@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Sanet.MagicalYatzy.XF</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.8.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="1.60.1" />
+    <PackageReference Include="Xam.Plugin.Connectivity" Version="3.1.1" />
+    <PackageReference Include="Xamarin.Forms" Version="3.0.0.561731" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\MagicalYatzy\MagicalYatzy.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <!-- https://bugzilla.xamarin.com/show_bug.cgi?id=55591 -->
+    <None Remove="**\*.xaml" />
+    
+    <Compile Update="**\*.xaml.cs" DependentUpon="%(Filename)" />
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Cells\MainMenuCell.xaml %28copy%29.cs">
+      <DependentUpon>SecondaryMenuCell.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controls\Game\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\Cells\MainMenuCell.xaml.cs">
+      <DependentUpon>MainMenuCell.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+</Project>

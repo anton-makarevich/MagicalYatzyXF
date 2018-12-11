@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<base:DicePanelView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Sanet.MagicalYatzy.XF.Views.MainMenuView"
+             xmlns:base="clr-namespace:Sanet.MagicalYatzy.XF.Views.Base"
+             xmlns:vm="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
+             xmlns:cells="clr-namespace:Sanet.MagicalYatzy.XF.Views.Cells"
+             xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Controls"
+             xmlns:gameControls="clr-namespace:Sanet.MagicalYatzy.XF.Controls.Game"
+             x:TypeArguments="vm:MainMenuViewModel">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height = "1*"/>
+            <RowDefinition Height = "17*"/>
+            <RowDefinition Height = "2*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width = "1*"/>
+            <ColumnDefinition Width = "10*"/>
+            <ColumnDefinition Width = "1*"/>
+        </Grid.ColumnDefinitions>
+
+        <controls:TappableContentView
+            Grid.ColumnSpan = "3"
+            Command="{Binding SelectPlayerCommand}"
+            >
+            <Grid 
+                VerticalOptions = "End"
+                HeightRequest = "50"
+                Padding = "10,0"
+                >
+                <Grid.InputTransparent>
+                    <OnPlatform x:TypeArguments="x:Boolean">
+                        <On Platform="macOS">True</On>
+                        <On Platform="UWP">False</On>
+                    </OnPlatform>
+                </Grid.InputTransparent>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width = "60"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Image Source="{Binding PlayerImage, Converter={StaticResource ImageNameConverter}}"
+                       Aspect="AspectFit"
+                       >
+                    <Image.InputTransparent>
+                        <OnPlatform x:TypeArguments="x:Boolean">
+                            <On Platform="macOS">True</On>
+                            <On Platform="UWP">False</On>
+                        </OnPlatform>
+                    </Image.InputTransparent>
+                </Image>
+                <Label Text="{Binding PlayerName}"
+                       VerticalOptions = "Center"
+                       Grid.Column="1" Style="{StaticResource CaptionLabelStyle}">
+                    <Label.InputTransparent>
+                        <OnPlatform x:TypeArguments="x:Boolean">
+                            <On Platform="macOS">True</On>
+                            <On Platform="UWP">False</On>
+                        </OnPlatform>
+                    </Label.InputTransparent>
+                </Label>
+            </Grid>
+        </controls:TappableContentView>
+        
+        <ListView
+            ItemsSource="{Binding MenuActions}"
+            SeparatorVisibility="None"
+            Grid.Row="2"
+            Grid.Column="1"
+            RowHeight="80"
+            VerticalOptions = "Start"
+            BackgroundColor = "Transparent">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <cells:MainMenuCell />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <controls:HorizontalListView ItemsSource="{Binding SecondaryMenuActions}"
+            HorizontalOptions="End"
+            SelectedItemColor="Transparent"
+            Grid.Row="3"
+            Grid.ColumnSpan="2">
+            <controls:HorizontalListView.ItemTemplate>
+                <DataTemplate>
+                    <cells:SecondaryMenuCell/>
+                </DataTemplate>
+            </controls:HorizontalListView.ItemTemplate>
+        </controls:HorizontalListView>
+    </Grid>
+</base:DicePanelView>

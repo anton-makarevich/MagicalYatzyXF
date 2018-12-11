@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<base:BaseView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Sanet.MagicalYatzy.XF.Views.LoginView"
+             xmlns:base="clr-namespace:Sanet.MagicalYatzy.XF.Views.Base"
+             xmlns:vm="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
+             xmlns:cells="clr-namespace:Sanet.MagicalYatzy.XF.Views.Cells"
+             xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Controls"
+             xmlns:gameControls="clr-namespace:Sanet.MagicalYatzy.XF.Controls.Game"
+             xmlns:loc="clr-namespace:Sanet.MagicalYatzy.XF.MarkupExtensions"
+             x:TypeArguments="vm:LoginViewModel">
+    <Grid
+        BackgroundColor="Black"
+        Padding = "10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height = "Auto"/>
+            <RowDefinition Height ="4*"/>
+            <RowDefinition Height = "Auto"/>
+        </Grid.RowDefinitions>
+        <Label VerticalTextAlignment = "Center"
+            HorizontalTextAlignment = "Center"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            Style="{StaticResource DescriptionLabelStyle}"
+            Text="{loc:Strings NoRegistration}"
+            />
+        <Grid
+            HorizontalOptions="Center"
+            WidthRequest="{Binding PageWidth}"
+            Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width = "3*"/>
+                <ColumnDefinition Width = "10*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label VerticalTextAlignment = "Center"
+                VerticalOptions="Center"
+                Style="{StaticResource DescriptionLabelStyle}"
+                Text="{loc:Strings PlayerNameLabel}"
+                />
+            <Label VerticalTextAlignment = "Center"
+                Grid.Row="1"
+                VerticalOptions="Center"
+                Style="{StaticResource DescriptionLabelStyle}"
+                Text="{loc:Strings PlayerPasswordLabel}"
+                />
+            <Entry 
+                Grid.Column="1"
+                Text="{Binding NewUsername, Mode=TwoWay}"
+                />
+            <Entry 
+                IsPassword="True"
+                Grid.Column="1"
+                Grid.Row="1"
+                Text="{Binding NewPassword, Mode=TwoWay}"
+                />
+            <Button
+                Grid.Row="2"
+                Grid.ColumnSpan="2"
+                Text="{loc:Strings LoginLabel}"
+                Command="{Binding LoginCommand}"
+                />
+        </Grid>
+        <ListView
+            ItemsSource="{Binding MenuActions}"
+            SeparatorVisibility="None"
+            Grid.Row="2"
+            RowHeight="50"
+            BackgroundColor = "Transparent">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <cells:MainMenuCell />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Grid
+            HeightRequest = "50"
+            Grid.Row="3">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding FacebookLoginCommand}"/>
+            </Grid.GestureRecognizers>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width = "Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label Text="{Binding PlayerName}"
+                VerticalOptions = "Center"
+                Grid.Column="1" Grid.Row="0" Style="{StaticResource CaptionLabelStyle}" />
+            <Image Source="{Binding FacebookImage, Converter={StaticResource ImageNameConverter}}"
+                Grid.Column="0" Grid.Row="0"
+                Aspect="AspectFit" />
+        </Grid>
+    </Grid>
+</base:BaseView>

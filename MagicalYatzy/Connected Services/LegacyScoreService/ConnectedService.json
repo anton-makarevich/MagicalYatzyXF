@@ -1,0 +1,56 @@
+﻿{
+  "_id" = 5b17cbd192e5a88a3842e1ac;
+  bcpId = "9579FBD0-6980-11E8-B0C6-8FBDD02F9158";
+  category = "Dr. appointment";
+  comments =     (
+              {
+          "_id" = 5b17cbd192e5a88a3842e1ad;
+          authorId =             (
+                              {
+                  "_id" = 5b041db2d1ae72dd1c28ee28;
+                  firstName = Anton;
+                  lastName = M;
+                  photo =                     (
+                  );
+              }
+          );
+          comment = "Anton created a task: T";
+          "created_at" = "2018-06-06T11:56:01.954Z";
+          parentId = 5b17cbd192e5a88a3842e1ac;
+          unread = 1;
+          "updated_at" = "2018-06-06T11:56:01.955Z";
+      }
+  );
+  "created_at" = "2018-06-06T11:56:01.931Z";
+  creator =     {
+      "_id" = 5b041db2d1ae72dd1c28ee28;
+      firstName = Anton;
+      lastName = M;
+      tzOffset = "Europe/Amsterdam";
+  };
+  displayStatus = overdue;
+  dueDate = "2018-06-06";
+  eventType = "";
+  feedType = task;
+  maxOwnerId =     {
+      "_id" = 5b17a67aab1402a2091ddc36;
+      name = "My HeartPartner Team";
+  };
+  objectiveId = "9579FBD1-6980-11E8-B0C6-8FBDD02F9158";
+  overdue = 0;
+  owner =     {
+      "_id" = 5b17a94f4b1a29ff21c9d84c;
+      firstName = T;
+      lastName = T;
+  };
+  shared = 0;
+  showReminder = 0;
+  status = accepted;
+  taskSpecifics = T;
+  time = "14:00";
+  unreadComment = 1;
+  unreadMsgCount = 1;
+  "updated_at" = "2018-06-06T11:56:01.935Z";
+  userOnlyTask = 0;
+  userStar = 0;
+}
