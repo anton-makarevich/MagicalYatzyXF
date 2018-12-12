@@ -1,12 +1,11 @@
-﻿using NUnit.Framework.Internal;
-using Sanet.MagicalYatzy.Services;
+﻿using Sanet.MagicalYatzy.Services;
 using NSubstitute;
 using System.Threading.Tasks;
 using Sanet.MagicalYatzy.Models.Game;
-using NUnit.Framework;
 using System.Linq;
-using Sanet.MagicalYatzy.Extensions;
 using System.Collections.Generic;
+using Xunit;
+using Sanet.MagicalYatzy.Extensions;
 
 namespace MagicalYatzyTests.ServiceTests
 {
@@ -16,21 +15,20 @@ namespace MagicalYatzyTests.ServiceTests
         private IStorageService _storageMock;
         private PlayerService _sut;
 
-        [SetUp]
-        public void Init()
+        public PlayerServiceTests()
         {
             _apiMock = Substitute.For<IApiClient>();
             _storageMock = Substitute.For<IStorageService>();
             _sut = new PlayerService(_apiMock,_storageMock);
         }
 
-        [Test]
+        [Fact]
         public void PlayerServiceShouldHaveDefaultPlayer()
         {
-            Assert.IsNotNull(_sut.CurrentPlayer);
+            Assert.NotNull(_sut.CurrentPlayer);
         }
 
-        [Test]
+        [Fact]
         public async Task LoginShouldInsertPlayer()
         {
             // Arrange
@@ -38,13 +36,13 @@ namespace MagicalYatzyTests.ServiceTests
             // Act
             var result = await _sut.LoginAsync(TestUserName,TestUserPassword);
             // Asset
-            Assert.IsTrue(result);
-            Assert.IsTrue(_sut.Players.Count>1);
-            Assert.AreEqual(_sut.CurrentPlayer, TestPlayer);
-            Assert.AreEqual(_sut.Players[0], TestPlayer);
+            Assert.True(result);
+            Assert.True(_sut.Players.Count>1);
+            Assert.Equal(_sut.CurrentPlayer, TestPlayer);
+            Assert.Equal(_sut.Players[0], TestPlayer);
         }
 
-        [Test]
+        [Fact]
         public async Task SuccesfulLoginShouldSavePlayer()
         {
             List<Player> players = new List<Player>();
@@ -62,14 +60,14 @@ namespace MagicalYatzyTests.ServiceTests
             _storageMock.LoadPlayersAsync().Returns(Task.FromResult(players));
             _sut = new PlayerService(_apiMock, _storageMock);
             // Asset
-            Assert.IsTrue(_sut.Players.Count == players.Count);
+            Assert.True(_sut.Players.Count == players.Count);
             for (int i = 0; i < players.Count;i++)
             {
-                Assert.AreEqual(players[i], _sut.Players[i]);
+                Assert.Equal(players[i], _sut.Players[i]);
             }
         }
 
-        [Test]
+        [Fact]
         public async Task FailingLoginShouldSavePlayer()
         {
             // Arrange
@@ -83,7 +81,7 @@ namespace MagicalYatzyTests.ServiceTests
             await _storageMock.DidNotReceiveWithAnyArgs().SavePlayersAsync(null);
         }
 
-        [Test]
+        [Fact]
         public async Task PlayersShouldNotContainMoreThanFourElements()
         {
             // Arrange
@@ -107,12 +105,12 @@ namespace MagicalYatzyTests.ServiceTests
             }
 
             // Asset
-            Assert.IsTrue(_sut.Players.Count == 4);
-            Assert.AreEqual(players.Last(), _sut.Players.First());
-            Assert.AreEqual(players[2], _sut.Players.Last());
+            Assert.True(_sut.Players.Count == 4);
+            Assert.Equal(players.Last(), _sut.Players.First());
+            Assert.Equal(players[2], _sut.Players.Last());
         }
 
-        [Test]
+        [Fact]
         public async Task SameUserShouldNotBeAddedTwice()
         {
             // Arrange
@@ -128,7 +126,7 @@ namespace MagicalYatzyTests.ServiceTests
             }
 
             // Asset
-            Assert.IsTrue(_sut.Players.Count == 2);
+            Assert.True(_sut.Players.Count == 2);
         }
 
         public static string TestUserName => "Anton";

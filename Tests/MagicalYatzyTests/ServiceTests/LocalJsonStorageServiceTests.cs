@@ -1,17 +1,14 @@
-﻿using NUnit.Framework;
-using Sanet.MagicalYatzy.Models.Game;
+﻿using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace MagicalYatzyTests.ServiceTests
 {
     public class LocalJsonStorageServiceTests
     {
-        [Test]
+        [Fact]
         public async Task StorageServiceShouldLoadSavedPlayers()
         {
             // Arange
@@ -28,7 +25,7 @@ namespace MagicalYatzyTests.ServiceTests
             var loadedPlayers = await sut.LoadPlayersAsync();
 
             //Assert
-            Assert.AreEqual(playersToSave, loadedPlayers);
+            Assert.Equal(playersToSave, loadedPlayers);
         }
     }
 }
