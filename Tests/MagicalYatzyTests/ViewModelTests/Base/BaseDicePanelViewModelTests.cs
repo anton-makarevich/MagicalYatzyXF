@@ -6,9 +6,8 @@ namespace MagicalYatzyTests.ViewModelTests.Base
     public abstract class BaseDicePanelViewModelTests:BaseViewModelTests
     {
         protected IDicePanel dicePanelMock;
-        public override void Init()
+        protected BaseDicePanelViewModelTests()
         {
-            base.Init();
             dicePanelMock = Substitute.For<IDicePanel>();
         }
     }

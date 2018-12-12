@@ -1,9 +1,9 @@
-﻿using NUnit.Framework;
-using Sanet.MagicalYatzy.ViewModels;
+﻿using Sanet.MagicalYatzy.ViewModels;
 using System.Linq;
 using MagicalYatzyTests.ViewModelTests.Base;
 using Sanet.MagicalYatzy.Services;
 using NSubstitute;
+using Xunit;
 
 namespace MagicalYatzyTests.ViewModelTests
 {
@@ -12,28 +12,26 @@ namespace MagicalYatzyTests.ViewModelTests
         private MainMenuViewModel _sut;
         private IExternalNavigationService _externalNavigationServiceMock;
 
-        [SetUp]
-        public override void Init()
+        public MainMenuViewModelsTests()
         {
-            base.Init();
             _externalNavigationServiceMock = Substitute.For<IExternalNavigationService>();
             _sut = new MainMenuViewModel(dicePanelMock, _externalNavigationServiceMock, playerServiceMock);
         }
 
-        [Test]
+        [Fact]
         public void FillMainMenuShouldCreateMainMenu()
         {
             _sut.FillMainActions();
 
-            Assert.IsTrue(_sut.MenuActions.Any());
+            Assert.True(_sut.MenuActions.Any());
         }
 
-        [Test]
+        [Fact]
         public void FillSecondaryMenuShouldCreateSecondaryMenu()
         {
             _sut.FillSecondaryActions();
 
-            Assert.IsTrue(_sut.SecondaryMenuActions.Any());
+            Assert.True(_sut.SecondaryMenuActions.Any());
         }
     }
 }

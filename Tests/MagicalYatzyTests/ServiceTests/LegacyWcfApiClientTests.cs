@@ -1,14 +1,13 @@
-﻿using NUnit.Framework.Internal;
-using System.Threading.Tasks;
-using Sanet.MagicalYatzy.Services;
-using NUnit.Framework;
+﻿using System.Threading.Tasks;
 using Sanet.MagicalYatzy.Extensions;
+using Sanet.MagicalYatzy.Services;
+using Xunit;
 
 namespace MagicalYatzyTests.ServiceTests
 {
     public class LegacyWcfApiClientTests
     {
-        [Test]
+        [Fact]
         public async Task LoginCallShouldReturnUserForValidCreds()
         {
             var sut = new LegacyWcfClient();
@@ -16,20 +15,20 @@ namespace MagicalYatzyTests.ServiceTests
 
             var player = await sut.LoginUserAsync(PlayerServiceTests.TestUserName, PlayerServiceTests.TestUserPassword);
 
-            Assert.IsNotNull(player);
-            Assert.AreEqual(PlayerServiceTests.TestUserName, player?.Name);
-            Assert.AreNotEqual(PlayerServiceTests.TestUserPassword, player?.Password);
-            Assert.AreEqual(PlayerServiceTests.TestUserPassword, player?.Password?.Decrypt(33));
+            Assert.NotNull(player);
+            Assert.Equal(PlayerServiceTests.TestUserName, player?.Name);
+            Assert.NotEqual(PlayerServiceTests.TestUserPassword, player?.Password);
+            Assert.Equal(PlayerServiceTests.TestUserPassword, player?.Password?.Decrypt(33));
         }
 
-        [Test]
+        [Fact]
         public async Task FailingLoginCallShouldReturnNullForWrongPassword()
         {
             var sut = new LegacyWcfClient();
 
             var player = await sut.LoginUserAsync(PlayerServiceTests.TestUserName, "wrongpassword");
 
-            Assert.IsNull(player);
+            Assert.Null(player);
         }
     }
 }

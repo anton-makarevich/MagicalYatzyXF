@@ -7,7 +7,7 @@ namespace MagicalYatzyTests.ViewModelTests.Base
     {
         protected IPlayerService playerServiceMock;
         protected INavigationService navigationServiceMock;
-        public virtual void Init()
+        protected BaseViewModelTests()
         {
             playerServiceMock = Substitute.For<IPlayerService>();
             navigationServiceMock = Substitute.For<INavigationService>();
