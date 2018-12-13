@@ -13,4 +13,5 @@ steps:
 
 - bash: codecov.sh
     displayName: 'Publishing code coverage report'
+    env: yaml - script: echo $CODECOV env: MySecret: $(codecov.token)
 
