@@ -15,6 +15,7 @@
     </PackageReference>
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
     <PackageReference Include="NSubstitute" Version="3.1.0" />
+    <PackageReference Include="coverlet.msbuild" Version="2.4.0" />
   </ItemGroup>
 
   <ItemGroup>

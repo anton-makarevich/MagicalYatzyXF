@@ -8,6 +8,9 @@ steps:
 - script: dotnet restore MagicalYatzyXF.sln
   displayName: 'Restore nuget packages'
 
-- script: dotnet test Tests/MagicalYatzyTests/MagicalYatzyTests.csproj
+- script: dotnet test Tests/MagicalYatzyTests/MagicalYatzyTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
   displayName: 'Run tests'
+
+- bash: codecov.sh
+    displayName: 'Publishing code coverage report'
 
