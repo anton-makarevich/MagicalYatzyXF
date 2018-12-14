@@ -1,16 +1,20 @@
-using Autofac;
 using Sanet.MagicalYatzy.XF.Droid.Services;
+using SimpleInjector;
+using Sanet.MagicalYatzy.Services;
 
 namespace Sanet.MagicalYatzy.XF.Droid
 {
-    public class PlatformModule : Module
+    public static class ContainerExtensions
     {
-        protected override void Load(ContainerBuilder builder)
+        public static void RegisterModules(this Container container)
         {
-            builder.RegisterType<ExternalNavigationService>().AsImplementedInterfaces().SingleInstance();
-            builder.RegisterModule<MainModule>();
+            container.RegisterAndroidModule();
+            container.RegisterMainModule();
+        }
 
-            base.Load(builder);
+        public static void RegisterAndroidModule(this Container container)
+        {
+            container.RegisterSingleton<IExternalNavigationService, ExternalNavigationService>();
         }
     }
 }

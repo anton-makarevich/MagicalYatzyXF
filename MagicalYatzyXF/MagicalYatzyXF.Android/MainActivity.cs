@@ -1,22 +1,21 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using Autofac;
+using SimpleInjector;
 
 namespace Sanet.MagicalYatzy.XF.Droid
 {
     [Activity(Label = "MagicalYatzyXF", Icon = "@drawable/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
-        private IContainer _container;
-        protected override void OnCreate(Bundle bundle)
+        private Container _container;
+        protected override void OnCreate(Bundle savedInstanceState)
         {
-            base.OnCreate(bundle);
+            base.OnCreate(savedInstanceState);
 
-            global::Xamarin.Forms.Forms.Init(this, bundle);
-            var builder = new ContainerBuilder();
-            builder.RegisterModule<PlatformModule>();
-            _container = builder.Build();
+            global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            _container = new Container();
+            _container.RegisterModules();
             LoadApplication(new App(_container));
         }
     }

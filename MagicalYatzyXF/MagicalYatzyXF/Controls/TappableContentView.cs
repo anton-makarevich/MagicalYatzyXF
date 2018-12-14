@@ -7,10 +7,9 @@ namespace Sanet.MagicalYatzy.XF.Controls
 {
     public class TappableContentView : ContentView
     {
-		private bool _isPressed;
-		private DateTime _startTapTime;
+	    private DateTime _startTapTime;
 
-		private int _tapTime = 1500;
+		private readonly int _tapTime = 1500;
 
         public static readonly BindableProperty CommandProperty =
             BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(TappableContentView), null);
@@ -35,7 +34,6 @@ namespace Sanet.MagicalYatzy.XF.Controls
             if (IsEnabled)
             {
                 _startTapTime = DateTime.Now;
-                _isPressed = true;
                 this.AnimateClick();
             }
         }
@@ -50,7 +48,6 @@ namespace Sanet.MagicalYatzy.XF.Controls
 
         protected virtual void ProceedTap()
         {
-            _isPressed = false;
             var tapTime = (DateTime.Now - _startTapTime).TotalMilliseconds;
             if (tapTime < _tapTime)
             {

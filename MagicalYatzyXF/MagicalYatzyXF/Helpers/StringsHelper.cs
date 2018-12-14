@@ -1,12 +1,8 @@
-﻿using Autofac;
-using Sanet.MagicalYatzy.Models.Game;
+﻿using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
-using System.Text;
 
 namespace Sanet.MagicalYatzy.XF.Helpers
 {
@@ -18,7 +14,7 @@ namespace Sanet.MagicalYatzy.XF.Helpers
                 return "null string";
 
             var resourcePath = "Sanet.MagicalYatzy.Resources.Strings";
-            ILocalizationService localization = App.Container.Resolve<ILocalizationService>();
+            ILocalizationService localization = App.Container.GetInstance<ILocalizationService>();
 
             ResourceManager resourceManager = new ResourceManager(resourcePath, typeof(Die).GetTypeInfo().Assembly);
             CultureInfo ci = localization.SystemCulture;
