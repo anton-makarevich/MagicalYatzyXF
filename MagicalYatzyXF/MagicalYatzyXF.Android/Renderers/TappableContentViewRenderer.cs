@@ -5,6 +5,7 @@ using Xamarin.Forms.Platform.Android;
 using Android.Views;
 using System;
 using System.Collections.Generic;
+using Android.Content;
 
 [assembly: ExportRenderer(typeof(TappableContentView), typeof(TappableContentViewRenderer))]
 namespace Sanet.MagicalYatzy.XF.Droid.Renderers
@@ -14,14 +15,16 @@ namespace Sanet.MagicalYatzy.XF.Droid.Renderers
 		/// <summary>
 		/// Used for registration with dependency service
 		/// </summary>
-		public new static void Init()
+		public static void Init()
 		{
 			var temp = DateTime.Now;
 		}
 
-		#region Touch Handlers
+        public TappableContentViewRenderer(Context context): base(context) { }
 
-		public override bool OnTouchEvent(MotionEvent e)
+        #region Touch Handlers
+
+        public override bool OnTouchEvent(MotionEvent e)
 		{
             if (e.PointerCount == 0 || Element == null)
                 return false;

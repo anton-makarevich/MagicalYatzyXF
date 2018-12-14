@@ -1,16 +1,15 @@
-﻿using Autofac;
+﻿using SimpleInjector;
 
 namespace Sanet.MagicalYatzy.XF.UWP
 {
     public sealed partial class MainPage
     {
-        private IContainer _container;
+        private Container _container;
         public MainPage()
         {
             this.InitializeComponent();
-            var builder = new ContainerBuilder();
-            builder.RegisterModule<PlatformModule>();
-            _container = builder.Build();
+            _container = new Container();
+            _container.RegisterModules();
             LoadApplication(new Sanet.MagicalYatzy.XF.App(_container));
         }
     }

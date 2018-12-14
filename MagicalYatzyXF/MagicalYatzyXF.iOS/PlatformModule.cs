@@ -1,15 +1,20 @@
-﻿using Autofac;
-using Sanet.MagicalYatzy.XF.iOS.Services;
+﻿using Sanet.MagicalYatzy.XF.iOS.Services;
+using Sanet.MagicalYatzy.Services;
+using SimpleInjector;
 
 namespace Sanet.MagicalYatzy.XF.iOS
 {
-    public class PlatformModule : Module
+    public static class ContainerExtensions
     {
-        protected override void Load(ContainerBuilder builder)
+        public static void RegisterModules(this Container container)
         {
-            builder.RegisterModule<MainModule>();
-            builder.RegisterType<ExternalNavigationService>().AsImplementedInterfaces().SingleInstance();
-            base.Load(builder);
+            container.RegisterIosModule();
+            container.RegisterMainModule();
+        }
+
+        public static void RegisterIosModule(this Container container)
+        {
+            container.RegisterSingleton<IExternalNavigationService, ExternalNavigationService>();
         }
     }
 }

@@ -1,16 +1,16 @@
-﻿using Autofac;
-using Sanet.MagicalYatzy.ViewModels;
+﻿using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MagicalYatzy.XF.Helpers;
 using Sanet.MagicalYatzy.XF.Services;
 using Sanet.MagicalYatzy.XF.Views;
+using SimpleInjector;
 using Xamarin.Forms;
 
 namespace Sanet.MagicalYatzy.XF
 {
     public partial class App : Application
     {
-        public static IContainer Container { get; private set; }
-        public App(IContainer container)
+        public static Container Container { get; private set; }
+        public App(Container container)
         {
             InitializeComponent();
             Container = container;

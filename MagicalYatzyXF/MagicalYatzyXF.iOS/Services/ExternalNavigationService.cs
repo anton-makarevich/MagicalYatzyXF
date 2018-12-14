@@ -1,5 +1,4 @@
-﻿using System;
-using Sanet.MagicalYatzy.Services;
+﻿using Sanet.MagicalYatzy.Services;
 
 namespace Sanet.MagicalYatzy.XF.iOS.Services
 {

@@ -146,8 +146,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac">
-      <Version>4.8.1</Version>
+    <PackageReference Include="SimpleInjector">
+      <Version>4.4.2</Version>
     </PackageReference>
     <PackageReference Include="SkiaSharp.Views.Forms">
       <Version>1.68.0</Version>

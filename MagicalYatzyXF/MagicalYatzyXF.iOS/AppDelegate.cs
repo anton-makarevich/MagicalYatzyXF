@@ -1,5 +1,5 @@
-﻿using Autofac;
-using Foundation;
+﻿using Foundation;
+using SimpleInjector;
 using UIKit;
 
 namespace Sanet.MagicalYatzy.XF.iOS
@@ -10,7 +10,7 @@ namespace Sanet.MagicalYatzy.XF.iOS
     [Register("AppDelegate")]
     public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
-        private IContainer _container;
+        private Container _container;
         //
         // This method is invoked when the application has loaded and is ready to run. In this 
         // method you should instantiate the window, load the UI into it and then make the window
@@ -21,9 +21,8 @@ namespace Sanet.MagicalYatzy.XF.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
-            var builder = new ContainerBuilder();
-            builder.RegisterModule<PlatformModule>();
-            _container = builder.Build();
+            _container = new Container();
+            _container.RegisterModules();
             LoadApplication(new App(_container));
 
             return base.FinishedLaunching(app, options);

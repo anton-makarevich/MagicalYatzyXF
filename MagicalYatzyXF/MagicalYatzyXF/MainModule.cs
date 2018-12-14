@@ -1,29 +1,29 @@
-﻿using Autofac;
-using Sanet.MagicalYatzy.Models.Game;
+﻿using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MagicalYatzy.XF.Services;
+using SimpleInjector;
 
 namespace Sanet.MagicalYatzy.XF
 {
-    public class MainModule : Module
+    public static class ContainerExtensions
     {
-        protected override void Load(ContainerBuilder builder)
+        public static void RegisterMainModule(this Container container)
         {
             // Register viewmodels for pages
-            builder.RegisterType<MainMenuViewModel>();
-            builder.RegisterType<LoginViewModel>();
+            container.Register<MainMenuViewModel>();
+            container.Register<LoginViewModel>();
 
             // Register services
-            builder.RegisterType<GameSettingsService>().AsImplementedInterfaces().SingleInstance();
-            builder.RegisterType<LocalizationService>().AsImplementedInterfaces().SingleInstance();
-            builder.RegisterType<WebService>().AsImplementedInterfaces().SingleInstance();
-            builder.RegisterType<LegacyWcfClient>().AsImplementedInterfaces().SingleInstance();
-            builder.RegisterType<LocalJsonStorageService>().AsImplementedInterfaces().SingleInstance();
-            builder.RegisterType<PlayerService>().AsImplementedInterfaces().SingleInstance();
+            container.RegisterSingleton<IGameSettingsService, GameSettingsService>();
+            container.RegisterSingleton<ILocalizationService, LocalizationService>();
+            container.RegisterSingleton<IWebService, WebService>();
+            container.RegisterSingleton<IApiClient, LegacyWcfClient>();
+            container.RegisterSingleton<IStorageService, LocalJsonStorageService>();
+            container.RegisterSingleton<IPlayerService, PlayerService>();
 
             // Register misc classes
-            builder.RegisterType<DicePanel>().AsImplementedInterfaces();
+            container.Register<IDicePanel, DicePanel>();
         }
     }
 }

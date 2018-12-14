@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Autofac;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using Sanet.MagicalYatzy.Views;
@@ -42,7 +41,7 @@ namespace Sanet.MagicalYatzy.XF.Services
 
         public T GetViewModel<T>() where T : BaseViewModel
         {
-            T vm = (T)_viewModels.Where(f => f is T).FirstOrDefault();
+            T vm = (T)_viewModels.FirstOrDefault(f => f is T);
             if (vm == null)
             {
                 vm = CreateViewModel<T>();
@@ -53,7 +52,7 @@ namespace Sanet.MagicalYatzy.XF.Services
 
         public T GetNewViewModel<T>() where T : BaseViewModel
         {
-            T vm = (T)_viewModels.Where(f => f is T).FirstOrDefault();
+            T vm = (T)_viewModels.FirstOrDefault(f => f is T);
 
             if (vm != null)
             {
@@ -67,7 +66,7 @@ namespace Sanet.MagicalYatzy.XF.Services
 
         private T CreateViewModel<T>() where T : BaseViewModel
         {
-            var vm = App.Container.Resolve<T>();
+            var vm = App.Container.GetInstance<T>();
             vm.SetNavigationService(this);
             return vm;
         }
@@ -95,8 +94,7 @@ namespace Sanet.MagicalYatzy.XF.Services
                 return;
             if (viewModel.NavigationService == null)
                 viewModel.SetNavigationService(this);
-            var view = CreateView(viewModel) as BaseView<T>;
-            if (view != null)
+            if (CreateView(viewModel) is BaseView<T> view)
             {
                 if (modalPresentation)
                     await FormsNavigation.PushModalAsync(view);
