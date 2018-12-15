@@ -1,6 +1,5 @@
 ﻿using Sanet.MagicalYatzy.Services;
 using System;
-using System.Threading.Tasks;
 
 namespace Sanet.MagicalYatzy.ViewModels.Base
 {
@@ -20,7 +19,7 @@ namespace Sanet.MagicalYatzy.ViewModels.Base
 
         #region Properties
 
-        public INavigationService NavigationService => _navigationService ?? throw new ArgumentNullException("Navigation service should be initialized, check your App.cs");
+        public INavigationService NavigationService => _navigationService ?? throw new ArgumentNullException("NavigationService", "Navigation service should be initialized, check your App.cs");
 
         public bool IsBusy
         {
@@ -47,15 +46,10 @@ namespace Sanet.MagicalYatzy.ViewModels.Base
             _navigationService = navigationService;
         }
 
-        public virtual void AttachHandlers()
-        {
-            
-        }
+        public virtual void AttachHandlers() { }
 
-        public virtual void DetachHandlers()
-        {
-            
-        }
+        public virtual void DetachHandlers() { }
+
         #endregion
     }
 }
