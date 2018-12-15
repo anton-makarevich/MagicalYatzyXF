@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace Sanet.MagicalYatzy.Extensions
 {
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     /// <summary>
     /// Need this extensions as for some reason wp doesn't generate task based methods for service references
     /// </summary>
