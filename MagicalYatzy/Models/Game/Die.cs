@@ -56,6 +56,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         private bool _isFrozen;
 
         public int _soundCounter;
+
         #endregion
 
         #region Properties
@@ -148,14 +149,14 @@ namespace Sanet.MagicalYatzy.Models.Game
             }
         }
 
-        public bool IsFrozen
+        public bool IsFixed
         {
             get { return _isFrozen; }
 
             set { _isFrozen = value; }
         }
 
-        private DieStatus Status
+        internal DieStatus Status
         {
             get { return _status; }
             set
@@ -188,15 +189,11 @@ namespace Sanet.MagicalYatzy.Models.Game
             }
         }
 
-        public bool IsNotRolling
-        {
-            get { return Status == DieStatus.Stopped; }
-        }
+        public bool IsNotRolling => Status == DieStatus.Stopped; 
 
-        public bool IsRolling
-        {
-            get { return Status == DieStatus.Rolling; }
-        }
+        public bool IsRolling => Status == DieStatus.Rolling;
+
+        public bool IsLanding => Status == DieStatus.Landing;
 
         public Rectangle Bounds
         {
@@ -270,7 +267,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             switch (Status)
             {
                 case DieStatus.Rolling:
-                    //если достигнуто максимальное число вращений останавливаемся
+                    // Stop when max amount of rolls has been reached
                     if (_rollLoop > _gameSettingsService.MaxRollLoop & ValueGenerator.Next(1, 100) < 10)
                     {
                         Status = DieStatus.Landing;
@@ -294,8 +291,9 @@ namespace Sanet.MagicalYatzy.Models.Game
         {
             if (iResult < 0 | iResult > 6)
                 iResult = 0;
+
             //new
-            if (!IsFrozen)
+            if (!IsFixed)
             {
                 do
                 {
@@ -344,7 +342,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                 Frame = (Result - 1) * 6 + _gameSettingsService.DieAngle;
                 _rotationString = "stop.";
                 ImagePath = GetFramePicPath();
-                if (IsFrozen)
+                if (IsFixed)
                 {
                     Opacity = 0.5f;
                 }

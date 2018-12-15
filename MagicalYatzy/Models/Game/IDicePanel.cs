@@ -5,10 +5,10 @@ using static Sanet.MagicalYatzy.Models.Events.GameEvents;
 
 namespace Sanet.MagicalYatzy.Models.Game
 {
-    public interface IDicePanel
+    public interface IDicePanel: IDisposable
     {
-        bool AllDiceStopped { get; }
-        bool ClickToFreeze { get; set; }
+        bool AreAllDiceStopped { get; }
+        bool ClickToFix { get; set; }
         bool DebugDrawMode { get; set; }
         int DiceCount { get; set; }
         bool ManualSetMode { get; set; }
@@ -21,22 +21,20 @@ namespace Sanet.MagicalYatzy.Models.Game
         double TreeDScaleCoef { get; set; }
         bool WithSound { get; set; }
         Rectangle Bounds { get; }
+        int FixedDiceCount { get; }
+        bool AreAllDiceFixed { get; }
 
         event DieChangedEventHandler DieChangedManually;
-        event DieFrozenEventHandler DieFrozen;
-        event Action<bool> PanelIsBusy;
+        event DieFrozenEventHandler DieFixed;
         event Action RollEnded;
         event Action RollStarted;
         event Action<Die> DieAdded;
         event Action<Die> DieRemoved;
 
-        bool AllDiceFrozen();
         void ChangeDice(int oldValue, int newValue);
-        void ClearFreeze();
+        void UnfixAll();
         void DieClicked(object sender, IEnumerable<Point> e);
-        void Dispose();
         void FixDice(int index, bool isfixed);
-        int FrozenCount();
         bool RollDice(List<int> aResults);
         void Resize(int width, int height);
     }
