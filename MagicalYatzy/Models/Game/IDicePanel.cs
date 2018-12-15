@@ -8,7 +8,7 @@ namespace Sanet.MagicalYatzy.Models.Game
     public interface IDicePanel: IDisposable
     {
         bool AreAllDiceStopped { get; }
-        bool ClickToFreeze { get; set; }
+        bool ClickToFix { get; set; }
         bool DebugDrawMode { get; set; }
         int DiceCount { get; set; }
         bool ManualSetMode { get; set; }

@@ -16,14 +16,8 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         #region Fields
         public List<Die> Dice = new List<Die>();
-
-        
-        private bool _withSound = false;
-        
         private int _diceCount = 6;
-        Die _lastClickedDie;
-        private bool _ManualSetMode = false;
-
+        internal Die _lastClickedDie;
         private readonly IGameSettingsService _gameSettingsService;
         #endregion
 
@@ -72,7 +66,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         /// <summary>
         /// Allows user to click dice to lock their movement
         /// </summary>
-        public bool ClickToFreeze { get; set; } = false;
+        public bool ClickToFix { get; set; } = false;
 
         /// <summary>
         /// Summed Result of All the Dice
@@ -116,33 +110,12 @@ namespace Sanet.MagicalYatzy.Models.Game
             }
         }
 
-        public bool WithSound
-        {
-            get { return _withSound; }
-            set
-            {
-                if (_withSound != value)
-                {
-                    _withSound = value;
-
-                }
-            }
-        }
+        public bool WithSound { get; set; } = false;
 
         public int RollDelay { get; set; } = 20;
 
-        public bool ManualSetMode
-        {
-            get { return _ManualSetMode; }
-            set
-            {
-                if (_ManualSetMode != value)
-                {
-                    _ManualSetMode = value;
-                }
-            }
-        }
-        
+        public bool ManualSetMode { get; set; } = false;
+
         public Rectangle Bounds { get; private set; }
         
         #endregion
@@ -155,14 +128,14 @@ namespace Sanet.MagicalYatzy.Models.Game
         #endregion
 
         #region Methods
-        void _popup_Closed(object sender, object e)
+        /*void _popup_Closed(object sender, object e)
         {
             int oldvalue = _lastClickedDie.Result;
 
             _lastClickedDie.DrawDie();
             ManualSetMode = false;
             DieChangedManually?.Invoke(_lastClickedDie.IsFixed, oldvalue, _lastClickedDie.Result);
-        }
+        }*/
 
         public void ChangeDice(int oldValue, int newValue)
         {
@@ -350,7 +323,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                 _selectionPanel.Draw();
                 _popup.IsOpen = true;*/
             }
-            else if (ClickToFreeze)
+            else if (ClickToFix)
             {
                 _lastClickedDie.IsFixed = !_lastClickedDie.IsFixed;
                 _lastClickedDie.DrawDie();

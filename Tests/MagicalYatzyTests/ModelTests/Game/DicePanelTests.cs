@@ -4,6 +4,7 @@ using NSubstitute;
 using Xunit;
 using System.Collections.Generic;
 using System.Linq;
+using Sanet.MagicalYatzy.Models.Common;
 
 namespace MagicalYatzyTests.ModelTests.Game
 {
@@ -185,7 +186,6 @@ namespace MagicalYatzyTests.ModelTests.Game
             _sut.FixDice(resultToFix, true);
             _sut.FixDice(resultToFix, false);
 
-
             // Assert
             Assert.Equal(0, _sut.FixedDiceCount);
         }
@@ -224,6 +224,60 @@ namespace MagicalYatzyTests.ModelTests.Game
             Assert.Equal(1, _sut.Result.NumDiceOf(4));
             Assert.Equal(1, _sut.Result.NumDiceOf(5));
             Assert.Equal(1, _sut.Result.NumDiceOf(6));
+        }
+
+        [Fact]
+        public void ResizeShouldUpdateBounds()
+        {
+            // Arrange
+            var width = 300;
+            var height = 200;
+
+            // Act
+            _sut.Resize(width, height);
+
+            // Assert
+            Assert.Equal(0, _sut.Bounds.Left);
+            Assert.Equal(0, _sut.Bounds.Top);
+            Assert.Equal(width, _sut.Bounds.Width);
+            Assert.Equal(height, _sut.Bounds.Height);
+        }
+
+        [Fact]
+        public void ClickOnDiceShouldFixItIfAllowed()
+        {
+            // Arrange
+            var width = 300;
+            var height = 200;
+            _sut.ClickToFix = true;
+            _sut.Resize(width, height);
+            var diceToSelect = _sut.Dice.First();
+            var pontInDice = diceToSelect.Bounds.Center;
+
+            // Act
+            _sut.DieClicked(null, new List<Point> { pontInDice });
+
+            // Assert
+            Assert.Equal(1, _sut.FixedDiceCount);
+            Assert.Equal(diceToSelect, _sut._lastClickedDie);
+        }
+
+        [Fact]
+        public void ClickOnDiceShoulNotFixItINotAllowed()
+        {
+            // Arrange
+            var width = 300;
+            var height = 200;
+            _sut.ClickToFix = false;
+            _sut.Resize(width, height);
+            var diceToSelect = _sut.Dice.First();
+            var pontInDice = diceToSelect.Bounds.Center;
+
+            // Act
+            _sut.DieClicked(null, new List<Point> { pontInDice });
+
+            // Assert
+            Assert.Equal(0, _sut.FixedDiceCount);
         }
     }
 }
