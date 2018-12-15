@@ -13,16 +13,14 @@ namespace Sanet.MagicalYatzy.Models.Game
     /// </summary>
     public class DicePanel : IDicePanel
     {
-        #region Fields
 
-        private DiceStyle _style = DiceStyle.Classic;
+        #region Fields
         public List<Die> Dice = new List<Die>();
 
         
         private bool _withSound = false;
         
         private int _diceCount = 0;
-        private int _rollDelay;
         Die _lastClickedDie;
         private bool _ManualSetMode = false;
 
@@ -38,7 +36,6 @@ namespace Sanet.MagicalYatzy.Models.Game
         public event Action<Die> DieAdded;
         public event Action<Die> DieRemoved;
 
-        public event Action<bool> PanelIsBusy;
         #endregion
 
         #region Properties
@@ -46,12 +43,8 @@ namespace Sanet.MagicalYatzy.Models.Game
         public bool TreeDScale { get; set; }
         public double TreeDScaleCoef { get; set; }
         public bool PlaySound { get; set; }
-        public DiceStyle PanelStyle
-        {
-            get { return _style; }
+        public DiceStyle PanelStyle { get; } = DiceStyle.Classic;
 
-        }
-       
         /// <summary>
         /// Number of Dice in the Panel
         /// </summary>
@@ -100,7 +93,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             {
                 foreach (Die d in Dice)
                 {
-                    if (d.IsRolling)
+                    if (d.IsRolling || d.IsLanding)
                         return false;
                 }
 
@@ -131,11 +124,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             }
         }
 
-        public int RollDelay
-        {
-            get { return _rollDelay; }
-            set { _rollDelay = value; }
-        }
+        public int RollDelay { get; set; } = 20;
 
         public bool ManualSetMode
         {
@@ -167,8 +156,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
             _lastClickedDie.DrawDie();
             ManualSetMode = false;
-            if (DieChangedManually != null)
-                DieChangedManually(_lastClickedDie.IsFrozen, oldvalue, _lastClickedDie.Result);
+            DieChangedManually?.Invoke(_lastClickedDie.IsFrozen, oldvalue, _lastClickedDie.Result);
         }
 
         public void ChangeDice(int oldValue, int newValue)
@@ -248,10 +236,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                 //LogManager.Log(LogLevel.Message, "DicePanel.RollDice","Can't roll... allfixed");
                 return false;
             }
-            if (RollStarted != null)
-            {
-                RollStarted();
-            }
+            RollStarted?.Invoke();
             //first values for fixed dices
             int j = Dice.Count(f => f.IsFrozen);
 

@@ -24,7 +24,6 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         event DieChangedEventHandler DieChangedManually;
         event DieFrozenEventHandler DieFrozen;
-        event Action<bool> PanelIsBusy;
         event Action RollEnded;
         event Action RollStarted;
         event Action<Die> DieAdded;

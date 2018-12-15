@@ -10,6 +10,7 @@ namespace Sanet.MagicalYatzy.Models.Events
         public SimpleCommand(Action execute)
         {
             _execute = execute;
+            CanExecuteChanged?.Invoke(this, null);
         }
 
         public event EventHandler CanExecuteChanged;
