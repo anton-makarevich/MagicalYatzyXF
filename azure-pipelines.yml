@@ -8,7 +8,7 @@ steps:
 - script: dotnet restore MagicalYatzyXF.sln
   displayName: 'Restore nuget packages'
 
-- script: dotnet test Tests/MagicalYatzyTests/MagicalYatzyTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+- script: dotnet test Tests/MagicalYatzyTests/MagicalYatzyTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute="Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute"
   displayName: 'Run tests'
 
 - bash: |
