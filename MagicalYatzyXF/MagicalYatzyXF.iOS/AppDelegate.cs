@@ -23,7 +23,8 @@ namespace Sanet.MagicalYatzy.XF.iOS
             global::Xamarin.Forms.Forms.Init();
             _container = new Container();
             _container.RegisterModules();
-            LoadApplication(new App(_container));
+            App.Container = _container;
+            LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);
         }

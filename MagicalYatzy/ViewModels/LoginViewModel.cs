@@ -2,6 +2,8 @@
 using Sanet.MagicalYatzy.Services;
 using System.Windows.Input;
 using Sanet.MagicalYatzy.Models.Events;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Sanet.MagicalYatzy.ViewModels
 {
@@ -41,12 +43,19 @@ namespace Sanet.MagicalYatzy.ViewModels
         {
             var result = await _playerService.LoginAsync(NewUsername,NewPassword);
             if (result)
-                await NavigationService.CloseAsync();
+                await CloseAsync();
         });
+
+        public ICommand CloseCommand => new SimpleCommand(async () => await CloseAsync());
+
+        public string CloseImage => "close.png";
         #endregion
 
         #region Methods
-        
+        private async Task CloseAsync()
+        {
+            await NavigationService.CloseAsync();
+        }
         #endregion
 
     }

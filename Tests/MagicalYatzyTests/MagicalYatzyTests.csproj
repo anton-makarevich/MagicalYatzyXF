@@ -21,6 +21,7 @@
   <ItemGroup>
     <Folder Include="ServiceTests\" />
     <Folder Include="ViewModelTests\" />
+    <Folder Include="UtilTests\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MagicalYatzy\MagicalYatzy.csproj" />
@@ -29,5 +30,8 @@
     <Reference Include="SanetLegacyEncryption">
       <HintPath>..\..\libs\SanetLegacyEncryption\netstandard2.0\SanetLegacyEncryption.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="coverage.opencover.xml" />
   </ItemGroup>
 </Project>

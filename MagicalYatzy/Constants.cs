@@ -1,4 +1,7 @@
-﻿namespace Sanet.MagicalYatzy
+﻿using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("MagicalYatzyTests")]
+namespace Sanet.MagicalYatzy
 {
     public static class Constants
     {

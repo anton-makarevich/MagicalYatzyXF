@@ -19,12 +19,12 @@ namespace Sanet.MagicalYatzy.Services
         {
             _apiClient = apiClient;
             _storageService = storageService;
-
-            LoadPlayers();
         }
 
-        private async Task LoadPlayers()
+        public async Task LoadPlayersAsync()
         {
+            if (Players.Any())
+                return;
             var players = await _storageService.LoadPlayersAsync();
             if (players != null && players.Any())
                 _players = players;

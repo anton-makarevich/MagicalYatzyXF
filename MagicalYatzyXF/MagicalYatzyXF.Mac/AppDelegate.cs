@@ -33,9 +33,12 @@ namespace MagicalYatzyXF.Mac
         public override void DidFinishLaunching(NSNotification notification)
         {
 			Forms.Init();
+
             _container = new Container();
             _container.RegisterModules();
-            LoadApplication(new App(_container));
+            App.Container = _container;
+            LoadApplication(new App());
+
             base.DidFinishLaunching(notification);
         }
 

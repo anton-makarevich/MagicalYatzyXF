@@ -126,6 +126,9 @@
     <BundleResource Include="Resources\Settings.png" />
     <BundleResource Include="Resources\Share.png" />
     <BundleResource Include="Resources\Victory.png" />
+    <BundleResource Include="Resources\close%403x.png" />
+    <BundleResource Include="Resources\close.png" />
+    <BundleResource Include="Resources\close%402x.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

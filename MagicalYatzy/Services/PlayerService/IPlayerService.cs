@@ -15,6 +15,8 @@ namespace Sanet.MagicalYatzy.Services
 
         Task<bool> LoginAsync(string newUsername, string newPassword);
 
+        Task LoadPlayersAsync();
+
         event EventHandler PlayersUpdated;
     }
 }

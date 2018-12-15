@@ -16,7 +16,8 @@ namespace Sanet.MagicalYatzy.XF.Droid
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             _container = new Container();
             _container.RegisterModules();
-            LoadApplication(new App(_container));
+            App.Container = _container;
+            LoadApplication(new App());
         }
     }
 }

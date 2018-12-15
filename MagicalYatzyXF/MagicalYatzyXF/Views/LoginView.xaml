@@ -5,30 +5,42 @@
              xmlns:base="clr-namespace:Sanet.MagicalYatzy.XF.Views.Base"
              xmlns:vm="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
              xmlns:cells="clr-namespace:Sanet.MagicalYatzy.XF.Views.Cells"
-             xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Controls"
-             xmlns:gameControls="clr-namespace:Sanet.MagicalYatzy.XF.Controls.Game"
              xmlns:loc="clr-namespace:Sanet.MagicalYatzy.XF.MarkupExtensions"
+             xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Controls"
              x:TypeArguments="vm:LoginViewModel">
     <Grid
         BackgroundColor="Black"
         Padding = "10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="2*"/>
             <RowDefinition Height = "Auto"/>
             <RowDefinition Height ="4*"/>
             <RowDefinition Height = "Auto"/>
         </Grid.RowDefinitions>
+        <controls:TappableContentView
+            Command="{Binding CloseCommand}"
+            HorizontalOptions="End"
+            HeightRequest="40"
+            WidthRequest="40"
+            >
+            <Image Source="{Binding CloseImage, Converter={StaticResource ImageNameConverter}}"
+                InputTransparent='{OnPlatform macOS="True", UWP="False"}'
+                >
+            </Image>
+        </controls:TappableContentView>
         <Label VerticalTextAlignment = "Center"
             HorizontalTextAlignment = "Center"
             HorizontalOptions="Center"
             VerticalOptions="Center"
+            Grid.Row="1"
             Style="{StaticResource DescriptionLabelStyle}"
             Text="{loc:Strings NoRegistration}"
             />
         <Grid
             HorizontalOptions="Center"
             WidthRequest="{Binding PageWidth}"
-            Grid.Row="1">
+            Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width = "3*"/>
                 <ColumnDefinition Width = "10*"/>
@@ -66,34 +78,5 @@
                 Command="{Binding LoginCommand}"
                 />
         </Grid>
-        <ListView
-            ItemsSource="{Binding MenuActions}"
-            SeparatorVisibility="None"
-            Grid.Row="2"
-            RowHeight="50"
-            BackgroundColor = "Transparent">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <cells:MainMenuCell />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <Grid
-            HeightRequest = "50"
-            Grid.Row="3">
-            <Grid.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding FacebookLoginCommand}"/>
-            </Grid.GestureRecognizers>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width = "Auto"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Label Text="{Binding PlayerName}"
-                VerticalOptions = "Center"
-                Grid.Column="1" Grid.Row="0" Style="{StaticResource CaptionLabelStyle}" />
-            <Image Source="{Binding FacebookImage, Converter={StaticResource ImageNameConverter}}"
-                Grid.Column="0" Grid.Row="0"
-                Aspect="AspectFit" />
-        </Grid>
-    </Grid>
+    </Grid>  
 </base:BaseView>

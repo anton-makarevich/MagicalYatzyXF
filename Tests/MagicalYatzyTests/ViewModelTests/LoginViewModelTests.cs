@@ -29,5 +29,18 @@ namespace MagicalYatzyTests.ViewModelTests
 
             navigationServiceMock.Received().CloseAsync();
         }
+
+        [Fact] 
+        public void CloseCommandShouldCallBackNavigation()
+        {
+            _sut.CloseCommand.Execute(null);
+            navigationServiceMock.Received().CloseAsync();
+        }
+
+        [Fact]
+        public void CloseImageHasCorrectValue()
+        {
+            Assert.Equal("close.png", _sut.CloseImage);
+        }
     }
 }

@@ -7,6 +7,7 @@ using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Models.Events;
 using System.Windows.Input;
+using System.Threading.Tasks;
 
 namespace Sanet.MagicalYatzy.ViewModels
 {
@@ -148,12 +149,17 @@ namespace Sanet.MagicalYatzy.ViewModels
 
             NotifyPropertyChanged(nameof(SecondaryMenuActions));
         }
+
+        internal async Task LoadLocalPlayersAsync()
+        {
+            await _playerService.LoadPlayersAsync();
+        }
         #endregion
 
-        public override void AttachHandlers()
+        public override async void AttachHandlers()
         {
             _playerService.PlayersUpdated += OnPlayersUpdated;
-            OnPlayersUpdated(null, null);
+            await LoadLocalPlayersAsync();
         }
 
         public override void DetachHandlers()

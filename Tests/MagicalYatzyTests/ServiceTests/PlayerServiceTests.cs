@@ -23,8 +23,9 @@ namespace MagicalYatzyTests.ServiceTests
         }
 
         [Fact]
-        public void PlayerServiceShouldHaveDefaultPlayer()
+        public async Task PlayerServiceShouldHaveDefaultPlayer()
         {
+            await _sut.LoadPlayersAsync();
             Assert.NotNull(_sut.CurrentPlayer);
         }
 
@@ -32,6 +33,7 @@ namespace MagicalYatzyTests.ServiceTests
         public async Task LoginShouldInsertPlayer()
         {
             // Arrange
+            await _sut.LoadPlayersAsync();
             _apiMock.LoginUserAsync(TestUserName, TestUserPassword).Returns(Task.FromResult(TestPlayer));
             // Act
             var result = await _sut.LoginAsync(TestUserName,TestUserPassword);
@@ -45,8 +47,8 @@ namespace MagicalYatzyTests.ServiceTests
         [Fact]
         public async Task SuccesfulLoginShouldSavePlayer()
         {
-            List<Player> players = new List<Player>();
             // Arrange
+            List<Player> players = new List<Player>();
             _apiMock.LoginUserAsync(TestUserName, TestUserPassword).Returns(Task.FromResult(TestPlayer));
             _storageMock.SavePlayersAsync((List<Player>)_sut.Players).Returns((t) =>
             {
@@ -59,6 +61,7 @@ namespace MagicalYatzyTests.ServiceTests
             await Task.Delay(100);
             _storageMock.LoadPlayersAsync().Returns(Task.FromResult(players));
             _sut = new PlayerService(_apiMock, _storageMock);
+            await _sut.LoadPlayersAsync();
             // Asset
             Assert.True(_sut.Players.Count == players.Count);
             for (int i = 0; i < players.Count;i++)
@@ -114,6 +117,7 @@ namespace MagicalYatzyTests.ServiceTests
         public async Task SameUserShouldNotBeAddedTwice()
         {
             // Arrange
+            await _sut.LoadPlayersAsync();
             for (int i = 0; i < 6; i++)
             {
                 _apiMock.LoginUserAsync(TestUserName, TestUserPassword).Returns(Task.FromResult(TestPlayer));
@@ -127,6 +131,32 @@ namespace MagicalYatzyTests.ServiceTests
 
             // Asset
             Assert.True(_sut.Players.Count == 2);
+        }
+
+        [Fact]
+        public async Task LoadPlayersShouldCallStorageOnlyOnce()
+        {
+            // Act
+            await _sut.LoadPlayersAsync();
+            await _sut.LoadPlayersAsync();
+
+            // Asset
+            Assert.Single(_storageMock.ReceivedCalls());
+        }
+
+        [Fact]
+        public async Task LoadPlayersShouldTriggerUpdatePlayersOnlyOnce()
+        {
+            // Arrange
+            int playersUpdatedCalledTimes = 0;
+            _sut.PlayersUpdated += (s, e) => { playersUpdatedCalledTimes++; };
+
+            // Act
+            await _sut.LoadPlayersAsync();
+            await _sut.LoadPlayersAsync();
+
+            // Asset
+            Assert.Equal(1, playersUpdatedCalledTimes);
         }
 
         public static string TestUserName => "Anton";
