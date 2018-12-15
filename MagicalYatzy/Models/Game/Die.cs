@@ -149,7 +149,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             }
         }
 
-        public bool IsFrozen
+        public bool IsFixed
         {
             get { return _isFrozen; }
 
@@ -293,7 +293,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                 iResult = 0;
 
             //new
-            if (!IsFrozen)
+            if (!IsFixed)
             {
                 do
                 {
@@ -342,7 +342,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                 Frame = (Result - 1) * 6 + _gameSettingsService.DieAngle;
                 _rotationString = "stop.";
                 ImagePath = GetFramePicPath();
-                if (IsFrozen)
+                if (IsFixed)
                 {
                     Opacity = 0.5f;
                 }

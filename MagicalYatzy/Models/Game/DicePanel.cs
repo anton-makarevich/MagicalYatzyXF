@@ -20,7 +20,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         
         private bool _withSound = false;
         
-        private int _diceCount = 0;
+        private int _diceCount = 6;
         Die _lastClickedDie;
         private bool _ManualSetMode = false;
 
@@ -29,7 +29,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         #region Events
 
-        public event DieFrozenEventHandler DieFrozen;
+        public event DieFrozenEventHandler DieFixed;
         public event DieChangedEventHandler DieChangedManually;
         public event Action RollEnded;
         public event Action RollStarted;
@@ -44,6 +44,11 @@ namespace Sanet.MagicalYatzy.Models.Game
         public double TreeDScaleCoef { get; set; }
         public bool PlaySound { get; set; }
         public DiceStyle PanelStyle { get; } = DiceStyle.Classic;
+
+        public DicePanel()
+        {
+            GenerateDice();
+        }
 
         /// <summary>
         /// Number of Dice in the Panel
@@ -87,7 +92,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             }
         }
 
-        public bool AllDiceStopped
+        public bool AreAllDiceStopped
         {
             get
             {
@@ -101,7 +106,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             }
         }
 
-        private bool IsRolling
+        internal bool IsRolling
         {
             get
             {
@@ -156,7 +161,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
             _lastClickedDie.DrawDie();
             ManualSetMode = false;
-            DieChangedManually?.Invoke(_lastClickedDie.IsFrozen, oldvalue, _lastClickedDie.Result);
+            DieChangedManually?.Invoke(_lastClickedDie.IsFixed, oldvalue, _lastClickedDie.Result);
         }
 
         public void ChangeDice(int oldValue, int newValue)
@@ -174,6 +179,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         public void Dispose()
         {
             Dice.Clear();
+            Dice = null;
         }
 
         private void GenerateDice()
@@ -231,20 +237,20 @@ namespace Sanet.MagicalYatzy.Models.Game
                 ManualSetMode = false;
 
             //don't roll if all frozen
-            if (AllDiceFrozen())
+            if (AreAllDiceFixed)
             {
                 //LogManager.Log(LogLevel.Message, "DicePanel.RollDice","Can't roll... allfixed");
                 return false;
             }
             RollStarted?.Invoke();
             //first values for fixed dices
-            int j = Dice.Count(f => f.IsFrozen);
+            int j = Dice.Count(f => f.IsFixed);
 
             for (int i = 0; i <= Dice.Count - 1; i++)
             {
                 int iResult = 0;
                 var d = Dice[i];
-                if (d.IsFrozen)
+                if (d.IsFixed)
                     continue;
                 if ((aResults != null))
                 {
@@ -284,7 +290,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
             HandleCollisions();
 
-            if (!AllDiceStopped)
+            if (!AreAllDiceStopped)
             {
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                 BeginLoop();
@@ -346,63 +352,64 @@ namespace Sanet.MagicalYatzy.Models.Game
             }
             else if (ClickToFreeze)
             {
-                _lastClickedDie.IsFrozen = !_lastClickedDie.IsFrozen;
+                _lastClickedDie.IsFixed = !_lastClickedDie.IsFixed;
                 _lastClickedDie.DrawDie();
-                if (DieFrozen != null)
-                {
-                    DieFrozen(_lastClickedDie.IsFrozen, _lastClickedDie.Result);
-                }
+                DieFixed?.Invoke(_lastClickedDie.IsFixed, _lastClickedDie.Result);
             }
         }
 
-        private bool DiceGenerated()
-        {
-            return (Dice != null);
-        }
+        internal bool AreDiceGenerated => (Dice != null);
 
-        public int FrozenCount()
+        public int FixedDiceCount
         {
-            int num = 0;
-            foreach (Die d in Dice)
-                if (d.IsFrozen) num++;
-            return num;
+            get
+            {
+                int num = 0;
+                foreach (Die d in Dice)
+                    if (d.IsFixed) num++;
+                return num;
+            }
         }
 
         //don't roll if all frozen
-        public bool AllDiceFrozen()
+        public bool AreAllDiceFixed
         {
-            foreach (Die d in Dice)
+            get
             {
-                if (!d.IsFrozen)
+                foreach (Die d in Dice)
                 {
-                    return false;
+                    if (!d.IsFixed)
+                    {
+                        return false;
+                    }
                 }
+                return true;
             }
-            return true;
         }
+
         public void FixDice(int index, bool isfixed)
         {
             foreach (Die d in Dice)
             {
-                if (d.Result == index && d.IsFrozen == !isfixed)
+                if (d.Result == index && d.IsFixed == !isfixed)
                 {
-                    d.IsFrozen = isfixed;
+                    d.IsFixed = isfixed;
                     d.DrawDie();
                     return;
                 }
             }
         }
 
-        public void ClearFreeze()
+        public void UnfixAll()
         {
             Die d = null;
 
             foreach (Die d_loopVariable in Dice)
             {
                 d = d_loopVariable;
-                if (d.IsFrozen)
+                if (d.IsFixed)
                 {
-                    d.IsFrozen = false;
+                    d.IsFixed = false;
                     d.DrawDie();
                 }
             }
@@ -411,7 +418,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public void Resize(int width, int height)
         {
-            if (width == Bounds.Width && height == Bounds.Height)
+            if (Math.Abs(width - Bounds.Width) < 0.1 && Math.Abs(height - Bounds.Height) < 0.1)
                 return;
 
             Bounds = new Rectangle(0, 0, width, height);
