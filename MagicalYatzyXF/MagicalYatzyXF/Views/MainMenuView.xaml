@@ -29,36 +29,22 @@
                 VerticalOptions = "End"
                 HeightRequest = "50"
                 Padding = "10,0"
+                InputTransparent='{OnPlatform macOS="True", UWP="False"}'
                 >
-                <Grid.InputTransparent>
-                    <OnPlatform x:TypeArguments="x:Boolean">
-                        <On Platform="macOS">True</On>
-                        <On Platform="UWP">False</On>
-                    </OnPlatform>
-                </Grid.InputTransparent>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width = "60"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Image Source="{Binding PlayerImage, Converter={StaticResource ImageNameConverter}}"
                        Aspect="AspectFit"
+                       InputTransparent='{OnPlatform macOS="True", UWP="False"}'
                        >
-                    <Image.InputTransparent>
-                        <OnPlatform x:TypeArguments="x:Boolean">
-                            <On Platform="macOS">True</On>
-                            <On Platform="UWP">False</On>
-                        </OnPlatform>
-                    </Image.InputTransparent>
                 </Image>
                 <Label Text="{Binding PlayerName}"
                        VerticalOptions = "Center"
-                       Grid.Column="1" Style="{StaticResource CaptionLabelStyle}">
-                    <Label.InputTransparent>
-                        <OnPlatform x:TypeArguments="x:Boolean">
-                            <On Platform="macOS">True</On>
-                            <On Platform="UWP">False</On>
-                        </OnPlatform>
-                    </Label.InputTransparent>
+                       Grid.Column="1" Style="{StaticResource CaptionLabelStyle}"
+                       InputTransparent='{OnPlatform macOS="True", UWP="False"}'
+                       >
                 </Label>
             </Grid>
         </controls:TappableContentView>

@@ -9,11 +9,10 @@ namespace Sanet.MagicalYatzy.XF
 {
     public partial class App : Application
     {
-        public static Container Container { get; private set; }
-        public App(Container container)
+        public static Container Container { get; set; }
+        public App()
         {
             InitializeComponent();
-            Container = container;
             DiceLoaderHelper.PreloadImages();
             MainPage = new MainMenuView()
             {

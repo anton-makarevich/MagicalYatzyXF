@@ -4,6 +4,7 @@ using MagicalYatzyTests.ViewModelTests.Base;
 using Sanet.MagicalYatzy.Services;
 using NSubstitute;
 using Xunit;
+using System.Threading.Tasks;
 
 namespace MagicalYatzyTests.ViewModelTests
 {
@@ -32,6 +33,22 @@ namespace MagicalYatzyTests.ViewModelTests
             _sut.FillSecondaryActions();
 
             Assert.True(_sut.SecondaryMenuActions.Any());
+        }
+
+        [Fact]
+        public async Task LoadPlayersMethodShouldCallCorrespondingServiceMethod()
+        {
+            await _sut.LoadLocalPlayersAsync();
+
+            await playerServiceMock.Received().LoadPlayersAsync();
+        }
+
+        [Fact]
+        public async Task OpeningViewModelShouldLoadPlayers()
+        {
+            _sut.AttachHandlers();
+
+            await playerServiceMock.Received().LoadPlayersAsync();
         }
     }
 }

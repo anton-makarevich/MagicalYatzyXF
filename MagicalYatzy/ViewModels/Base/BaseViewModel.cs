@@ -1,5 +1,6 @@
 ﻿using Sanet.MagicalYatzy.Services;
 using System;
+using System.Threading.Tasks;
 
 namespace Sanet.MagicalYatzy.ViewModels.Base
 {
@@ -55,6 +56,6 @@ namespace Sanet.MagicalYatzy.ViewModels.Base
         {
             
         }
-#endregion
+        #endregion
     }
 }

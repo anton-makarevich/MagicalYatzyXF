@@ -173,6 +173,9 @@
     <BundleResource Include="..\MagicalYatzyXF.iOS\Resources\Victory.png">
       <Link>Resources\Victory.png</Link>
     </BundleResource>
+    <BundleResource Include="..\MagicalYatzyXF.Android\Resources\drawable-xxhdpi\close.png">
+      <Link>Resources\close.png</Link>
+    </BundleResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
