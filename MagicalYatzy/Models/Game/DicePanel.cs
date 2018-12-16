@@ -25,6 +25,8 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public event DieFrozenEventHandler DieFixed;
         public event DieChangedEventHandler DieChangedManually;
+        public event DieManualChangeRequestEventHandler DieManualChangeRequested;
+
         public event Action RollEnded;
         public event Action RollStarted;
         public event Action<Die> DieAdded;
@@ -128,14 +130,14 @@ namespace Sanet.MagicalYatzy.Models.Game
         #endregion
 
         #region Methods
-        /*void _popup_Closed(object sender, object e)
+        public void ChangeDiceManually(int newValue)
         {
             int oldvalue = _lastClickedDie.Result;
-
+            _lastClickedDie.Result = newValue;
             _lastClickedDie.DrawDie();
             ManualSetMode = false;
             DieChangedManually?.Invoke(_lastClickedDie.IsFixed, oldvalue, _lastClickedDie.Result);
-        }*/
+        }
 
         public void ChangeDice(int oldValue, int newValue)
         {
@@ -300,14 +302,13 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         }
         
-        public void DieClicked(object sender, IEnumerable<Point> e)
+        public void DieClicked(Point clickLocation)
         {
-            Point pointClicked = e.First();
             //determine if die was clicked
             _lastClickedDie = null;
             foreach (Die d in Dice)
             {
-                if (d.ClickedOn(pointClicked.X, pointClicked.Y))
+                if (d.ClickedOn(clickLocation.X, clickLocation.Y))
                 {
                     _lastClickedDie = d;
                     break; // TODO: might not be correct. Was : Exit For
@@ -319,9 +320,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
             if (ManualSetMode)
             {
-                /*_selectionPanel.SelectedDice = _lastClickedDie;
-                _selectionPanel.Draw();
-                _popup.IsOpen = true;*/
+                DieManualChangeRequested?.Invoke(ChangeDiceManually);
             }
             else if (ClickToFix)
             {
