@@ -26,6 +26,8 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         event DieChangedEventHandler DieChangedManually;
         event DieFrozenEventHandler DieFixed;
+        event DieManualChangeRequestEventHandler DieManualChangeRequested;
+
         event Action RollEnded;
         event Action RollStarted;
         event Action<Die> DieAdded;
@@ -33,9 +35,10 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         void ChangeDice(int oldValue, int newValue);
         void UnfixAll();
-        void DieClicked(object sender, IEnumerable<Point> e);
+        void DieClicked(Point clickLocation);
         void FixDice(int index, bool isfixed);
         bool RollDice(List<int> aResults);
         void Resize(int width, int height);
+        void ChangeDiceManually(int newValue);
     }
 }

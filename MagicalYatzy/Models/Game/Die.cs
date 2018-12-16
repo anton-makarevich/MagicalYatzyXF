@@ -462,9 +462,9 @@ namespace Sanet.MagicalYatzy.Models.Game
         }
 
         //new
-        public bool ClickedOn(double x, double y)
+        public bool ClickedOn(Point point)
         {
-            return this.Bounds.Contains(new Point(x, y));
+            return this.Bounds.Contains(point);
         }
         #endregion
     }

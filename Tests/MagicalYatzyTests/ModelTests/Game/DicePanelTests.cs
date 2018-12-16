@@ -4,7 +4,6 @@ using NSubstitute;
 using Xunit;
 using System.Collections.Generic;
 using System.Linq;
-using Sanet.MagicalYatzy.Models.Common;
 
 namespace MagicalYatzyTests.ModelTests.Game
 {
@@ -255,7 +254,7 @@ namespace MagicalYatzyTests.ModelTests.Game
             var pontInDice = diceToSelect.Bounds.Center;
 
             // Act
-            _sut.DieClicked(null, new List<Point> { pontInDice });
+            _sut.DieClicked(pontInDice);
 
             // Assert
             Assert.Equal(1, _sut.FixedDiceCount);
@@ -274,10 +273,58 @@ namespace MagicalYatzyTests.ModelTests.Game
             var pontInDice = diceToSelect.Bounds.Center;
 
             // Act
-            _sut.DieClicked(null, new List<Point> { pontInDice });
+            _sut.DieClicked(pontInDice);
 
             // Assert
             Assert.Equal(0, _sut.FixedDiceCount);
+        }
+
+        [Fact]
+        public void ClickOnDiceShoulUpdateItsValueIfManualSetModeIsOn()
+        {
+            // Arrange
+            var width = 300;
+            var height = 200;
+
+            var valueToSet = 3;
+            var initialValue = 1;
+
+            bool chanedEventValidated = false;
+
+            _sut.ManualSetMode = true;
+            _sut.Resize(width, height);
+            var diceToSelect = _sut.Dice.First();
+            diceToSelect.Result = initialValue;
+            var pontInDice = diceToSelect.Bounds.Center;
+            _sut.DieManualChangeRequested += (update) => { update(valueToSet); };
+            _sut.DieChangedManually += (isFixed, oldValue, newValue) => 
+            {
+                chanedEventValidated = oldValue == initialValue &&
+                    newValue == valueToSet && !isFixed; 
+            };
+
+            // Act
+            _sut.DieClicked( pontInDice );
+
+            // Assert
+            Assert.Equal(0, _sut.FixedDiceCount);
+            Assert.Equal(valueToSet, diceToSelect.Result);
+            Assert.True(chanedEventValidated);
+            Assert.False(_sut.ManualSetMode);
+        }
+
+        [Fact]
+        public void PanelResultShouldBeTheSumOfAllDice()
+        {
+            // Arrange
+            _sut.RollDelay = 0;
+
+            // Act
+            _sut.RollDice(TestResults);
+            var result = _sut.Result.DiceResults.Sum();
+
+            // Assert
+            Assert.Equal(result, _sut.Result.Total);
         }
     }
 }
