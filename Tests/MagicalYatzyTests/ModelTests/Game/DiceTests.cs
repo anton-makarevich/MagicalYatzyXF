@@ -147,5 +147,28 @@ namespace MagicalYatzyTests.ModelTests.Game
             Assert.Equal(thisDirection, _sut._directionY);
             Assert.Equal(othersDirection * -1, otherDice._directionY);
         }
+
+        [Fact]
+        public void FixedDiceShouldChangedOpacity()
+        {
+            // Arrange
+            _sut.IsFixed = true;
+
+            //Act
+            _sut.DrawDie();
+
+            // Assert
+            Assert.True(_sut.Opacity < 1);
+        }
+
+        [Fact]
+        public void ImagePathShouldPointToPngImage()
+        {
+            //Act
+            _sut.DrawDie();
+
+            // Assert
+            Assert.EndsWith("png", _sut.ImagePath);
+        }
     }
 }
