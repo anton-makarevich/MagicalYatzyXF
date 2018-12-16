@@ -15,7 +15,8 @@ namespace Sanet.MagicalYatzy.Models.Game
         private static Random ValueGenerator = new Random();
 
         const int MAXMOVE = 5;
-
+        private const int MinDiceValue = 1;
+        private const int MaxDiceValue = 6;
         private readonly IGameSettingsService _gameSettingsService;
         private readonly IDicePanel _dicePanel;
 
@@ -31,16 +32,16 @@ namespace Sanet.MagicalYatzy.Models.Game
         private int _rollLoop;
 
         //dimensions
-        private int _height = 72;
-        private int _width = 72;
+        private readonly int _height = 72;
+        private readonly int _width = 72;
 
         //position
         private int _posX;
         private int _posY;
 
         //direction
-        private int _directionX;
-        private int _directionY;
+        internal int _directionX;
+        internal int _directionY;
 
         private DieStatus _status = DieStatus.Stopped;
 
@@ -52,10 +53,6 @@ namespace Sanet.MagicalYatzy.Models.Game
         private float _opacity;
 
         private string _imagePath;
-
-        private bool _isFrozen;
-
-        public int _soundCounter;
 
         #endregion
 
@@ -84,7 +81,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             get { return _result; }
             set
             {
-                if (value < 1 | value > 6)
+                if (value < MinDiceValue | value > MaxDiceValue)
                 {
                     throw new Exception($"Unexpected value {value}. Should be in the range 1..6");
                 }
@@ -95,35 +92,29 @@ namespace Sanet.MagicalYatzy.Models.Game
             }
         }
 
-        private int PosX
+        internal int PosX
         {
             get { return _posX; }
             set
             {
-                int ks = 0;
-
                 _posX = value;
 
-                if (_posX < 0 + ks)
+                if (_posX < 0 )
                 {
-                    _posX = 0 + ks;
+                    _posX = 0;
                     BounceX();
                 }
-                double MW = 0;
-                try
+                double MW =  _dicePanel.Bounds.Width;
+
+                if (_posX > (MW) - _width)
                 {
-                    MW = _dicePanel.Bounds.Width;
-                }
-                catch { }
-                if (_posX > (MW) - _width - ks)
-                {
-                    _posX = (int)(MW) - _width - ks;
+                    _posX = (int)(MW) - _width;
                     BounceX();
                 }
             }
         }
 
-        private int PosY
+        internal int PosY
         {
             get { return _posY; }
             set
@@ -135,12 +126,8 @@ namespace Sanet.MagicalYatzy.Models.Game
                     _posY = 0;
                     BounceY();
                 }
-                double MH = 0;
-                try
-                {
-                    MH = _dicePanel.Bounds.Height;
-                }
-                catch { }
+                double MH = _dicePanel.Bounds.Height;
+
                 if (_posY > MH - _height)
                 {
                     _posY = (int)(MH) - _height;
@@ -149,12 +136,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             }
         }
 
-        public bool IsFixed
-        {
-            get { return _isFrozen; }
-
-            set { _isFrozen = value; }
-        }
+        public bool IsFixed { get; set; }
 
         internal DieStatus Status
         {
@@ -165,9 +147,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                 if (value == DieStatus.Stopped)
                 {
                     _directionX = 0;
-                    //stop direction
                     _directionY = 0;
-
                 }
             }
         }
@@ -219,13 +199,13 @@ namespace Sanet.MagicalYatzy.Models.Game
         {
             try
             {
-                var w1 = (int)_dicePanel.Bounds.Width;
-                var h1 = (int)_dicePanel.Bounds.Height;
-                if (w1 > 0 && h1 > 0)
+                var width = (int)_dicePanel.Bounds.Width;
+                var height = (int)_dicePanel.Bounds.Height;
+                if (width > 0 && height > 0)
                 {
-                    int mw = w1 - _width;
+                    int mw = width - _width;
                     PosX = ValueGenerator.Next(1, mw);
-                    mw = h1 - _height;
+                    mw = height - _height;
                     PosY = ValueGenerator.Next(1, mw);
                 }
                 else
@@ -418,7 +398,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             Die dTop = null;
             Die dBot = null;
 
-            if (this.PosY < d.PosY)
+            if (PosY < d.PosY)
             {
                 dTop = this;
                 dBot = d;
@@ -431,7 +411,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
             if (dTop._directionY >= 0 & dBot._directionY <= 0)
             {
-                this.BounceY();
+                BounceY();
                 d.BounceY();
                 return;
             }
@@ -464,7 +444,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         //new
         public bool ClickedOn(Point point)
         {
-            return this.Bounds.Contains(point);
+            return Bounds.Contains(point);
         }
         #endregion
     }
