@@ -13,11 +13,12 @@ namespace Sanet.MagicalYatzy.Models.Game
     /// </summary>
     public class DicePanel : IDicePanel
     {
+        private const int MaxAttemptsToFindDicePosition = 1000;
 
         #region Fields
-        public List<Die> Dice = new List<Die>();
         private int _diceCount = 6;
         internal Die _lastClickedDie;
+
         private readonly IGameSettingsService _gameSettingsService;
         #endregion
 
@@ -32,6 +33,8 @@ namespace Sanet.MagicalYatzy.Models.Game
         public event Action<Die> DieAdded;
         public event Action<Die> DieRemoved;
 
+        internal bool AreDiceGenerated => (Dice != null);
+
         #endregion
 
         #region Properties
@@ -40,12 +43,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         public double TreeDScaleCoef { get; set; }
         public bool PlaySound { get; set; }
         public DiceStyle PanelStyle { get; } = DiceStyle.Classic;
-
-        public DicePanel()
-        {
-            GenerateDice();
-        }
-
+        public List<Die> Dice { get; set; } = new List<Die>();
         /// <summary>
         /// Number of Dice in the Panel
         /// </summary>
@@ -57,9 +55,9 @@ namespace Sanet.MagicalYatzy.Models.Game
                 _diceCount = value;
 
                 GenerateDice();
-
             }
         }
+
         /// <summary>
         /// Draws a Box Around the Die for Collision Debugging
         /// </summary>
@@ -73,44 +71,11 @@ namespace Sanet.MagicalYatzy.Models.Game
         /// <summary>
         /// Summed Result of All the Dice
         /// </summary>
-        public DieResult Result
-        {
-            get
-            {
-                var dr = new List<int>();
+        public DieResult Result => new DieResult { DiceResults = Dice.Select(d=>d.Result).ToList() };
 
-                foreach (Die d in Dice)
-                {
-                    dr.Add(d.Result);
+        public bool AreAllDiceStopped => !Dice.Any(d => d.IsRolling || d.IsLanding);
 
-                }
-                return new DieResult { DiceResults = dr };
-            }
-        }
-
-        public bool AreAllDiceStopped
-        {
-            get
-            {
-                foreach (Die d in Dice)
-                {
-                    if (d.IsRolling || d.IsLanding)
-                        return false;
-                }
-
-                return true;
-            }
-        }
-
-        internal bool IsRolling
-        {
-            get
-            {
-                foreach (Die d in Dice)
-                    if (d.IsRolling) return true;
-                return false;
-            }
-        }
+        internal bool IsRolling => Dice.Any(d => d.IsRolling);
 
         public bool WithSound { get; set; } = false;
 
@@ -119,13 +84,18 @@ namespace Sanet.MagicalYatzy.Models.Game
         public bool ManualSetMode { get; set; } = false;
 
         public Rectangle Bounds { get; private set; }
-        
+
+        public int FixedDiceCount => Dice.Count(d => d.IsFixed);
+
+        public bool AreAllDiceFixed => FixedDiceCount == Dice.Count;
+
         #endregion
 
         #region Constructor
         public DicePanel(IGameSettingsService gameSettingsService)
         {
             _gameSettingsService = gameSettingsService;
+            GenerateDice();
         }
         #endregion
 
@@ -153,13 +123,125 @@ namespace Sanet.MagicalYatzy.Models.Game
         /// </summary>
         public void Dispose()
         {
+            DiceCount = 0;
             Dice.Clear();
             Dice = null;
         }
 
+        public bool RollDice(List<int> overrideValues)
+        {
+            if (ManualSetMode)
+                ManualSetMode = false;
+
+            //don't roll if all are fixed
+            if (AreAllDiceFixed)
+            {
+                return false;
+            }
+
+            RollStarted?.Invoke();
+
+            var shouldOverrideValues = overrideValues != null && 
+                overrideValues.Count == Dice.Count;
+
+            //first values for fixed dices
+            int fixedDiceCount = Dice.Count(f => f.IsFixed);
+
+            for (int i = 0; i <= Dice.Count - 1; i++)
+            {
+                int initialResulrValue = 0;
+                var d = Dice[i];
+                if (d.IsFixed)
+                    continue;
+                if (shouldOverrideValues)
+                {
+                    initialResulrValue = overrideValues[fixedDiceCount];
+                    fixedDiceCount += 1;
+                }
+
+                d.InitializeRoll(initialResulrValue);
+            }
+
+            // Start playing the animation loop
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            BeginLoop();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            return true;
+        }
+
+        public void DieClicked(Point clickLocation)
+        {
+            //determine if die was clicked
+            _lastClickedDie = null;
+            foreach (Die d in Dice)
+            {
+                if (d.ClickedOn(clickLocation))
+                {
+                    _lastClickedDie = d;
+                    break;
+                }
+            }
+            //no die was clicked
+            if (_lastClickedDie == null)
+                return;
+
+            if (ManualSetMode)
+            {
+                DieManualChangeRequested?.Invoke(ChangeDiceManually);
+            }
+            else if (ClickToFix)
+            {
+                _lastClickedDie.IsFixed = !_lastClickedDie.IsFixed;
+                _lastClickedDie.DrawDie();
+                DieFixed?.Invoke(_lastClickedDie.IsFixed, _lastClickedDie.Result);
+            }
+        }
+
+        public void FixDice(int index, bool isfixed)
+        {
+            foreach (Die d in Dice)
+            {
+                if (d.Result == index && d.IsFixed == !isfixed)
+                {
+                    d.IsFixed = isfixed;
+                    d.DrawDie();
+                    return;
+                }
+            }
+        }
+
+        public void UnfixAll()
+        {
+            foreach (Die dice in Dice)
+            {
+                if (dice.IsFixed)
+                {
+                    dice.IsFixed = false;
+                    dice.DrawDie();
+                }
+            }
+        }
+
+        public void Resize(int width, int height)
+        {
+            if (Math.Abs(width - Bounds.Width) < 0.1 && Math.Abs(height - Bounds.Height) < 0.1)
+                return;
+
+            Bounds = new Rectangle(0, 0, width, height);
+
+            foreach (Die d in Dice)
+            {
+                if (!Bounds.Contains(d.Bounds) || d.Bounds.Position.IsZero )
+                    FindDiePosition(d);
+            }
+        }
+        #endregion
+
+        #region Private methods
+
         private void GenerateDice()
         {
-            if (Dice!=null && Dice.Any())
+            if (Dice != null && Dice.Any())
             {
                 foreach (var die in Dice)
                 {
@@ -177,7 +259,6 @@ namespace Sanet.MagicalYatzy.Models.Game
 
                 Dice.Add(d);
 
-                
                 DieAdded?.Invoke(d);
             }
         }
@@ -197,57 +278,11 @@ namespace Sanet.MagicalYatzy.Models.Game
                 die.InitializeLocation();
                 foreach (Die otherDie in Dice)
                 {
-                    if (die.Overlapping(otherDie))
-                    {
-                        _isDone = false;
-                    }
+                    _isDone = !die.Overlapping(otherDie);
                 }
-            } while (!(_isDone | attempt > 1000));
+            } while (!(_isDone | attempt > MaxAttemptsToFindDicePosition));
             die.DrawDie();
         }
-
-        public bool RollDice(List<int> aResults)
-        {
-            if (ManualSetMode)
-                ManualSetMode = false;
-
-            //don't roll if all frozen
-            if (AreAllDiceFixed)
-            {
-                //LogManager.Log(LogLevel.Message, "DicePanel.RollDice","Can't roll... allfixed");
-                return false;
-            }
-            RollStarted?.Invoke();
-            //first values for fixed dices
-            int j = Dice.Count(f => f.IsFixed);
-
-            for (int i = 0; i <= Dice.Count - 1; i++)
-            {
-                int iResult = 0;
-                var d = Dice[i];
-                if (d.IsFixed)
-                    continue;
-                if ((aResults != null))
-                {
-                    if (aResults.Count == Dice.Count)
-                    {
-                        iResult = aResults[j];
-                        j += 1;
-                    }
-
-                }
-                //d.iSound = FRand.Next(1, 10);
-                d.InitializeRoll(iResult);
-            }
-
-            // Start playing the Storyboard loop
-
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            BeginLoop();
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            return true;
-        }
-
 
         private async Task BeginLoop()
         {
@@ -299,110 +334,8 @@ namespace Sanet.MagicalYatzy.Models.Game
                     di.HandleCollision(dj);
                 }
             }
-
-        }
-        
-        public void DieClicked(Point clickLocation)
-        {
-            //determine if die was clicked
-            _lastClickedDie = null;
-            foreach (Die d in Dice)
-            {
-                if (d.ClickedOn(clickLocation.X, clickLocation.Y))
-                {
-                    _lastClickedDie = d;
-                    break; // TODO: might not be correct. Was : Exit For
-                }
-            }
-            //no die was clicked
-            if (_lastClickedDie == null)
-                return;
-
-            if (ManualSetMode)
-            {
-                DieManualChangeRequested?.Invoke(ChangeDiceManually);
-            }
-            else if (ClickToFix)
-            {
-                _lastClickedDie.IsFixed = !_lastClickedDie.IsFixed;
-                _lastClickedDie.DrawDie();
-                DieFixed?.Invoke(_lastClickedDie.IsFixed, _lastClickedDie.Result);
-            }
         }
 
-        internal bool AreDiceGenerated => (Dice != null);
-
-        public int FixedDiceCount
-        {
-            get
-            {
-                int num = 0;
-                foreach (Die d in Dice)
-                    if (d.IsFixed) num++;
-                return num;
-            }
-        }
-
-        //don't roll if all frozen
-        public bool AreAllDiceFixed
-        {
-            get
-            {
-                foreach (Die d in Dice)
-                {
-                    if (!d.IsFixed)
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        }
-
-        public void FixDice(int index, bool isfixed)
-        {
-            foreach (Die d in Dice)
-            {
-                if (d.Result == index && d.IsFixed == !isfixed)
-                {
-                    d.IsFixed = isfixed;
-                    d.DrawDie();
-                    return;
-                }
-            }
-        }
-
-        public void UnfixAll()
-        {
-            Die d = null;
-
-            foreach (Die d_loopVariable in Dice)
-            {
-                d = d_loopVariable;
-                if (d.IsFixed)
-                {
-                    d.IsFixed = false;
-                    d.DrawDie();
-                }
-            }
-
-        }
-
-        public void Resize(int width, int height)
-        {
-            if (Math.Abs(width - Bounds.Width) < 0.1 && Math.Abs(height - Bounds.Height) < 0.1)
-                return;
-
-            Bounds = new Rectangle(0, 0, width, height);
-
-            foreach (Die d in Dice)
-            {
-                if (!Bounds.Contains(d.Bounds) || d.Bounds.Position.IsZero )
-                    FindDiePosition(d);
-            }
-        }
         #endregion
     }
-
-
 }

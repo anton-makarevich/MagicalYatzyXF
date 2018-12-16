@@ -312,5 +312,19 @@ namespace MagicalYatzyTests.ModelTests.Game
             Assert.True(chanedEventValidated);
             Assert.False(_sut.ManualSetMode);
         }
+
+        [Fact]
+        public void PanelResultShouldBeTheSumOfAllDice()
+        {
+            // Arrange
+            _sut.RollDelay = 0;
+
+            // Act
+            _sut.RollDice(TestResults);
+            var result = _sut.Result.DiceResults.Sum();
+
+            // Assert
+            Assert.Equal(result, _sut.Result.Total);
+        }
     }
 }
