@@ -5,13 +5,14 @@ using Sanet.MagicalYatzy.Services;
 using NSubstitute;
 using Xunit;
 using System.Threading.Tasks;
+using Sanet.MagicalYatzy.Resources;
 
 namespace MagicalYatzyTests.ViewModelTests
 {
     public class MainMenuViewModelsTests:BaseDicePanelViewModelTests
     {
         private MainMenuViewModel _sut;
-        private IExternalNavigationService _externalNavigationServiceMock;
+        private readonly IExternalNavigationService _externalNavigationServiceMock;
 
         public MainMenuViewModelsTests()
         {
@@ -25,6 +26,28 @@ namespace MagicalYatzyTests.ViewModelTests
             _sut.FillMainActions();
 
             Assert.True(_sut.MenuActions.Any());
+        }
+
+        [Fact]
+        public void MainMenuShouldContainNewLoacalGameitem()
+        {
+            _sut.FillMainActions();
+
+            var newLocalGameMenuItem = _sut.MenuActions.FirstOrDefault(mm => mm.Label == Strings.NewLocalGameAction);
+            Assert.NotNull(newLocalGameMenuItem);
+            Assert.Equal("SanetDice.png", newLocalGameMenuItem.Image);
+            Assert.Equal(Strings.NewLocalGameDescription, newLocalGameMenuItem.Description);
+        }
+
+        [Fact]
+        public void CallingNewLoacalGameitemShouldTriggercorrespondingNavigationServiceMethod()
+        {
+            _sut.SetNavigationService(navigationServiceMock);
+            _sut.FillMainActions();
+
+            var newLocalGameMenuItem = _sut.MenuActions.FirstOrDefault(mm => mm.Label == Strings.NewLocalGameAction);
+            newLocalGameMenuItem.MenuAction.Execute(null);
+            navigationServiceMock.Received().NavigateToViewModelAsync<LobbyViewModel>();
         }
 
         [Fact]
