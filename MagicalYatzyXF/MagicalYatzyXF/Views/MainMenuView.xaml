@@ -50,11 +50,13 @@
         </controls:TappableContentView>
         
         <ListView
+            x:Name="MainMenuList"
             ItemsSource="{Binding MenuActions}"
             SeparatorVisibility="None"
             Grid.Row="2"
             Grid.Column="1"
             RowHeight="80"
+            ItemSelected="MainMenuItemSelected"
             VerticalOptions = "Start"
             BackgroundColor = "Transparent">
             <ListView.ItemTemplate>

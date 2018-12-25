@@ -13,6 +13,7 @@ namespace Sanet.MagicalYatzy.XF.Views.Base
 
         protected BaseView() : base()
         {
+            Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, false);
             BackgroundColor = Color.Black;
 
             On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUseSafeArea(true);

@@ -1,11 +1,10 @@
-﻿using Sanet.MagicalYatzy.ViewModels.Base;
+﻿using Sanet.MagicalYatzy.Models.Game;
+using Sanet.MagicalYatzy.ViewModels.Base;
 
 namespace Sanet.MagicalYatzy.ViewModels
 {
-    public class LobbyViewModel: BaseViewModel
+    public class LobbyViewModel: DicePanelViewModel
     {
-        public LobbyViewModel()
-        {
-        }
+        public LobbyViewModel(IDicePanel dicePanel) : base(dicePanel) { }
     }
 }

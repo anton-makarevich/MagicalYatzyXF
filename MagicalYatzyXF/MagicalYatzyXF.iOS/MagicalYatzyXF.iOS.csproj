@@ -129,6 +129,9 @@
     <BundleResource Include="Resources\close%403x.png" />
     <BundleResource Include="Resources\close.png" />
     <BundleResource Include="Resources\close%402x.png" />
+    <BundleResource Include="Resources\backarrow.png" />
+    <BundleResource Include="Resources\backarrow%402x.png" />
+    <BundleResource Include="Resources\backarrow%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

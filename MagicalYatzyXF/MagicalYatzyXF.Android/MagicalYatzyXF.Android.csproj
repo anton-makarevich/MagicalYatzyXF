@@ -127,6 +127,10 @@
     <AndroidResource Include="Resources\drawable-hdpi\close.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\close.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\close.png" />
+    <AndroidResource Include="Resources\drawable\backarrow.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\backarrow.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\backarrow.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\backarrow.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

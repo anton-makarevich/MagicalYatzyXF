@@ -18,10 +18,13 @@
   </ItemGroup>
   
   <ItemGroup>
+    <Compile Remove="Views\LobbyView.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <!-- https://bugzilla.xamarin.com/show_bug.cgi?id=55591 -->
     <None Remove="**\*.xaml" />
     
-    <Compile Update="**\*.xaml.cs" DependentUpon="%(Filename)" />
+    <Compile Update="**\*.xaml.cs" DependentUpon="LobbyView.xaml" />
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Cells\MainMenuCell.xaml %28copy%29.cs">
       <DependentUpon>SecondaryMenuCell.xaml</DependentUpon>
     </Compile>

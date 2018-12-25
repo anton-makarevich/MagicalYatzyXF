@@ -42,6 +42,11 @@ namespace MagicalYatzyXF.Mac
             base.DidFinishLaunching(notification);
         }
 
+        public override bool ApplicationShouldTerminateAfterLastWindowClosed(NSApplication sender)
+        {
+            return true;
+        }
+
         public override void WillTerminate(NSNotification notification)
         {
             // Insert code here to tear down your application

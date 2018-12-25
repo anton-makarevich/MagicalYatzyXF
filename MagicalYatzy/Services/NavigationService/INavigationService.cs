@@ -15,7 +15,7 @@ namespace Sanet.MagicalYatzy.Services
         Task ShowViewModelAsync<T>(T viewModel) where T : BaseViewModel;
         Task ShowViewModelAsync<T>() where T : BaseViewModel;
 
-        Task NavigateBack();
+        Task NavigateBackAsync();
         Task CloseAsync();
     }
 }

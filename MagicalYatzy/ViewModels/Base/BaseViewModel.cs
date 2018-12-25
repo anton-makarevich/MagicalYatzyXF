@@ -1,5 +1,8 @@
 ﻿using Sanet.MagicalYatzy.Services;
 using System;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Sanet.MagicalYatzy.Models.Events;
 
 namespace Sanet.MagicalYatzy.ViewModels.Base
 {
@@ -40,10 +43,19 @@ namespace Sanet.MagicalYatzy.ViewModels.Base
         }
         #endregion
 
+        #region Commands
+        public ICommand BackCommand => new SimpleCommand(async () => await GoBackAsync());
+        #endregion
+
         #region Methods
         public void SetNavigationService(INavigationService navigationService)
         {
             _navigationService = navigationService;
+        }
+
+        public async Task GoBackAsync()
+        {
+            await NavigationService.NavigateBackAsync();
         }
 
         public virtual void AttachHandlers() { }

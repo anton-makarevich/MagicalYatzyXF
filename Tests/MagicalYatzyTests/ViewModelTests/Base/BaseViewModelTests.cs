@@ -3,6 +3,7 @@ using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using Xunit;
 using System;
+using System.Threading.Tasks;
 
 namespace MagicalYatzyTests.ViewModelTests.Base
 {
@@ -75,6 +76,14 @@ namespace MagicalYatzyTests.ViewModelTests.Base
         {
             _sut.SetNavigationService(navigationServiceMock);
             Assert.NotNull(_sut.NavigationService);
+        }
+
+        [Fact]
+        public async Task GoBackShouldTriggerNavgationServiceNavigateBack()
+        {
+            _sut.SetNavigationService(navigationServiceMock);
+            _sut.BackCommand.Execute(null);
+            await navigationServiceMock.Received().NavigateBackAsync();
         }
 
         [Fact]
