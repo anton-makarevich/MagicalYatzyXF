@@ -116,7 +116,7 @@ namespace Sanet.MagicalYatzy.XF.Services
             return view;
         }
 
-        public async Task NavigateBack()
+        public async Task NavigateBackAsync()
         {
             await FormsNavigation.PopAsync();
         }

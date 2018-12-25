@@ -86,7 +86,7 @@ namespace Sanet.MagicalYatzy.ViewModels
                 new MainMenuAction
                 {
                     Label = Strings.NewLocalGameAction,
-                    MenuAction = new SimpleCommand(() => { /*_navigationService.NavigateToPage(AppPages.LobbyPage);*/ }),
+                    MenuAction = new SimpleCommand(() => { NavigationService.NavigateToViewModelAsync<LobbyViewModel>(); }),
                     Description = Strings.NewLocalGameDescription,
                     Image = "SanetDice.png",
                 },

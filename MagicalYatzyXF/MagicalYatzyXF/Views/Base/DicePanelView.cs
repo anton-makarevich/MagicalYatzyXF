@@ -9,30 +9,28 @@ namespace Sanet.MagicalYatzy.XF.Views.Base
         private DicePanelXF _dicePanel;
         protected void InitDicePanel()
         {
-            var pageGrid = Content as Grid;
-            if (pageGrid != null && ViewModel?.DicePanel != null)
+            if (_dicePanel != null)
+                return;
+            if (Content is Grid pageGrid && ViewModel?.DicePanel != null)
             {
-                _dicePanel = new DicePanelXF();
-                _dicePanel.SetValue(Grid.RowSpanProperty, pageGrid.RowDefinitions.Count);
-                _dicePanel.SetValue(Grid.ColumnSpanProperty, pageGrid.ColumnDefinitions.Count);
+                _dicePanel = new DicePanelXF
+                {
+                    InputTransparent = Device.RuntimePlatform == Device.macOS
+                };
+                if (pageGrid.RowDefinitions.Count > 0)
+                    _dicePanel.SetValue(Grid.RowSpanProperty, pageGrid.RowDefinitions.Count);
+                if (pageGrid.ColumnDefinitions.Count > 0)
+                    _dicePanel.SetValue(Grid.ColumnSpanProperty, pageGrid.ColumnDefinitions.Count);
                 _dicePanel.DicePanel = ViewModel.DicePanel;
-                pageGrid.Children.Insert(0,_dicePanel);
+                pageGrid.Children.Insert(0, _dicePanel);
                 ViewModel.DicePanel.DiceCount = 5;
                 ViewModel.DicePanel.RollDelay = 30;
-            }
-        }
-        public override TViewModel ViewModel
-        {
-            get => base.ViewModel; 
-            set
-            {
-                base.ViewModel = value;
-                InitDicePanel();
             }
         }
 
         protected override void OnAppearing()
         {
+            InitDicePanel();
             base.OnAppearing();
             ViewModel.DicePanel.RollEnded += Roll;
             Roll();

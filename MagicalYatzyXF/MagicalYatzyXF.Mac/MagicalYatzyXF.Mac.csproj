@@ -133,9 +133,6 @@
     <Compile Include="Renderers\TappableContentViewRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <InterfaceDefinition Include="Main.storyboard" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\MagicalYatzy\MagicalYatzy.csproj">
       <Project>{CF5D56A6-688C-45BF-BEC3-171D8197910A}</Project>
       <Name>MagicalYatzy</Name>
@@ -175,6 +172,9 @@
     </BundleResource>
     <BundleResource Include="..\MagicalYatzyXF.Android\Resources\drawable-xxhdpi\close.png">
       <Link>Resources\close.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\MagicalYatzyXF.Android\Resources\drawable-xxhdpi\backarrow.png">
+      <Link>Resources\backarrow.png</Link>
     </BundleResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />

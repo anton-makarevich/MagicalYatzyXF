@@ -14,10 +14,10 @@ namespace Sanet.MagicalYatzy.XF
         {
             InitializeComponent();
             DiceLoaderHelper.PreloadImages();
-            MainPage = new MainMenuView()
+            MainPage = new NavigationPage( new MainMenuView()
             {
                 ViewModel = new XamarinFormsNavigationService().GetViewModel<MainMenuViewModel>()
-            };
+            });
         }
 
         protected override void OnStart()
