@@ -74,8 +74,7 @@ namespace Sanet.MagicalYatzy.XF.Controls
 
         private void ObservableUpdateItems(HorizontalListView stack, IEnumerable newValue)
         {
-            var observableCollection = newValue as INotifyCollectionChanged;
-            if (observableCollection != null)
+            if (newValue is INotifyCollectionChanged observableCollection)
             {
                 observableCollection.CollectionChanged += (sender, args) =>
                 {

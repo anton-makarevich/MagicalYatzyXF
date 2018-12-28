@@ -4,7 +4,27 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:base="clr-namespace:Sanet.MagicalYatzy.XF.Views.Base"
     xmlns:vm="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
+    xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Controls"
     x:Class="Sanet.MagicalYatzy.XF.Views.LobbyView"
     x:TypeArguments="vm:LobbyViewModel">
-    <Grid/>
+    <Grid
+        BackgroundColor="Fuchsia">
+        <controls:AdaptiveStackPanel>
+            <StackLayout
+                Orientation="Vertical">
+                <Label Text="Title 1"/>
+                <Label Text="subtitle 1"/>
+                <BoxView x:Name="Box1" BackgroundColor="Blue"
+                     Grid.ColumnSpan="2" Grid.Column="0" 
+                     HorizontalOptions="CenterAndExpand"/>
+            </StackLayout>
+            <StackLayout
+                Orientation="Vertical">
+                <Label Text="Title 1"/>
+                <Label Text="subtitle 1"/>
+                <BoxView x:Name="Box2" BackgroundColor="Red"
+                     Grid.Column="1" HorizontalOptions="CenterAndExpand"/>
+            </StackLayout>
+        </controls:AdaptiveStackPanel>
+    </Grid>
 </base:NavigationBackView>
