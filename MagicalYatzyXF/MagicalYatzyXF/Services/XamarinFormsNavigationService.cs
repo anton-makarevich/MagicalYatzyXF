@@ -4,10 +4,12 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Sanet.MagicalYatzy.Services;
+using Sanet.MagicalYatzy.Utils;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using Sanet.MagicalYatzy.Views;
 using Sanet.MagicalYatzy.XF.Views.Base;
 using Xamarin.Forms;
+using Sanet.MagicalYatzy.XF.Models;
 
 namespace Sanet.MagicalYatzy.XF.Services
 {
@@ -31,6 +33,20 @@ namespace Sanet.MagicalYatzy.XF.Services
             foreach (var type in assembly.DefinedTypes.Where(dt => !dt.IsAbstract &&
                 dt.ImplementedInterfaces.Any(ii => ii == typeof(IBaseView))))
             {
+                var shouldAddView = true;
+                foreach (var formFactor in EnumUtils.GetValues<FormFactor>())
+                {
+                    var formFactorString = formFactor.ToString().ToLower();
+                    if (type.Name.ToLower().EndsWith(formFactorString, StringComparison.CurrentCulture)
+                        && App.FormFactor != formFactor)
+                    {
+                        shouldAddView = false;
+                        break;
+                    }
+                }
+                if (!shouldAddView)
+                    continue;
+
                 var viewForType = type.ImplementedInterfaces.FirstOrDefault(
                     ii => ii.IsConstructedGenericType &&
                     ii.GetGenericTypeDefinition() == typeof(IBaseView<>));

@@ -4,6 +4,7 @@ using Sanet.MagicalYatzy.XF.Services;
 using Sanet.MagicalYatzy.XF.Views;
 using SimpleInjector;
 using Xamarin.Forms;
+using Sanet.MagicalYatzy.XF.Models;
 
 namespace Sanet.MagicalYatzy.XF
 {
@@ -19,6 +20,10 @@ namespace Sanet.MagicalYatzy.XF
                 ViewModel = new XamarinFormsNavigationService().GetViewModel<MainMenuViewModel>()
             });
         }
+
+        public static FormFactor FormFactor => 
+            (Device.Idiom == TargetIdiom.Phone) ? FormFactor.Narrow : FormFactor.Wide;
+
 
         protected override void OnStart()
         {
