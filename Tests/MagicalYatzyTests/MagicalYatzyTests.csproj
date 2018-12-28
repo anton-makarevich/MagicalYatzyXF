@@ -24,6 +24,7 @@
     <Folder Include="UtilTests\" />
     <Folder Include="ModelTests\" />
     <Folder Include="ModelTests\Game\" />
+    <Folder Include="ModelTests\Common\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MagicalYatzy\MagicalYatzy.csproj" />
