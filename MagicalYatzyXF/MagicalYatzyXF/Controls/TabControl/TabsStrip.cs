@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace Sanet.MagicalYatzy.XF.Controls.TabControl
 {
-    public class TabsStrip: TappableContentView
+    public class TabsStrip: ContentView
     {
         #region Private Members
 
@@ -14,7 +14,7 @@ namespace Sanet.MagicalYatzy.XF.Controls.TabControl
 
         private readonly ObservableCollection<TabItem> _children = new ObservableCollection<TabItem>();
 
-        private readonly TappableContentView _tabControl;
+        private readonly ContentView _tabControl;
 
         private readonly Grid _contentView;
 
@@ -55,7 +55,7 @@ namespace Sanet.MagicalYatzy.XF.Controls.TabControl
                 WidthRequest = 0,
             };
 
-            _tabControl = new TappableContentView
+            _tabControl = new ContentView
             {
                 BackgroundColor = TabBackColor,
                 Content = new Grid
@@ -88,11 +88,13 @@ namespace Sanet.MagicalYatzy.XF.Controls.TabControl
             );
 
             _children.CollectionChanged += (sender, e) => {
+                foreach (TabBarButton tabButton in _buttonStack.Children)
+                    tabButton.ButtonPressed -= TabButtonPressed;
 
                 _contentView.Children.Clear();
                 _buttonStack.Children.Clear();
 
-                foreach (var tabChild in Children)
+                foreach (var tabChild in TabChildren)
                 {
                     var tabItemControl = new TabBarButton(tabChild.Title);
                     if (FontFamily != null)
@@ -101,23 +103,33 @@ namespace Sanet.MagicalYatzy.XF.Controls.TabControl
                     tabItemControl.FontSize = FontSize;
                     tabItemControl.SelectedColor = TabIndicatorColor;
                     _buttonStack.Children.Add(tabItemControl);
+                    tabItemControl.ButtonPressed += TabButtonPressed;
                 }
 
-                if (Children.Any())
-                    Activate(Children.First(), false);
+                if (TabChildren.Any())
+                    Activate(TabChildren.First(), false);
             };
+        }
+
+        private void TabButtonPressed(object sender, EventArgs e)
+        {
+            if (sender is TabBarButton button)
+            {
+                var idx = _buttonStack.Children.IndexOf(button);
+                Activate(TabChildren[idx], true);
+            }
         }
 
         public void Activate(TabItem tabChild, bool animate)
         {
-            var existingChild = Children.FirstOrDefault(t => t.View ==
+            var existingChild = TabChildren.FirstOrDefault(t => t.View ==
                _contentView.Children.FirstOrDefault(v => v.IsVisible));
 
             if (existingChild == tabChild)
                 return;
 
-            var idxOfExisting = existingChild != null ? Children.IndexOf(existingChild) : -1;
-            var idxOfNew = Children.IndexOf(tabChild);
+            var idxOfExisting = existingChild != null ? TabChildren.IndexOf(existingChild) : -1;
+            var idxOfNew = TabChildren.IndexOf(tabChild);
 
             if (idxOfExisting > -1 && animate)
             {
@@ -175,54 +187,23 @@ namespace Sanet.MagicalYatzy.XF.Controls.TabControl
             TabActivated?.Invoke(this, idxOfNew);
         }
 
-        public override void OnTouchesBegan(Point point)
-        {
-            HandleTouches(point, false);
-        }
-
-        public override void OnTouchesEnded(Point point)
-        {
-            HandleTouches(point);
-        }
-
-        private bool HandleTouches(Point point, bool activate = true)
-        {
-            foreach (var child in _buttonStack.Children)
-            {
-                if (point.X >= child.X && point.X <= child.X + child.Width &&
-                    point.Y >= child.Y && point.Y <= child.Y + _tabControl.Height)
-                {
-
-                    if (activate)
-                    {
-                        var idx = _buttonStack.Children.IndexOf(child);
-                        Activate(Children[idx], true);
-                    }
-
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         protected override void LayoutChildren(double x, double y, double width, double height)
         {
             base.LayoutChildren(x, y, width, height);
 
             if (width > 0 && !_inTransition)
             {
-                var existingChild = Children.FirstOrDefault(t =>
+                var existingChild = TabChildren.FirstOrDefault(t =>
                    t.View == _contentView.Children.FirstOrDefault(v => v.IsVisible));
 
-                var idxOfExisting = existingChild != null ? Children.IndexOf(existingChild) : -1;
+                var idxOfExisting = existingChild != null ? TabChildren.IndexOf(existingChild) : -1;
 
                 _indicator.WidthRequest = _buttonStack.Children.ElementAt(idxOfExisting).Width;
                 _indicator.TranslationX = _buttonStack.Children.ElementAt(idxOfExisting).X;
             }
         }
 
-        public new IList<TabItem> Children=> _children;
+        public IList<TabItem> TabChildren => _children;
 
         public static BindableProperty FontSizeProperty =
             BindableProperty.Create(nameof(FontSize), typeof(double), typeof(TabsStrip), 14.0,

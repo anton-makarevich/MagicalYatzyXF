@@ -1,4 +1,5 @@
 ﻿using Xamarin.Forms;
+using System;
 
 namespace Sanet.MagicalYatzy.XF.Controls.TabControl
 {
@@ -6,8 +7,10 @@ namespace Sanet.MagicalYatzy.XF.Controls.TabControl
     {
         private readonly Label _label;
 
-        public Color DarkTextColor = Color.Black;
-        public Color AccentColor = Color.Accent;
+        public Color DarkTextColor = Color.White;
+        public Color AccentColor = (Color)Application.Current.Resources["SanetBlueColor"];
+
+        public event EventHandler ButtonPressed;
 
         public TabBarButton()
         {
@@ -120,9 +123,10 @@ namespace Sanet.MagicalYatzy.XF.Controls.TabControl
             }
         }
 
-        public override void OnTouchesBegan(Point position)
+        public override void OnTouchesBegan(Point point)
         {
-            _label.TextColor = AccentColor;
+            IsSelected = true;
+            ButtonPressed?.Invoke(this, null);
         }
     }
 }
