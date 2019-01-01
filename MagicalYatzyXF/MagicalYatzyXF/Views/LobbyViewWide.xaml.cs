@@ -5,9 +5,9 @@ using Xamarin.Forms.Xaml;
 namespace Sanet.MagicalYatzy.XF.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class LobbyView : NavigationBackView<LobbyViewModel>
+    public partial class LobbyViewWide : NavigationBackView<LobbyViewModel>
     {
-        public LobbyView()
+        public LobbyViewWide()
         {
             InitializeComponent();
         }

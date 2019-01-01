@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<base:NavigationBackView 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:Sanet.MagicalYatzy.XF.Views.Base"
+    xmlns:tabControl="clr-namespace:Sanet.MagicalYatzy.XF.Controls.TabControl"
+    xmlns:vm="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
+    x:Class="Sanet.MagicalYatzy.XF.Views.LobbyViewNarrow"
+    x:TypeArguments="vm:LobbyViewModel">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <tabControl:TabsStrip
+            BackgroundColor="Transparent"
+            TabBackColor="Transparent"
+            TabIndicatorColor="{StaticResource SanetBlueColor}"
+            FontSize="20"
+            Grid.Row="1"
+                x:Name="tabBar"/>
+    </Grid>
+</base:NavigationBackView>

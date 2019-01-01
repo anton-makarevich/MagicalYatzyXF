@@ -701,6 +701,7 @@
     <Folder Include="Services\PlayerService\" />
     <Folder Include="Services\NavigationService\" />
     <Folder Include="Views\" />
+    <Folder Include="Utils\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="SanetLegacyEncryption">

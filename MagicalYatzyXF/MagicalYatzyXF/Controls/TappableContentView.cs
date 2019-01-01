@@ -29,7 +29,7 @@ namespace Sanet.MagicalYatzy.XF.Controls
 			set { SetValue(CommandParameterProperty, value); }
 		}
 
-        public void OnTouchesBegan(Point position)
+        public virtual void OnTouchesBegan(Point point)
         {
             if (IsEnabled)
             {
@@ -38,7 +38,7 @@ namespace Sanet.MagicalYatzy.XF.Controls
             }
         }
 
-        public void OnTouchesEnded(Point point)
+        public virtual void OnTouchesEnded(Point point)
         {
             if (IsEnabled)
             {

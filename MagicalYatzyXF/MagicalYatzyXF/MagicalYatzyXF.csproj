@@ -28,10 +28,16 @@
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Cells\MainMenuCell.xaml %28copy%29.cs">
       <DependentUpon>SecondaryMenuCell.xaml</DependentUpon>
     </Compile>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\LobbyViewWide.xaml %28copy%29.cs">
+      <DependentUpon>LobbyViewWide.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Controls\Game\" />
+    <Folder Include="Models\" />
+    <Folder Include="Controls\TabControl\" />
   </ItemGroup>
 
   <ItemGroup>
