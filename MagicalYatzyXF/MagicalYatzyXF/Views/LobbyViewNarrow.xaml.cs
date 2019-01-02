@@ -3,6 +3,7 @@ using Sanet.MagicalYatzy.ViewModels;
 using Xamarin.Forms.Xaml;
 using Sanet.MagicalYatzy.XF.Controls.TabControl;
 using Xamarin.Forms;
+using Sanet.MagicalYatzy.XF.Views.Fragments;
 
 namespace Sanet.MagicalYatzy.XF.Views
 {
@@ -12,9 +13,12 @@ namespace Sanet.MagicalYatzy.XF.Views
         public LobbyViewNarrow()
         {
             InitializeComponent();
-            tabBar.TabChildren.Add(new TabItem("Players", new StackLayout()));
-            tabBar.TabChildren.Add(new TabItem("Rules", new StackLayout()));
+        }
 
+        protected override void OnViewModelSet()
+        {
+            tabBar.TabChildren.Add(new TabItem(ViewModel.PlayersTitle, new PlayersFragment()));
+            tabBar.TabChildren.Add(new TabItem(ViewModel.RulesTitle, new StackLayout()));
         }
     }
 }

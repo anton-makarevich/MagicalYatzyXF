@@ -13,6 +13,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <tabControl:TabsStrip
+            Padding="10,0"
             BackgroundColor="Transparent"
             TabBackColor="Transparent"
             TabIndicatorColor="{StaticResource SanetBlueColor}"

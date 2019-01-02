@@ -1,8 +1,9 @@
-﻿using System;
-using Sanet.MagicalYatzy.Models.Game;
+﻿using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.ViewModels;
 using NSubstitute;
 using Xunit;
+using Sanet.MagicalYatzy.Resources;
+
 namespace MagicalYatzyTests.ViewModelTests
 {
     public class LobbyViewModelTests
@@ -20,6 +21,13 @@ namespace MagicalYatzyTests.ViewModelTests
         public void LobbyViewModelHasDicePanel()
         {
             Assert.NotNull(_sut.DicePanel);
+        }
+
+        [Fact]
+        public void PanelTitlesAreCorrect()
+        {
+            Assert.Equal(Strings.PlayersLabel.ToUpper(), _sut.PlayersTitle);
+            Assert.Equal(Strings.RulesLabel.ToUpper(), _sut.RulesTitle);
         }
     }
 }

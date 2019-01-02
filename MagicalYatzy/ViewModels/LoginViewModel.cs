@@ -3,7 +3,6 @@ using Sanet.MagicalYatzy.Services;
 using System.Windows.Input;
 using Sanet.MagicalYatzy.Models.Events;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace Sanet.MagicalYatzy.ViewModels
 {
