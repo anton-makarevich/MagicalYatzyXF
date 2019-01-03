@@ -1,25 +1,32 @@
-﻿using Newtonsoft.Json;
-using Sanet.MagicalYatzy.Extensions;
+﻿using Sanet.MagicalYatzy.Extensions;
 
 namespace Sanet.MagicalYatzy.Models.Game
 {
     public class Player: IPlayer
     {
+        public Player()
+        {
+            Type = PlayerType.Local;
+        }
+
+        public Player(PlayerType type)
+        {
+            Type = type;
+        }
+
         public bool AllNumericFilled => default;
 
         public bool CanBuy => default;
 
         public ClientType Client => default;
-        [JsonIgnore]
-        public IGame Game { get ; set; }
 
         public bool HasPassword => default;
 
-        public bool IsBot => default;
+        public bool IsBot => Type == PlayerType.AI;
 
         public bool IsDefaultName => default;
 
-        public bool IsHuman => default;
+        public bool IsHuman => Type == PlayerType.Local || Type == PlayerType.Network;
         public bool IsMoving => default;
         public bool IsReady => default;
         public string Language { get; set; }
@@ -37,12 +44,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public int TotalNumeric => default;
 
-        public PlayerType Type { get; set; }
-
-        public void Init()
-        {
-
-        }
+        public PlayerType Type { get; }
 
         public override bool Equals(object obj)
         {

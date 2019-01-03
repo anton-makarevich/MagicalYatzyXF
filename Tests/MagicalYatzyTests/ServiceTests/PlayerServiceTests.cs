@@ -71,7 +71,7 @@ namespace MagicalYatzyTests.ServiceTests
         }
 
         [Fact]
-        public async Task FailingLoginShouldSavePlayer()
+        public async Task FailingLoginShouldNotSavePlayer()
         {
             // Arrange
             _apiMock.LoginUserAsync(TestUserName, "1234").Returns(Task.FromResult<IPlayer>(null));
@@ -154,6 +154,20 @@ namespace MagicalYatzyTests.ServiceTests
             // Act
             await _sut.LoadPlayersAsync();
             await _sut.LoadPlayersAsync();
+
+            // Asset
+            Assert.Equal(1, playersUpdatedCalledTimes);
+        }
+
+        [Fact]
+        public async Task FaceboolLoginAddsPlayer()
+        {
+            // Arrange
+            int playersUpdatedCalledTimes = 0;
+            _sut.PlayersUpdated += (s, e) => { playersUpdatedCalledTimes++; };
+
+            // Act
+            await _sut.LoginToFacebookAsync();
 
             // Asset
             Assert.Equal(1, playersUpdatedCalledTimes);

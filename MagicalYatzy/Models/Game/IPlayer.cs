@@ -8,16 +8,10 @@
 
         ClientType Client { get; }
 
-
-        IGame Game { get; set; }
-
-
         bool HasPassword { get; }
 
-        void Init();
         bool IsBot { get; }
         bool IsDefaultName { get; }
-
 
         bool IsHuman { get;  }
 
@@ -39,9 +33,10 @@
 
         int SeatNo { get; }
 
-
         int Total { get; }
+
         int TotalNumeric { get; }
-        PlayerType Type { get; set; }
+
+        PlayerType Type { get; }
     }
 }
