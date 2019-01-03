@@ -8,12 +8,12 @@ using System.Collections.Generic;
 using Xunit;
 using Sanet.MagicalYatzy.Extensions;
 
-namespace MagicalYatzyTests.ServiceTests
+namespace MagicalYatzyTests.ServiceTests.Game
 {
     public class PlayerServiceTests
     {
-        private IApiClient _apiMock;
-        private IStorageService _storageMock;
+        private readonly IApiClient _apiMock;
+        private readonly IStorageService _storageMock;
         private PlayerService _sut;
 
         public PlayerServiceTests()
@@ -46,10 +46,10 @@ namespace MagicalYatzyTests.ServiceTests
         }
 
         [Fact]
-        public async Task SuccesfulLoginShouldSavePlayer()
+        public async Task SuccessfulLoginSavesPlayer()
         {
             // Arrange
-            List<Player> players = new List<Player>();
+            var players = new List<Player>();
             _apiMock.LoginUserAsync(TestUserName, TestUserPassword).Returns(Task.FromResult(TestPlayer));
             _storageMock.SavePlayersAsync((List<Player>)_sut.Players).Returns((t) =>
             {
@@ -89,10 +89,10 @@ namespace MagicalYatzyTests.ServiceTests
         public async Task PlayersShouldNotContainMoreThanFourElements()
         {
             // Arrange
-            List<Player> players = new List<Player>();
-            List<string> passwords = new List<string>();
+            var players = new List<Player>();
+            var passwords = new List<string>();
 
-            for (int i = 0; i < 6; i++)
+            for (var i = 0; i < 6; i++)
             {
                 var username = $"Player{i}";
                 var password = $"pw{i}";
@@ -103,7 +103,7 @@ namespace MagicalYatzyTests.ServiceTests
             }
 
             // Act
-            for (int i = 0; i < 6; i++)
+            for (var i = 0; i < 6; i++)
             {
                 await _sut.LoginAsync(players[i].Name, passwords[i]);
             }
@@ -161,10 +161,10 @@ namespace MagicalYatzyTests.ServiceTests
         }
 
         [Fact]
-        public async Task FaceboolLoginAddsPlayer()
+        public async Task FacebookLoginAddsPlayer()
         {
             // Arrange
-            int playersUpdatedCalledTimes = 0;
+            var playersUpdatedCalledTimes = 0;
             _sut.PlayersUpdated += (s, e) => { playersUpdatedCalledTimes++; };
 
             // Act
@@ -176,6 +176,7 @@ namespace MagicalYatzyTests.ServiceTests
 
         public static string TestUserName => "Anton";
         public static string TestUserPassword => "123456";
-        public static IPlayer TestPlayer { get; } = new Player { Name = TestUserName, Password = TestUserPassword.Encrypt(33) };
+        private static IPlayer TestPlayer { get; } =
+            new Player {Name = TestUserName, Password = TestUserPassword.Encrypt(33)};
     }
 }

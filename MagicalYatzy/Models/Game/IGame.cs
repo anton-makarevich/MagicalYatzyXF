@@ -16,16 +16,15 @@ namespace Sanet.MagicalYatzy.Models.Game
         event EventHandler<PlayerEventArgs> MagicRollUsed;
         event EventHandler<PlayerEventArgs> StyleChanged;
 
-        IPlayer CurrentPlayer { get; set; }
+        IPlayer CurrentPlayer { get; }
         void ApplyScore(IRollResult result);
         void ChangeStyle(IPlayer player, DiceStyle style);
-        void DoMove();
+        void DoTurn();
         void FixAllDices(int value, bool isfixed);
         void FixDice(int value, bool isfixed);
         int FixedDicesCount { get; }
         event EventHandler GameFinished;
-        int GameId { get; set; }
-        //int Roll { get; }
+        int GameId { get; }
         bool IsDiceFixed(int value);
         bool IsPlaying { get; set; }
         string MyName { get; set; }
@@ -33,15 +32,15 @@ namespace Sanet.MagicalYatzy.Models.Game
         DieResult LastDiceResult { get; }
 
         void ManualChange(bool isfixed, int oldvalue, int newvalue);
-        int Move { get; set; }
+        int Turn { get; }
         event EventHandler<MoveEventArgs> MoveChanged;
         event EventHandler<ChatMessageEventArgs> OnChatMessage;
-        void NextMove();
+        void NextTurn();
         string Password { get; set; }
         event EventHandler<PlayerEventArgs> PlayerJoined;
-        global::System.Collections.Generic.List<IPlayer> Players { get; set; }
+        global::System.Collections.Generic.List<IPlayer> Players { get; }
         int PlayersNumber { get; }
-        void ReporMagictRoll();
+        void ReportMagictRoll();
         void ReportRoll();
         bool RerollMode { get; set; }
         void ResetRolls();
