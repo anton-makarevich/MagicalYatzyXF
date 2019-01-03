@@ -1,16 +1,23 @@
 ﻿using Sanet.MagicalYatzy.Models.Game;
 using Xunit;
 using Sanet.MagicalYatzy.Utils;
+using Sanet.MagicalYatzy.Extensions;
 
 namespace MagicalYatzyTests.ModelTests.Game
 {
     public class PlayerTests
     {
+        private readonly Player _sut;
+
+        public PlayerTests()
+        {
+            _sut = new Player();
+        }
+
         [Fact]
         public void DefaultPlayerIsHuman()
         {
-            var sut = new Player();
-            Assert.True(sut.IsHuman);
+            Assert.True(_sut.IsHuman);
         }
 
         [Fact]
@@ -29,6 +36,13 @@ namespace MagicalYatzyTests.ModelTests.Game
         {
             var sut = new Player(PlayerType.AI);
             Assert.True(sut.IsBot);
+        }
+
+        [Fact]
+        public void PlayersHashcodeIsBasedOnNameAndEncodedPassword()
+        {
+            int expectedHashcode = $"player{_sut.Name}{_sut.Password.Decrypt(33)}".GetHashCode();
+            Assert.Equal(expectedHashcode, _sut.GetHashCode());
         }
     }
 }
