@@ -41,24 +41,10 @@ namespace Sanet.MagicalYatzy.ViewModels
 		}
 
         private List<MainMenuAction> _menuActions;
-        public List<MainMenuAction> MenuActions
-        {
-            get { return _menuActions; }
-            set
-            {
-                SetProperty(ref _menuActions, value);
-            }
-        }
+        public List<MainMenuAction> MenuActions => _menuActions;
 
         private List<MainMenuAction> _secondaryMenuActions;
-        public List<MainMenuAction> SecondaryMenuActions
-        {
-            get { return _secondaryMenuActions; }
-            set
-            {
-                SetProperty(ref _secondaryMenuActions, value);
-            }
-        }
+        public List<MainMenuAction> SecondaryMenuActions => _secondaryMenuActions;
 
         #endregion
 
@@ -75,7 +61,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         #region Methods
         public void FillMainActions()
         {
-            MenuActions = new List<MainMenuAction>
+            _menuActions = new List<MainMenuAction>
             {
                 new MainMenuAction
                 {
@@ -141,9 +127,9 @@ namespace Sanet.MagicalYatzy.ViewModels
                 new MainMenuAction
                 {
                     Label = Strings.ShareApp,
-                    MenuAction = new SimpleCommand(new Action(() =>
+                    MenuAction = new SimpleCommand(() =>
                     {
-                    })),
+                    }),
                     Image = "Share.png"
                 }
             };
