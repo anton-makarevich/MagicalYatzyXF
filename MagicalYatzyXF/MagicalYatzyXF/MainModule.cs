@@ -1,5 +1,6 @@
 ﻿using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
+using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MagicalYatzy.XF.Services;
 using SimpleInjector;

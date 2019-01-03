@@ -1,5 +1,5 @@
 ﻿using Sanet.MagicalYatzy.ViewModels.Base;
-using Sanet.MagicalYatzy.Services;
+using Sanet.MagicalYatzy.Services.Game;
 using System.Windows.Input;
 using Sanet.MagicalYatzy.Models.Events;
 using System.Threading.Tasks;

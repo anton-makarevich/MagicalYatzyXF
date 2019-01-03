@@ -1,4 +1,5 @@
 ﻿using NSubstitute;
+using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using Xunit;

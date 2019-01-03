@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Services;
+using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Models.Events;
 using System.Windows.Input;

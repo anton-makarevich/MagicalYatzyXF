@@ -1,4 +1,5 @@
-﻿using Sanet.MagicalYatzy.Services;
+﻿using Sanet.MagicalYatzy.Services.Game;
+using Sanet.MagicalYatzy.Services;
 using NSubstitute;
 using System.Threading.Tasks;
 using Sanet.MagicalYatzy.Models.Game;
