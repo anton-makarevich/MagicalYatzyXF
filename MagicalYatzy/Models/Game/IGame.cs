@@ -1,6 +1,7 @@
 ﻿using Sanet.MagicalYatzy.Models.Chat;
 using Sanet.MagicalYatzy.Models.Events;
 using System;
+using System.Collections.Generic;
 
 namespace Sanet.MagicalYatzy.Models.Game
 {
@@ -24,7 +25,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         void FixDice(int value, bool isfixed);
         int FixedDicesCount { get; }
         event EventHandler GameFinished;
-        int GameId { get; }
+        string GameId { get; }
         bool IsDiceFixed(int value);
         bool IsPlaying { get; set; }
         string MyName { get; set; }
@@ -38,7 +39,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         void NextTurn();
         string Password { get; set; }
         event EventHandler<PlayerEventArgs> PlayerJoined;
-        global::System.Collections.Generic.List<IPlayer> Players { get; }
+        List<Player> Players { get; }
         int PlayersNumber { get; }
         void ReportMagictRoll();
         void ReportRoll();

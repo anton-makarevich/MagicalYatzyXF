@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Sanet.MagicalYatzy.Models.Chat;
 using Sanet.MagicalYatzy.Models.Events;
@@ -7,7 +8,21 @@ namespace Sanet.MagicalYatzy.Models.Game
 {
     public class YatzyGame: IGame
     {
+        private bool _isPlaying;
+
         #region Events
+
+        public YatzyGame(Rules rules)
+        {
+            Rules = new Rule(rules);
+            Players = new List<Player>();
+            GameId = Guid.NewGuid().ToString("N");
+        }
+
+        public YatzyGame():this(Game.Rules.krExtended)
+        {
+        }
+
         public event EventHandler<PlayerEventArgs> PlayerLeft;
         public event EventHandler<RollEventArgs> DiceChanged;
         public event EventHandler<FixDiceEventArgs> DiceFixed;
@@ -29,10 +44,20 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         #region Properties
 
-        public IPlayer CurrentPlayer { get; } 
-        public int GameId { get; }
+        public IPlayer CurrentPlayer { get; private set; } 
+        public string GameId { get; }
         public int FixedDicesCount { get; }
-        public bool IsPlaying { get; set; }
+
+        public bool IsPlaying
+        {
+            get
+            {
+                if (Players != null && Players.Count(f => f.IsReady) == 0)
+                    _isPlaying = false;
+                return _isPlaying;
+            }
+            set => _isPlaying = value;
+        }
         public string MyName { get; set; }
         
         public DieResult LastDiceResult { get; }
@@ -41,7 +66,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         
         public string Password { get; set; }
 
-        public List<IPlayer> Players { get; }
+        public List<Player> Players { get; }
         public int PlayersNumber { get; }
 
         public bool RerollMode { get; set; }
