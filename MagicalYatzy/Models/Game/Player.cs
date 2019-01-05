@@ -68,7 +68,6 @@ namespace Sanet.MagicalYatzy.Models.Game
             IsMoving = false;
         }
 
-
         #endregion
 
         public override bool Equals(object obj)

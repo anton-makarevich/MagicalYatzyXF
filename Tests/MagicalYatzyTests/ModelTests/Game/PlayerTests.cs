@@ -86,5 +86,15 @@ namespace MagicalYatzyTests.ModelTests.Game
             _sut.PrepareForGameStart();
             Assert.Equal(1, _sut.Roll);
         }
+
+        [Fact]
+        public void ReturnsResultForRequestedScore()
+        {
+            _sut.PrepareForGameStart();
+            const Scores score = Scores.Ones;
+            var result = _sut.GetResultForScore(score);
+            Assert.NotNull(result);
+            Assert.Equal(score, result.ScoreType);
+        }
     }
 }

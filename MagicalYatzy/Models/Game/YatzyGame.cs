@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Sanet.MagicalYatzy.Models.Chat;
 using Sanet.MagicalYatzy.Models.Events;
+using Sanet.MagicalYatzy.Models.Game.DieResultExtensions;
 
 namespace Sanet.MagicalYatzy.Models.Game
 {
@@ -114,14 +115,13 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public void ApplyScore(IRollResult result)
         {
-            /*
             //check for kniffel bonus
             if (Rules.HasExtendedBonuses && result.ScoreType != Scores.Kniffel)
             {
                 //check if already have kniffel
                 var kresult = CurrentPlayer.GetResultForScore(Scores.Kniffel);
                 result.HasBonus = (LastDiceResult.KniffelFiveOfAKindScore() == 50 && kresult.Value==kresult.MaxValue);
-            }
+            }/*
             //sending result to everyone
             if (ResultApplied != null)
                 ResultApplied(this, new ResultEventArgs(CurrentPlayer, result));

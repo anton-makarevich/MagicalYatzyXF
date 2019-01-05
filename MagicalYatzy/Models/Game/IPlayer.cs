@@ -47,5 +47,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         PlayerType Type { get; }
 
         void PrepareForGameStart(List<Artifact> availableArtifacts = null);
+        
+        RollResult GetResultForScore(Scores score);
     }
 }
