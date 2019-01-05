@@ -1,8 +1,15 @@
-﻿namespace Sanet.MagicalYatzy.Models.Game
+﻿using System.Collections.Generic;
+using Sanet.MagicalYatzy.Models.Game.Magical;
+
+namespace Sanet.MagicalYatzy.Models.Game
 {
     public interface IPlayer
     {
         bool AllNumericFilled { get; }
+
+        IReadOnlyList<RollResult> Results { get; }
+
+        IReadOnlyList<Artifact> MagicalArtifacts { get; }
 
         bool CanBuy { get; }
 
@@ -29,7 +36,7 @@
 
         string ProfileImage { get; set; }
 
-        int Roll { get; set; }
+        int Roll { get; }
 
         int SeatNo { get; }
 
@@ -38,5 +45,7 @@
         int TotalNumeric { get; }
 
         PlayerType Type { get; }
+
+        void PrepareForGameStart(List<Artifact> availableArtifacts = null);
     }
 }

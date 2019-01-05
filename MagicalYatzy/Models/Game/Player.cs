@@ -1,4 +1,8 @@
-﻿using Sanet.MagicalYatzy.Extensions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Sanet.MagicalYatzy.Extensions;
+using Sanet.MagicalYatzy.Models.Game.Magical;
+using Sanet.MagicalYatzy.Utils;
 
 namespace Sanet.MagicalYatzy.Models.Game
 {
@@ -27,7 +31,8 @@ namespace Sanet.MagicalYatzy.Models.Game
         public bool IsDefaultName => default;
 
         public bool IsHuman => Type == PlayerType.Local || Type == PlayerType.Network;
-        public bool IsMoving => default;
+        public bool IsMoving { get; private set; }
+
         public bool IsReady => default;
         public string Language { get; set; }
 
@@ -36,23 +41,35 @@ namespace Sanet.MagicalYatzy.Models.Game
         public string Name { get;  set; } = "Player 1";
         public string Password { get; set; }
         public string ProfileImage { get; set; } = "SanetDice.png";
-        public int Roll { get ; set ; }
+        public int Roll { get ; private set ; }
 
         public int SeatNo => default;
 
         public int Total => default;
+        
+        public IReadOnlyList<RollResult> Results { get; private set; }
+        
+        public IReadOnlyList<Artifact> MagicalArtifacts { get; private set; }
 
         public int TotalNumeric => default;
 
         public PlayerType Type { get; }
         
-        public RollResult GetResultForScore(Scores score)
-        {
-            //if (Results==null)
-                return null;
+        #region Methods
+        
+        public RollResult GetResultForScore(Scores score)=> Results?.FirstOrDefault(f => f.ScoreType == score);
 
-            //return Results.FirstOrDefault(f => f.ScoreType == score);
+        public void PrepareForGameStart(List<Artifact> availableArtifacts = null)
+        {
+            Roll = 1;
+            MagicalArtifacts = availableArtifacts;
+            var allScores = EnumUtils.GetValues<Scores>();
+            Results = allScores.Select(score => new RollResult(score)).ToList();
+            IsMoving = false;
         }
+
+
+        #endregion
 
         public override bool Equals(object obj)
         {
