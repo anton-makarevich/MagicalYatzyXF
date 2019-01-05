@@ -5,13 +5,20 @@ namespace Sanet.MagicalYatzy.Models.Game
     public class RollResult : IRollResult
     {
         private int _value;
+        private bool _hasBonus;
+        private int _possibleValue;
 
         public RollResult(Scores score)
         {
             ScoreType = score;
         }
 
-        public bool HasBonus { get; set; }
+        public bool HasBonus
+        {
+            get => ScoreType == Scores.Kniffel && _hasBonus;
+            set => _hasBonus = value;
+        }
+
         public bool HasValue { get; private set; }
 
         public bool IsNumeric =>
@@ -60,7 +67,17 @@ namespace Sanet.MagicalYatzy.Models.Game
                 return 0;
             }
         }
-        public int PossibleValue { get; set; }
+
+        public int PossibleValue
+        {
+            get => _possibleValue;
+            set
+            {
+                if (value< 0 || value > MaxValue) return;
+                _possibleValue = value;
+            }
+        }
+
         public Scores ScoreType { get; }
 
         public int Value

@@ -91,5 +91,31 @@ namespace MagicalYatzyTests.ModelTests.Game
                 Assert.Equal(numericScores.Contains(score) , sut.IsNumeric);
             }
         }
+
+        [Fact]
+        public void KniffelScoreCanHaveBonus()
+        {
+            var sut = new RollResult(Scores.Kniffel);
+            sut.HasBonus = true;
+            Assert.True(sut.HasBonus);
+        }
+        
+        [Fact]
+        public void NonKniffelScoreCannotHaveBonus()
+        {
+            _sut.HasBonus = true;
+            Assert.False(_sut.HasBonus);
+        }
+
+        [Fact]
+        public void PossibleValueIsInCorrectRangeForScoreType()
+        {
+            _sut.PossibleValue = -1;
+            Assert.Equal(0,_sut.PossibleValue);
+            _sut.PossibleValue = 2;
+            Assert.Equal(2,_sut.PossibleValue);
+            _sut.PossibleValue = 6;
+            Assert.Equal(2,_sut.PossibleValue);
+        }
     }
 }
