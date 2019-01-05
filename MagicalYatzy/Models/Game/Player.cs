@@ -45,6 +45,14 @@ namespace Sanet.MagicalYatzy.Models.Game
         public int TotalNumeric => default;
 
         public PlayerType Type { get; }
+        
+        public RollResult GetResultForScore(Scores score)
+        {
+            //if (Results==null)
+                return null;
+
+            //return Results.FirstOrDefault(f => f.ScoreType == score);
+        }
 
         public override bool Equals(object obj)
         {

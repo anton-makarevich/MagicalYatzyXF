@@ -56,5 +56,36 @@ namespace MagicalYatzyTests.ModelTests.Game
         {
             Assert.False(_sut.IsPlaying);
         }
+
+        [Fact]
+        public void OneIsDefaultRollValue()
+        {
+            Assert.Equal(1,_sut.Roll);
+        }
+
+        [Fact]
+        public void DefaultLastDiceResultHasEmptyResults()
+        {
+            Assert.NotNull(_sut.LastDiceResult?.DiceResults);
+            Assert.Empty(_sut.LastDiceResult?.DiceResults);
+        }
+
+        [Fact]
+        public void FalseIsDefaultReRollModeValue()
+        {
+            Assert.False(_sut.ReRollMode);
+        }
+
+        [Fact]
+        public void ByDefaultThereAreNoPlayers()
+        {
+            Assert.Equal(0,_sut.NumberOfPlayers);
+        }
+
+        [Fact]
+        public void ThereAreNoFixedDiceInitially()
+        {
+            Assert.Equal(0, _sut.NumberOfFixedDice);
+        }
     }
 }

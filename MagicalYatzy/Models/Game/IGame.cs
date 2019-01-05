@@ -23,7 +23,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         void DoTurn();
         void FixAllDices(int value, bool isfixed);
         void FixDice(int value, bool isfixed);
-        int FixedDicesCount { get; }
+        int NumberOfFixedDice { get; }
         event EventHandler GameFinished;
         string GameId { get; }
         bool IsDiceFixed(int value);
@@ -34,20 +34,21 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         void ManualChange(bool isfixed, int oldvalue, int newvalue);
         int Turn { get; }
+        int Roll { get; }
         event EventHandler<MoveEventArgs> MoveChanged;
         event EventHandler<ChatMessageEventArgs> OnChatMessage;
         void NextTurn();
         string Password { get; set; }
         event EventHandler<PlayerEventArgs> PlayerJoined;
         List<Player> Players { get; }
-        int PlayersNumber { get; }
+        int NumberOfPlayers { get; }
         void ReportMagictRoll();
         void ReportRoll();
-        bool RerollMode { get; set; }
+        bool ReRollMode { get; set; }
         void ResetRolls();
         void RestartGame();
         event EventHandler<ResultEventArgs> ResultApplied;
-        Rule Rules { get; set; }
+        Rule Rules { get; }
 
         void LeaveGame(IPlayer player);
         void SetPlayerReady(IPlayer player, bool isready);
