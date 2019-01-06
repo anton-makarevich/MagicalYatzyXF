@@ -8,20 +8,45 @@ namespace MagicalYatzyTests.ModelTests.Game.DieResultExtensions
     public class YatzyRulesTests
     {
         [Fact]
-        public void ReturnsCorrectScoreForNumericValues()
+        public void NumberScoreReturnsSumOfSpecifiedNumericValues()
         {
-            var dieResult = new DieResult {DiceResults = new List<int> {1, 2, 2, 4}};
-            var resultForOnes = dieResult.KniffelNumberScore(1);
+            var sut = new DieResult {DiceResults = new List<int> {1, 2, 2, 4}};
+            
+            var resultForOnes = sut.YatzyNumberScore(1);
             Assert.Equal(1,resultForOnes);
             
-            var resultForTwos = dieResult.KniffelNumberScore(2);
+            var resultForTwos = sut.YatzyNumberScore(2);
             Assert.Equal(4,resultForTwos);
             
-            var resultForThrees = dieResult.KniffelNumberScore(3);
+            var resultForThrees = sut.YatzyNumberScore(3);
             Assert.Equal(0,resultForThrees);
             
-            var resultForFours = dieResult.KniffelNumberScore(4);
+            var resultForFours = sut.YatzyNumberScore(4);
             Assert.Equal(4,resultForFours);
+        }
+
+        [Fact]
+        public void OfAKindReturnsSumOfAllValuesIfThereAreEqualOrMoreSameValuesThanSpecified()
+        {
+            var sut = new DieResult {DiceResults = new List<int> {1, 2, 2, 2, 4}};
+
+            for (var sameValues = 1; sameValues < 4; sameValues++)
+            {
+                var resultForOnes = sut.YatzyOfAKindScore(sameValues);
+                Assert.Equal(11, resultForOnes);
+            }
+        }
+        
+        [Fact]
+        public void OfAKindReturnsZeroIfThereAreLessSameValuesThanSpecified()
+        {
+            var sut = new DieResult {DiceResults = new List<int> {1, 2, 2, 2, 4}};
+            
+            for (var sameValues = 4; sameValues < 6; sameValues++)
+            {
+                var resultForOnes = sut.YatzyOfAKindScore(sameValues);
+                Assert.Equal(0, resultForOnes);
+            }
         }
     }
 }

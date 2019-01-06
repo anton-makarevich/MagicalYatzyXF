@@ -1,34 +1,17 @@
+using System.Linq;
+
 namespace Sanet.MagicalYatzy.Models.Game.DieResultExtensions
 {
     public static class YatzyRules
     {
-        //the score for the numeric 1-6 categories in Y
-        public static int KniffelNumberScore(this DieResult result, int number)
+        public static int YatzyNumberScore(this DieResult result, int number) =>
+            result.DiceResults.Where(f => (f == number)).Sum();
+
+        public static int YatzyOfAKindScore(this DieResult result, int count)
         {
-            var iTot = 0;
-
-            foreach (int i in result.DiceResults)
+            for (var i = 0; i <= 6; i++)
             {
-                if (i == number)
-                {
-                    iTot += number;
-                }
-            }
-            return iTot;
-
-        }
-
-        public static int KniffelOfAKindScore(this DieResult result, int count)
-        {
-            int[] iOccur = new int[7];
-            foreach (int res in result.DiceResults)
-            {
-                iOccur[res] += 1;
-            }
-
-            for (int i = 0; i <= 6; i++)
-            {
-                if (iOccur[i] >= count)
+                if (result.DiceResults.Count(f => f == i) >= count)
                 {
                     return result.Total;
                 }
