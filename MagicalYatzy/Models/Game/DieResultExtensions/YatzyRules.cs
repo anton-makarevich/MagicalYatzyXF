@@ -9,9 +9,9 @@ namespace Sanet.MagicalYatzy.Models.Game.DieResultExtensions
 
         public static int YatzyOfAKindScore(this DieResult result, int count)
         {
-            for (var i = 0; i <= 6; i++)
+            foreach (var diceResult in result.DiceResults)
             {
-                if (result.DiceResults.Count(f => f == i) >= count)
+                if (result.DiceResults.Count(f => f == diceResult) >= count)
                 {
                     return result.Total;
                 }
@@ -19,202 +19,37 @@ namespace Sanet.MagicalYatzy.Models.Game.DieResultExtensions
             return 0;
         }
 
-        public static int KniffelFiveOfAKindScore(this DieResult result)
+        public static int YatzyFiveOfAKindScore(this DieResult result)
         {
-
-            const int SCORE = 50;
-            int[] iOccur = new int[7];
+            const int score = 50;
             
-            foreach (int res in result.DiceResults)
-            {
-                iOccur[res] += 1;
-            }
-
-            for (int i = 0; i <= 6; i++)
-            {
-                if (iOccur[i] >= 5)
-                {
-                    return SCORE;
-                }
-            }
-            return 0;
+            return result.YatzyOfAKindScore(5) > 0 ? score : 0;
         }
 
-        public static int KniffelChanceScore(this DieResult result)
+        public static int YatzyChanceScore(this DieResult result)
         {
             return result.Total;
         }
 
-        public static int XInRow(this DieResult result, ref int count)
+        public static int YatzySmallStraightScore(this DieResult result)
         {
-            
-            int[] iOccur = new int[7];
-            count = 3;
-            foreach (int res in result.DiceResults)
-            {
-                iOccur[res] += 1;
-            }
-            for (int i = 1;i<5;i++)
-                if (iOccur[i] >= 1 & iOccur[i+1] >= 1 & iOccur[i+2] >= 1)
-                {
-                    if (i < 4 && iOccur[i + 3] >= 1)
-                        count = 4;
-                    return i;
+            const int score = 30;
 
-                }
-
-            return 0;
+            return result.DiceResults.Distinct().Count() >= 4 && result.DiceResults.Contains(3) ? score : 0;
         }
 
-        public static int KniffelSmallStraightScore(this DieResult result/*bool ToFix, ref bool Fixed, int n = 3*/)
+        public static int YatzyLargeStraightScore(this DieResult result)
         {
-            bool[] Fr = {
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false
-        };
-            const int SCORE = 30;
-            int[] iOccur = new int[7];
-            int MinNum = 0;
+            const int score = 40;
             
-            foreach (int res in result.DiceResults)
-            {
-                iOccur[res] += 1;
-            }
-
-            if (iOccur[1] >= 1 & iOccur[2] >= 1 & iOccur[3] >= 1 & iOccur[4] >= 1)
-            {
-                MinNum = 1;
-            }
-
-            if (iOccur[2] >= 1 & iOccur[3] >= 1 & iOccur[4] >= 1 & iOccur[5] >= 1)
-            {
-                MinNum = 2;
-            }
-
-            if (iOccur[3] >= 1 & iOccur[4] >= 1 & iOccur[5] >= 1 & iOccur[6] >= 1)
-            {
-                MinNum = 3;
-
-            }
-            if (!(MinNum == 0))
-            {
-                //if (ToFix)
-                //{
-                //    Fixed = true;
-                //    for (i = MinNum; i <= MinNum + n; i++)
-                //    {
-                //        foreach (Die d_loopVariable in aDice)
-                //        {
-                //            d = d_loopVariable;
-
-                //            if (d.Result == i & i < 7)
-                //            {
-                //                if (!Fr[i])
-                //                {
-                //                    d.Frozen = true;
-                //                    Fr[i] = true;
-
-                //                }
-                //            }
-                //        }
-                //    }
-                //}
-                return SCORE;
-            }
-            return 0;
-        }
-
-        public static int KniffelLargeStraightScore(this DieResult result)
-        {
-
-            const int SCORE = 40;
-            int[] iOccur = new int[7];
-
-            foreach (int res in result.DiceResults)
-            {
-                iOccur[res] += 1;
-            }
-
-            if (iOccur[1] > 0 & iOccur[2] > 0 & iOccur[3] > 0 & iOccur[4] > 0 & iOccur[5] > 0)
-            {
-                return SCORE;
-            }
-
-            if (iOccur[2] > 0 & iOccur[3] > 0 & iOccur[4] > 0 & iOccur[5] > 0 & iOccur[6] > 0)
-            {
-                return SCORE;
-            }
-            return 0;
+            return result.DiceResults.Distinct().Count() == 5 ? score : 0;
         }
 
         public static int KniffelFullHouseScore(this DieResult result)
         {
-
-            const int SCORE = 25;
-            int[] iOccur = new int[7];
+            const int score = 25;
             
-            bool bPair = false;
-            bool bTrip = false;
-
-
-            foreach (int res in result.DiceResults)
-            {
-                iOccur[res] += 1;
-            }
-
-            for (int i = 0; i <= 6; i++)
-            {
-                if (iOccur[i] == 2)
-                {
-                    bPair = true;
-                }
-                else if (iOccur[i] == 3)
-                {
-                    bTrip = true;
-                }
-            }
-
-            if (bPair & bTrip)
-            {
-                return SCORE;
-            }
-            return 0;
-        }
-
-        public static int NumPairs(this DieResult result)
-        {
-
-            int[] iOccur = new int[7];
-            int bPair = 0;
-
-            foreach (int res in result.DiceResults)
-            {
-                iOccur[res] += 1;
-            }
-
-            for (int i = 0; i <= 6; i++)
-            {
-                if (iOccur[i] > 1)
-                {
-                    bPair++;
-                }
-                //if (iOccur[i] > 3)
-                //{
-                //    bPair++;
-                //}
-                //if (iOccur[i] > 5)
-                //{
-                //    bPair++;
-                //}
-            }
-
-
-            return bPair;
+            return result.DiceResults.Distinct().Count() == 2 && result.YatzyOfAKindScore(4) == 0 ? score : 0;
         }
     }
 }

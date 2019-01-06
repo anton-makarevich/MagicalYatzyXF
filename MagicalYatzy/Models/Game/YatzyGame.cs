@@ -120,7 +120,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             {
                 //check if already have kniffel
                 var kresult = CurrentPlayer.GetResultForScore(Scores.Kniffel);
-                result.HasBonus = (LastDiceResult.KniffelFiveOfAKindScore() == 50 && kresult.Value==kresult.MaxValue);
+                result.HasBonus = (LastDiceResult.YatzyFiveOfAKindScore() == 50 && kresult.Value==kresult.MaxValue);
             }/*
             //sending result to everyone
             if (ResultApplied != null)
