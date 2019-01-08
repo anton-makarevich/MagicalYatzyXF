@@ -31,9 +31,10 @@ namespace Sanet.MagicalYatzy.Models.Game
         public bool IsDefaultName => default;
 
         public bool IsHuman => Type == PlayerType.Local || Type == PlayerType.Network;
-        public bool IsMoving { get; private set; }
+        public bool IsMyTurn { get; set; }
 
-        public bool IsReady => default;
+        public bool IsReady { get; set; }
+
         public string Language { get; set; }
 
         public int MaxRemainingNumeric => default;
@@ -43,8 +44,8 @@ namespace Sanet.MagicalYatzy.Models.Game
         public string ProfileImage { get; set; } = "SanetDice.png";
         public int Roll { get ; private set ; }
 
-        public int SeatNo => default;
-
+        public int SeatNo { get; set; }
+   
         public int Total => default;
         
         public IReadOnlyList<RollResult> Results { get; private set; }
@@ -54,7 +55,8 @@ namespace Sanet.MagicalYatzy.Models.Game
         public int TotalNumeric => default;
 
         public PlayerType Type { get; }
-        
+        public string InGameId { get; set; }
+
         #region Methods
         
         public RollResult GetResultForScore(Scores score)=> Results?.FirstOrDefault(f => f.ScoreType == score);
@@ -65,7 +67,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             MagicalArtifacts = availableArtifacts;
             var allScores = EnumUtils.GetValues<Scores>();
             Results = allScores.Select(score => new RollResult(score)).ToList();
-            IsMoving = false;
+            IsMyTurn = false;
         }
 
         #endregion

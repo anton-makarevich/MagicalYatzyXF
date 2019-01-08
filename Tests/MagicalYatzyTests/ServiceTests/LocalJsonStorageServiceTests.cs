@@ -11,7 +11,7 @@ namespace MagicalYatzyTests.ServiceTests
         [Fact]
         public async Task StorageServiceShouldLoadSavedPlayers()
         {
-            // Arange
+            // Arrange
             var sut = new LocalJsonStorageService();
 
             var playersToSave = new List<Player>

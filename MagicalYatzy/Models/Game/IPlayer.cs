@@ -22,7 +22,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         bool IsHuman { get;  }
 
-        bool IsMoving { get;  }
+        bool IsMyTurn { get; set; }
 
         bool IsReady { get;  }
 
@@ -38,13 +38,14 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         int Roll { get; }
 
-        int SeatNo { get; }
+        int SeatNo { get; set; }
 
         int Total { get; }
 
         int TotalNumeric { get; }
 
         PlayerType Type { get; }
+        string InGameId { get; set; }
 
         void PrepareForGameStart(List<Artifact> availableArtifacts = null);
         

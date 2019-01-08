@@ -33,9 +33,9 @@ namespace Sanet.MagicalYatzy.Models.Game
         DieResult LastDiceResult { get; }
 
         void ManualChange(bool isfixed, int oldvalue, int newvalue);
-        int Turn { get; }
+        int Round { get; }
         int Roll { get; }
-        event EventHandler<MoveEventArgs> MoveChanged;
+        event EventHandler<MoveEventArgs> TurnChanged;
         event EventHandler<ChatMessageEventArgs> OnChatMessage;
         void NextTurn();
         string Password { get; set; }
@@ -51,8 +51,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         Rule Rules { get; }
 
         void LeaveGame(IPlayer player);
-        void SetPlayerReady(IPlayer player, bool isready);
-        void SetPlayerReady(bool isready);
+        void SetPlayerReady(IPlayer player, bool isReady);
         void SendChatMessage(ChatMessage message);
     }
 }

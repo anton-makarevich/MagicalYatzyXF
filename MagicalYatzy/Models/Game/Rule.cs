@@ -90,7 +90,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         /// <summary>
         /// Maximum moves count based on rules
         /// </summary>
-        public int MaxMove
+        public int MaxRound
         {
             get
             {
