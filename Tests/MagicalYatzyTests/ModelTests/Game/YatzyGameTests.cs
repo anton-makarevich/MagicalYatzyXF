@@ -183,10 +183,12 @@ namespace MagicalYatzyTests.ModelTests.Game
             _sut.SetPlayerReady(player,true);
 
             Assert.Equal(1, gameUpdatedCount);
+            Assert.True(_sut.IsPlaying);
+            Assert.Equal(1,_sut.Round);
         }
 
         [Fact]
-        public void SettingAllPlayersReadyShouldActivateFirstPlayerToMakeMoveAndInvokeCorrespodingEvent()
+        public void SettingAllPlayersReadyShouldActivateFirstPlayerToMakeMoveAndInvokeCorrespondingEvent()
         {
             var player1 = new Player();
             var player2 = new Player();
@@ -209,6 +211,7 @@ namespace MagicalYatzyTests.ModelTests.Game
             Assert.NotNull(_sut.CurrentPlayer);
             Assert.Equal(player1, _sut.CurrentPlayer);
             Assert.Equal(player1, currentPlayer);
+            Assert.True(_sut.CurrentPlayer.IsMyTurn);
         }
     }
 }

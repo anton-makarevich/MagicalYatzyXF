@@ -181,20 +181,20 @@ namespace Sanet.MagicalYatzy.Models.Game
             if (Rules.CurrentRule == Game.Rules.krMagic)
                 ReRollMode = false;
             //if we have current player - round is continuing, so selecting next
+            var currentSeatNo = 0;
             if (CurrentPlayer != null)
             {
                 CurrentPlayer.IsMyTurn = false;
                 //if player left we can't just take next - need to check to the last possible place
-                for (var i = CurrentPlayer.SeatNo + 1; i < 5; i++)
-                {
-                    CurrentPlayer = Players.Where(f => f.IsReady).FirstOrDefault(f => f.SeatNo == i);
-                    if (CurrentPlayer != null)
-                        break;
-                }
+                currentSeatNo = CurrentPlayer.SeatNo + 1;
             }
-            else//else it's new move and we select first player as current
-                CurrentPlayer = Players.FirstOrDefault(f => f.SeatNo == 0); //TODO refactor this as first player also can leave
-            //if current player null then all players are done in this move - move next
+            for (var seatNo = currentSeatNo; seatNo < 5; seatNo++)
+            {
+                CurrentPlayer = Players.Where(f => f.IsReady).FirstOrDefault(f => f.SeatNo == seatNo);
+                if (CurrentPlayer != null)
+                    break;
+            }
+            //if current player is null then all players are done in this round - start next
             if (CurrentPlayer == null)
             {
                 NextTurn();
