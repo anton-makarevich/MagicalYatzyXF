@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Utils;
 using Xunit;
@@ -95,24 +97,46 @@ namespace MagicalYatzyTests.ModelTests.Game
         {
             Assert.Equal(0, _sut.NumberOfFixedDice);
         }
-
+        
         [Fact]
-        public void ApplyingScoreInvokesResultAppliedEvent()
+        public void ApplyingScoreInvokesResultAppliedEventForResultOnlyIfResultIsNotNumeric()
         {
             StartGame();
             var resultAppliedCount = 0;
             RollResult appliedResult = null;
-            var result = new RollResult(Scores.Ones);
+            var result = new RollResult(Scores.SmallStraight);
             
             _sut.ResultApplied += (sender, args) =>
             {
                 resultAppliedCount++;
                 appliedResult = args.Result as RollResult;
             };
+            
             _sut.ApplyScore(result);
             
             Assert.Equal(1,resultAppliedCount);
             Assert.Equal(result,appliedResult);
+        }
+
+        [Fact]
+        public void ApplyingScoreInvokesResultAppliedEventForResultItselfAndBonusIfResultIsNumeric()
+        {
+            StartGame();
+            var resultAppliedCount = 0;
+            var appliedResults = new List<RollResult>();
+            var result = new RollResult(Scores.Ones);
+            
+            _sut.ResultApplied += (sender, args) =>
+            {
+                resultAppliedCount++;
+                appliedResults.Add(args.Result as RollResult);
+            };
+            
+            _sut.ApplyScore(result);
+            
+            Assert.Equal(2,resultAppliedCount);
+            Assert.Equal(result,appliedResults.FirstOrDefault());
+            Assert.Equal(Scores.Bonus, appliedResults.LastOrDefault()?.ScoreType);
         }
 
         [Fact]
@@ -132,7 +156,6 @@ namespace MagicalYatzyTests.ModelTests.Game
             Assert.Single(_sut.Players);
             Assert.Equal(1, playerAddedCount);
             Assert.Equal(player, joinedPlayer);
-            Assert.NotEmpty(player.InGameId);
         }
 
         [Fact]

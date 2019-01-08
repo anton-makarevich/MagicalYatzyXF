@@ -50,7 +50,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         [Fact]
         public void PrepareForGameStartInitializesResults()
         {
-            _sut.PrepareForGameStart();
+            _sut.PrepareForGameStart(new Rule(Rules.krSimple));
             Assert.NotNull(_sut.Results);
             Assert.NotEmpty(_sut.Results);
             foreach (var rollResult in _sut.Results)
@@ -60,37 +60,51 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void DoesNotHaveArtifactsIfNotPassedToPrepareForGame()
+        public void DoesNotHaveArtifactsIfRulesAreNotMagical()
         {
-            _sut.PrepareForGameStart();
-            Assert.Null(_sut.MagicalArtifacts);
+            _sut.PrepareForGameStart(new Rule(Rules.krSimple));
+            Assert.Null(_sut.MagicalArtifactsForGame);
+        }
+        
+        [Fact]
+        public void DoesNotHaveArtifactsIfRulesAreMagicalButAvailableArtifactsAreNotSet()
+        {
+            _sut.PrepareForGameStart(new Rule(Rules.krMagic));
+            Assert.Null(_sut.MagicalArtifactsForGame);
         }
 
         [Fact]
-        public void HasArtifactsPassedToPrepareToPrepareForGame()
+        public void HasArtifactsIfRulesAreMagicalAndAvailableArtifactsAreSet()
         {
             var artifact1 = new Artifact(Artifacts.ManualSet);
             var artifact2 = new Artifact(Artifacts.FourthRoll);
-            var artifacts = new List<Artifact> {artifact1, artifact2};
+
+            _sut.AvailableMagicalArtifacts = new List<Artifact> {artifact1, artifact2};
+            _sut.PrepareForGameStart(new Rule(Rules.krMagic));
             
-            _sut.PrepareForGameStart(artifacts);
-            
-            Assert.NotNull(_sut.MagicalArtifacts);
-            Assert.Contains(artifact1, _sut.MagicalArtifacts);
-            Assert.Contains(artifact2, _sut.MagicalArtifacts);
+            Assert.NotNull(_sut.MagicalArtifactsForGame);
+            Assert.Contains(artifact1, _sut.MagicalArtifactsForGame);
+            Assert.Contains(artifact2, _sut.MagicalArtifactsForGame);
         }
 
         [Fact]
         public void PrepareForGameResetsToFirstRoll()
         {
-            _sut.PrepareForGameStart();
+            _sut.PrepareForGameStart(new Rule(Rules.krMagic));
             Assert.Equal(1, _sut.Roll);
+        }
+        
+        [Fact]
+        public void PrepareForGameSetsInGameId()
+        {
+            _sut.PrepareForGameStart(new Rule(Rules.krMagic));
+            Assert.NotEmpty(_sut.InGameId);
         }
 
         [Fact]
         public void ReturnsResultForRequestedScore()
         {
-            _sut.PrepareForGameStart();
+            _sut.PrepareForGameStart(new Rule(Rules.krMagic));
             const Scores score = Scores.Ones;
             var result = _sut.GetResultForScore(score);
             Assert.NotNull(result);

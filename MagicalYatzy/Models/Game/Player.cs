@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Sanet.MagicalYatzy.Extensions;
 using Sanet.MagicalYatzy.Models.Game.Magical;
@@ -50,23 +51,29 @@ namespace Sanet.MagicalYatzy.Models.Game
         
         public IReadOnlyList<RollResult> Results { get; private set; }
         
-        public IReadOnlyList<Artifact> MagicalArtifacts { get; private set; }
+        public IReadOnlyList<Artifact> MagicalArtifactsForGame { get; private set; }
+        
+        public IReadOnlyList<Artifact> AvailableMagicalArtifacts { get; set; }
 
         public int TotalNumeric => default;
 
         public PlayerType Type { get; }
-        public string InGameId { get; set; }
+        public string InGameId { get; private set; }
 
         #region Methods
         
         public RollResult GetResultForScore(Scores score)=> Results?.FirstOrDefault(f => f.ScoreType == score);
 
-        public void PrepareForGameStart(List<Artifact> availableArtifacts = null)
+        public void PrepareForGameStart(Rule rule)
         {
             Roll = 1;
-            MagicalArtifacts = availableArtifacts;
-            var allScores = EnumUtils.GetValues<Scores>();
-            Results = allScores.Select(score => new RollResult(score)).ToList();
+            if (rule.CurrentRule == Rules.krMagic)
+            {
+                MagicalArtifactsForGame = AvailableMagicalArtifacts?.Distinct().ToList();
+            }
+
+            Results = rule.ScoresForRule.Select(score => new RollResult(score)).ToList();
+            InGameId = Guid.NewGuid().ToString("N");
             IsMyTurn = false;
         }
 

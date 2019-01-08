@@ -140,29 +140,20 @@ namespace Sanet.MagicalYatzy.Models.Game
                 var bonusResult=CurrentPlayer.Results?.FirstOrDefault(f=>f.ScoreType== Scores.Bonus);
                 if (bonusResult != null && (result.IsNumeric && !bonusResult.HasValue))
                 {
+                    var possibleBonusValue = -1;
                     if (CurrentPlayer.TotalNumeric > 62)
-                    {
-                        bonusResult.PossibleValue = 35;
-                        ResultApplied?.Invoke(this, new ResultEventArgs(CurrentPlayer, new RollResult(Scores.Bonus)
-                        {
-                            PossibleValue = bonusResult.PossibleValue
-                        }));
-#if SERVER
-                        bonusResult.Value = bonusResult.PossibleValue;
-#endif
-                    }
+                        possibleBonusValue = 35;
                     else if (CurrentPlayer.TotalNumeric + CurrentPlayer.MaxRemainingNumeric < 63)
+                        possibleBonusValue = 0;
+       
+                    if (possibleBonusValue > -1)
                     {
-                        bonusResult.PossibleValue = 0;
-                        ResultApplied?.Invoke(this, new ResultEventArgs(CurrentPlayer, new RollResult(Scores.Bonus)
-                        {
-                            PossibleValue = bonusResult.PossibleValue
-                        }));
+                        bonusResult.PossibleValue = possibleBonusValue;
+                        ResultApplied?.Invoke(this, new ResultEventArgs(CurrentPlayer, bonusResult));
 #if SERVER
                         bonusResult.Value = bonusResult.PossibleValue;
 #endif
                     }
-                    
                 }
             }
 
@@ -245,7 +236,6 @@ namespace Sanet.MagicalYatzy.Models.Game
                     seat++;
                
                 player.SeatNo = seat;
-                player.InGameId = Guid.NewGuid().ToString("N");
                 Players.Add(player as Player);
                 PlayerJoined?.Invoke(this, new PlayerEventArgs(player));
             }
@@ -316,8 +306,9 @@ namespace Sanet.MagicalYatzy.Models.Game
             if (previousPlayer == null) return;
             previousPlayer.IsReady = isReady;
             PlayerReady?.Invoke(null, new PlayerEventArgs(previousPlayer));
-            if (isReady)
-                StartGame();
+            if (!isReady) return;
+            player.PrepareForGameStart(Rules);
+            StartGame();
         }
 
         public void SendChatMessage(ChatMessage message)

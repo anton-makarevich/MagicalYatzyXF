@@ -9,7 +9,9 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         IReadOnlyList<RollResult> Results { get; }
 
-        IReadOnlyList<Artifact> MagicalArtifacts { get; }
+        IReadOnlyList<Artifact> MagicalArtifactsForGame { get; }
+        
+        IReadOnlyList<Artifact> AvailableMagicalArtifacts { get; set; }
 
         bool CanBuy { get; }
 
@@ -45,9 +47,9 @@ namespace Sanet.MagicalYatzy.Models.Game
         int TotalNumeric { get; }
 
         PlayerType Type { get; }
-        string InGameId { get; set; }
+        string InGameId { get; }
 
-        void PrepareForGameStart(List<Artifact> availableArtifacts = null);
+        void PrepareForGameStart(Rule rule);
         
         RollResult GetResultForScore(Scores score);
     }
