@@ -375,12 +375,15 @@ namespace MagicalYatzyTests.ModelTests.Game
 
             _sut.DiceChanged += (sender, args) => { diceChangedCount++; };
             
-            RollDiceToHaveValue(valueToChange, 1);
+            RollDiceToHaveValue(valueToChange, 2);
+            _sut.FixDice(valueToChange, true);
             
             var newValuesBefore = _sut.LastDiceResult.NumDiceOf(valueToChangeTo);
             _sut.ManualChange(valueToChange,valueToChangeTo, false);
             
-            Assert.Equal(0,_sut.LastDiceResult.NumDiceOf(valueToChange));
+            Assert.True(_sut.IsDiceFixed(valueToChange));
+            Assert.False(_sut.IsDiceFixed(valueToChangeTo));
+            Assert.Equal(1,_sut.LastDiceResult.NumDiceOf(valueToChange));
             Assert.Equal(newValuesBefore+1,_sut.LastDiceResult.NumDiceOf(valueToChangeTo));
             Assert.Equal(1,diceChangedCount);
         }

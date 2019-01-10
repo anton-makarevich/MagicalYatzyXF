@@ -42,7 +42,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         event EventHandler<PlayerEventArgs> PlayerJoined;
         List<Player> Players { get; }
         int NumberOfPlayers { get; }
-        void ReportMagictRoll();
+        void ReportMagicRoll();
         void ReportRoll();
         bool ReRollMode { get; set; }
         void ResetRolls();

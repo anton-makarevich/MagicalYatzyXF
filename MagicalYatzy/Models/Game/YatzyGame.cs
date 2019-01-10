@@ -289,28 +289,20 @@ namespace Sanet.MagicalYatzy.Models.Game
         {
             if (Rules.CurrentRule != Game.Rules.krMagic)
                 return;
-            
+
             lock (_syncRoot)
             {
-                var hasChangedValue = false;
-                for (var i = 0; i < 5; i++)
-                {
-                    if (_lastRollResults[i] == oldValue && _fixedRollResults.Contains(oldValue)==isFixed)
-                    {
-                        _lastRollResults[i] = newValue;
-                        if (isFixed)
-                        {
-                            FixDice(oldValue, false);
-                            FixDice(newValue, true);
-                        }
+                var oldIndexValue = _lastRollResults.ToList().IndexOf(oldValue);
 
-                        hasChangedValue = true;
-                        break;
-                    }
+                if (oldIndexValue <= -1) return;
+                _lastRollResults[oldIndexValue] = newValue;
+                if (isFixed && _fixedRollResults.Contains(oldValue))
+                {
+                    FixDice(oldValue, false);
+                    FixDice(newValue, true);
                 }
 
-                if (hasChangedValue)
-                    DiceChanged?.Invoke(this, new RollEventArgs(CurrentPlayer, _lastRollResults));
+                DiceChanged?.Invoke(this, new RollEventArgs(CurrentPlayer, _lastRollResults));
             }
         }
 
@@ -340,7 +332,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             }
         }
         
-        public void ReportMagictRoll()
+        public void ReportMagicRoll()
         {
             throw new NotImplementedException();
         }
