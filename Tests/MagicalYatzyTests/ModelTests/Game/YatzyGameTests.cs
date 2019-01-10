@@ -8,7 +8,7 @@ namespace MagicalYatzyTests.ModelTests.Game
 {
     public class YatzyGameTests
     {
-        private readonly YatzyGame _sut;
+        private YatzyGame _sut;
 
         public YatzyGameTests()
         {
@@ -23,6 +23,16 @@ namespace MagicalYatzyTests.ModelTests.Game
             _sut.SetPlayerReady(player,true);
         }
 
+        private void RollDiceToHaveValue(int requiredValue, int requiredNumberOfValues)
+        {
+            var numberOfValues = 0;
+            _sut.DiceRolled += (sender, args) => { numberOfValues = args.Value.Count(f => f == requiredValue); };
+            do
+            {
+                _sut.ReportRoll();
+            } while (numberOfValues != requiredNumberOfValues);
+        }
+        
         [Fact]
         public void DefaultGameRuleIsExtended()
         {
@@ -262,28 +272,137 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
         
         [Fact]
-        public void FixAllDiceFixesAllDiceOfSpecifiedValueInLastRollResultAndInvokesEventForEveryFix()
+        public void FixAllDiceFixesOrUnfixesAllDiceOfSpecifiedValueInLastRollResultAndInvokesEventForEveryFix()
         {
             const int valueToFix = 4;
             var diceFixedCount = 0;
-
-            var numberOfValuesToFix = 0;
-            _sut.DiceRolled += (sender, args) => { numberOfValuesToFix = args.Value.Count(f => f == valueToFix); };
-            do
-            {
-                _sut.ReportRoll();
-            } while (numberOfValuesToFix<2);
+            var expectedValue = true;
+            const int requiredNumberOfValues = 2;
+            RollDiceToHaveValue(valueToFix, requiredNumberOfValues);
             
             _sut.DiceFixed += (sender, args) =>
             {
                 diceFixedCount++;
                 Assert.Equal(valueToFix, args.Value);
-                Assert.True(args.Isfixed);
+                // ReSharper disable once AccessToModifiedClosure
+                Assert.Equal(expectedValue,args.Isfixed);
             };
             
             _sut.FixAllDice(valueToFix,true);
+            expectedValue = false;
+            _sut.FixAllDice(valueToFix,false);
             
-            Assert.Equal(numberOfValuesToFix, diceFixedCount);
+            Assert.Equal(requiredNumberOfValues*2, diceFixedCount);
+        }
+        
+        [Fact]
+        public void FixDiceFixesOrUnfixesSingleDiceOfSpecifiedValueInLastRollResultAndInvokesEvent()
+        {
+            const int valueToFix = 4;
+            var diceFixedCount = 0;
+            var expectedValue = true;
+            RollDiceToHaveValue(valueToFix, 1);
+
+            _sut.DiceFixed += (sender, args) =>
+            {
+                diceFixedCount++;
+                Assert.Equal(valueToFix, args.Value);
+                // ReSharper disable once AccessToModifiedClosure
+                Assert.Equal(expectedValue,args.Isfixed);
+            };
+            
+            _sut.FixDice(valueToFix,true);
+            Assert.True(_sut.IsDiceFixed(valueToFix));
+            expectedValue = false;
+            _sut.FixDice(valueToFix,false);
+            
+            Assert.Equal(2, diceFixedCount);
+        }
+        
+        [Fact]
+        public void ManualChangeReplacesValueWhenItIsFixed()
+        {
+            _sut = new YatzyGame(Rules.krMagic);
+            const int valueToChange = 4;
+            const int valueToChangeTo = 5;
+            var diceChangedCount = 0;
+
+            _sut.DiceChanged += (sender, args) => { diceChangedCount++; };
+            
+            RollDiceToHaveValue(valueToChange, 2);
+            _sut.FixDice(valueToChange, true);
+
+            var newValuesBefore = _sut.LastDiceResult.NumDiceOf(valueToChangeTo);
+            _sut.ManualChange(valueToChange,valueToChangeTo, true);
+            
+            Assert.False(_sut.IsDiceFixed(valueToChange));
+            Assert.True(_sut.IsDiceFixed(valueToChangeTo));
+            Assert.Equal(1,_sut.LastDiceResult.NumDiceOf(valueToChange));
+            Assert.Equal(newValuesBefore+1,_sut.LastDiceResult.NumDiceOf(valueToChangeTo));
+            Assert.Equal(1,diceChangedCount);
+        }
+        
+        [Fact]
+        public void ManualChangeWorksOnlyForMagicRules()
+        {
+            _sut = new YatzyGame(Rules.krStandard);
+            const int valueToChange = 4;
+            const int valueToChangeTo = 5;
+            var diceChangedCount = 0;
+
+            _sut.DiceChanged += (sender, args) => { diceChangedCount++; };
+            
+            RollDiceToHaveValue(valueToChange, 2);
+            _sut.FixDice(valueToChange, true);
+
+            var newValuesBefore = _sut.LastDiceResult.NumDiceOf(valueToChangeTo);
+            _sut.ManualChange(valueToChange,valueToChangeTo, true);
+            
+            Assert.True(_sut.IsDiceFixed(valueToChange));
+            Assert.False(_sut.IsDiceFixed(valueToChangeTo));
+            Assert.Equal(2,_sut.LastDiceResult.NumDiceOf(valueToChange));
+            Assert.Equal(newValuesBefore,_sut.LastDiceResult.NumDiceOf(valueToChangeTo));
+            Assert.Equal(0,diceChangedCount);
+        }
+        
+        [Fact]
+        public void ManualChangeReplacesValueWhenItIsNotFixed()
+        {
+            _sut = new YatzyGame(Rules.krMagic);
+            const int valueToChange = 4;
+            const int valueToChangeTo = 5;
+            var diceChangedCount = 0;
+
+            _sut.DiceChanged += (sender, args) => { diceChangedCount++; };
+            
+            RollDiceToHaveValue(valueToChange, 1);
+            
+            var newValuesBefore = _sut.LastDiceResult.NumDiceOf(valueToChangeTo);
+            _sut.ManualChange(valueToChange,valueToChangeTo, false);
+            
+            Assert.Equal(0,_sut.LastDiceResult.NumDiceOf(valueToChange));
+            Assert.Equal(newValuesBefore+1,_sut.LastDiceResult.NumDiceOf(valueToChangeTo));
+            Assert.Equal(1,diceChangedCount);
+        }
+        
+        [Fact]
+        public void ManualChangeDoesNotReplacesValueWhenItIsNotInResult()
+        {
+            _sut = new YatzyGame(Rules.krMagic);
+            const int valueToChange = 4;
+            const int valueToChangeTo = 5;
+            var diceChangedCount = 0;
+
+            _sut.DiceChanged += (sender, args) => { diceChangedCount++; };
+            
+            RollDiceToHaveValue(valueToChange, 0);
+            
+            var newValuesBefore = _sut.LastDiceResult.NumDiceOf(valueToChangeTo);
+            _sut.ManualChange(valueToChange,valueToChangeTo, false);
+            
+            Assert.Equal(0,_sut.LastDiceResult.NumDiceOf(valueToChange));
+            Assert.Equal(newValuesBefore,_sut.LastDiceResult.NumDiceOf(valueToChangeTo));
+            Assert.Equal(0,diceChangedCount);
         }
     }
 }

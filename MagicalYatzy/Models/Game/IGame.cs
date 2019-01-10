@@ -32,7 +32,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         void JoinGame(IPlayer player);
         DieResult LastDiceResult { get; }
 
-        void ManualChange(bool isfixed, int oldvalue, int newvalue);
+        void ManualChange(int oldValue, int newValue, bool isFixed);
         int Round { get; }
         int Roll { get; }
         event EventHandler<MoveEventArgs> TurnChanged;

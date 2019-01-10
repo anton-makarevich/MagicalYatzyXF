@@ -215,9 +215,9 @@ namespace Sanet.MagicalYatzy.Models.Game
             {
                 if (isFixed)
                 {
-                    var count = LastDiceResult.NumDiceOf(value);
+                    var numberOfDiceToFix = LastDiceResult.NumDiceOf(value);
                     var fixedCount = _fixedRollResults.Count(f => f == value);
-                    for (var i = 0; i < (count - fixedCount); i++)
+                    for (var counter = 0; counter < (numberOfDiceToFix - fixedCount); counter++)
                     {
                         _fixedRollResults.Add(value);
                         DiceFixed?.Invoke(this, new FixDiceEventArgs(CurrentPlayer, value, true));
@@ -234,14 +234,30 @@ namespace Sanet.MagicalYatzy.Models.Game
             }
         }
 
-        public void FixDice(int value, bool isfixed)
+        public void FixDice(int value, bool isFixed)
         {
-            throw new NotImplementedException();
+            lock (_syncRoot)
+            {
+                if (isFixed)
+                {
+                    var numberOfDiceOfValue = LastDiceResult.NumDiceOf(value);
+                    var fixedCount = _fixedRollResults.Count(f => f == value);
+                    if (numberOfDiceOfValue > fixedCount)
+                        _fixedRollResults.Add(value);
+                }
+                else
+                {
+                    if (_fixedRollResults.Contains(value))
+                        _fixedRollResults.Remove(value);
+                }
+
+                DiceFixed?.Invoke(this, new FixDiceEventArgs(CurrentPlayer, value, isFixed));
+            }
         }
 
         public bool IsDiceFixed(int value)
         {
-            throw new NotImplementedException();
+            return _fixedRollResults.Contains(value);
         }
         
         public void JoinGame(IPlayer player)
@@ -269,9 +285,33 @@ namespace Sanet.MagicalYatzy.Models.Game
             }
         }
 
-        public void ManualChange(bool isfixed, int oldvalue, int newvalue)
+        public void ManualChange(int oldValue, int newValue, bool isFixed)
         {
-            throw new NotImplementedException();
+            if (Rules.CurrentRule != Game.Rules.krMagic)
+                return;
+            
+            lock (_syncRoot)
+            {
+                var hasChangedValue = false;
+                for (var i = 0; i < 5; i++)
+                {
+                    if (_lastRollResults[i] == oldValue && _fixedRollResults.Contains(oldValue)==isFixed)
+                    {
+                        _lastRollResults[i] = newValue;
+                        if (isFixed)
+                        {
+                            FixDice(oldValue, false);
+                            FixDice(newValue, true);
+                        }
+
+                        hasChangedValue = true;
+                        break;
+                    }
+                }
+
+                if (hasChangedValue)
+                    DiceChanged?.Invoke(this, new RollEventArgs(CurrentPlayer, _lastRollResults));
+            }
         }
 
         public void NextTurn()
