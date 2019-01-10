@@ -48,6 +48,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         PlayerType Type { get; }
         string InGameId { get; }
+        DiceStyle SelectedStyle { get; set; }
 
         void PrepareForGameStart(Rule rule);
         

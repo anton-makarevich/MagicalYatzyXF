@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Sanet.MagicalYatzy.Models.Chat;
 using Sanet.MagicalYatzy.Models.Events;
+using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
 using Sanet.MagicalYatzy.Models.Game.DieResultExtensions;
 
 namespace Sanet.MagicalYatzy.Models.Game
@@ -10,12 +11,14 @@ namespace Sanet.MagicalYatzy.Models.Game
     public class YatzyGame: IGame
     {
         //sync object
-        readonly object _syncRoot = new object();
+        private readonly object _syncRoot = new object();
+        
+        private readonly IDiceGenerator _diceGenerator = new RandomDiceGenerator();
         
         private bool _isPlaying;
         private int[] _lastRollResults;
-        private List<int> fixedRollResults = new List<int>();
-        private Queue<int> thisTurnValues = new Queue<int>();
+        private List<int> _fixedRollResults = new List<int>();
+        private Queue<int> _thisTurnValues = new Queue<int>();
         private bool _reRollMode;
 
         public YatzyGame(Rules rules)
@@ -56,7 +59,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         
         public string GameId { get; }
         
-        public int NumberOfFixedDice => fixedRollResults?.Count ?? 0;
+        public int NumberOfFixedDice => _fixedRollResults?.Count ?? 0;
 
         public bool IsPlaying
         {
@@ -105,9 +108,9 @@ namespace Sanet.MagicalYatzy.Models.Game
             {
                 _reRollMode = value;
                 if (!value)
-                    thisTurnValues = new Queue<int>();
+                    _thisTurnValues = new Queue<int>();
                 else
-                    fixedRollResults = new List<int>();
+                    _fixedRollResults = new List<int>();
             }
         }
         
@@ -162,12 +165,17 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public void ChangeStyle(IPlayer player, DiceStyle style)
         {
-            throw new NotImplementedException();
+            if (player==null)
+                return;
+            player = Players.FirstOrDefault(f => f.InGameId == player.InGameId);
+            if (player == null) return;
+            player.SelectedStyle = style;
+            StyleChanged?.Invoke(null, new PlayerEventArgs(player));
         }
 
         public void DoTurn()
         {
-            fixedRollResults = new List<int>();
+            _fixedRollResults = new List<int>();
             
             if (Rules.CurrentRule == Game.Rules.krMagic)
                 ReRollMode = false;
@@ -201,9 +209,29 @@ namespace Sanet.MagicalYatzy.Models.Game
             TurnChanged?.Invoke(this, new MoveEventArgs(CurrentPlayer, Round));
         }
 
-        public void FixAllDices(int value, bool isfixed)
+        public void FixAllDice(int value, bool isFixed)
         {
-            throw new NotImplementedException();
+            lock (_syncRoot)
+            {
+                if (isFixed)
+                {
+                    var count = LastDiceResult.NumDiceOf(value);
+                    var fixedCount = _fixedRollResults.Count(f => f == value);
+                    for (var i = 0; i < (count - fixedCount); i++)
+                    {
+                        _fixedRollResults.Add(value);
+                        DiceFixed?.Invoke(this, new FixDiceEventArgs(CurrentPlayer, value, true));
+                    }
+                }
+                else
+                {
+                    while (_fixedRollResults.Contains(value))
+                    {
+                        _fixedRollResults.Remove(value);
+                        DiceFixed?.Invoke(this, new FixDiceEventArgs(CurrentPlayer, value, false));
+                    }
+                }
+            }
         }
 
         public void FixDice(int value, bool isfixed)
@@ -279,7 +307,30 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public void ReportRoll()
         {
-            throw new NotImplementedException();
+            lock (_syncRoot)
+            {
+                var diceIndexToSet = 0;
+                _lastRollResults = new int[5];
+                for (var diceCounter = diceIndexToSet; diceCounter < _fixedRollResults.Count; diceCounter++)
+                {
+                    _lastRollResults[diceCounter] = _fixedRollResults[diceCounter];
+                }
+                diceIndexToSet = _fixedRollResults.Count;
+
+                for (var diceCounter = diceIndexToSet; diceCounter <= 4; diceCounter++)
+                {
+                    var diceValue = _diceGenerator.GetNextDiceResult(_fixedRollResults.ToArray());
+
+                    _lastRollResults[diceCounter] = diceValue;
+                    if (Rules.CurrentRule != Game.Rules.krMagic) continue;
+                    if (!ReRollMode)
+                        _thisTurnValues.Enqueue(diceValue);
+                    else if (_thisTurnValues.Count>0)
+                        _lastRollResults[diceCounter]=_thisTurnValues.Dequeue();
+                }
+
+                DiceRolled?.Invoke(this, new RollEventArgs(CurrentPlayer, _lastRollResults));
+            }
         }
         
         public void ResetRolls()

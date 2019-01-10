@@ -59,6 +59,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public PlayerType Type { get; }
         public string InGameId { get; private set; }
+        public DiceStyle SelectedStyle { get; set; }
 
         #region Methods
         

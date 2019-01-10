@@ -21,7 +21,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         void ApplyScore(IRollResult result);
         void ChangeStyle(IPlayer player, DiceStyle style);
         void DoTurn();
-        void FixAllDices(int value, bool isfixed);
+        void FixAllDice(int value, bool isFixed);
         void FixDice(int value, bool isfixed);
         int NumberOfFixedDice { get; }
         event EventHandler GameFinished;

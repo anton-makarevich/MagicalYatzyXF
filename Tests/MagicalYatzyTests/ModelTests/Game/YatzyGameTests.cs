@@ -236,5 +236,54 @@ namespace MagicalYatzyTests.ModelTests.Game
             Assert.Equal(player1, currentPlayer);
             Assert.True(_sut.CurrentPlayer.IsMyTurn);
         }
+
+        [Fact]
+        public void ChangeStyleChangesPlayerStyleAndInvokesEvent()
+        {
+            const DiceStyle initialStyle = DiceStyle.Classic;
+            const DiceStyle nextStyle = DiceStyle.Blue;
+            
+            var player = new Player{ SelectedStyle = initialStyle};
+            Player updatedPlayer = null;
+            
+            var styleChangedCount = 0;
+            _sut.StyleChanged += (sender, args) =>
+            {
+                styleChangedCount++;
+                updatedPlayer = args.Player as Player;
+            };
+            
+            _sut.JoinGame(player);
+            _sut.ChangeStyle(player, nextStyle);
+
+            Assert.Equal(1, styleChangedCount);
+            Assert.Equal(player, updatedPlayer);
+            Assert.Equal(nextStyle,player.SelectedStyle);
+        }
+        
+        [Fact]
+        public void FixAllDiceFixesAllDiceOfSpecifiedValueInLastRollResultAndInvokesEventForEveryFix()
+        {
+            const int valueToFix = 4;
+            var diceFixedCount = 0;
+
+            var numberOfValuesToFix = 0;
+            _sut.DiceRolled += (sender, args) => { numberOfValuesToFix = args.Value.Count(f => f == valueToFix); };
+            do
+            {
+                _sut.ReportRoll();
+            } while (numberOfValuesToFix<2);
+            
+            _sut.DiceFixed += (sender, args) =>
+            {
+                diceFixedCount++;
+                Assert.Equal(valueToFix, args.Value);
+                Assert.True(args.Isfixed);
+            };
+            
+            _sut.FixAllDice(valueToFix,true);
+            
+            Assert.Equal(numberOfValuesToFix, diceFixedCount);
+        }
     }
 }
