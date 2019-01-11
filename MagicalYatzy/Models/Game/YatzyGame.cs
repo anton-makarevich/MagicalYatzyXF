@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Sanet.MagicalYatzy.Models.Chat;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
-using Sanet.MagicalYatzy.Models.Game.DieResultExtensions;
+using Sanet.MagicalYatzy.Models.Game.Extensions;
 
 namespace Sanet.MagicalYatzy.Models.Game
 {
@@ -20,6 +20,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         private List<int> _fixedRollResults = new List<int>();
         private Queue<int> _thisTurnValues = new Queue<int>();
         private bool _reRollMode;
+        private readonly Random _randomizer = new Random();
 
         public YatzyGame(Rules rules)
         {
@@ -334,7 +335,32 @@ namespace Sanet.MagicalYatzy.Models.Game
         
         public void ReportMagicRoll()
         {
-            throw new NotImplementedException();
+            lock (_syncRoot)
+            {
+                //set magic value
+                //1) check how many free hands we have
+                var freeHandsIndex = 0;
+                var freeHands = new Dictionary<int,Scores>();
+                foreach (var score in Rule.PokerHands)
+                {
+                    if (CurrentPlayer.GetResultForScore(score).HasValue) continue;
+                    freeHands.Add(freeHandsIndex, score);
+                    freeHandsIndex++;
+                }
+                if (freeHands.Count==0)
+                    ReportRoll();// no available hands - just roll
+                else
+                {
+                    _lastRollResults = freeHands[_randomizer.Next(freeHands.Count)].GetMagicResults();
+
+                    MagicRollUsed?.Invoke(this, new PlayerEventArgs(CurrentPlayer));
+                    //CurrentPlayer.OnMagicRollUsed();
+                    foreach (var result in _lastRollResults)
+                        _thisTurnValues.Enqueue(result);
+                    //roll report
+                    DiceRolled?.Invoke(this, new RollEventArgs(CurrentPlayer, _lastRollResults));
+                }
+            }
         }
 
         public void ReportRoll()

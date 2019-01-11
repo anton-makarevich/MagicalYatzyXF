@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace Sanet.MagicalYatzy.Models.Game.DieResultExtensions
+namespace Sanet.MagicalYatzy.Models.Game.Extensions
 {
     public static class YatzyRules
     {
@@ -45,7 +45,7 @@ namespace Sanet.MagicalYatzy.Models.Game.DieResultExtensions
             return result.DiceResults.Distinct().Count() == 5 ? score : 0;
         }
 
-        public static int KniffelFullHouseScore(this DieResult result)
+        public static int YatzyFullHouseScore(this DieResult result)
         {
             const int score = 25;
             

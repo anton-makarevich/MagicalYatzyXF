@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Sanet.MagicalYatzy.Models.Game;
-using Sanet.MagicalYatzy.Models.Game.DieResultExtensions;
+using Sanet.MagicalYatzy.Models.Game.Extensions;
 using Xunit;
 
-namespace MagicalYatzyTests.ModelTests.Game.DieResultExtensions
+namespace MagicalYatzyTests.ModelTests.Game.Extensions
 {
     public class AiHelpersTests
     {

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Sanet.MagicalYatzy.Models.Game;
-using Sanet.MagicalYatzy.Models.Game.DieResultExtensions;
+using Sanet.MagicalYatzy.Models.Game.Extensions;
 using Xunit;
 
-namespace MagicalYatzyTests.ModelTests.Game.DieResultExtensions
+namespace MagicalYatzyTests.ModelTests.Game.Extensions
 {
     public class YatzyRulesTests
     {
@@ -109,7 +109,7 @@ namespace MagicalYatzyTests.ModelTests.Game.DieResultExtensions
         public void FullHouseReturnsTwentyFiveWhenThereAreTwoAndThreeSameValues()
         {
             var sut = new DieResult {DiceResults = new List<int> {1, 2, 1, 2, 1}};
-            var result = sut.KniffelFullHouseScore();
+            var result = sut.YatzyFullHouseScore();
             Assert.Equal(25,result);
         }
         
@@ -117,7 +117,7 @@ namespace MagicalYatzyTests.ModelTests.Game.DieResultExtensions
         public void FullHouseReturnsZeroWhenThereAreNoTwoAndThreeSameValues()
         {
             var sut = new DieResult {DiceResults = new List<int> {1, 1, 1, 2, 1}};
-            var result = sut.KniffelFullHouseScore();
+            var result = sut.YatzyFullHouseScore();
             Assert.Equal(0,result);
         }
     }

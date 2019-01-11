@@ -1,4 +1,4 @@
-namespace Sanet.MagicalYatzy.Models.Game.DieResultExtensions
+namespace Sanet.MagicalYatzy.Models.Game.Extensions
 {
     public static class AiHelpers
     {
