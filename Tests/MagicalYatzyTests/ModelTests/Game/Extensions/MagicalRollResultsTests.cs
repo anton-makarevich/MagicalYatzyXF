@@ -53,6 +53,15 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
         }
         
         [Fact]
+        public void ReturnsValidResultsForLargeStraight()
+        {
+            const Scores sut = Scores.LargeStraight;
+            
+            var diceResults = new DieResult() {DiceResults = sut.GetMagicResults().ToList()};
+            Assert.True(diceResults.YatzyLargeStraightScore()>0);
+        }
+        
+        [Fact]
         public void ReturnsValidResultsForLargeKniffel()
         {
             const Scores sut = Scores.Kniffel;

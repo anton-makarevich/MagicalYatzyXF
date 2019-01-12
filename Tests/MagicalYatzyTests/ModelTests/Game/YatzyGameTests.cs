@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Sanet.MagicalYatzy.Models.Game;
+using Sanet.MagicalYatzy.Models.Game.Extensions;
+using Sanet.MagicalYatzy.Models.Game.Magical;
 using Sanet.MagicalYatzy.Utils;
 using Xunit;
 
@@ -406,6 +408,111 @@ namespace MagicalYatzyTests.ModelTests.Game
             Assert.Equal(0,_sut.LastDiceResult.NumDiceOf(valueToChange));
             Assert.Equal(newValuesBefore,_sut.LastDiceResult.NumDiceOf(valueToChangeTo));
             Assert.Equal(0,diceChangedCount);
+        }
+
+        [Fact]
+        public void MagicalRollDoesNotSetAnyOfEmptyPokerHandsIfRulesAreNotMagical()
+        {
+            var player = new Player();
+            _sut.JoinGame(player);
+            _sut.SetPlayerReady(player,true);
+            var magicalRollsUsedCount = 0;
+            _sut.MagicRollUsed += (sender, args) => { magicalRollsUsedCount++; };
+            
+            _sut.ReportMagicRoll();
+
+            var result = _sut.LastDiceResult;
+            var isPokerHand = result.YatzyOfAKindScore(3) > 0 ||
+                              result.YatzyOfAKindScore(4) > 0 ||
+                              result.YatzyFullHouseScore() > 0 ||
+                              result.YatzySmallStraightScore() > 0 ||
+                              result.YatzyLargeStraightScore() > 0 ||
+                              result.YatzyFiveOfAKindScore() > 0;
+            
+            Assert.False(isPokerHand);
+            Assert.Equal(0, magicalRollsUsedCount);
+        }
+        
+        [Fact]
+        public void MagicalRollDoesNotSetAnyOfEmptyPokerHandsIfPlayerDoesNotHaveArtifacts()
+        {
+            _sut = new YatzyGame(Rules.krMagic);
+            
+            var player = new Player();
+            _sut.JoinGame(player);
+            _sut.SetPlayerReady(player,true);
+            var magicalRollsUsedCount = 0;
+            _sut.MagicRollUsed += (sender, args) => { magicalRollsUsedCount++; };
+            
+            _sut.ReportMagicRoll();
+
+            var result = _sut.LastDiceResult;
+            var isPokerHand = result.YatzyOfAKindScore(3) > 0 ||
+                              result.YatzyOfAKindScore(4) > 0 ||
+                              result.YatzyFullHouseScore() > 0 ||
+                              result.YatzySmallStraightScore() > 0 ||
+                              result.YatzyLargeStraightScore() > 0 ||
+                              result.YatzyFiveOfAKindScore() > 0;
+            
+            Assert.False(isPokerHand);
+            Assert.Equal(0, magicalRollsUsedCount);
+        }
+        
+        [Fact]
+        public void MagicalRollSetsAnyOfEmptyPokerHandsAndFiresEvent()
+        {
+            _sut = new YatzyGame(Rules.krMagic);
+
+            var player = new Player
+            {
+                AvailableMagicalArtifacts = new List<Artifact> {new Artifact(Artifacts.MagicalRoll)}
+            };
+            _sut.JoinGame(player);
+            _sut.SetPlayerReady(player,true);
+            var magicalRollsUsedCount = 0;
+            _sut.MagicRollUsed += (sender, args) => { magicalRollsUsedCount++; };
+            
+            _sut.ReportMagicRoll();
+
+            var result = _sut.LastDiceResult;
+            var isPokerHand = result.YatzyOfAKindScore(3) > 0 ||
+                result.YatzyOfAKindScore(4) > 0 ||
+                result.YatzyFullHouseScore() > 0 ||
+                result.YatzySmallStraightScore() > 0 ||
+                result.YatzyLargeStraightScore() > 0 ||
+                result.YatzyFiveOfAKindScore() > 0;
+            
+            Assert.True(isPokerHand);
+            Assert.Equal(1, magicalRollsUsedCount);
+        }
+        
+        [Fact]
+        public void MagicalRollInitializeStandartRollIfAllPokerHandsAreOccupied()
+        {
+            _sut = new YatzyGame(Rules.krMagic);
+
+            var player = new Player
+            {
+                AvailableMagicalArtifacts = new List<Artifact> {new Artifact(Artifacts.MagicalRoll)}
+            };
+            
+            _sut.JoinGame(player);
+            _sut.SetPlayerReady(player,true);
+            foreach (var score in Rule.PokerHands)
+            {
+                // ReSharper disable once PossibleNullReferenceException
+                player.Results.FirstOrDefault(f => f.ScoreType == score).Value = 1;
+            }
+            
+            var magicalRollsUsedCount = 0;
+            var standardRollCount = 0;
+            _sut.MagicRollUsed += (sender, args) => { magicalRollsUsedCount++; };
+            _sut.DiceRolled += (sender, args) => { standardRollCount++; };
+            
+            _sut.ReportMagicRoll();
+
+            Assert.Equal(0, magicalRollsUsedCount);
+            Assert.Equal(1, standardRollCount);
         }
     }
 }

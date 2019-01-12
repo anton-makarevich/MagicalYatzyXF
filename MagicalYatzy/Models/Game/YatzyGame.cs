@@ -5,6 +5,7 @@ using Sanet.MagicalYatzy.Models.Chat;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
 using Sanet.MagicalYatzy.Models.Game.Extensions;
+using Sanet.MagicalYatzy.Models.Game.Magical;
 
 namespace Sanet.MagicalYatzy.Models.Game
 {
@@ -335,17 +336,20 @@ namespace Sanet.MagicalYatzy.Models.Game
         
         public void ReportMagicRoll()
         {
+            if (Rules.CurrentRule != Game.Rules.krMagic)
+                return;
+            var artifact = CurrentPlayer.AvailableMagicalArtifacts?.FirstOrDefault(f => f.Type == Artifacts.MagicalRoll);
+            if (artifact == null)
+                return;
             lock (_syncRoot)
             {
                 //set magic value
                 //1) check how many free hands we have
-                var freeHandsIndex = 0;
-                var freeHands = new Dictionary<int,Scores>();
+                var freeHands = new List<Scores>();
                 foreach (var score in Rule.PokerHands)
                 {
                     if (CurrentPlayer.GetResultForScore(score).HasValue) continue;
-                    freeHands.Add(freeHandsIndex, score);
-                    freeHandsIndex++;
+                    freeHands.Add(score);
                 }
                 if (freeHands.Count==0)
                     ReportRoll();// no available hands - just roll
