@@ -514,5 +514,54 @@ namespace MagicalYatzyTests.ModelTests.Game
             Assert.Equal(0, magicalRollsUsedCount);
             Assert.Equal(1, standardRollCount);
         }
+
+        [Fact]
+        public void ResetRollSetsPlayersRollCountToOneAndReRollModeToTrue()
+        {
+            var player = new Player();
+            _sut.JoinGame(player);
+            _sut.SetPlayerReady(player, true);
+            player.Roll = 2;
+            
+            _sut.ResetRolls();
+            Assert.True(_sut.ReRollMode);
+            Assert.Equal(1,player.Roll);
+        }
+
+        [Fact]
+        public void RestartGameResetsRollsForEveryPlayerAndStartsGame()
+        {
+            var player = new Player();
+            _sut.JoinGame(player);
+            player.Roll = 2;
+            
+            var gameUpdatedCount = 0;
+            _sut.GameUpdated += (sender, args) =>
+            {
+                gameUpdatedCount++;
+            };
+            
+            _sut.RestartGame();
+            Assert.Equal(1,player.Roll);
+            Assert.Equal(1, gameUpdatedCount);
+            Assert.True(player.IsReady);
+        }
+        
+        [Fact]
+        public void RestartGameMovesPlayersAroundTable()
+        {
+            var player1 = new Player();
+            var player2 = new Player();
+            var player3 = new Player();
+            _sut.JoinGame(player1);
+            _sut.JoinGame(player2);
+            _sut.JoinGame(player3);
+            
+            _sut.RestartGame();
+            
+            Assert.Equal(2,player1.SeatNo);
+            Assert.Equal(0,player2.SeatNo);
+            Assert.Equal(1,player3.SeatNo);
+        }
     }
 }

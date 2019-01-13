@@ -30,6 +30,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         bool IsPlaying { get; set; }
         string MyName { get; set; }
         void JoinGame(IPlayer player);
+        
         DieResult LastDiceResult { get; }
 
         void ManualChange(int oldValue, int newValue, bool isFixed);

@@ -38,7 +38,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         string ProfileImage { get; set; }
 
-        int Roll { get; }
+        int Roll { get; set; }
 
         int SeatNo { get; set; }
 

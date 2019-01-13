@@ -43,7 +43,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         public string Name { get;  set; } = "Player 1";
         public string Password { get; set; }
         public string ProfileImage { get; set; } = "SanetDice.png";
-        public int Roll { get ; private set ; }
+        public int Roll { get ; set ; }
 
         public int SeatNo { get; set; }
    
