@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Sanet.MagicalYatzy.Models.Chat;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.Extensions;
 using Sanet.MagicalYatzy.Models.Game.Magical;
@@ -630,6 +631,22 @@ namespace MagicalYatzyTests.ModelTests.Game
             _sut.LeaveGame(player2);
             
             Assert.Equal(1, gameUpdatedCount);
+        }
+
+        [Fact]
+        public void SendChatMessageInvokesEvent()
+        {
+            var message = new ChatMessage();
+            var chatMessageCalled = 0;
+            _sut.ChatMessageSent += (sender, args) =>
+            {
+                chatMessageCalled++;
+                Assert.Equal(message, args.Message);
+            };
+            
+            _sut.SendChatMessage(message);
+
+            Assert.Equal(1, chatMessageCalled);
         }
     }
 }

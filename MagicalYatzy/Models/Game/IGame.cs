@@ -37,7 +37,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         int Round { get; }
         int Roll { get; }
         event EventHandler<MoveEventArgs> TurnChanged;
-        event EventHandler<ChatMessageEventArgs> OnChatMessage;
+        event EventHandler<ChatMessageEventArgs> ChatMessageSent;
         void NextTurn();
         string Password { get; set; }
         event EventHandler<PlayerEventArgs> PlayerJoined;

@@ -48,7 +48,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         public event EventHandler GameFinished;
         
         public event EventHandler<MoveEventArgs> TurnChanged;
-        public event EventHandler<ChatMessageEventArgs> OnChatMessage;
+        public event EventHandler<ChatMessageEventArgs> ChatMessageSent;
         
         public event EventHandler<PlayerEventArgs> PlayerJoined;
         
@@ -460,7 +460,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public void SendChatMessage(ChatMessage message)
         {
-            throw new NotImplementedException();
+            ChatMessageSent?.Invoke(this, new ChatMessageEventArgs(message));
         }
         #endregion    
         
