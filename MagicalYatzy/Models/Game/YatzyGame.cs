@@ -282,6 +282,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                     seat++;
                
                 player.SeatNo = seat;
+                player.PrepareForGameStart(Rules);
                 Players.Add(player as Player);
                 PlayerJoined?.Invoke(this, new PlayerEventArgs(player));
             }
@@ -425,7 +426,22 @@ namespace Sanet.MagicalYatzy.Models.Game
         
         public void LeaveGame(IPlayer player)
         {
-            throw new NotImplementedException();
+            player = Players.FirstOrDefault(f => f.InGameId == player.InGameId);
+            if (player == null)
+                return;
+
+            Players.Remove((Player) player);
+
+            PlayerLeft?.Invoke(null, new PlayerEventArgs(player));
+            if (CurrentPlayer != null && CurrentPlayer.InGameId == player.InGameId && IsPlaying)
+            {
+#if SERVER
+                _roundTimer.Stop();
+#endif
+                DoTurn();
+                return;
+            }
+            StartGame();
         }
 
         public void SetPlayerReady(IPlayer player, bool isReady)
@@ -438,7 +454,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             previousPlayer.IsReady = isReady;
             PlayerReady?.Invoke(null, new PlayerEventArgs(previousPlayer));
             if (!isReady) return;
-            player.PrepareForGameStart(Rules);
+            
             StartGame();
         }
 

@@ -563,5 +563,73 @@ namespace MagicalYatzyTests.ModelTests.Game
             Assert.Equal(0,player2.SeatNo);
             Assert.Equal(1,player3.SeatNo);
         }
+        
+        [Fact]
+        public void LeavePlayerRemovesPlayerAndFiresEvent()
+        {
+            var player1 = new Player();
+            var player2 = new Player();
+            
+            _sut.JoinGame(player1);
+            _sut.JoinGame(player2);
+
+            var playerLeftCount = 0;
+
+            _sut.PlayerLeft += (sender, args) =>
+            {
+                playerLeftCount++;
+                Assert.Equal(player2, args.Player);
+            }; 
+            
+            _sut.LeaveGame(player2);
+            
+            Assert.Equal(1, playerLeftCount);
+        }
+        
+        [Fact]
+        public void LeavePlayerDoesNotStartGameIfRemainingPlayersAreNotReady()
+        {
+            var player1 = new Player();
+            var player2 = new Player();
+            
+            _sut.JoinGame(player1);
+            _sut.JoinGame(player2);
+            
+            _sut.SetPlayerReady(player2, true);
+            
+            var gameUpdatedCount = 0;
+
+            _sut.GameUpdated += (sender, args) =>
+            {
+                gameUpdatedCount++;
+            };
+
+            _sut.LeaveGame(player2);
+            
+            Assert.Equal(0, gameUpdatedCount);
+        }
+        
+        [Fact]
+        public void LeavePlayerStartsGameIfRemainingPlayersAreReady()
+        {
+            var player1 = new Player();
+            var player2 = new Player();
+            
+            _sut.JoinGame(player1);
+            _sut.JoinGame(player2);
+            
+            _sut.SetPlayerReady(player1, true);
+            
+            var gameUpdatedCount = 0;
+
+            _sut.GameUpdated += (sender, args) =>
+            {
+                gameUpdatedCount++;
+            };
+
+            _sut.LeaveGame(player2);
+            
+            Assert.Equal(1, gameUpdatedCount);
+        }
     }
 }

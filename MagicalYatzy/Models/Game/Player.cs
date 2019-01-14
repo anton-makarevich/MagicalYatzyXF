@@ -85,7 +85,9 @@ namespace Sanet.MagicalYatzy.Models.Game
             if (!(obj is Player otherPlayer))
                 return false;
 
-            return this.Name == otherPlayer.Name && this.Password.Decrypt(33) == otherPlayer.Password.Decrypt(33);
+            return this.Name == otherPlayer.Name && 
+                   this.Password.Decrypt(33) == otherPlayer.Password.Decrypt(33) &&
+                   this.InGameId == otherPlayer.InGameId ;
         }
 
         public override int GetHashCode()
