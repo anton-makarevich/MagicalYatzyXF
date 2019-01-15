@@ -28,7 +28,6 @@ namespace Sanet.MagicalYatzy.Models.Game
         string GameId { get; }
         bool IsDiceFixed(int value);
         bool IsPlaying { get; set; }
-        string MyName { get; set; }
         void JoinGame(IPlayer player);
         
         DieResult LastDiceResult { get; }
@@ -39,7 +38,6 @@ namespace Sanet.MagicalYatzy.Models.Game
         event EventHandler<MoveEventArgs> TurnChanged;
         event EventHandler<ChatMessageEventArgs> ChatMessageSent;
         void NextTurn();
-        string Password { get; set; }
         event EventHandler<PlayerEventArgs> PlayerJoined;
         List<Player> Players { get; }
         int NumberOfPlayers { get; }

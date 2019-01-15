@@ -10,31 +10,17 @@ namespace Sanet.MagicalYatzy.Models.Game
         }
 
         #region Properties
-        /// <summary>
-        /// Rule
-        /// </summary>
-        private Rules _Rule;
-        public Rules CurrentRule
-        {
-            get { return _Rule; }
-            set
-            {
-                if (_Rule != value)
-                {
-                    _Rule = value;
-                    //NotifyPropertyChanged("Rule");
-                    //NotifyPropertyChanged("RuleNameLocalized");
-                }
-            }
-        }
+
+        public Rules CurrentRule { get; }
 
         /// <summary>
         /// Set of Specific combinations for rule
         /// </summary>
-        public List<Scores> ScoresForRule
+        public IEnumerable<Scores> ScoresForRule
         {
             get
             {
+                // ReSharper disable once SwitchStatementMissingSomeCases
                 switch (CurrentRule)
                 {
                     case Rules.krBaby:
@@ -87,50 +73,27 @@ namespace Sanet.MagicalYatzy.Models.Game
 
             }
         }
+
         /// <summary>
         /// Maximum moves count based on rules
         /// </summary>
-        public int MaxRound
-        {
-            get
-            {
-                switch (CurrentRule)
-                {
-                    case Rules.krBaby:
-                        return 7;
-                }
-                return 13;
-            }
-        }
-
+        public int MaxRound => (CurrentRule == Rules.krBaby) ? 7 : 13;
 
         /// <summary>
         /// Helper method to get if we play with extended bonuses
         /// </summary>
-        public bool HasExtendedBonuses
-        {
-            get
-            {
-                return CurrentRule == Rules.krExtended || CurrentRule == Rules.krMagic;
-            }
-        }
+        public bool HasExtendedBonuses => CurrentRule == Rules.krExtended || CurrentRule == Rules.krMagic;
 
         /// <summary>
         /// Helper method to get if we play with standard bonuses
         /// </summary>
-        public bool HasStandardBonus
-        {
-            get
-            {
-                return CurrentRule == Rules.krStandard || CurrentRule == Rules.krExtended || CurrentRule == Rules.krMagic;
-            }
-        }
+        public bool HasStandardBonus => CurrentRule == Rules.krStandard || CurrentRule == Rules.krExtended || CurrentRule == Rules.krMagic;
 
 
         /// <summary>
         /// returns list of available hands
         /// </summary>
-        static public Scores[] PokerHands = new Scores[]
+        public static IEnumerable<Scores> PokerHands => new[]
         {
             Scores.ThreeOfAKind,
             Scores.FourOfAKind,
@@ -146,6 +109,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public override string ToString()
         {
+            // ReSharper disable once SwitchStatementMissingSomeCases
             switch (CurrentRule)
             {
                 case Rules.krBaby:

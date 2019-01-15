@@ -89,16 +89,12 @@ namespace Sanet.MagicalYatzy.Models.Game
             }
         }
         
-        public string MyName { get; set; }
-        
         public DieResult LastDiceResult => new DieResult() 
         {
             DiceResults = _lastRollResults?.ToList() ?? new List<int>()
         };
                 
         public int Round { get; private set; }
-        
-        public string Password { get; set; }
 
         public List<Player> Players { get; private set; }
         public int NumberOfPlayers => Players?.Count ?? 0;
