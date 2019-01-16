@@ -5,7 +5,9 @@
              x:Class="Sanet.MagicalYatzy.XF.Views.Cells.PlayerCell">
     <StackLayout Orientation="Horizontal">
         <Image Source="{Binding ProfileImage, Converter={StaticResource ImageNameConverter}}"
-                       Aspect="AspectFit">
+               HeightRequest="50"
+               WidthRequest="50"
+               Aspect="AspectFit">
         </Image>
         <Label Text="{Binding Name}"
                VerticalOptions = "Center"
