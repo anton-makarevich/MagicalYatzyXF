@@ -24,14 +24,14 @@ namespace MagicalYatzyTests.ServiceTests.Game
         }
 
         [Fact]
-        public async Task PlayerServiceShouldHaveDefaultPlayer()
+        public async Task PlayerServiceHasDefaultPlayer()
         {
             await _sut.LoadPlayersAsync();
             Assert.NotNull(_sut.CurrentPlayer);
         }
 
         [Fact]
-        public async Task LoginShouldInsertPlayer()
+        public async Task LoginInsertsPlayer()
         {
             // Arrange
             await _sut.LoadPlayersAsync();
@@ -46,7 +46,7 @@ namespace MagicalYatzyTests.ServiceTests.Game
         }
 
         [Fact]
-        public async Task SuccessfulLoginSavesPlayer()
+        public async Task SuccessfullyLogsInSavesPlayer()
         {
             // Arrange
             var players = new List<Player>();
@@ -72,7 +72,7 @@ namespace MagicalYatzyTests.ServiceTests.Game
         }
 
         [Fact]
-        public async Task FailingLoginShouldNotSavePlayer()
+        public async Task FailingLoginDoesNotSavePlayer()
         {
             // Arrange
             _apiMock.LoginUserAsync(TestUserName, "1234").Returns(Task.FromResult<IPlayer>(null));
@@ -86,7 +86,7 @@ namespace MagicalYatzyTests.ServiceTests.Game
         }
 
         [Fact]
-        public async Task PlayersShouldNotContainMoreThanFourElements()
+        public async Task PlayersListDoesNotContainMoreThanFourElements()
         {
             // Arrange
             var players = new List<Player>();
@@ -115,17 +115,17 @@ namespace MagicalYatzyTests.ServiceTests.Game
         }
 
         [Fact]
-        public async Task SameUserShouldNotBeAddedTwice()
+        public async Task SameUserIsNotAddedTwice()
         {
             // Arrange
             await _sut.LoadPlayersAsync();
-            for (int i = 0; i < 6; i++)
+            for (var i = 0; i < 6; i++)
             {
                 _apiMock.LoginUserAsync(TestUserName, TestUserPassword).Returns(Task.FromResult(TestPlayer));
             }
 
             // Act
-            for (int i = 0; i < 6; i++)
+            for (var i = 0; i < 6; i++)
             {
                 await _sut.LoginAsync(TestUserName, TestUserPassword);
             }
@@ -135,7 +135,7 @@ namespace MagicalYatzyTests.ServiceTests.Game
         }
 
         [Fact]
-        public async Task LoadPlayersShouldCallStorageOnlyOnce()
+        public async Task LoadPlayersCallsStorageOnlyOnce()
         {
             // Act
             await _sut.LoadPlayersAsync();
@@ -146,10 +146,10 @@ namespace MagicalYatzyTests.ServiceTests.Game
         }
 
         [Fact]
-        public async Task LoadPlayersShouldTriggerUpdatePlayersOnlyOnce()
+        public async Task LoadPlayersTriggersUpdatePlayersOnlyOnce()
         {
             // Arrange
-            int playersUpdatedCalledTimes = 0;
+            var playersUpdatedCalledTimes = 0;
             _sut.PlayersUpdated += (s, e) => { playersUpdatedCalledTimes++; };
 
             // Act

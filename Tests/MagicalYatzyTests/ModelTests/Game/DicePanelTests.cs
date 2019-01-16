@@ -10,17 +10,16 @@ namespace MagicalYatzyTests.ModelTests.Game
     public class DicePanelTests
     {
         private readonly DicePanel _sut;
-        private readonly IGameSettingsService _gameSettingMock;
 
         private const int TestDiceCount = 6;
         private const int TestRollDelay = 6;
 
-        private readonly List<int> TestResults = new List<int> { 2, 4, 3, 3, 1, 5 };
+        private readonly List<int> _testResults = new List<int> { 2, 4, 3, 3, 1, 5 };
 
         public DicePanelTests()
         {
-            _gameSettingMock = Substitute.For<IGameSettingsService>();
-            _sut = new DicePanel(_gameSettingMock)
+            var gameSettingMock = Substitute.For<IGameSettingsService>();
+            _sut = new DicePanel(gameSettingMock)
             {
                 DiceCount = TestDiceCount,
                 RollDelay = TestRollDelay
@@ -28,14 +27,14 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void DiceShouldBeInitialized()
+        public void DiceIsInitialized()
         {
             // Assert
             Assert.True(_sut.AreDiceGenerated);
         }
 
         [Fact]
-        public void DisposeShouldClearDice()
+        public void DisposeClearsDice()
         {
             // Act
             _sut.Dispose();
@@ -45,7 +44,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void ResultShouldNotBeEmpty()
+        public void ResultIsNotEmpty()
         {
             // Assert
             Assert.Equal(TestDiceCount, _sut.Result.DiceResults.Count);
@@ -53,7 +52,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void AllDiceShouldRollWhenRollIsInvoked()
+        public void AllDiceRollWhenRollIsInvoked()
         {
             // Act
             _sut.RollDice(null);
@@ -65,7 +64,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void EventShouldFireWhenRollIsInvoked()
+        public void EventFiresWhenRollIsInvoked()
         {
             // Arrange
             var rollStartFired = false;
@@ -78,7 +77,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void EventShouldFireWhenRollIsEnded()
+        public void EventFiresWhenRollIsEnded()
         {
             // Arrange
             var rollEndFired = false;
@@ -92,7 +91,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void AllDiceShouldStopWhenRollIsEnded()
+        public void AllDiceStopWhenRollIsEnded()
         {
             // Arrange
             _sut.RollDelay = 0;
@@ -107,7 +106,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void EveryDiceShouldHaveProperResultValue()
+        public void EveryDiceHasProperResultValue()
         {
             // Arrange
             _sut.RollDelay = 0;
@@ -121,13 +120,13 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void DiceResultShouldHaveValuePassedToRollMethod()
+        public void DiceResultHasValuePassedToRollMethod()
         {
             // Arrange
             _sut.RollDelay = 0;
 
             // Act
-            _sut.RollDice(TestResults);
+            _sut.RollDice(_testResults);
 
             // Assert
             Assert.Equal(1, _sut.Result.NumDiceOf(1));
@@ -139,15 +138,15 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void PanelShouldFixSpecifiedDice()
+        public void PanelFixesSpecifiedDice()
         {
-            var resultToFix = 2;
+            const int resultToFix = 2;
 
             // Arrange
             _sut.RollDelay = 0;
 
             // Act
-            _sut.RollDice(TestResults);
+            _sut.RollDice(_testResults);
             _sut.FixDice(resultToFix, true);
 
             // Assert
@@ -158,14 +157,14 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void PanelShouldFixAllDice()
+        public void PanelFixesAllDice()
         {
             // Arrange
             _sut.RollDelay = 0;
 
             // Act
-            _sut.RollDice(TestResults);
-            foreach(var result in TestResults)
+            _sut.RollDice(_testResults);
+            foreach(var result in _testResults)
                 _sut.FixDice(result, true);
 
             // Assert
@@ -173,15 +172,15 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void PanelShouldUnfixSpecifiedDice()
+        public void PanelUnfixesSpecifiedDice()
         {
-            var resultToFix = 2;
+            const int resultToFix = 2;
 
             // Arrange
             _sut.RollDelay = 0;
 
             // Act
-            _sut.RollDice(TestResults);
+            _sut.RollDice(_testResults);
             _sut.FixDice(resultToFix, true);
             _sut.FixDice(resultToFix, false);
 
@@ -190,15 +189,15 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void PanelShouldUnfixAllDice()
+        public void PanelUnfixesAllDice()
         {
-            var resultToFix = 2;
+            const int resultToFix = 2;
 
             // Arrange
             _sut.RollDelay = 0;
 
             // Act
-            _sut.RollDice(TestResults);
+            _sut.RollDice(_testResults);
             _sut.FixDice(resultToFix, true);
             _sut.UnfixAll();
 
@@ -207,13 +206,13 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void PanelShouldChangeDiceValueWhenRequested()
+        public void PanelChangesDiceValueWhenRequested()
         {
             // Arrange
             _sut.RollDelay = 0;
 
             // Act
-            _sut.RollDice(TestResults);
+            _sut.RollDice(_testResults);
             _sut.ChangeDice(1, 6);
 
             // Assert
@@ -226,7 +225,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void ResizeShouldUpdateBounds()
+        public void ResizeUpdatesBounds()
         {
             // Arrange
             var width = 300;
@@ -243,18 +242,18 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void ClickOnDiceShouldFixItIfAllowed()
+        public void ClickOnDiceFixesItIfAllowed()
         {
             // Arrange
-            var width = 300;
-            var height = 200;
+            const int width = 300;
+            const int height = 200;
             _sut.ClickToFix = true;
             _sut.Resize(width, height);
             var diceToSelect = _sut.Dice.First();
-            var pontInDice = diceToSelect.Bounds.Center;
+            var pointInDice = diceToSelect.Bounds.Center;
 
             // Act
-            _sut.DieClicked(pontInDice);
+            _sut.DieClicked(pointInDice);
 
             // Assert
             Assert.Equal(1, _sut.FixedDiceCount);
@@ -262,25 +261,25 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void ClickOnDiceShoulNotFixItINotAllowed()
+        public void ClickOnDiceDoesNotFixItIfNotAllowed()
         {
             // Arrange
-            var width = 300;
-            var height = 200;
+            const int width = 300;
+            const int height = 200;
             _sut.ClickToFix = false;
             _sut.Resize(width, height);
             var diceToSelect = _sut.Dice.First();
-            var pontInDice = diceToSelect.Bounds.Center;
+            var pointInDice = diceToSelect.Bounds.Center;
 
             // Act
-            _sut.DieClicked(pontInDice);
+            _sut.DieClicked(pointInDice);
 
             // Assert
             Assert.Equal(0, _sut.FixedDiceCount);
         }
 
         [Fact]
-        public void ClickOnDiceShoulUpdateItsValueIfManualSetModeIsOn()
+        public void ClickOnDiceUpdatesItsValueIfManualSetModeIsOn()
         {
             // Arrange
             var width = 300;
@@ -314,13 +313,13 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void PanelResultShouldBeTheSumOfAllDice()
+        public void PanelResultIsTheSumOfAllDice()
         {
             // Arrange
             _sut.RollDelay = 0;
 
             // Act
-            _sut.RollDice(TestResults);
+            _sut.RollDice(_testResults);
             var result = _sut.Result.DiceResults.Sum();
 
             // Assert
