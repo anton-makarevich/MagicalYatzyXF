@@ -1,6 +1,7 @@
 ﻿using Sanet.MagicalYatzy.Models.Chat;
 using Sanet.MagicalYatzy.Models.Events;
 using System;
+using System.Collections.Generic;
 
 namespace Sanet.MagicalYatzy.Models.Game
 {
@@ -16,42 +17,40 @@ namespace Sanet.MagicalYatzy.Models.Game
         event EventHandler<PlayerEventArgs> MagicRollUsed;
         event EventHandler<PlayerEventArgs> StyleChanged;
 
-        IPlayer CurrentPlayer { get; set; }
+        IPlayer CurrentPlayer { get; }
         void ApplyScore(IRollResult result);
         void ChangeStyle(IPlayer player, DiceStyle style);
-        void DoMove();
-        void FixAllDices(int value, bool isfixed);
+        void DoTurn();
+        void FixAllDice(int value, bool isFixed);
         void FixDice(int value, bool isfixed);
-        int FixedDicesCount { get; }
+        int NumberOfFixedDice { get; }
         event EventHandler GameFinished;
-        int GameId { get; set; }
-        //int Roll { get; }
+        string GameId { get; }
         bool IsDiceFixed(int value);
         bool IsPlaying { get; set; }
-        string MyName { get; set; }
         void JoinGame(IPlayer player);
+        
         DieResult LastDiceResult { get; }
 
-        void ManualChange(bool isfixed, int oldvalue, int newvalue);
-        int Move { get; set; }
-        event EventHandler<MoveEventArgs> MoveChanged;
-        event EventHandler<ChatMessageEventArgs> OnChatMessage;
-        void NextMove();
-        string Password { get; set; }
+        void ManualChange(int oldValue, int newValue, bool isFixed);
+        int Round { get; }
+        int Roll { get; }
+        event EventHandler<MoveEventArgs> TurnChanged;
+        event EventHandler<ChatMessageEventArgs> ChatMessageSent;
+        void NextTurn();
         event EventHandler<PlayerEventArgs> PlayerJoined;
-        global::System.Collections.Generic.List<IPlayer> Players { get; set; }
-        int PlayersNumber { get; }
-        void ReporMagictRoll();
+        List<Player> Players { get; }
+        int NumberOfPlayers { get; }
+        void ReportMagicRoll();
         void ReportRoll();
-        bool RerollMode { get; set; }
+        bool ReRollMode { get; set; }
         void ResetRolls();
         void RestartGame();
         event EventHandler<ResultEventArgs> ResultApplied;
-        Rule Rules { get; set; }
+        Rule Rules { get; }
 
         void LeaveGame(IPlayer player);
-        void SetPlayerReady(IPlayer player, bool isready);
-        void SetPlayerReady(bool isready);
+        void SetPlayerReady(IPlayer player, bool isReady);
         void SendChatMessage(ChatMessage message);
     }
 }

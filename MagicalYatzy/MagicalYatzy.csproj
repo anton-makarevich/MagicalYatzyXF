@@ -698,10 +698,10 @@
 
   <ItemGroup>
     <Folder Include="Services\ApiClient\" />
-    <Folder Include="Services\PlayerService\" />
     <Folder Include="Services\NavigationService\" />
     <Folder Include="Views\" />
     <Folder Include="Utils\" />
+    <Folder Include="Services\Game\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="SanetLegacyEncryption">

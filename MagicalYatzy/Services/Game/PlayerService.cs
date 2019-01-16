@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using System.Linq;
 using System;
 
-namespace Sanet.MagicalYatzy.Services
+namespace Sanet.MagicalYatzy.Services.Game
 {
-    public class PlayerService:IPlayerService
+    public class PlayerService: IPlayerService
     {
         private readonly IApiClient _apiClient;
         private readonly IStorageService _storageService;

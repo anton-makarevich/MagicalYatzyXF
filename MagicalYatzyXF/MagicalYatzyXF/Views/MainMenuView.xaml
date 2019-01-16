@@ -6,7 +6,6 @@
              xmlns:vm="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
              xmlns:cells="clr-namespace:Sanet.MagicalYatzy.XF.Views.Cells"
              xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Controls"
-             xmlns:gameControls="clr-namespace:Sanet.MagicalYatzy.XF.Controls.Game"
              x:TypeArguments="vm:MainMenuViewModel">
     <Grid>
         <Grid.RowDefinitions>
@@ -70,7 +69,8 @@
             HorizontalOptions="End"
             SelectedItemColor="Transparent"
             Grid.Row="3"
-            Grid.ColumnSpan="2">
+            Grid.ColumnSpan="2" 
+            Grid.Column="0">
             <controls:HorizontalListView.ItemTemplate>
                 <DataTemplate>
                     <cells:SecondaryMenuCell/>

@@ -2,6 +2,7 @@
 using Sanet.MagicalYatzy.ViewModels;
 using MagicalYatzyTests.ViewModelTests.Base;
 using MagicalYatzyTests.ServiceTests;
+using MagicalYatzyTests.ServiceTests.Game;
 using NSubstitute;
 using Xunit;
 
@@ -9,7 +10,7 @@ namespace MagicalYatzyTests.ViewModelTests
 {
     public class LoginViewModelTests:BaseViewModelTests
     {
-        LoginViewModel _sut;
+        private readonly LoginViewModel _sut;
 
         public LoginViewModelTests()
         {
@@ -18,7 +19,7 @@ namespace MagicalYatzyTests.ViewModelTests
         }
 
         [Fact]
-        public void SuccesfulLoginShouldCallBackNavigation()
+        public void SuccessfulLoginCallsBackNavigation()
         {
             playerServiceMock.LoginAsync(PlayerServiceTests.TestUserName, PlayerServiceTests.TestUserPassword).Returns(Task.FromResult(true));
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 
-namespace Sanet.MagicalYatzy.Services
+namespace Sanet.MagicalYatzy.Services.Game
 {
     public interface IPlayerService 
     {

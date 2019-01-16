@@ -1,4 +1,5 @@
 ﻿using NSubstitute;
+using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using Xunit;
@@ -79,7 +80,7 @@ namespace MagicalYatzyTests.ViewModelTests.Base
         }
 
         [Fact]
-        public async Task GoBackShouldTriggerNavgationServiceNavigateBack()
+        public async Task GoBackTriggersNavigationServiceNavigateBack()
         {
             _sut.SetNavigationService(navigationServiceMock);
             _sut.BackCommand.Execute(null);

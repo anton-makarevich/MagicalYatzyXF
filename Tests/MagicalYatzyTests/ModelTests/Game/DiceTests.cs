@@ -23,11 +23,11 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void BothColidingDiceMovingTowardsEachOtherAlongXAxisShouldChangeDirection() 
+        public void BothColidingDiceMovingTowardsEachOtherAlongXAxisChangeDirection() 
         {
             // Arrange
-            var thisDirection = 3;
-            var othersDirection = -3;
+            const int thisDirection = 3;
+            const int othersDirection = -3;
             _sut._directionX = thisDirection;
             var otherDice = new Die(_dicePanelMock, _gameSettingMock)
             {
@@ -44,11 +44,11 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void OnlyOneColidingDiceMovingShouldChangeDirectionWhenMovingRight()
+        public void OnlyOneColidingDiceMovingChangesDirectionWhenMovingRight()
         {
             // Arrange
-            var thisDirection = 3;
-            var othersDirection = 2;
+            const int thisDirection = 3;
+            const int othersDirection = 2;
             _sut._directionX = thisDirection;
             var otherDice = new Die(_dicePanelMock, _gameSettingMock)
             {
@@ -65,11 +65,11 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void OnlyOneColidingDiceMovingShouldChangeDirectionWhenMovingLeft()
+        public void OnlyOneColidingDiceMovingChangesDirectionWhenMovingLeft()
         {
             // Arrange
-            var thisDirection = -2;
-            var othersDirection = -3;
+            const int thisDirection = -2;
+            const int othersDirection = -3;
             _sut._directionX = thisDirection;
             var otherDice = new Die(_dicePanelMock, _gameSettingMock)
             {
@@ -86,11 +86,11 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void BothColidingDiceMovingTowardsEachOtherAlongYAxisShouldChangeDirection()
+        public void BothColidingDiceMovingTowardsEachOtherAlongYAxisChangeDirection()
         {
             // Arrange
-            var thisDirection = 3;
-            var othersDirection = -3;
+            const int thisDirection = 3;
+            const int othersDirection = -3;
             _sut._directionY = thisDirection;
             var otherDice = new Die(_dicePanelMock, _gameSettingMock)
             {
@@ -107,11 +107,11 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void OnlyOneColidingDiceMovingShouldChangeDirectionWhenMovingDown()
+        public void OnlyOneColidingDiceMovingChangesDirectionWhenMovingDown()
         {
             // Arrange
-            var thisDirection = 3;
-            var othersDirection = 2;
+            const int thisDirection = 3;
+            const int othersDirection = 2;
             _sut._directionY = thisDirection;
             var otherDice = new Die(_dicePanelMock, _gameSettingMock)
             {
@@ -128,11 +128,11 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void OnlyOneColidingDiceMovingShouldChangeDirectionWhenMovingUp()
+        public void OnlyOneColidingDiceMovingChangesDirectionWhenMovingUp()
         {
             // Arrange
-            var thisDirection = -2;
-            var othersDirection = -3;
+            const int thisDirection = -2;
+            const int othersDirection = -3;
             _sut._directionY = thisDirection;
             var otherDice = new Die(_dicePanelMock, _gameSettingMock)
             {
@@ -149,7 +149,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void FixedDiceShouldChangedOpacity()
+        public void FixedDiceChangesOpacity()
         {
             // Arrange
             _sut.IsFixed = true;
@@ -162,7 +162,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void ImagePathShouldPointToPngImage()
+        public void ImagePathPointsToPngImage()
         {
             //Act
             _sut.DrawDie();

@@ -29,6 +29,7 @@ namespace Sanet.MagicalYatzy.XF.Views.Base
                 var pageWidth = 300;
                 _viewModel.PageWidth = pageWidth;
                 BindingContext = _viewModel;
+                OnViewModelSet();
             }
         }
 
@@ -52,5 +53,7 @@ namespace Sanet.MagicalYatzy.XF.Views.Base
             base.OnDisappearing();
             ViewModel.DetachHandlers();
         }
+
+        protected virtual void OnViewModelSet() { }
     }
 }

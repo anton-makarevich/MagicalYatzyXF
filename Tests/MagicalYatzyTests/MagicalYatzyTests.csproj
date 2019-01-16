@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -37,5 +37,6 @@
   <ItemGroup>
     <None Remove="coverage.opencover.xml" />
     <None Remove="ViewModelTests\LobbyViewModelTests.config" />
+    <None Remove="ModelTests\Game\PlayerTests.config" />
   </ItemGroup>
 </Project>

@@ -9,9 +9,9 @@ namespace MagicalYatzyTests.ServiceTests
     public class LocalJsonStorageServiceTests
     {
         [Fact]
-        public async Task StorageServiceShouldLoadSavedPlayers()
+        public async Task StorageServiceLoadsSavedPlayers()
         {
-            // Arange
+            // Arrange
             var sut = new LocalJsonStorageService();
 
             var playersToSave = new List<Player>
