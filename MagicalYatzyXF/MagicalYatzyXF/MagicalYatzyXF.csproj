@@ -46,4 +46,11 @@
       <DependentUpon>MainMenuCell.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Views\Cells\PlayerCell.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </Page>
+  </ItemGroup>
 </Project>

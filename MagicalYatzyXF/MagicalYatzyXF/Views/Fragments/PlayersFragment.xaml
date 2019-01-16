@@ -2,6 +2,27 @@
 <Grid 
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:cells="clr-namespace:Sanet.MagicalYatzy.XF.Views.Cells"
     x:Class="Sanet.MagicalYatzy.XF.Views.Fragments.PlayersFragment">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+    </Grid>
     <Label TextColor="Lime" Text="{Binding PlayersTitle}"/>
+    <ListView
+        x:Name="MainMenuList"
+        ItemsSource="{Binding Players}"
+        SeparatorVisibility="None"
+        Grid.Row="1"
+        RowHeight="80"
+        VerticalOptions = "Start"
+        BackgroundColor = "Transparent">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <cells:PlayerCell />
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
 </Grid>

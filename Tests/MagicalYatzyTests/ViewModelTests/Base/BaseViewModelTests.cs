@@ -80,7 +80,7 @@ namespace MagicalYatzyTests.ViewModelTests.Base
         }
 
         [Fact]
-        public async Task GoBackShouldTriggerNavgationServiceNavigateBack()
+        public async Task GoBackTriggersNavigationServiceNavigateBack()
         {
             _sut.SetNavigationService(navigationServiceMock);
             _sut.BackCommand.Execute(null);

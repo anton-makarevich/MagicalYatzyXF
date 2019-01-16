@@ -9,7 +9,7 @@ namespace MagicalYatzyTests.ServiceTests
     public class LegacyWcfApiClientTests
     {
         [Fact]
-        public async Task LoginCallShouldReturnUserForValidCreds()
+        public async Task LoginCallReturnsUserForValidCreds()
         {
             var sut = new LegacyWcfClient();
 
@@ -23,7 +23,7 @@ namespace MagicalYatzyTests.ServiceTests
         }
 
         [Fact]
-        public async Task FailingLoginCallShouldReturnNullForWrongPassword()
+        public async Task FailingLoginCallReturnsNullForWrongPassword()
         {
             var sut = new LegacyWcfClient();
 

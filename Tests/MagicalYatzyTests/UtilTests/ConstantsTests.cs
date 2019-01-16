@@ -6,7 +6,7 @@ namespace MagicalYatzyTests.UtilTests
     public class ConstantsTests
     {
         [Fact]
-        public void ApiEndpointShouldBeCorrect()
+        public void ApiEndpointIsCorrect()
         {
             Assert.Equal("http://sanet.by/api/", Constants.ApiEndpoint);
         }
