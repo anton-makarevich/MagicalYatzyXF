@@ -2,17 +2,45 @@
 
 <ViewCell xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Controls"
              x:Class="Sanet.MagicalYatzy.XF.Views.Cells.PlayerCell">
-    <StackLayout Orientation="Horizontal">
-        <Image Source="{Binding ProfileImage, Converter={StaticResource ImageNameConverter}}"
-               HeightRequest="50"
-               WidthRequest="50"
-               Aspect="AspectFit">
+    <Grid
+        HeightRequest="60">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="60"/>
+            <ColumnDefinition />
+            <ColumnDefinition Width="60"/>
+        </Grid.ColumnDefinitions>
+        <Image 
+            Source="{Binding Image, Converter={StaticResource ImageNameConverter}}"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            HeightRequest="50"
+            WidthRequest="50"
+            Aspect="AspectFit">
         </Image>
-        <Label Text="{Binding Name}"
-               VerticalOptions = "Center"
-               Style="{StaticResource CaptionLabelStyle}"
-               >
+        <Label 
+            Grid.Column="1"
+            Text="{Binding Name}"
+            VerticalOptions = "Center"
+            Style="{StaticResource CaptionLabelStyle}"
+            >
         </Label>
-    </StackLayout>
+        <controls:TappableContentView
+            Grid.Column="2"
+            BackgroundColor="Transparent"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            HeightRequest="40"
+            WidthRequest="40"
+            >
+            <Image 
+                Source="{Binding DeleteImage, Converter={StaticResource ImageNameConverter}}"
+                HeightRequest="40"
+                WidthRequest="40"
+                InputTransparent='{OnPlatform macOS="True", UWP="False"}'
+            >
+            </Image>
+        </controls:TappableContentView><!-- Command="{Binding RemoveCommand}" -->
+    </Grid>
 </ViewCell>

@@ -19,6 +19,9 @@
   
   <ItemGroup>
     <Compile Remove="Views\LobbyView.cs" />
+    <Compile Update="Views\Cells\PlayerCell.xaml.cs">
+      <DependentUpon>PlayerCell.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <!-- https://bugzilla.xamarin.com/show_bug.cgi?id=55591 -->
@@ -48,9 +51,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Include="Views\Cells\PlayerCell.xaml">
+    <EmbeddedResource Update="Views\Cells\PlayerCell.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
-    </Page>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@ using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Services.Game;
+using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 
 namespace Sanet.MagicalYatzy.ViewModels
 {
@@ -18,12 +19,12 @@ namespace Sanet.MagicalYatzy.ViewModels
         public string PlayersTitle => Strings.PlayersLabel.ToUpper();
 
         public string RulesTitle => Strings.RulesLabel.ToUpper();
-        public ObservableCollection<IPlayer> Players { get; } = new ObservableCollection<IPlayer>();
+        public ObservableCollection<PlayerViewModel> Players { get; } = new ObservableCollection<PlayerViewModel>();
 
         private void AddDefaultPlayer()
         {
             if (!Players.Any())
-                Players.Add(_playerService.CurrentPlayer);
+                Players.Add(new PlayerViewModel(_playerService.CurrentPlayer));
         }
 
         public override void AttachHandlers()

@@ -39,7 +39,7 @@ namespace MagicalYatzyTests.ViewModelTests
             _sut.AttachHandlers();
             
             Assert.NotEmpty(_sut.Players);
-            Assert.Equal(_playerService.CurrentPlayer, _sut.Players.First());
+            Assert.Equal(_playerService.CurrentPlayer.Name, _sut.Players.First().Name);
         }
     }
 }

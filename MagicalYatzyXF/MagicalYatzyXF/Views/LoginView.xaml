@@ -4,7 +4,6 @@
              x:Class="Sanet.MagicalYatzy.XF.Views.LoginView"
              xmlns:base="clr-namespace:Sanet.MagicalYatzy.XF.Views.Base"
              xmlns:vm="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
-             xmlns:cells="clr-namespace:Sanet.MagicalYatzy.XF.Views.Cells"
              xmlns:loc="clr-namespace:Sanet.MagicalYatzy.XF.MarkupExtensions"
              xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Controls"
              x:TypeArguments="vm:LoginViewModel">
@@ -56,13 +55,13 @@
                 Text="{loc:Strings PlayerNameLabel}"
                 />
             <Label VerticalTextAlignment = "Center"
-                Grid.Row="1"
+                Grid.Row="1" Grid.Column="0"
                 VerticalOptions="Center"
                 Style="{StaticResource DescriptionLabelStyle}"
                 Text="{loc:Strings PlayerPasswordLabel}"
                 />
-            <Entry 
-                Grid.Column="1"
+            <Entry
+                Grid.Row="0" Grid.Column="1"
                 Text="{Binding NewUsername, Mode=TwoWay}"
                 />
             <Entry 
@@ -73,7 +72,7 @@
                 />
             <Button
                 Grid.Row="2"
-                Grid.ColumnSpan="2"
+                Grid.ColumnSpan="2" Grid.Column="0"
                 Text="{loc:Strings LoginLabel}"
                 Command="{Binding LoginCommand}"
                 />
