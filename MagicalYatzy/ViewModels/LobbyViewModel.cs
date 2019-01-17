@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.ViewModels.Base;
@@ -24,13 +25,36 @@ namespace Sanet.MagicalYatzy.ViewModels
         private void AddDefaultPlayer()
         {
             if (!Players.Any())
-                Players.Add(new PlayerViewModel(_playerService.CurrentPlayer));
+                AddPlayer(new PlayerViewModel(_playerService.CurrentPlayer));
         }
 
         public override void AttachHandlers()
         {
             base.AttachHandlers();
             AddDefaultPlayer();
+        }
+
+        internal void AddPlayer(PlayerViewModel playerViewModel)
+        {
+            playerViewModel.PlayerDeleted += PlayerViewModelOnPlayerDeleted;
+            Players.Add(playerViewModel);
+            CheckPossibilityToDeletePlayers();
+        }
+
+        private void PlayerViewModelOnPlayerDeleted(object sender, EventArgs e)
+        {
+            if (!(sender is PlayerViewModel playerVm)) return;
+            playerVm.PlayerDeleted -= PlayerViewModelOnPlayerDeleted;
+            Players.Remove(playerVm);
+            CheckPossibilityToDeletePlayers();
+        }
+
+        private void CheckPossibilityToDeletePlayers()
+        {
+            foreach (var playerViewModel in Players)
+            {
+                playerViewModel.CanBeDeleted = Players.Count != 1;
+            }
         }
     }
 }

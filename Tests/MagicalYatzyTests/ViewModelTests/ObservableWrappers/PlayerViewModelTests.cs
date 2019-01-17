@@ -36,5 +36,30 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
             
             Assert.Equal(deleteImage, _sut.DeleteImage);
         }
+
+        [Fact]
+        public void DeletingPlayerInvokesDeletedEvent()
+        {
+            var playerDeletedCount = 0;
+
+            _sut.PlayerDeleted += (sender, args) => { playerDeletedCount++; };
+
+            _sut.DeleteCommand.Execute(null);
+            
+            Assert.Equal(1, playerDeletedCount);
+        }
+        
+        [Fact]
+        public void DeletingPlayerThatCanNotBeDeletedDoesNotInvokesDeletedEvent()
+        {
+            var playerDeletedCount = 0;
+
+            _sut.CanBeDeleted = false;
+            _sut.PlayerDeleted += (sender, args) => { playerDeletedCount++; };
+
+            _sut.DeleteCommand.Execute(null);
+            
+            Assert.Equal(0, playerDeletedCount);
+        }
     }
 }
