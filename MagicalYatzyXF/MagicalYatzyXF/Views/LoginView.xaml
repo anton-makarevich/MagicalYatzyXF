@@ -24,7 +24,7 @@
             WidthRequest="40"
             >
             <Image Source="{Binding CloseImage, Converter={StaticResource ImageNameConverter}}"
-                InputTransparent='{OnPlatform macOS="True", UWP="False"}'
+                Style="{StaticResource ToolButtonImageStyle}"
                 >
             </Image>
         </controls:TappableContentView>

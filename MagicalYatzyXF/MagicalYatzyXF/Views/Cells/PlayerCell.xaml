@@ -13,11 +13,7 @@
         </Grid.ColumnDefinitions>
         <Image 
             Source="{Binding Image, Converter={StaticResource ImageNameConverter}}"
-            HorizontalOptions="Center"
-            VerticalOptions="Center"
-            HeightRequest="50"
-            WidthRequest="50"
-            Aspect="AspectFit">
+            Style="{StaticResource ProfileImageStyle}">
         </Image>
         <Label 
             Grid.Column="1"
@@ -27,20 +23,16 @@
             >
         </Label>
         <controls:TappableContentView
+            IsVisible="{Binding CanBeDeleted}"
             Grid.Column="2"
-            BackgroundColor="Transparent"
-            HorizontalOptions="Center"
-            VerticalOptions="Center"
-            HeightRequest="40"
-            WidthRequest="40"
+            Command="{Binding DeleteCommand}"
+            Style = "{StaticResource ToolButtonStyle}"
             >
             <Image 
                 Source="{Binding DeleteImage, Converter={StaticResource ImageNameConverter}}"
-                HeightRequest="40"
-                WidthRequest="40"
-                InputTransparent='{OnPlatform macOS="True", UWP="False"}'
+                Style="{StaticResource ToolButtonImageStyle}"
             >
             </Image>
-        </controls:TappableContentView><!-- Command="{Binding RemoveCommand}" -->
+        </controls:TappableContentView>
     </Grid>
 </ViewCell>

@@ -101,21 +101,6 @@
     <Compile Include="Services\ExternalNavigationService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\Default-568h%402x.png" />
-    <BundleResource Include="Resources\Default-Portrait.png" />
-    <BundleResource Include="Resources\Default-Portrait%402x.png" />
-    <BundleResource Include="Resources\Default.png" />
-    <BundleResource Include="Resources\Default%402x.png" />
-    <BundleResource Include="Resources\Icon-60%402x.png" />
-    <BundleResource Include="Resources\Icon-60%403x.png" />
-    <BundleResource Include="Resources\Icon-76.png" />
-    <BundleResource Include="Resources\Icon-76%402x.png" />
-    <BundleResource Include="Resources\Icon-Small-40.png" />
-    <BundleResource Include="Resources\Icon-Small-40%402x.png" />
-    <BundleResource Include="Resources\Icon-Small-40%403x.png" />
-    <BundleResource Include="Resources\Icon-Small.png" />
-    <BundleResource Include="Resources\Icon-Small%402x.png" />
-    <BundleResource Include="Resources\Icon-Small%403x.png" />
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
     <BundleResource Include="Resources\About.png" />
     <BundleResource Include="Resources\Facebook.png" />
@@ -126,12 +111,6 @@
     <BundleResource Include="Resources\Settings.png" />
     <BundleResource Include="Resources\Share.png" />
     <BundleResource Include="Resources\Victory.png" />
-    <BundleResource Include="Resources\close%403x.png" />
-    <BundleResource Include="Resources\close.png" />
-    <BundleResource Include="Resources\close%402x.png" />
-    <BundleResource Include="Resources\backarrow.png" />
-    <BundleResource Include="Resources\backarrow%402x.png" />
-    <BundleResource Include="Resources\backarrow%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -165,7 +144,38 @@
       <Version>3.4.0.1008975</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
-  <ItemGroup />
+  <ItemGroup>
+    <ImageAsset Include="Assets.xcassets\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\backarrow.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\backarrow.imageset\backarrow.png" />
+    <ImageAsset Include="Assets.xcassets\backarrow.imageset\backarrow%402x.png" />
+    <ImageAsset Include="Assets.xcassets\backarrow.imageset\backarrow%403x.png" />
+    <ImageAsset Include="Assets.xcassets\close.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\close.imageset\close.png" />
+    <ImageAsset Include="Assets.xcassets\close.imageset\close%402x.png" />
+    <ImageAsset Include="Assets.xcassets\close.imageset\close%403x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets.xcassets\backarrow.imageset\" />
+    <Folder Include="Assets.xcassets\close.imageset\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-20x20@1x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-20x20@2x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-20x20@3x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-29x29@1x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-29x29@2x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-29x29@3x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-40x40@1x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-40x40@2x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-40x40@3x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-60x60@2x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-60x60@3x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-76x76@1x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-76x76@2x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-83.5x83.5@2x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\ItunesArtwork@2x.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

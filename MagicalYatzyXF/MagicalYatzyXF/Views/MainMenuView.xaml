@@ -35,7 +35,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Image Source="{Binding PlayerImage, Converter={StaticResource ImageNameConverter}}"
-                       Aspect="AspectFit"
+                       Style="{StaticResource ProfileImageStyle}"
                        InputTransparent='{OnPlatform macOS="True", UWP="False"}'
                        >
                 </Image>

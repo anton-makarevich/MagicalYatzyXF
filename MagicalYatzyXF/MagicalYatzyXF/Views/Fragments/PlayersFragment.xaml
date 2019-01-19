@@ -6,6 +6,10 @@
     xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Controls"
     x:Class="Sanet.MagicalYatzy.XF.Views.Fragments.PlayersFragment"
     Margin="5,10">
+    <Grid.RowDefinitions>
+        <RowDefinition/>
+        <RowDefinition Height="{StaticResource ToolBarHeight}"/>
+    </Grid.RowDefinitions>
     <controls:BindableStackLayout
         x:Name="PlayersList"
         ItemsSource="{Binding Players}"
@@ -16,4 +20,21 @@
             </DataTemplate>
         </controls:BindableStackLayout.ItemTemplate>
     </controls:BindableStackLayout>
+    <StackLayout
+        Grid.Row="1"
+        Orientation="Horizontal"
+        HorizontalOptions="End">
+        <controls:TappableContentView
+            IsVisible="{Binding CanBeDeleted}"
+            Grid.Column="2"
+            Command="{Binding DeleteCommand}"
+            Style = "{StaticResource ToolButtonStyle}"
+        >
+            <Image 
+                Source="{Binding DeleteImage, Converter={StaticResource ImageNameConverter}}"
+                Style="{StaticResource ToolButtonImageStyle}"
+            >
+            </Image>
+        </controls:TappableContentView>
+    </StackLayout>
 </Grid>

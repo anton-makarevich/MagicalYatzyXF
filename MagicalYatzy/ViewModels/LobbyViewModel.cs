@@ -20,6 +20,8 @@ namespace Sanet.MagicalYatzy.ViewModels
         public string PlayersTitle => Strings.PlayersLabel.ToUpper();
 
         public string RulesTitle => Strings.RulesLabel.ToUpper();
+        
+        public string DeleteImage => "close.png";
         public ObservableCollection<PlayerViewModel> Players { get; } = new ObservableCollection<PlayerViewModel>();
 
         private void AddDefaultPlayer()
