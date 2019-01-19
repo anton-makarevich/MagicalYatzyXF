@@ -93,5 +93,11 @@ namespace MagicalYatzyTests.ViewModelTests
             Assert.Single(_sut.Players);
             Assert.False(_sut.Players.First().CanBeDeleted);
         }
+
+        [Fact]
+        public void AddBotImageHasCorrectValue()
+        {
+            Assert.Equal("AddBot.png", _sut.AddBotImage);
+        }
     }
 }

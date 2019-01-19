@@ -5,7 +5,9 @@
     xmlns:cells="clr-namespace:Sanet.MagicalYatzy.XF.Views.Cells"
     xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Controls"
     x:Class="Sanet.MagicalYatzy.XF.Views.Fragments.PlayersFragment"
-    Margin="5,10">
+    Margin="5,10"
+    HorizontalOptions="Fill"
+    >
     <Grid.RowDefinitions>
         <RowDefinition/>
         <RowDefinition Height="{StaticResource ToolBarHeight}"/>
@@ -29,9 +31,9 @@
             Grid.Column="2"
             Command="{Binding DeleteCommand}"
             Style = "{StaticResource ToolButtonStyle}"
-        >
+            >
             <Image 
-                Source="{Binding DeleteImage, Converter={StaticResource ImageNameConverter}}"
+                Source="{Binding AddBotImage, Converter={StaticResource ImageNameConverter}}"
                 Style="{StaticResource ToolButtonImageStyle}"
             >
             </Image>

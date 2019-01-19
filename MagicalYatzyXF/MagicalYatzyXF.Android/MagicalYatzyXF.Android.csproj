@@ -131,6 +131,10 @@
     <AndroidResource Include="Resources\drawable-hdpi\backarrow.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\backarrow.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\backarrow.png" />
+    <AndroidResource Include="Resources\drawable\AddBot.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\AddBot.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\AddBot.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\AddBot.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

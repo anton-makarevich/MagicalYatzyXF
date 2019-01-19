@@ -165,6 +165,7 @@
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
     <Content Include="Assets\close.png" />
     <Content Include="Assets\backarrow.png" />
+    <Content Include="Assets\AddBot.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

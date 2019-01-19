@@ -170,12 +170,20 @@
     <BundleResource Include="..\MagicalYatzyXF.iOS\Resources\Victory.png">
       <Link>Resources\Victory.png</Link>
     </BundleResource>
-    <BundleResource Include="..\MagicalYatzyXF.Android\Resources\drawable-xxhdpi\close.png">
+    <BundleResource Include="..\MagicalYatzyXF.UWP\Assets\AddBot.png">
+      <Link>Resources\AddBot.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\MagicalYatzyXF.UWP\Assets\close.png">
       <Link>Resources\close.png</Link>
     </BundleResource>
-    <BundleResource Include="..\MagicalYatzyXF.Android\Resources\drawable-xxhdpi\backarrow.png">
+    <BundleResource Include="..\MagicalYatzyXF.UWP\Assets\backarrow.png">
       <Link>Resources\backarrow.png</Link>
     </BundleResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets.xcassets\AddBot.imageset\" />
+    <Folder Include="Assets.xcassets\backarrow.imageset\" />
+    <Folder Include="Assets.xcassets\close.imageset\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

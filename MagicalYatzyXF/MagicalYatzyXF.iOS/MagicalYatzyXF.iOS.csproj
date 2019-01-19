@@ -155,10 +155,15 @@
     <ImageAsset Include="Assets.xcassets\close.imageset\close%402x.png" />
     <ImageAsset Include="Assets.xcassets\close.imageset\close%403x.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\AddBot.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\AddBot.imageset\AddBot.png" />
+    <ImageAsset Include="Assets.xcassets\AddBot.imageset\AddBot%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AddBot.imageset\AddBot%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets.xcassets\backarrow.imageset\" />
     <Folder Include="Assets.xcassets\close.imageset\" />
+    <Folder Include="Assets.xcassets\AddBot.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-20x20@1x.png" />
