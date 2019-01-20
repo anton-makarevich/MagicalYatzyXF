@@ -69,7 +69,8 @@ namespace Sanet.MagicalYatzy.XF.Controls
                             foreach (var obj in items)
                             {
                                 var item = Children.FirstOrDefault(x => ReferenceEquals(x.BindingContext, obj));
-                                Children.Remove(item);
+                                if (item != null)
+                                    Children.Remove(item);
                             }
                             break;
                         case NotifyCollectionChangedAction.Replace:

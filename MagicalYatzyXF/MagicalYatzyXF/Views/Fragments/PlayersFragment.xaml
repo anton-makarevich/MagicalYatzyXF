@@ -29,7 +29,7 @@
         <controls:TappableContentView
             IsVisible="{Binding CanBeDeleted}"
             Grid.Column="2"
-            Command="{Binding DeleteCommand}"
+            Command="{Binding AddBotCommand}"
             Style = "{StaticResource ToolButtonStyle}"
             >
             <Image 

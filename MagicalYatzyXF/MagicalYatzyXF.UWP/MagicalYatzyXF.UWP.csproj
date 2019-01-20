@@ -123,6 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\About.png" />
+    <Content Include="Assets\BotPlayer.png" />
     <Content Include="Assets\Facebook.png" />
     <Content Include="Assets\Mail.png" />
     <Content Include="Assets\OnlineGame.png" />

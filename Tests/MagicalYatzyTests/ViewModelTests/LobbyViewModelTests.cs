@@ -99,5 +99,41 @@ namespace MagicalYatzyTests.ViewModelTests
         {
             Assert.Equal("AddBot.png", _sut.AddBotImage);
         }
+
+        [Fact]
+        public void AddBotCommandAddsNewPlayer()
+        {
+            _sut.AddBotCommand.Execute(null);
+            
+            Assert.Single(_sut.Players);
+        }
+
+        [Fact]
+        public void AddBotCommandAddsAiPlayer()
+        {
+            _sut.AddBotCommand.Execute(null);
+            
+            Assert.Equal("BotPlayer.png", _sut.Players.First().Image);
+        }
+        
+        [Fact]
+        public void NextAddedBotHasIncreasedNumber()
+        {
+            _sut.AddBotCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            
+            Assert.Equal('2', _sut.Players.Last().Name.Last());
+        }
+
+        [Fact]
+        public void BotsDontHaveTheSameName()
+        {
+            _sut.AddBotCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            _sut.Players.First().DeleteCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            
+            Assert.NotEqual(_sut.Players.First().Name, _sut.Players.Last().Name);
+        }
     }
 }

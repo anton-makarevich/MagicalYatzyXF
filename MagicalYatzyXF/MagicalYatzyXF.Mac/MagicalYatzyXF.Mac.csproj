@@ -110,7 +110,11 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-512%402x.png" />
     <ImageAsset Include="Assets.xcassets\Contents.json" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <BundleResource Include="..\MagicalYatzyXF.UWP\Assets\BotPlayer.png">
+      <Link>Resources/BotPlayer.png</Link>
+    </BundleResource>
+  </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />

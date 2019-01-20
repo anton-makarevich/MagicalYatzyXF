@@ -33,5 +33,7 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
             get => _canBeDeleted;
             set => SetProperty(ref _canBeDeleted, value);
         }
+
+        public IPlayer Player => _player;
     }
 }

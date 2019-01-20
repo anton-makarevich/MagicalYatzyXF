@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using Sanet.MagicalYatzy.Extensions;
 using Sanet.MagicalYatzy.Models.Game.Magical;
+using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Utils;
 
 namespace Sanet.MagicalYatzy.Models.Game
 {
     public class Player: IPlayer
     {
-        public Player()
+        public Player():this(PlayerType.Local)
         {
-            Type = PlayerType.Local;
         }
 
-        public Player(PlayerType type)
+        public Player(PlayerType type, IEnumerable<string> playersInGame = null)
         {
             Type = type;
+
+            Name = GetUniqueInGameName(playersInGame?.ToList() ?? new List<string>());
+            ProfileImage = (IsBot) ? "BotPlayer.png" : "SanetDice.png";
         }
 
         public bool AllNumericFilled => default;
@@ -40,9 +43,9 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public int MaxRemainingNumeric => default;
 
-        public string Name { get;  set; } = "Player 1";
+        public string Name { get; set; }
         public string Password { get; set; }
-        public string ProfileImage { get; set; } = "SanetDice.png";
+        public string ProfileImage { get; set; }
         public int Roll { get ; set ; }
 
         public int SeatNo { get; set; }
@@ -85,14 +88,29 @@ namespace Sanet.MagicalYatzy.Models.Game
             if (!(obj is Player otherPlayer))
                 return false;
 
-            return this.Name == otherPlayer.Name && 
-                   this.Password.Decrypt(33) == otherPlayer.Password.Decrypt(33) &&
-                   this.InGameId == otherPlayer.InGameId ;
+            return Name == otherPlayer.Name && 
+                   Password.Decrypt(33) == otherPlayer.Password.Decrypt(33) &&
+                   InGameId == otherPlayer.InGameId ;
         }
 
         public override int GetHashCode()
         {
             return $"player{this.Name}{this.Password.Decrypt(33)}".GetHashCode();
+        }
+
+        private string GetUniqueInGameName(ICollection<string> names)
+        {
+            var numberOfPlayers = 1;
+            var defaultName = (IsBot) ? Strings.BotNameDefault : Strings.PlayerNameDefault;
+            do
+            {
+                var name = $"{defaultName} {numberOfPlayers}";
+                if (!names.Contains(name))
+                    return name;
+                numberOfPlayers++;
+            } while (numberOfPlayers < 10000);
+
+            return defaultName;
         }
     }
 }
