@@ -135,5 +135,30 @@ namespace MagicalYatzyTests.ViewModelTests
             
             Assert.NotEqual(_sut.Players.First().Name, _sut.Players.Last().Name);
         }
+
+        [Fact]
+        public void ItsNotPossibleToAddBotIfThereAreAlreadyFourPlayers()
+        {
+            _sut.AddBotCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            Assert.Equal(4,_sut.Players.Count);
+            
+            _sut.AddBotCommand.Execute(null);
+            Assert.Equal(4,_sut.Players.Count);
+        }
+        
+        [Fact]
+        public void CanAddBotIsFalseIfThereAreAlreadyFourPlayers()
+        {
+            Assert.True(_sut.CanAddBot);
+            _sut.AddBotCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            
+            Assert.False(_sut.CanAddBot);
+        }
     }
 }

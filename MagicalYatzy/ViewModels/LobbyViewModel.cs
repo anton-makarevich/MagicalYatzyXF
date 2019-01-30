@@ -13,6 +13,8 @@ namespace Sanet.MagicalYatzy.ViewModels
 {
     public class LobbyViewModel: DicePanelViewModel
     {
+        private const int MaxPlayers = 4;
+        
         private readonly IPlayerService _playerService;
         public LobbyViewModel(IDicePanel dicePanel, IPlayerService playerService) : base(dicePanel)
         {
@@ -30,6 +32,9 @@ namespace Sanet.MagicalYatzy.ViewModels
             var newBot = new Player(PlayerType.AI, Players.Select(p=>p.Name).ToList());
             AddPlayer(new PlayerViewModel(newBot));
         });
+
+        public bool CanAddBot { get; private set; } = true;
+
         private void AddDefaultPlayer()
         {
             if (!Players.Any())
@@ -40,13 +45,17 @@ namespace Sanet.MagicalYatzy.ViewModels
         {
             base.AttachHandlers();
             AddDefaultPlayer();
+            CheckCanAddPlayers();
         }
 
         internal void AddPlayer(PlayerViewModel playerViewModel)
         {
+            if (Players.Count >= MaxPlayers)
+                return;
             playerViewModel.PlayerDeleted += PlayerViewModelOnPlayerDeleted;
             Players.Add(playerViewModel);
             CheckPossibilityToDeletePlayers();
+            CheckCanAddPlayers();
         }
 
         private void PlayerViewModelOnPlayerDeleted(object sender, EventArgs e)
@@ -55,6 +64,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             playerVm.PlayerDeleted -= PlayerViewModelOnPlayerDeleted;
             Players.Remove(playerVm);
             CheckPossibilityToDeletePlayers();
+            CheckCanAddPlayers();
         }
 
         private void CheckPossibilityToDeletePlayers()
@@ -63,6 +73,11 @@ namespace Sanet.MagicalYatzy.ViewModels
             {
                 playerViewModel.CanBeDeleted = Players.Count != 1;
             }
+        }
+
+        private void CheckCanAddPlayers()
+        {
+            CanAddBot = Players.Count < MaxPlayers;
         }
     }
 }
