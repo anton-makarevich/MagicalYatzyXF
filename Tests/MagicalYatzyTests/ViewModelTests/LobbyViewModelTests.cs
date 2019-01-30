@@ -152,6 +152,12 @@ namespace MagicalYatzyTests.ViewModelTests
         [Fact]
         public void CanAddBotIsFalseIfThereAreAlreadyFourPlayers()
         {
+            var canAddBotChanged = false;
+            _sut.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(_sut.CanAddBot)) canAddBotChanged = true;
+            };
+            
             Assert.True(_sut.CanAddBot);
             _sut.AddBotCommand.Execute(null);
             _sut.AddBotCommand.Execute(null);
@@ -159,6 +165,30 @@ namespace MagicalYatzyTests.ViewModelTests
             _sut.AddBotCommand.Execute(null);
             
             Assert.False(_sut.CanAddBot);
+            Assert.True(canAddBotChanged);
+        }
+        
+        [Fact]
+        public void CanAddBotIsTrueAgainWhenPlayerIsRemoved()
+        {
+            var addBotChangedCalled = 0;
+            _sut.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(_sut.CanAddBot)) addBotChangedCalled++;
+            };
+            
+            Assert.True(_sut.CanAddBot);
+            _sut.AddBotCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            
+            Assert.False(_sut.CanAddBot);
+            
+            _sut.Players.Last().DeleteCommand.Execute(null);
+            Assert.True(_sut.CanAddBot);
+            
+            Assert.Equal(2,addBotChangedCalled);
         }
     }
 }

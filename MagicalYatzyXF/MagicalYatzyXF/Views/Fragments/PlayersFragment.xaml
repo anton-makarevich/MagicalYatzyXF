@@ -27,7 +27,7 @@
         Orientation="Horizontal"
         HorizontalOptions="End">
         <controls:TappableContentView
-            IsVisible="{Binding CanBeDeleted}"
+            IsVisible="{Binding CanAddBot}"
             Grid.Column="2"
             Command="{Binding AddBotCommand}"
             Style = "{StaticResource ToolButtonStyle}"

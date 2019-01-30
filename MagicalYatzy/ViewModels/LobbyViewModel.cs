@@ -16,6 +16,8 @@ namespace Sanet.MagicalYatzy.ViewModels
         private const int MaxPlayers = 4;
         
         private readonly IPlayerService _playerService;
+        private bool _canAddBot = true;
+
         public LobbyViewModel(IDicePanel dicePanel, IPlayerService playerService) : base(dicePanel)
         {
             _playerService = playerService;
@@ -29,11 +31,17 @@ namespace Sanet.MagicalYatzy.ViewModels
         public ObservableCollection<PlayerViewModel> Players { get; } = new ObservableCollection<PlayerViewModel>();
         public ICommand AddBotCommand => new SimpleCommand(() =>
         {
+            if (!CanAddBot)
+                return;
             var newBot = new Player(PlayerType.AI, Players.Select(p=>p.Name).ToList());
             AddPlayer(new PlayerViewModel(newBot));
         });
 
-        public bool CanAddBot { get; private set; } = true;
+        public bool CanAddBot
+        {
+            get => _canAddBot;
+            private set => SetProperty(ref _canAddBot, value);
+        }
 
         private void AddDefaultPlayer()
         {
