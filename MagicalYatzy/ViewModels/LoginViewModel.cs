@@ -49,13 +49,5 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         public string CloseImage => "close.png";
         #endregion
-
-        #region Methods
-        private async Task CloseAsync()
-        {
-            await NavigationService.CloseAsync();
-        }
-        #endregion
-
     }
 }

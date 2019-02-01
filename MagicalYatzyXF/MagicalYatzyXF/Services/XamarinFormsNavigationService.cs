@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Sanet.MagicalYatzy.Services;
+using Sanet.MagicalYatzy.Services.Navigation;
 using Sanet.MagicalYatzy.Utils;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using Sanet.MagicalYatzy.Views;
+using Sanet.MagicalYatzy.XF.Models;
 using Sanet.MagicalYatzy.XF.Views.Base;
 using Xamarin.Forms;
-using Sanet.MagicalYatzy.XF.Models;
 
 namespace Sanet.MagicalYatzy.XF.Services
 {
-    public class XamarinFormsNavigationService:INavigationService
+    public class XamarinFormsNavigationService: INavigationService
     {
         private readonly List<BaseViewModel> _viewModels = new List<BaseViewModel>();
 
@@ -33,17 +33,12 @@ namespace Sanet.MagicalYatzy.XF.Services
             foreach (var type in assembly.DefinedTypes.Where(dt => !dt.IsAbstract &&
                 dt.ImplementedInterfaces.Any(ii => ii == typeof(IBaseView))))
             {
-                var shouldAddView = true;
-                foreach (var formFactor in EnumUtils.GetValues<FormFactor>())
-                {
-                    var formFactorString = formFactor.ToString().ToLower();
-                    if (type.Name.ToLower().EndsWith(formFactorString, StringComparison.CurrentCulture)
-                        && App.FormFactor != formFactor)
-                    {
-                        shouldAddView = false;
-                        break;
-                    }
-                }
+                var shouldAddView = !(from formFactor in EnumUtils.GetValues<FormFactor>() 
+                    let formFactorString = formFactor.ToString().ToLower() 
+                    where type.Name.ToLower().EndsWith(formFactorString, StringComparison.CurrentCulture) 
+                          && App.FormFactor != formFactor 
+                    select formFactor).Any();
+                
                 if (!shouldAddView)
                     continue;
 
@@ -51,29 +46,27 @@ namespace Sanet.MagicalYatzy.XF.Services
                     ii => ii.IsConstructedGenericType &&
                     ii.GetGenericTypeDefinition() == typeof(IBaseView<>));
 
-                _viewModelViewDictionary.Add(viewForType.GenericTypeArguments[0], type.AsType());
+                if (viewForType != null)
+                    _viewModelViewDictionary.Add(viewForType.GenericTypeArguments[0], type.AsType());
             }
         }
 
         public T GetViewModel<T>() where T : BaseViewModel
         {
-            T vm = (T)_viewModels.FirstOrDefault(f => f is T);
-            if (vm == null)
-            {
-                vm = CreateViewModel<T>();
-                _viewModels.Add(vm);
-            }
+            var vm = (T)_viewModels.FirstOrDefault(f => f is T);
+            if (vm != null) return vm;
+            vm = CreateViewModel<T>();
+            _viewModels.Add(vm);
             return vm;
         }
 
         public T GetNewViewModel<T>() where T : BaseViewModel
         {
-            T vm = (T)_viewModels.FirstOrDefault(f => f is T);
+            var vm = (T)_viewModels.FirstOrDefault(f => f is T);
 
             if (vm != null)
             {
                 _viewModels.Remove(vm);
-                vm = null;
             }
             vm = CreateViewModel<T>();
             _viewModels.Add(vm);
@@ -89,19 +82,19 @@ namespace Sanet.MagicalYatzy.XF.Services
 
         public bool HasViewModel<T>() where T : BaseViewModel
         {
-            T vm = (T)_viewModels.FirstOrDefault(f => f is T);
+            var vm = (T)_viewModels.FirstOrDefault(f => f is T);
             return (vm != null);
         }
 
         public Task NavigateToViewModelAsync<T>(T viewModel) where T : BaseViewModel
         {
-            return OpenViewModelAsync(viewModel, false);
+            return OpenViewModelAsync(viewModel);
         }
 
         public Task NavigateToViewModelAsync<T>() where T : BaseViewModel
         {
             var vm = GetViewModel<T>();
-            return OpenViewModelAsync(vm, false);
+            return OpenViewModelAsync(vm);
         }
 
         private async Task OpenViewModelAsync<T>(T viewModel, bool modalPresentation = false) where T : BaseViewModel
@@ -150,7 +143,34 @@ namespace Sanet.MagicalYatzy.XF.Services
         public Task ShowViewModelAsync<T>() where T : BaseViewModel
         {
             var viewModel = GetViewModel<T>();
-            return OpenViewModelAsync(viewModel, true);
+            return ShowViewModelAsync(viewModel);
+        }
+
+        public Task<TResult> ShowViewModelForResultAsync<T, TResult>(T viewModel) 
+            where T : BaseViewModel 
+            where TResult : class
+        {
+            viewModel.ExpectsResult = true;
+
+            var taskCompletionSource = new TaskCompletionSource<TResult>();
+            
+            void OnViewModelOnOnResult(object sender, object o)
+            {
+                viewModel.OnResult-= OnViewModelOnOnResult;
+                var result = o as TResult;
+                taskCompletionSource.TrySetResult(result);
+            }
+            viewModel.OnResult+= OnViewModelOnOnResult;
+
+            return taskCompletionSource.Task;
+        }
+        
+        public async Task<TResult> ShowViewModelForResultAsync<T, TResult>() 
+            where T : BaseViewModel
+            where TResult : class
+        {
+            var viewModel = GetViewModel<T>();
+            return await ShowViewModelForResultAsync<T, TResult>(viewModel);
         }
     }
 }

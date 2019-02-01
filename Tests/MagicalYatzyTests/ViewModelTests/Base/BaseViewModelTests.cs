@@ -5,6 +5,7 @@ using Sanet.MagicalYatzy.ViewModels.Base;
 using Xunit;
 using System;
 using System.Threading.Tasks;
+using Sanet.MagicalYatzy.Services.Navigation;
 
 namespace MagicalYatzyTests.ViewModelTests.Base
 {
@@ -93,6 +94,45 @@ namespace MagicalYatzyTests.ViewModelTests.Base
             Assert.Throws<ArgumentNullException>(() => { var t = _sut.NavigationService; });
         }
 
+        [Fact]
+        public async Task InvokesOnResultIfResultIsExpectedAndResetsResultExpectation()
+        {
+            var result = new ResultStub();
+            var getResultCount = 0;
+            _sut.OnResult += (sender, o) =>
+            {
+                getResultCount++;
+                Assert.Equal(result, o);
+            };
+            _sut.SetNavigationService(navigationServiceMock);
+            _sut.ExpectsResult = true;
+
+            await _sut.CloseAsync(result);
+            Assert.Equal(1,getResultCount);
+            Assert.False(_sut.ExpectsResult);
+        }
+        
+        [Fact]
+        public async Task DoesNotInvokeOnResultIfResultIsNotExpected()
+        {
+            var result = new ResultStub();
+            var getResultCount = 0;
+            _sut.OnResult += (sender, o) =>
+            {
+                getResultCount++;
+                Assert.Equal(result, o);
+            };
+            _sut.SetNavigationService(navigationServiceMock);
+
+            await _sut.CloseAsync(result);
+            Assert.Equal(0,getResultCount);
+        }
+
         private class SimpleTestViewModel : BaseViewModel { }
+        
+        private class ResultStub
+        {
+            public int Id => new Random().Next(100);
+        }
     }
 }
