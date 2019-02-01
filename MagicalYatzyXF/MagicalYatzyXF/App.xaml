@@ -51,14 +51,6 @@
                 <Setter Property="HorizontalOptions" Value="Center"/>
                 <Setter Property="VerticalOptions" Value="Center"/>
             </Style>
-            
-            <Style x:Key="ToolButtonStyle" TargetType="controls:TappableContentView" >
-                <Setter Property="BackgroundColor" Value="Transparent"/>
-                <Setter Property="HorizontalOptions" Value="Center"/>
-                <Setter Property="VerticalOptions" Value="Center"/>
-                <Setter Property="HeightRequest" Value="{StaticResource ToolButtonSize}"/>
-                <Setter Property="WidthRequest" Value="{StaticResource ToolButtonSize}"/>
-            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

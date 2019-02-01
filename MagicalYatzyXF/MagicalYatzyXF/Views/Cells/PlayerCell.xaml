@@ -22,17 +22,12 @@
             Style="{StaticResource CaptionLabelStyle}"
             >
         </Label>
-        <controls:TappableContentView
+        <controls:ToolBarButton
             IsVisible="{Binding CanBeDeleted}"
             Grid.Column="2"
             Command="{Binding DeleteCommand}"
             Style = "{StaticResource ToolButtonStyle}"
-            >
-            <Image 
-                Source="{Binding DeleteImage, Converter={StaticResource ImageNameConverter}}"
-                Style="{StaticResource ToolButtonImageStyle}"
-            >
-            </Image>
-        </controls:TappableContentView>
+            ImageSource="{Binding DeleteImage, Converter={StaticResource ImageNameConverter}}"
+            />
     </Grid>
 </ViewCell>

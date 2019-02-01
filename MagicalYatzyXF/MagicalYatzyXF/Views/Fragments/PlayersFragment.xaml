@@ -6,8 +6,7 @@
     xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Controls"
     x:Class="Sanet.MagicalYatzy.XF.Views.Fragments.PlayersFragment"
     Margin="5,10"
-    HorizontalOptions="Fill"
-    >
+    HorizontalOptions="Fill">
     <Grid.RowDefinitions>
         <RowDefinition/>
         <RowDefinition Height="{StaticResource ToolBarHeight}"/>
@@ -26,16 +25,9 @@
         Grid.Row="1"
         Orientation="Horizontal"
         HorizontalOptions="End">
-        <controls:TappableContentView
+        <controls:ToolBarButton
             IsVisible="{Binding CanAddBot}"
             Command="{Binding AddBotCommand}"
-            Style = "{StaticResource ToolButtonStyle}"
-            >
-            <Image 
-                Source="{Binding AddBotImage, Converter={StaticResource ImageNameConverter}}"
-                Style="{StaticResource ToolButtonImageStyle}"
-            >
-            </Image>
-        </controls:TappableContentView>
+            ImageSource="{Binding AddBotImage, Converter={StaticResource ImageNameConverter}}" />
     </StackLayout>
 </Grid>
