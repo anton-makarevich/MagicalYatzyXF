@@ -4,6 +4,7 @@ using MagicalYatzyTests.ViewModelTests.Base;
 using MagicalYatzyTests.ServiceTests;
 using MagicalYatzyTests.ServiceTests.Game;
 using NSubstitute;
+using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Services.Navigation;
 using Xunit;
@@ -14,6 +15,8 @@ namespace MagicalYatzyTests.ViewModelTests
     {
         private readonly IPlayerService _playerServiceMock = Substitute.For<IPlayerService>();
         private readonly INavigationService _navigationServiceMock = Substitute.For<INavigationService>();
+
+        private readonly IPlayer _playerStub = Substitute.For<IPlayer>();
         
         private readonly LoginViewModel _sut;
 
@@ -26,7 +29,7 @@ namespace MagicalYatzyTests.ViewModelTests
         [Fact]
         public void SuccessfulLoginCallsBackNavigation()
         {
-            _playerServiceMock.LoginAsync(PlayerServiceTests.TestUserName, PlayerServiceTests.TestUserPassword).Returns(Task.FromResult(true));
+            _playerServiceMock.LoginAsync(PlayerServiceTests.TestUserName, PlayerServiceTests.TestUserPassword).Returns(Task.FromResult(_playerStub));
 
             _sut.NewUsername = PlayerServiceTests.TestUserName;
             _sut.NewPassword = PlayerServiceTests.TestUserPassword;
@@ -34,6 +37,28 @@ namespace MagicalYatzyTests.ViewModelTests
             _sut.LoginCommand.Execute(null);
 
             _navigationServiceMock.Received().CloseAsync();
+        }
+        
+        [Fact]
+        public void SuccessfulLoginCallsBackNavigationAndProvidesLoggedInPlayerAsResultIfItIsExpected()
+        {
+            _sut.ExpectsResult = true;
+            var onResultCalledCount = 0;
+            _sut.OnResult += (sender, o) =>
+            {
+                onResultCalledCount++;
+                Assert.Equal(_playerStub, o);
+            }; 
+            
+            _playerServiceMock.LoginAsync(PlayerServiceTests.TestUserName, PlayerServiceTests.TestUserPassword).Returns(Task.FromResult(_playerStub));
+
+            _sut.NewUsername = PlayerServiceTests.TestUserName;
+            _sut.NewPassword = PlayerServiceTests.TestUserPassword;
+
+            _sut.LoginCommand.Execute(null);
+
+            _navigationServiceMock.Received().CloseAsync();
+            Assert.Equal(1,onResultCalledCount);
         }
 
         [Fact] 

@@ -1,6 +1,5 @@
 ﻿using NSubstitute;
 using Sanet.MagicalYatzy.Services.Game;
-using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using Xunit;
 using System;
@@ -11,15 +10,14 @@ namespace MagicalYatzyTests.ViewModelTests.Base
 {
     public class BaseViewModelTests
     {
-        protected IPlayerService PlayerServiceMock;
-        protected INavigationService NavigationServiceMock;
+        private readonly INavigationService _navigationServiceMock;
 
         private readonly SimpleTestViewModel _sut;
 
         public BaseViewModelTests()
         {
-            PlayerServiceMock = Substitute.For<IPlayerService>();
-            NavigationServiceMock = Substitute.For<INavigationService>();
+            Substitute.For<IPlayerService>();
+            _navigationServiceMock = Substitute.For<INavigationService>();
 
             _sut = new SimpleTestViewModel();
         }
@@ -28,7 +26,7 @@ namespace MagicalYatzyTests.ViewModelTests.Base
         public void IsBusyShouldBeFiredWhenValueIsChanged()
         {
             // Arrange
-            var isBusyNewValue = true;
+            const bool isBusyNewValue = true;
             var isPropertyFired = false;
             var isPropertyNameCorrect = false;
             var isPropertyValueCorrect = false;
@@ -76,30 +74,30 @@ namespace MagicalYatzyTests.ViewModelTests.Base
         [Fact]
         public void NavigationServiceIsSet()
         {
-            _sut.SetNavigationService(NavigationServiceMock);
+            _sut.SetNavigationService(_navigationServiceMock);
             Assert.NotNull(_sut.NavigationService);
         }
 
         [Fact]
         public async Task GoBackTriggersNavigationServiceNavigateBack()
         {
-            _sut.SetNavigationService(NavigationServiceMock);
+            _sut.SetNavigationService(_navigationServiceMock);
             _sut.BackCommand.Execute(null);
-            await NavigationServiceMock.Received().NavigateBackAsync();
+            await _navigationServiceMock.Received().NavigateBackAsync();
         }
         
         [Fact]
         public async Task CloseTriggersNavigationServiceNavigateBack()
         {
-            _sut.SetNavigationService(NavigationServiceMock);
+            _sut.SetNavigationService(_navigationServiceMock);
             await _sut.CloseAsync();
-            await NavigationServiceMock.Received().CloseAsync();
+            await _navigationServiceMock.Received().CloseAsync();
         }
 
         [Fact]
         public void ThrowsArgumentNullExceptionIfNavigationServiceIsNotSet()
         {
-            Assert.Throws<ArgumentNullException>(() => { var t = _sut.NavigationService; });
+            Assert.Throws<ArgumentNullException>(() => { var _ = _sut.NavigationService; });
         }
 
         [Fact]
@@ -112,7 +110,7 @@ namespace MagicalYatzyTests.ViewModelTests.Base
                 getResultCount++;
                 Assert.Equal(result, o);
             };
-            _sut.SetNavigationService(NavigationServiceMock);
+            _sut.SetNavigationService(_navigationServiceMock);
             _sut.ExpectsResult = true;
 
             await _sut.CloseAsync(result);
@@ -130,17 +128,33 @@ namespace MagicalYatzyTests.ViewModelTests.Base
                 getResultCount++;
                 Assert.Equal(result, o);
             };
-            _sut.SetNavigationService(NavigationServiceMock);
+            _sut.SetNavigationService(_navigationServiceMock);
 
             await _sut.CloseAsync(result);
             Assert.Equal(0,getResultCount);
         }
 
-        private class SimpleTestViewModel : BaseViewModel { }
+        [Fact]
+        public void HasNavigationServiceIfItIsPassedInConstructor()
+        {
+            var sut = new SimpleTestViewModel(_navigationServiceMock);
+            
+            Assert.NotNull(sut.NavigationService);
+        }
+
+        private class SimpleTestViewModel : BaseViewModel
+        {
+            public SimpleTestViewModel()
+            {
+            }
+
+            public SimpleTestViewModel(INavigationService navigationService) : base(navigationService)
+            {
+            }
+        }
         
         private class ResultStub
         {
-            public int Id => new Random().Next(100);
         }
     }
 }

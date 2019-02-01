@@ -35,24 +35,24 @@ namespace Sanet.MagicalYatzy.Services.Game
 
         private int PlayerToBeSetIndex { get; set; }
 
-        public IReadOnlyList<IPlayer> Players => (IReadOnlyList<IPlayer>)_players;
+        public IReadOnlyList<IPlayer> Players => _players;
 
         public IPlayer CurrentPlayer => (!Players.Any())? null: Players[PlayerToBeSetIndex]; 
 
-        public async Task<bool> LoginAsync(string username, string password)
+        public async Task<IPlayer> LoginAsync(string username, string password)
         {
             var player = await _apiClient.LoginUserAsync(username, password);
             if (player == null)
-                return false;
+                return null;
             AddPlayer((Player)player);
-            return true;
+            return player;
         }
 
-        public async Task<bool> LoginToFacebookAsync()
+        public async Task<IPlayer> LoginToFacebookAsync()
         {
-            var player = await Task.FromResult<Player>(new Player());
+            var player = await Task.FromResult(new Player());
             AddPlayer(player);
-            return true; 
+            return player; 
         }
 
         private void AddPlayer(Player player)

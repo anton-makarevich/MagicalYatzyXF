@@ -39,10 +39,10 @@ namespace MagicalYatzyTests.ServiceTests.Game
             // Act
             var result = await _sut.LoginAsync(TestUserName,TestUserPassword);
             // Asset
-            Assert.True(result);
+            Assert.Equal(TestPlayer,result);
             Assert.True(_sut.Players.Count>1);
-            Assert.Equal(_sut.CurrentPlayer, TestPlayer);
-            Assert.Equal(_sut.Players[0], TestPlayer);
+            Assert.Equal(TestPlayer,_sut.CurrentPlayer);
+            Assert.Equal(TestPlayer, _sut.Players[0]);
         }
 
         [Fact]
@@ -65,7 +65,7 @@ namespace MagicalYatzyTests.ServiceTests.Game
             await _sut.LoadPlayersAsync();
             // Asset
             Assert.True(_sut.Players.Count == players.Count);
-            for (int i = 0; i < players.Count;i++)
+            for (var i = 0; i < players.Count;i++)
             {
                 Assert.Equal(players[i], _sut.Players[i]);
             }

@@ -1,10 +1,12 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.ViewModels;
 using NSubstitute;
 using Xunit;
 using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Services.Game;
+using Sanet.MagicalYatzy.Services.Navigation;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 
 namespace MagicalYatzyTests.ViewModelTests
@@ -13,6 +15,7 @@ namespace MagicalYatzyTests.ViewModelTests
     {
         private readonly LobbyViewModel _sut;
         private readonly IPlayerService _playerService;
+        private readonly INavigationService _navigationService = Substitute.For<INavigationService>();
 
         public LobbyViewModelTests()
         {
@@ -114,6 +117,7 @@ namespace MagicalYatzyTests.ViewModelTests
             _sut.AddBotCommand.Execute(null);
             
             Assert.Equal("BotPlayer.png", _sut.Players.First().Image);
+            Assert.True(_sut.Players.First().Player.IsBot);
         }
         
         [Fact]
@@ -189,6 +193,83 @@ namespace MagicalYatzyTests.ViewModelTests
             Assert.True(_sut.CanAddBot);
             
             Assert.Equal(2,addBotChangedCalled);
+        }
+
+        [Fact]
+        public void AddHumanCommandAddsPlayer()
+        {
+            // Arrange
+            var playerStub = Substitute.For<IPlayer>();
+            _navigationService.ShowViewModelForResultAsync<LoginViewModel, IPlayer>()
+                .Returns(Task.FromResult(playerStub));
+            _sut.SetNavigationService(_navigationService);
+            
+            // Act
+            _sut.AddHumanCommand.Execute(null);
+            
+            // Assert
+            Assert.Single(_sut.Players);
+        }
+        
+        [Fact]
+        public void ItsNotPossibleToAddHumanIfThereAreAlreadyFourPlayers()
+        {
+            // Arrange
+            var playerStub = Substitute.For<IPlayer>();
+            _navigationService.ShowViewModelForResultAsync<LoginViewModel, IPlayer>()
+                .Returns(Task.FromResult(playerStub));
+            _sut.SetNavigationService(_navigationService);
+            
+            _sut.AddBotCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            Assert.Equal(4,_sut.Players.Count);
+            
+            _sut.AddHumanCommand.Execute(null);
+            Assert.Equal(4,_sut.Players.Count);
+        }
+        
+        [Fact]
+        public void CanAddHumanIsFalseIfThereAreAlreadyFourPlayers()
+        {
+            var canAddHumanChanged = false;
+            _sut.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(_sut.CanAddHuman)) canAddHumanChanged = true;
+            };
+            
+            Assert.True(_sut.CanAddHuman);
+            _sut.AddBotCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            
+            Assert.False(_sut.CanAddHuman);
+            Assert.True(canAddHumanChanged);
+        }
+        
+        [Fact]
+        public void CanAddHumanIsTrueAgainWhenPlayerIsRemoved()
+        {
+            var addHumanChangedCalled = 0;
+            _sut.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(_sut.CanAddHuman)) addHumanChangedCalled++;
+            };
+            
+            Assert.True(_sut.CanAddHuman);
+            _sut.AddBotCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            
+            Assert.False(_sut.CanAddHuman);
+            
+            _sut.Players.Last().DeleteCommand.Execute(null);
+            Assert.True(_sut.CanAddHuman);
+            
+            Assert.Equal(2,addHumanChangedCalled);
         }
     }
 }
