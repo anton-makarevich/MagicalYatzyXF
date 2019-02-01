@@ -11,15 +11,15 @@ namespace MagicalYatzyTests.ViewModelTests.Base
 {
     public class BaseViewModelTests
     {
-        protected IPlayerService playerServiceMock;
-        protected INavigationService navigationServiceMock;
+        protected IPlayerService PlayerServiceMock;
+        protected INavigationService NavigationServiceMock;
 
-        private SimpleTestViewModel _sut;
+        private readonly SimpleTestViewModel _sut;
 
         public BaseViewModelTests()
         {
-            playerServiceMock = Substitute.For<IPlayerService>();
-            navigationServiceMock = Substitute.For<INavigationService>();
+            PlayerServiceMock = Substitute.For<IPlayerService>();
+            NavigationServiceMock = Substitute.For<INavigationService>();
 
             _sut = new SimpleTestViewModel();
         }
@@ -74,22 +74,30 @@ namespace MagicalYatzyTests.ViewModelTests.Base
 
 
         [Fact]
-        public void NavgationServiceShouldBeSet()
+        public void NavigationServiceIsSet()
         {
-            _sut.SetNavigationService(navigationServiceMock);
+            _sut.SetNavigationService(NavigationServiceMock);
             Assert.NotNull(_sut.NavigationService);
         }
 
         [Fact]
         public async Task GoBackTriggersNavigationServiceNavigateBack()
         {
-            _sut.SetNavigationService(navigationServiceMock);
+            _sut.SetNavigationService(NavigationServiceMock);
             _sut.BackCommand.Execute(null);
-            await navigationServiceMock.Received().NavigateBackAsync();
+            await NavigationServiceMock.Received().NavigateBackAsync();
+        }
+        
+        [Fact]
+        public async Task CloseTriggersNavigationServiceNavigateBack()
+        {
+            _sut.SetNavigationService(NavigationServiceMock);
+            await _sut.CloseAsync();
+            await NavigationServiceMock.Received().CloseAsync();
         }
 
         [Fact]
-        public void ShouldThrowArgumentNullExceptionIfNavigationServiceIsNotSet()
+        public void ThrowsArgumentNullExceptionIfNavigationServiceIsNotSet()
         {
             Assert.Throws<ArgumentNullException>(() => { var t = _sut.NavigationService; });
         }
@@ -104,7 +112,7 @@ namespace MagicalYatzyTests.ViewModelTests.Base
                 getResultCount++;
                 Assert.Equal(result, o);
             };
-            _sut.SetNavigationService(navigationServiceMock);
+            _sut.SetNavigationService(NavigationServiceMock);
             _sut.ExpectsResult = true;
 
             await _sut.CloseAsync(result);
@@ -122,7 +130,7 @@ namespace MagicalYatzyTests.ViewModelTests.Base
                 getResultCount++;
                 Assert.Equal(result, o);
             };
-            _sut.SetNavigationService(navigationServiceMock);
+            _sut.SetNavigationService(NavigationServiceMock);
 
             await _sut.CloseAsync(result);
             Assert.Equal(0,getResultCount);

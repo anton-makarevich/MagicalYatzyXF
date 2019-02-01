@@ -15,6 +15,12 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
             _player = Substitute.For<IPlayer>();
             _sut = new PlayerViewModel(_player);
         }
+
+        [Fact]
+        public void PlayerReturnsUnderlyingModel()
+        {
+            Assert.Equal(_player, _sut.Player);
+        }
         
         [Fact]
         public void HasAllBasicPropertiesEqualToPlayerObject()
