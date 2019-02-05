@@ -10,6 +10,7 @@
         <ResourceDictionary>
             <converters:ImageNameConverter x:Key="ImageNameConverter"/>
             <converters:StringUppercasedConverter x:Key="StringUppercasedConverter"/>
+            <converters:GridLenthConverter x:Key="GridLenthConverter"/>
 
             <Color x:Key = "SanetBlueColor">#009CD6</Color>
             
@@ -17,6 +18,7 @@
             <x:Int16 x:Key = "ProfilePicSize">50</x:Int16>
             
             <GridLength x:Key = "ToolBarHeight">50</GridLength>
+            <GridLength x:Key = "ToolButtonGridSize">32</GridLength>
 
             <Style x:Key="CaptionLabelStyle" TargetType="Label">
                 <Setter Property="TextColor" Value="{StaticResource SanetBlueColor}" />
@@ -37,13 +39,12 @@
                 <Setter Property="BackgroundColor" Value="{StaticResource SanetBlueColor}"/>
                 <Setter Property="TextColor" Value="White" />
             </Style>
-            
             <Style x:Key="ToolButtonImageStyle" TargetType="Image">
                 <Setter Property="HeightRequest" Value="{StaticResource ToolButtonSize}"/>
                 <Setter Property="WidthRequest" Value="{StaticResource ToolButtonSize}"/>
                 <Setter Property="InputTransparent" Value='{OnPlatform macOS="True", UWP="False"}'/>
             </Style>
-            
+                    
             <Style x:Key="ProfileImageStyle" TargetType="Image">
                 <Setter Property="HeightRequest" Value="{StaticResource ProfilePicSize}"/>
                 <Setter Property="WidthRequest" Value="{StaticResource ProfilePicSize}"/>

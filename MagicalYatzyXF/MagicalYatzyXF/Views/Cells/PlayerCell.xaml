@@ -26,7 +26,6 @@
             IsVisible="{Binding CanBeDeleted}"
             Grid.Column="2"
             Command="{Binding DeleteCommand}"
-            Style = "{StaticResource ToolButtonStyle}"
             ImageSource="{Binding DeleteImage, Converter={StaticResource ImageNameConverter}}"
             />
     </Grid>

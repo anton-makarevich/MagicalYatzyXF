@@ -16,9 +16,9 @@ namespace Sanet.MagicalYatzy.XF.Controls
             default(ImageSource), 
             propertyChanged: OnImageSourceChanged);
         
-        public object ImageSource
+        public ImageSource ImageSource
         {
-            get => GetValue(ImageSourceProperty);
+            get => (ImageSource)GetValue(ImageSourceProperty);
             set => SetValue(ImageSourceProperty, value);
         }
 
@@ -28,6 +28,27 @@ namespace Sanet.MagicalYatzy.XF.Controls
 
             var incoming = newValue as ImageSource;
             control.Icon.Source = incoming;
+        }
+        
+        public static readonly BindableProperty TextProperty = BindableProperty.Create(
+            nameof(Text),
+            typeof(string), 
+            typeof(ToolBarButton),
+            default(string), 
+            propertyChanged: OnTextChanged);
+        
+        public string Text
+        {
+            get => (string)GetValue(TextProperty);
+            set => SetValue(TextProperty, value);
+        }
+
+        private static void OnTextChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var control = (ToolBarButton)bindable;
+
+            var incoming = newValue as string;
+            control.Label.Text = incoming;
         }
     }
 }

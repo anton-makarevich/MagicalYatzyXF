@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     xmlns:cells="clr-namespace:Sanet.MagicalYatzy.XF.Views.Cells"
     xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Controls"
+    xmlns:loc="clr-namespace:Sanet.MagicalYatzy.XF.MarkupExtensions"
     x:Class="Sanet.MagicalYatzy.XF.Views.Fragments.PlayersFragment"
     Margin="5,10"
     HorizontalOptions="Fill">
@@ -28,6 +29,7 @@
         <controls:ToolBarButton
             IsVisible="{Binding CanAddBot}"
             Command="{Binding AddBotCommand}"
-            ImageSource="{Binding AddBotImage, Converter={StaticResource ImageNameConverter}}" />
+            ImageSource="{Binding AddBotImage, Converter={StaticResource ImageNameConverter}}" 
+            Text="{loc:Strings AddBotLabel}"/>
     </StackLayout>
 </Grid>

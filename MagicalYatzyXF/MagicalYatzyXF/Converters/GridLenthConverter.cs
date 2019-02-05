@@ -1,23 +1,22 @@
-﻿using Sanet.MagicalYatzy.XF.Helpers;
 using System;
 using Xamarin.Forms;
 
 namespace Sanet.MagicalYatzy.XF.Converters
 {
-    public class ImageNameConverter : IValueConverter
+    public class GridLenthConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (!(value is string stringValue))
+            if (double.TryParse(value.ToString(), out var doubleValue))
             {
-                return string.Empty;
+                return new GridLength(doubleValue);
             }
 
-            return ImageHelper.Get(stringValue);
+            return new GridLength(0);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter,
-                                  System.Globalization.CultureInfo culture)
+            System.Globalization.CultureInfo culture)
         {
             throw new NotImplementedException();
         }

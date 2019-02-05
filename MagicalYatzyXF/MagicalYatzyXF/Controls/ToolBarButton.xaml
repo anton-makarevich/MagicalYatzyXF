@@ -6,10 +6,26 @@
   xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Controls"
   BackgroundColor="Transparent"
   HorizontalOptions="Center"
-  VerticalOptions="Center"
-  HeightRequest="{StaticResource ToolButtonSize}"
-  WidthRequest="{StaticResource ToolButtonSize}">
-  <Image 
-    x:Name="Icon"
-    Style="{StaticResource ToolButtonImageStyle}"/>
+  VerticalOptions="Center">
+  <!--HeightRequest="{StaticResource ProfilePicSize}"
+  WidthRequest="{StaticResource ProfilePicSize}">-->
+    <Grid
+        InputTransparent ='{OnPlatform macOS="True", UWP="False"}'>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{StaticResource ToolButtonGridSize}"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Image 
+            x:Name="Icon"
+            Style="{StaticResource ToolButtonImageStyle}"
+            />
+        <Label
+            Grid.Row="1"
+            x:Name="Label"
+            TextColor="White"
+            FontSize="10"
+            HorizontalOptions="Center"
+            VerticalOptions="Start"
+            HorizontalTextAlignment="Center"/>
+    </Grid>
 </controls:TappableContentView>
