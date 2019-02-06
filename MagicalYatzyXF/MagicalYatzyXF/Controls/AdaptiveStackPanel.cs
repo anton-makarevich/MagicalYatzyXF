@@ -7,7 +7,7 @@ namespace Sanet.MagicalYatzy.XF.Controls
         {
             var isHorizontal = width > height;
             Orientation = isHorizontal ? StackOrientation.Horizontal : StackOrientation.Vertical;
-            foreach (var child in this.Children)
+            foreach (var child in Children)
                 child.WidthRequest = isHorizontal ? width : width * 0.5;
             base.OnSizeAllocated(width, height);
         }

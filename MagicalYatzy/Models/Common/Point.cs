@@ -1,11 +1,10 @@
 ﻿namespace Sanet.MagicalYatzy.Models.Common
 {
-    /// <summary>Point structure</summary>
     public struct Point
     {
-        public double X {get; set; }
+        public double X {get; }
 
-        public double Y { get; set; }
+        public double Y { get; }
 
         public Point(double x, double y)
         {
@@ -13,13 +12,7 @@
             Y = y;
         }
 
-        public bool IsZero
-        {
-            get
-            {
-                return X == 0 && Y == 0;
-            }
-        }
+        public bool IsZero => X == 0 && Y == 0;
 
         public static Point operator+(Point p1, Point p2)
         {

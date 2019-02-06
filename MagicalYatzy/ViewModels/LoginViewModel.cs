@@ -2,7 +2,6 @@
 using Sanet.MagicalYatzy.Services.Game;
 using System.Windows.Input;
 using Sanet.MagicalYatzy.Models.Events;
-using System.Threading.Tasks;
 
 namespace Sanet.MagicalYatzy.ViewModels
 {
@@ -15,7 +14,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         private string _newPassword;
 #endregion
 
-        public LoginViewModel(IPlayerService playerService) : base()
+        public LoginViewModel(IPlayerService playerService)
         {
             _playerService = playerService;
         }
@@ -41,21 +40,13 @@ namespace Sanet.MagicalYatzy.ViewModels
         public ICommand LoginCommand => new SimpleCommand(async () => 
         {
             var result = await _playerService.LoginAsync(NewUsername,NewPassword);
-            if (result)
-                await CloseAsync();
+            if (result != null)
+                await CloseAsync(result);
         });
 
         public ICommand CloseCommand => new SimpleCommand(async () => await CloseAsync());
 
         public string CloseImage => "close.png";
         #endregion
-
-        #region Methods
-        private async Task CloseAsync()
-        {
-            await NavigationService.CloseAsync();
-        }
-        #endregion
-
     }
 }

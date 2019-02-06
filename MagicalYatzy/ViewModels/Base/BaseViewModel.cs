@@ -1,13 +1,15 @@
-﻿using Sanet.MagicalYatzy.Services;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Sanet.MagicalYatzy.Models.Events;
+using Sanet.MagicalYatzy.Services.Navigation;
 
 namespace Sanet.MagicalYatzy.ViewModels.Base
 {
     public abstract class BaseViewModel : BindableBase
     {
+        public event EventHandler<object> OnResult; 
+        
         #region Fields
         private bool _isBusy;
         private int _pageWidth;
@@ -22,25 +24,24 @@ namespace Sanet.MagicalYatzy.ViewModels.Base
 
         #region Properties
 
-        public INavigationService NavigationService => _navigationService ?? throw new ArgumentNullException("NavigationService", "Navigation service should be initialized, check your App.cs");
+        // ReSharper disable once LocalizableElement
+        public INavigationService NavigationService => _navigationService ?? throw new ArgumentNullException(
+                                                           nameof(NavigationService), 
+                                                           "Navigation service should be initialized, check your App.cs");
 
         public bool IsBusy
         {
-            get { return _isBusy; }
-            set
-            {
-                SetProperty(ref _isBusy, value);
-            }
+            get => _isBusy;
+            set => SetProperty(ref _isBusy, value);
         }
 
         public int PageWidth
         {
-            get { return _pageWidth; }
-            set
-            {
-                SetProperty(ref _pageWidth, value);
-            }
+            get => _pageWidth;
+            set => SetProperty(ref _pageWidth, value);
         }
+        
+        public bool ExpectsResult { get; set; }
         #endregion
 
         #region Commands
@@ -56,6 +57,16 @@ namespace Sanet.MagicalYatzy.ViewModels.Base
         public async Task GoBackAsync()
         {
             await NavigationService.NavigateBackAsync();
+        }
+        
+        internal async Task CloseAsync(object result = null)
+        {
+            await NavigationService.CloseAsync();
+            if (ExpectsResult)
+            {
+                ExpectsResult = false;
+                OnResult?.Invoke(this, result);
+            }
         }
 
         public virtual void AttachHandlers() { }

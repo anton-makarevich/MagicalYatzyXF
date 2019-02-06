@@ -1,7 +1,5 @@
 ﻿using Sanet.MagicalYatzy.XF.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
 
 namespace Sanet.MagicalYatzy.XF.Converters

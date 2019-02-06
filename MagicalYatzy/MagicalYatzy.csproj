@@ -337,7 +337,6 @@
     <None Remove="Resources\DiceImages\2\yrot.8.png" />
     <None Remove="Resources\DiceImages\2\yrot.9.png" />
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="Resources\DiceImages\0\stop.0.png" />
     <EmbeddedResource Include="Resources\DiceImages\0\stop.1.png" />
@@ -666,10 +665,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Resources\Strings.resx" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="System.ServiceModel.Duplex" Version="4.5.3" />
     <PackageReference Include="System.ServiceModel.Http" Version="4.5.3" />
@@ -686,19 +681,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources\Strings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
     <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Services\ApiClient\" />
-    <Folder Include="Services\NavigationService\" />
+    <Folder Include="Services\Navigation\" />
     <Folder Include="Views\" />
     <Folder Include="Utils\" />
     <Folder Include="Services\Game\" />

@@ -5,19 +5,25 @@ using Sanet.MagicalYatzy.Services;
 using NSubstitute;
 using Xunit;
 using System.Threading.Tasks;
+using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Resources;
+using Sanet.MagicalYatzy.Services.Game;
+using Sanet.MagicalYatzy.Services.Navigation;
 
 namespace MagicalYatzyTests.ViewModelTests
 {
-    public class MainMenuViewModelsTests:BaseDicePanelViewModelTests
+    public class MainMenuViewModelsTests
     {
         private readonly MainMenuViewModel _sut;
-        private readonly IExternalNavigationService _externalNavigationServiceMock;
+        
+        private readonly IPlayerService _playerServiceMock = Substitute.For<IPlayerService>();
+        private readonly INavigationService _navigationServiceMock = Substitute.For<INavigationService>();
+        private readonly IDicePanel _dicePanelMock = Substitute.For<IDicePanel>();
 
         public MainMenuViewModelsTests()
         {
-            _externalNavigationServiceMock = Substitute.For<IExternalNavigationService>();
-            _sut = new MainMenuViewModel(dicePanelMock, _externalNavigationServiceMock, playerServiceMock);
+            var externalNavigationServiceMock = Substitute.For<IExternalNavigationService>();
+            _sut = new MainMenuViewModel(_dicePanelMock, externalNavigationServiceMock, _playerServiceMock);
         }
 
         [Fact]
@@ -42,12 +48,12 @@ namespace MagicalYatzyTests.ViewModelTests
         [Fact]
         public void CallingNewLocalGameItemTriggersCorrespondingNavigationServiceMethod()
         {
-            _sut.SetNavigationService(navigationServiceMock);
+            _sut.SetNavigationService(_navigationServiceMock);
             _sut.FillMainActions();
 
             var newLocalGameMenuItem = _sut.MenuActions.FirstOrDefault(mm => mm.Label == Strings.NewLocalGameAction);
             newLocalGameMenuItem?.MenuAction?.Execute(null);
-            navigationServiceMock.Received().NavigateToViewModelAsync<LobbyViewModel>();
+            _navigationServiceMock.Received().NavigateToViewModelAsync<LobbyViewModel>();
         }
 
         [Fact]
@@ -63,7 +69,7 @@ namespace MagicalYatzyTests.ViewModelTests
         {
             await _sut.LoadLocalPlayersAsync();
 
-            await playerServiceMock.Received().LoadPlayersAsync();
+            await _playerServiceMock.Received().LoadPlayersAsync();
         }
 
         [Fact]
@@ -71,7 +77,7 @@ namespace MagicalYatzyTests.ViewModelTests
         {
             _sut.AttachHandlers();
 
-            await playerServiceMock.Received().LoadPlayersAsync();
+            await _playerServiceMock.Received().LoadPlayersAsync();
         }
 
         [Fact]
@@ -80,8 +86,8 @@ namespace MagicalYatzyTests.ViewModelTests
             const string testName = "SomeTestName";
             const string testImage = "TestImage.jpg";
             
-            playerServiceMock.CurrentPlayer.Name = testName;
-            playerServiceMock.CurrentPlayer.ProfileImage = testImage;
+            _playerServiceMock.CurrentPlayer.Name = testName;
+            _playerServiceMock.CurrentPlayer.ProfileImage = testImage;
             
             Assert.Equal(testName, _sut.PlayerName);
             Assert.Equal(testImage, _sut.PlayerImage);
@@ -96,7 +102,7 @@ namespace MagicalYatzyTests.ViewModelTests
             _sut.AttachHandlers();
             
             // Act
-            playerServiceMock.PlayersUpdated += Raise.Event();
+            _playerServiceMock.PlayersUpdated += Raise.Event();
             
             // Assert
             Assert.Equal(2,propertyChangedCalledTimes);
@@ -111,7 +117,7 @@ namespace MagicalYatzyTests.ViewModelTests
             _sut.AttachHandlers();
             _sut.DetachHandlers();
             // Act
-            playerServiceMock.PlayersUpdated += Raise.Event();
+            _playerServiceMock.PlayersUpdated += Raise.Event();
             
             // Assert
             Assert.Equal(0,propertyChangedCalledTimes);
@@ -121,13 +127,13 @@ namespace MagicalYatzyTests.ViewModelTests
         public void SelectingPlayerInvokesNavigationToLoginPage()
         {
             //Arrange
-            _sut.SetNavigationService(navigationServiceMock);
+            _sut.SetNavigationService(_navigationServiceMock);
             
             // Act
             _sut.SelectPlayerCommand.Execute(null);
 
             // Assert
-            navigationServiceMock.ReceivedWithAnyArgs().ShowViewModelAsync<LoginViewModel>();
+            _navigationServiceMock.ReceivedWithAnyArgs().ShowViewModelAsync<LoginViewModel>();
         }
     }
 }

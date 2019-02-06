@@ -6,6 +6,7 @@ namespace MagicalYatzyTests.ViewModelTests.Base
     public class BindableBaseTests
     {
         private readonly TestBindableBaseChild _sut = new TestBindableBaseChild();
+        
         [Fact]
         public void SetPropertyShouldFirePropertyChangedEvent()
         {

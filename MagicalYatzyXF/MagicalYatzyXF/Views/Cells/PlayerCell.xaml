@@ -2,17 +2,33 @@
 
 <ViewCell xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Controls"
+             xmlns:loc="clr-namespace:Sanet.MagicalYatzy.XF.MarkupExtensions"
              x:Class="Sanet.MagicalYatzy.XF.Views.Cells.PlayerCell">
-    <StackLayout Orientation="Horizontal">
-        <Image Source="{Binding ProfileImage, Converter={StaticResource ImageNameConverter}}"
-               HeightRequest="50"
-               WidthRequest="50"
-               Aspect="AspectFit">
+    <Grid
+        HeightRequest="60">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="60"/>
+            <ColumnDefinition />
+            <ColumnDefinition Width="60"/>
+        </Grid.ColumnDefinitions>
+        <Image 
+            Source="{Binding Image, Converter={StaticResource ImageNameConverter}}"
+            Style="{StaticResource ProfileImageStyle}">
         </Image>
-        <Label Text="{Binding Name}"
-               VerticalOptions = "Center"
-               Style="{StaticResource CaptionLabelStyle}"
-               >
+        <Label 
+            Grid.Column="1"
+            Text="{Binding Name}"
+            VerticalOptions = "Center"
+            Style="{StaticResource CaptionLabelStyle}"
+            >
         </Label>
-    </StackLayout>
+        <controls:ToolBarButton
+            IsVisible="{Binding CanBeDeleted}"
+            Grid.Column="2"
+            Command="{Binding DeleteCommand}"
+            ImageSource="{Binding DeleteImage, Converter={StaticResource ImageNameConverter}}"
+            Text="{loc:Strings DeletePlayerLabel}"
+            />
+    </Grid>
 </ViewCell>

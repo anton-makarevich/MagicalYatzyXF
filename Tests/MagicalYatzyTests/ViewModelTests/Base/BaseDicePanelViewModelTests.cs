@@ -3,12 +3,12 @@ using Sanet.MagicalYatzy.Models.Game;
 
 namespace MagicalYatzyTests.ViewModelTests.Base
 {
-    public abstract class BaseDicePanelViewModelTests:BaseViewModelTests
+    public abstract class BaseDicePanelViewModelTests
     {
-        protected IDicePanel dicePanelMock;
+        private readonly IDicePanel _dicePanelMock;
         protected BaseDicePanelViewModelTests()
         {
-            dicePanelMock = Substitute.For<IDicePanel>();
+            _dicePanelMock = Substitute.For<IDicePanel>();
         }
     }
 }

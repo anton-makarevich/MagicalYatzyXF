@@ -4,6 +4,7 @@ using Xunit;
 using Sanet.MagicalYatzy.Utils;
 using Sanet.MagicalYatzy.Extensions;
 using Sanet.MagicalYatzy.Models.Game.Magical;
+using Sanet.MagicalYatzy.Resources;
 
 namespace MagicalYatzyTests.ModelTests.Game
 {
@@ -109,6 +110,19 @@ namespace MagicalYatzyTests.ModelTests.Game
             var result = _sut.GetResultForScore(score);
             Assert.NotNull(result);
             Assert.Equal(score, result.ScoreType);
+        }
+        
+        [Fact]
+        public void AiPlayerHasBotName()
+        {
+            var sut = new Player(PlayerType.AI);
+            Assert.Contains(Strings.BotNameDefault, sut.Name);
+        }
+        
+        [Fact]
+        public void LocalPlayerHasPlayerName()
+        {
+            Assert.Contains(Strings.PlayerNameDefault, _sut.Name);
         }
     }
 }

@@ -1,24 +1,23 @@
 ﻿using NSubstitute;
 using Sanet.MagicalYatzy.Services.Game;
-using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using Xunit;
 using System;
 using System.Threading.Tasks;
+using Sanet.MagicalYatzy.Services.Navigation;
 
 namespace MagicalYatzyTests.ViewModelTests.Base
 {
     public class BaseViewModelTests
     {
-        protected IPlayerService playerServiceMock;
-        protected INavigationService navigationServiceMock;
+        private readonly INavigationService _navigationServiceMock;
 
-        private SimpleTestViewModel _sut;
+        private readonly SimpleTestViewModel _sut;
 
         public BaseViewModelTests()
         {
-            playerServiceMock = Substitute.For<IPlayerService>();
-            navigationServiceMock = Substitute.For<INavigationService>();
+            Substitute.For<IPlayerService>();
+            _navigationServiceMock = Substitute.For<INavigationService>();
 
             _sut = new SimpleTestViewModel();
         }
@@ -27,7 +26,7 @@ namespace MagicalYatzyTests.ViewModelTests.Base
         public void IsBusyShouldBeFiredWhenValueIsChanged()
         {
             // Arrange
-            var isBusyNewValue = true;
+            const bool isBusyNewValue = true;
             var isPropertyFired = false;
             var isPropertyNameCorrect = false;
             var isPropertyValueCorrect = false;
@@ -73,26 +72,89 @@ namespace MagicalYatzyTests.ViewModelTests.Base
 
 
         [Fact]
-        public void NavgationServiceShouldBeSet()
+        public void NavigationServiceIsSet()
         {
-            _sut.SetNavigationService(navigationServiceMock);
+            _sut.SetNavigationService(_navigationServiceMock);
             Assert.NotNull(_sut.NavigationService);
         }
 
         [Fact]
         public async Task GoBackTriggersNavigationServiceNavigateBack()
         {
-            _sut.SetNavigationService(navigationServiceMock);
+            _sut.SetNavigationService(_navigationServiceMock);
             _sut.BackCommand.Execute(null);
-            await navigationServiceMock.Received().NavigateBackAsync();
+            await _navigationServiceMock.Received().NavigateBackAsync();
+        }
+        
+        [Fact]
+        public async Task CloseTriggersNavigationServiceNavigateBack()
+        {
+            _sut.SetNavigationService(_navigationServiceMock);
+            await _sut.CloseAsync();
+            await _navigationServiceMock.Received().CloseAsync();
         }
 
         [Fact]
-        public void ShouldThrowArgumentNullExceptionIfNavigationServiceIsNotSet()
+        public void ThrowsArgumentNullExceptionIfNavigationServiceIsNotSet()
         {
-            Assert.Throws<ArgumentNullException>(() => { var t = _sut.NavigationService; });
+            Assert.Throws<ArgumentNullException>(() => { var _ = _sut.NavigationService; });
         }
 
-        private class SimpleTestViewModel : BaseViewModel { }
+        [Fact]
+        public async Task InvokesOnResultIfResultIsExpectedAndResetsResultExpectation()
+        {
+            var result = new ResultStub();
+            var getResultCount = 0;
+            _sut.OnResult += (sender, o) =>
+            {
+                getResultCount++;
+                Assert.Equal(result, o);
+            };
+            _sut.SetNavigationService(_navigationServiceMock);
+            _sut.ExpectsResult = true;
+
+            await _sut.CloseAsync(result);
+            Assert.Equal(1,getResultCount);
+            Assert.False(_sut.ExpectsResult);
+        }
+        
+        [Fact]
+        public async Task DoesNotInvokeOnResultIfResultIsNotExpected()
+        {
+            var result = new ResultStub();
+            var getResultCount = 0;
+            _sut.OnResult += (sender, o) =>
+            {
+                getResultCount++;
+                Assert.Equal(result, o);
+            };
+            _sut.SetNavigationService(_navigationServiceMock);
+
+            await _sut.CloseAsync(result);
+            Assert.Equal(0,getResultCount);
+        }
+
+        [Fact]
+        public void HasNavigationServiceIfItIsPassedInConstructor()
+        {
+            var sut = new SimpleTestViewModel(_navigationServiceMock);
+            
+            Assert.NotNull(sut.NavigationService);
+        }
+
+        private class SimpleTestViewModel : BaseViewModel
+        {
+            public SimpleTestViewModel()
+            {
+            }
+
+            public SimpleTestViewModel(INavigationService navigationService) : base(navigationService)
+            {
+            }
+        }
+        
+        private class ResultStub
+        {
+        }
     }
 }

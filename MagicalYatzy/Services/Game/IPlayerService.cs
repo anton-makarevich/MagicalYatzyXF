@@ -11,9 +11,9 @@ namespace Sanet.MagicalYatzy.Services.Game
 
         IPlayer CurrentPlayer { get; }
 
-        Task<bool> LoginToFacebookAsync();
+        Task<IPlayer> LoginToFacebookAsync();
 
-        Task<bool> LoginAsync(string newUsername, string newPassword);
+        Task<IPlayer> LoginAsync(string newUsername, string newPassword);
 
         Task LoadPlayersAsync();
 
