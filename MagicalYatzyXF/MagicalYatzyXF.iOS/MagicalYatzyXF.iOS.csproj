@@ -198,6 +198,10 @@
     <ImageAsset Include="Assets.xcassets\BotPlayer.imageset\BotPlayer%403x.png">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AddPlayer.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\AddPlayer.imageset\AddPlayer%403x.png" />
+    <ImageAsset Include="Assets.xcassets\AddPlayer.imageset\AddPlayer%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AddPlayer.imageset\AddPlayer.png" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -246,6 +250,9 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\ItunesArtwork@2x.png">
       <Visible>false</Visible>
     </ImageAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets.xcassets\AddPlayer.imageset\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

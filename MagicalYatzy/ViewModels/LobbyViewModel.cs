@@ -29,6 +29,8 @@ namespace Sanet.MagicalYatzy.ViewModels
         public string RulesTitle => Strings.RulesLabel.ToUpper();
         
         public string AddBotImage => "AddBot.png";
+        
+        public string AddPlayerImage => "AddPlayer.png";
         public ObservableCollection<PlayerViewModel> Players { get; } = new ObservableCollection<PlayerViewModel>();
         public ICommand AddBotCommand => new SimpleCommand(() =>
         {
@@ -49,13 +51,14 @@ namespace Sanet.MagicalYatzy.ViewModels
             if (!CanAddHuman)
                 return;
             var player = await NavigationService.ShowViewModelForResultAsync<LoginViewModel,IPlayer>();
-            AddPlayer(new PlayerViewModel(player));
+            if (player != null)
+                AddPlayer(new PlayerViewModel(player));
         });
 
         public bool CanAddHuman
         {
             get => _canAddHuman;
-            set => SetProperty(ref _canAddHuman, value);
+            private set => SetProperty(ref _canAddHuman, value);
         }
 
         private void AddDefaultPlayer()

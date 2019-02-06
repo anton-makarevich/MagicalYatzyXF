@@ -146,7 +146,7 @@ namespace Sanet.MagicalYatzy.XF.Services
             return ShowViewModelAsync(viewModel);
         }
 
-        public Task<TResult> ShowViewModelForResultAsync<T, TResult>(T viewModel) 
+        public async Task<TResult> ShowViewModelForResultAsync<T, TResult>(T viewModel) 
             where T : BaseViewModel 
             where TResult : class
         {
@@ -161,8 +161,9 @@ namespace Sanet.MagicalYatzy.XF.Services
                 taskCompletionSource.TrySetResult(result);
             }
             viewModel.OnResult+= OnViewModelOnOnResult;
+            await OpenViewModelAsync(viewModel, true);
 
-            return taskCompletionSource.Task;
+            return await taskCompletionSource.Task;
         }
         
         public async Task<TResult> ShowViewModelForResultAsync<T, TResult>() 

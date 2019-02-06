@@ -102,6 +102,12 @@ namespace MagicalYatzyTests.ViewModelTests
         {
             Assert.Equal("AddBot.png", _sut.AddBotImage);
         }
+        
+        [Fact]
+        public void AddPlayerImageHasCorrectValue()
+        {
+            Assert.Equal("AddPlayer.png", _sut.AddPlayerImage);
+        }
 
         [Fact]
         public void AddBotCommandAddsNewPlayer()
@@ -210,7 +216,22 @@ namespace MagicalYatzyTests.ViewModelTests
             // Assert
             Assert.Single(_sut.Players);
         }
-        
+
+        [Fact]
+        public void AddHumanCommandDoesNotAddPlayerIfnullIsReturned()
+        {
+            // Arrange
+            _navigationService.ShowViewModelForResultAsync<LoginViewModel, IPlayer>()
+                .Returns(Task.FromResult<IPlayer>(null));
+            _sut.SetNavigationService(_navigationService);
+
+            // Act
+            _sut.AddHumanCommand.Execute(null);
+
+            // Assert
+            Assert.Empty(_sut.Players);
+        }
+
         [Fact]
         public void ItsNotPossibleToAddHumanIfThereAreAlreadyFourPlayers()
         {

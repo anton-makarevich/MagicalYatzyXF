@@ -80,6 +80,9 @@
     <BundleResource Include="..\MagicalYatzyXF.UWP\Assets\BotPlayer.png">
       <Link>Resources/BotPlayer.png</Link>
     </BundleResource>
+    <BundleResource Include="..\MagicalYatzyXF.UWP\Assets\AddPlayer.png">
+      <Link>Resources\AddPlayer.png</Link>
+    </BundleResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />

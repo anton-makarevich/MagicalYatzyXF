@@ -167,6 +167,7 @@
     <Content Include="Assets\close.png" />
     <Content Include="Assets\backarrow.png" />
     <Content Include="Assets\AddBot.png" />
+    <Content Include="Assets\AddPlayer.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

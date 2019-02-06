@@ -27,6 +27,11 @@
         Orientation="Horizontal"
         HorizontalOptions="End">
         <controls:ToolBarButton
+            IsVisible="{Binding CanAddHuman}"
+            Command="{Binding AddHumanCommand}"
+            ImageSource="{Binding AddPlayerImage, Converter={StaticResource ImageNameConverter}}" 
+            Text="{loc:Strings AddPlayerLabel}"/>
+        <controls:ToolBarButton
             IsVisible="{Binding CanAddBot}"
             Command="{Binding AddBotCommand}"
             ImageSource="{Binding AddBotImage, Converter={StaticResource ImageNameConverter}}" 
