@@ -57,4 +57,11 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Page Include="Views\Fragments\RulesFragment.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </Page>
+  </ItemGroup>
+
 </Project>

@@ -18,10 +18,12 @@ namespace Sanet.MagicalYatzy.ViewModels
         private readonly IPlayerService _playerService;
         private bool _canAddBot = true;
         private bool _canAddHuman = true;
+        private IRulesService _rulesService;
 
-        public LobbyViewModel(IDicePanel dicePanel, IPlayerService playerService) : base(dicePanel)
+        public LobbyViewModel(IDicePanel dicePanel, IPlayerService playerService, IRulesService rulesService) : base(dicePanel)
         {
             _playerService = playerService;
+            _rulesService = rulesService;
         }
 
         public string PlayersTitle => Strings.PlayersLabel.ToUpper();
@@ -60,6 +62,8 @@ namespace Sanet.MagicalYatzy.ViewModels
             get => _canAddHuman;
             private set => SetProperty(ref _canAddHuman, value);
         }
+
+        public ObservableCollection<RuleViewModel> Rules { get; } = new ObservableCollection<RuleViewModel>();
 
         private void AddDefaultPlayer()
         {
@@ -104,6 +108,15 @@ namespace Sanet.MagicalYatzy.ViewModels
         private void CheckCanAddPlayers()
         {
             CanAddBot = CanAddHuman = Players.Count < MaxPlayers;
+        }
+
+        public void LoadRules()
+        {
+            var rules = _rulesService.GetAllRules().Select(r=>new RuleViewModel());
+            foreach (var rule in rules)
+            {
+                Rules.Add(rule);
+            }
         }
     }
 }

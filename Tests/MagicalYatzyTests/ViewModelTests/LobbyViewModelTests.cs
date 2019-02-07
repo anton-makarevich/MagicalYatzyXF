@@ -16,12 +16,13 @@ namespace MagicalYatzyTests.ViewModelTests
         private readonly LobbyViewModel _sut;
         private readonly IPlayerService _playerService;
         private readonly INavigationService _navigationService = Substitute.For<INavigationService>();
+        private readonly IRulesService _rulesService = Substitute.For<IRulesService>();
 
         public LobbyViewModelTests()
         {
             _playerService = Substitute.For<IPlayerService>();
             var dicePanelMock = Substitute.For<IDicePanel>();
-            _sut = new LobbyViewModel(dicePanelMock, _playerService);
+            _sut = new LobbyViewModel(dicePanelMock, _playerService, _rulesService);
         }
 
         [Fact]
@@ -218,7 +219,7 @@ namespace MagicalYatzyTests.ViewModelTests
         }
 
         [Fact]
-        public void AddHumanCommandDoesNotAddPlayerIfnullIsReturned()
+        public void AddHumanCommandDoesNotAddPlayerIfNullIsReturned()
         {
             // Arrange
             _navigationService.ShowViewModelForResultAsync<LoginViewModel, IPlayer>()
@@ -291,6 +292,16 @@ namespace MagicalYatzyTests.ViewModelTests
             Assert.True(_sut.CanAddHuman);
             
             Assert.Equal(2,addHumanChangedCalled);
+        }
+
+        [Fact]
+        public void LoadRulesLoadsRules()
+        {
+            _rulesService.GetAllRules().Returns(new []{Rules.krBaby, Rules.krMagic});
+            
+            _sut.LoadRules();
+            
+            Assert.NotEmpty(_sut.Rules);
         }
     }
 }
