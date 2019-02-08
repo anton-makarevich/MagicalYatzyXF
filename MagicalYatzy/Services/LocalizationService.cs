@@ -1,24 +1,24 @@
 ﻿using Sanet.MagicalYatzy.Extensions;
+using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Resources;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
+using System.Reflection;
+using System.Resources;
 
 namespace Sanet.MagicalYatzy.Services
 {
-    public enum LanguageCode { Default, EnUs, RuRu, };
-
     public class LocalizationService : ILocalizationService
     {
+        private const string ResourcePath = "Sanet.MagicalYatzy.Resources.Strings";
+        private const string KeyIsNull = "KeyIsNull";
+
+        private readonly ResourceManager _resourceManager;
+
         public LocalizationService()
         {
-            SetSystemCulture(GetCurrentCultureInfo());
-        }
+            SetSystemCulture(LanguageCode.Default);
 
-        public LanguageCode GetCurrentCultureInfo()
-        {
-            return LanguageCode.Default;
+            _resourceManager = new ResourceManager(ResourcePath, GetType().GetTypeInfo().Assembly);
         }
 
         public LanguageCode Language { get; private set; } = LanguageCode.Default;
@@ -26,7 +26,7 @@ namespace Sanet.MagicalYatzy.Services
         private CultureInfo _systemCulture;
         public CultureInfo SystemCulture
         {
-            get { return _systemCulture; }
+            get => _systemCulture;
             private set
             {
                 _systemCulture = value;
@@ -43,6 +43,14 @@ namespace Sanet.MagicalYatzy.Services
         public void SetSystemCulture(CultureInfo cultureInfo)
         {
             SetSystemCulture(cultureInfo.ToLanguageCode());
+        }
+
+        public string GetLocalizedString(string key)
+        {
+            if (string.IsNullOrEmpty(key))
+                return KeyIsNull;
+
+            return _resourceManager.GetString(key, SystemCulture) ?? key;
         }
     }
 }

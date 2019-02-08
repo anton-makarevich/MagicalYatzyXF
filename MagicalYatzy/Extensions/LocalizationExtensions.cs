@@ -1,15 +1,17 @@
-﻿using Sanet.MagicalYatzy.Services;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
+﻿using System.Globalization;
+using Sanet.MagicalYatzy.Models;
 
 namespace Sanet.MagicalYatzy.Extensions
 {
     public static class LocalizationExtensions
     {
-        public static LanguageCode ToLanguageCode(this CultureInfo info)
+        public static LanguageCode ToLanguageCode(this CultureInfo cultureInfo)
         {
+            switch (cultureInfo.Name.ToLower())
+            {
+                case "ru-ru":
+                    return LanguageCode.RuRu;
+            }
             return LanguageCode.Default;
         }
 

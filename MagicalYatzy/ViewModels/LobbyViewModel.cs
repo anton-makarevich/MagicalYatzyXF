@@ -6,6 +6,7 @@ using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using Sanet.MagicalYatzy.Resources;
+using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 
@@ -19,11 +20,16 @@ namespace Sanet.MagicalYatzy.ViewModels
         private bool _canAddBot = true;
         private bool _canAddHuman = true;
         private IRulesService _rulesService;
+        private readonly ILocalizationService _localizationService;
 
-        public LobbyViewModel(IDicePanel dicePanel, IPlayerService playerService, IRulesService rulesService) : base(dicePanel)
+        public LobbyViewModel(IDicePanel dicePanel, 
+            IPlayerService playerService, 
+            IRulesService rulesService,
+            ILocalizationService localizationService) : base(dicePanel)
         {
             _playerService = playerService;
             _rulesService = rulesService;
+            _localizationService = localizationService;
         }
 
         public string PlayersTitle => Strings.PlayersLabel.ToUpper();
@@ -112,7 +118,7 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         public void LoadRules()
         {
-            var rules = _rulesService.GetAllRules().Select(r=>new RuleViewModel());
+            var rules = _rulesService.GetAllRules().Select(r=>new RuleViewModel(r, _rulesService, _localizationService));
             foreach (var rule in rules)
             {
                 Rules.Add(rule);

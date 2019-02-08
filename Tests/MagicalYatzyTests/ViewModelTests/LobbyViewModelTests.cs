@@ -5,6 +5,7 @@ using Sanet.MagicalYatzy.ViewModels;
 using NSubstitute;
 using Xunit;
 using Sanet.MagicalYatzy.Resources;
+using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Services.Navigation;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
@@ -17,12 +18,13 @@ namespace MagicalYatzyTests.ViewModelTests
         private readonly IPlayerService _playerService;
         private readonly INavigationService _navigationService = Substitute.For<INavigationService>();
         private readonly IRulesService _rulesService = Substitute.For<IRulesService>();
+        private readonly ILocalizationService _localizationService = Substitute.For<ILocalizationService>();
 
         public LobbyViewModelTests()
         {
             _playerService = Substitute.For<IPlayerService>();
             var dicePanelMock = Substitute.For<IDicePanel>();
-            _sut = new LobbyViewModel(dicePanelMock, _playerService, _rulesService);
+            _sut = new LobbyViewModel(dicePanelMock, _playerService, _rulesService, _localizationService);
         }
 
         [Fact]
