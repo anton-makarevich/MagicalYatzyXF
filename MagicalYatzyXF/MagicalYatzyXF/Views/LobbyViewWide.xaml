@@ -28,6 +28,7 @@
                 <Label
                     Style="{StaticResource CaptionLabelStyle}"
                     Text="{Binding RulesTitle}"/>
+                <fragments:RulesFragment/>
             </StackLayout>
         </controls:AdaptiveStackPanel>
     </Grid>

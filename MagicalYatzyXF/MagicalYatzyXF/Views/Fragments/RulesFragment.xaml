@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<controls:BindableStackLayout
+<ListView
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     xmlns:cells="clr-namespace:Sanet.MagicalYatzy.XF.Views.Cells"
-    xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Controls"
-    xmlns:loc="clr-namespace:Sanet.MagicalYatzy.XF.MarkupExtensions"
     x:Class="Sanet.MagicalYatzy.XF.Views.Fragments.RulesFragment"
     Margin="5,10"
+    SeparatorVisibility="None"
+    RowHeight="80"
+    ItemSelected="RuleSelected"
+    VerticalOptions = "Start"
     HorizontalOptions="Fill"
     x:Name="PlayersList"
     ItemsSource="{Binding Rules}"
     BackgroundColor = "Transparent">
-    <controls:BindableStackLayout.ItemTemplate>
+    <ListView.ItemTemplate>
         <DataTemplate>
-            <cells:PlayerCell />
+            <cells:RuleCell />
         </DataTemplate>
-    </controls:BindableStackLayout.ItemTemplate>
-</controls:BindableStackLayout>
+    </ListView.ItemTemplate>
+</ListView>

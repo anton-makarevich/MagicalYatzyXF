@@ -31,7 +31,7 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
             const string expectedName = "Localized Name";
 
             _localizationService.GetLocalizedString(TestRule.ToString()).Returns(expectedName);
-            var name = _sut.LocalizedName;
+            var name = _sut.Name;
             
             Assert.Equal(expectedName.ToUpper(), name);
         }
@@ -42,7 +42,7 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
             const string expectedDescription = "Localized Description";
             
             _localizationService.GetLocalizedString(TestRule.ToString()+ "Short").Returns(expectedDescription);
-            var shortDescription = _sut.LocalizedShortDescription;
+            var shortDescription = _sut.ShortDescription;
             
             Assert.Equal(expectedDescription, shortDescription);
         }

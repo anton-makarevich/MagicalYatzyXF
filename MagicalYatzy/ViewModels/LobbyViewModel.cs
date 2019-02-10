@@ -82,6 +82,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             base.AttachHandlers();
             AddDefaultPlayer();
             CheckCanAddPlayers();
+            LoadRules();
         }
 
         internal void AddPlayer(PlayerViewModel playerViewModel)
@@ -118,6 +119,8 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         public void LoadRules()
         {
+            if (Rules.Any())
+                return;
             var rules = _rulesService.GetAllRules().Select(r=>new RuleViewModel(r, _rulesService, _localizationService));
             foreach (var rule in rules)
             {

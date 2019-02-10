@@ -19,11 +19,11 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
             Rule = rule;
         }
 
-        public Rules Rule { get;}
+        public Rules Rule { get; }
 
-        public string LocalizedName => _localizationService.GetLocalizedString(Rule.ToString()).ToUpper();
+        public string Name => _localizationService.GetLocalizedString(Rule.ToString()).ToUpper();
 
-        public string LocalizedShortDescription => 
+        public string ShortDescription => 
             _localizationService.GetLocalizedString(Rule.ToString() + "Short");
     }
 }

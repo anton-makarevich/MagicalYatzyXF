@@ -305,5 +305,26 @@ namespace MagicalYatzyTests.ViewModelTests
             
             Assert.NotEmpty(_sut.Rules);
         }
+
+        [Fact]
+        public void RulesAreLoadedOnPageAppear()
+        {
+            _rulesService.GetAllRules().Returns(new[] { Rules.krBaby, Rules.krMagic });
+
+            _sut.AttachHandlers();
+
+            Assert.NotEmpty(_sut.Rules);
+        }
+
+        [Fact]
+        public void RulesAreLoadedOnlyOnce()
+        {
+            _rulesService.GetAllRules().Returns(new[] { Rules.krBaby, Rules.krMagic });
+
+            _sut.LoadRules();
+            _sut.LoadRules();
+
+            Assert.Equal(2, _sut.Rules.Count);
+        }
     }
 }

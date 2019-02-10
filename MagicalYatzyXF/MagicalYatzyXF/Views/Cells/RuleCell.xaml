@@ -1,13 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <ViewCell
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="Sanet.MagicalYatzy.XF.Views.Cells.MainMenuCell">
-    <Grid Padding="10,15,0,0" BackgroundColor="Transparent">
-        <Grid.GestureRecognizers>
-            <TapGestureRecognizer Command="{Binding MenuAction}"/>
-        </Grid.GestureRecognizers>
-
+    x:Class="Sanet.MagicalYatzy.XF.Views.Cells.RuleCell">
+    <Grid Padding="10,15" BackgroundColor="Transparent">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="60" />
             <ColumnDefinition/>
@@ -18,15 +14,12 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         
-        <Image Source="{Binding Image, Converter={StaticResource ImageNameConverter}}"
-               Grid.RowSpan="2"
-               Aspect="AspectFit" />
-        <Label Text="{Binding Label, 
+        <Label Text="{Binding Name, 
                Converter = {StaticResource StringUppercasedConverter}}"
                Grid.Row="0" Grid.Column="1" 
                Style="{StaticResource CaptionLabelStyle}"
-               />
-        <Label Text="{Binding Description}" Grid.Column="1" Grid.Row="1" 
+        />
+        <Label Text="{Binding ShortDescription}" Grid.Column="1" Grid.Row="1" 
                Style="{StaticResource DescriptionLabelStyle}" />
 
     </Grid>

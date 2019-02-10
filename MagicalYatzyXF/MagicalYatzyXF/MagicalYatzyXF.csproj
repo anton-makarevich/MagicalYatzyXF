@@ -22,6 +22,7 @@
     <Compile Update="Views\Cells\PlayerCell.xaml.cs">
       <DependentUpon>PlayerCell.xaml</DependentUpon>
     </Compile>
+    <Compile Remove="Views\LobbyViewNarrow.xaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <!-- https://bugzilla.xamarin.com/show_bug.cgi?id=55591 -->
@@ -49,16 +50,24 @@
       <DependentUpon>MainMenuCell.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
-
+  <ItemGroup>
+    <EmbeddedResource Include="Views\LobbyViewNarrow.xaml.cs" Condition=" '$(EnableDefaultCompileItems)' == 'true' ">
+      <DependentUpon>Views\LobbyViewNarrow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Views\Cells\PlayerCell.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\Fragments\RulesFragment.xaml">
+      <Generator></Generator>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
-    <Page Include="Views\Fragments\RulesFragment.xaml">
+    <Page Include="Views\Cells\RuleCell.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
     </Page>

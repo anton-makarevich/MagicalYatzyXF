@@ -1,4 +1,5 @@
 using Xamarin.Forms.Xaml;
+using Xamarin.Forms;
 
 namespace Sanet.MagicalYatzy.XF.Views.Fragments
 {
@@ -8,6 +9,11 @@ namespace Sanet.MagicalYatzy.XF.Views.Fragments
         public RulesFragment()
         {
             InitializeComponent();
+        }
+
+        public void RuleSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+
         }
     }
 }
