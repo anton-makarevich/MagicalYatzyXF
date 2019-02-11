@@ -10,10 +10,5 @@ namespace Sanet.MagicalYatzy.XF.Views.Fragments
         {
             InitializeComponent();
         }
-
-        public void RuleSelected(object sender, SelectedItemChangedEventArgs e)
-        {
-
-        }
     }
 }
