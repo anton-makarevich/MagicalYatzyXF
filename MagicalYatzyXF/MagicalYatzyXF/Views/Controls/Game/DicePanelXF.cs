@@ -1,7 +1,7 @@
 ﻿using Sanet.MagicalYatzy.Models.Game;
 using Xamarin.Forms;
 
-namespace Sanet.MagicalYatzy.XF.Controls.Game
+namespace Sanet.MagicalYatzy.XF.Views.Controls.Game
 {
     class DicePanelXF: AbsoluteLayout
     {

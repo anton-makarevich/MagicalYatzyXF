@@ -5,7 +5,7 @@
     xmlns:base="clr-namespace:Sanet.MagicalYatzy.XF.Views.Base"
     xmlns:fragments="clr-namespace:Sanet.MagicalYatzy.XF.Views.Fragments"
     xmlns:vm="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
-    xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Controls"
+    xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls"
     x:Class="Sanet.MagicalYatzy.XF.Views.LobbyViewWide"
     x:TypeArguments="vm:LobbyViewModel">
     <Grid>

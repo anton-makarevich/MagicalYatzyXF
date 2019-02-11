@@ -70,6 +70,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         }
 
         public ObservableCollection<RuleViewModel> Rules { get; } = new ObservableCollection<RuleViewModel>();
+        public RuleViewModel SelectedRule => Rules.FirstOrDefault(r => r.IsSelected);
 
         private void AddDefaultPlayer()
         {
@@ -83,6 +84,17 @@ namespace Sanet.MagicalYatzy.ViewModels
             AddDefaultPlayer();
             CheckCanAddPlayers();
             LoadRules();
+        }
+
+        public override void DetachHandlers()
+        {
+            base.DetachHandlers();
+
+            foreach (var ruleViewModel in Rules)
+            {
+                ruleViewModel.RuleSelected -= OnRuleSelected;
+            }
+            Rules.Clear();
         }
 
         internal void AddPlayer(PlayerViewModel playerViewModel)
@@ -124,8 +136,28 @@ namespace Sanet.MagicalYatzy.ViewModels
             var rules = _rulesService.GetAllRules().Select(r=>new RuleViewModel(r, _rulesService, _localizationService));
             foreach (var rule in rules)
             {
+                rule.RuleSelected += OnRuleSelected;
                 Rules.Add(rule);
             }
+
+            SelectRule(Models.Game.Rules.krSimple);
+        }
+
+        private void OnRuleSelected(object sender, EventArgs e)
+        {
+            SelectRule(((RuleViewModel)sender).Rule);
+        }
+
+        private void SelectRule(Rules rule)
+        {
+            foreach (var ruleViewModel in Rules)
+            {
+                ruleViewModel.IsSelected = false;
+            }
+
+            var ruleToSelect = Rules.FirstOrDefault(r => r.Rule == rule);
+            if (ruleToSelect != null)
+                ruleToSelect.IsSelected = true;
         }
     }
 }

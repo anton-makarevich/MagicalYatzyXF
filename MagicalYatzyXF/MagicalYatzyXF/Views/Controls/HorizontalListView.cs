@@ -1,11 +1,11 @@
-﻿using Sanet.MagicalYatzy.XF.Extensions;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Linq;
+using Sanet.MagicalYatzy.XF.Extensions;
 using Xamarin.Forms;
 
-namespace Sanet.MagicalYatzy.XF.Controls
+namespace Sanet.MagicalYatzy.XF.Views.Controls
 {
     public class HorizontalListView : ScrollView
     {

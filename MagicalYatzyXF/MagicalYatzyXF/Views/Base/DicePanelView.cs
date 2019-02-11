@@ -1,5 +1,5 @@
 ﻿using Sanet.MagicalYatzy.ViewModels.Base;
-using Sanet.MagicalYatzy.XF.Controls.Game;
+using Sanet.MagicalYatzy.XF.Views.Controls.Game;
 using Xamarin.Forms;
 
 namespace Sanet.MagicalYatzy.XF.Views.Base

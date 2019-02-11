@@ -2,25 +2,36 @@
 <ViewCell
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls;assembly=MagicalYatzyXF"
     x:Class="Sanet.MagicalYatzy.XF.Views.Cells.RuleCell">
-    <Grid Padding="10,15" BackgroundColor="Transparent">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="60" />
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        
-        <Label Text="{Binding Name, 
-               Converter = {StaticResource StringUppercasedConverter}}"
-               Grid.Row="0" Grid.Column="1" 
-               Style="{StaticResource CaptionLabelStyle}"
-        />
-        <Label Text="{Binding ShortDescription}" Grid.Column="1" Grid.Row="1" 
-               Style="{StaticResource DescriptionLabelStyle}" />
-
-    </Grid>
+    <controls:TappableContentView
+        BackgroundColor="{Binding IsSelected, Converter={StaticResource SelectionColorConverter}}"
+        HorizontalOptions="FillAndExpand"
+        VerticalOptions="FillAndExpand"
+        Command="{Binding SelectRuleCommand}">
+        <Grid 
+            InputTransparent ='{OnPlatform macOS="True", UWP="False"}'
+            Padding="10,15" BackgroundColor="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60" />
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+    
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            <Label Text="{Binding Name, 
+                   Converter = {StaticResource StringUppercasedConverter}}"
+                   InputTransparent ='{OnPlatform macOS="True", UWP="False"}'
+                   Grid.Row="0" Grid.Column="1" 
+                   Style="{StaticResource CaptionLabelStyle}"
+            />
+            <Label Text="{Binding ShortDescription}" Grid.Column="1" Grid.Row="1" 
+                   InputTransparent ='{OnPlatform macOS="True", UWP="False"}'
+                   Style="{StaticResource DescriptionLabelStyle}" />
+    
+        </Grid>
+    </controls:TappableContentView>
 </ViewCell>

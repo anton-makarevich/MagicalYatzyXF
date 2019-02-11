@@ -326,5 +326,39 @@ namespace MagicalYatzyTests.ViewModelTests
 
             Assert.Equal(2, _sut.Rules.Count);
         }
+
+        [Fact]
+        public void DefaultRuleIsSelectedWhenRulesAreLoaded()
+        {
+            _rulesService.GetAllRules().Returns(new[] { Rules.krBaby, Rules.krSimple });
+            _sut.LoadRules();
+
+            Assert.Single(_sut.Rules.Where(r => r.IsSelected));
+            Assert.Equal(Rules.krSimple, _sut.SelectedRule?.Rule);
+        }
+
+        [Fact]
+        public void ClearsRulesOnViewDisappear()
+        {
+            _rulesService.GetAllRules().Returns(new[] { Rules.krBaby, Rules.krSimple });
+            _sut.LoadRules();
+            
+            _sut.DetachHandlers();
+            
+            Assert.Empty(_sut.Rules);
+        }
+        
+        [Fact]
+        public void RuleSelectionChangesSelectedRule()
+        {
+            _rulesService.GetAllRules().Returns(new[] { Rules.krBaby, Rules.krSimple });
+            _sut.LoadRules();
+
+            var babyRule = _sut.Rules.FirstOrDefault(f => f.Rule == Rules.krBaby);
+            babyRule?.SelectRuleCommand?.Execute(null);
+
+            Assert.Single(_sut.Rules.Where(r => r.IsSelected));
+            Assert.Equal(babyRule?.Rule, _sut.SelectedRule?.Rule);
+        }
     }
 }

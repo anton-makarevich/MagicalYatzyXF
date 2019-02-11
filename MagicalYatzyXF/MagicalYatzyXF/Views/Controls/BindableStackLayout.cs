@@ -2,9 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Linq;
+using Sanet.MagicalYatzy.XF.Views.Cells;
 using Xamarin.Forms;
 
-namespace Sanet.MagicalYatzy.XF.Controls
+namespace Sanet.MagicalYatzy.XF.Views.Controls
 {
     public class BindableStackLayout: StackLayout
     {
@@ -100,6 +101,7 @@ namespace Sanet.MagicalYatzy.XF.Controls
             if (viewCell == null) return;
             viewCell.BindingContext = item;
             viewCell.View.BindingContext = item;
+
             Children.Add(viewCell.View);
         }
 

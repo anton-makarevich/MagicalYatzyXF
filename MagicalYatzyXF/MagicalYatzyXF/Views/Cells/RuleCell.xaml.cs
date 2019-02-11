@@ -1,3 +1,4 @@
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace Sanet.MagicalYatzy.XF.Views.Cells

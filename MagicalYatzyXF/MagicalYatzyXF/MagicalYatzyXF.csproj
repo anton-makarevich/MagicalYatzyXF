@@ -42,9 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controls\Game\" />
     <Folder Include="Models\" />
-    <Folder Include="Controls\TabControl\" />
     <Folder Include="Views\Fragments\" />
   </ItemGroup>
 
