@@ -42,7 +42,8 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
 
         private void SelectRule()
         {
-            RuleSelected?.Invoke(this,null);
+            if (!IsSelected)
+                RuleSelected?.Invoke(this,null);
         }
     }
 }

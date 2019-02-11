@@ -67,5 +67,20 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
             
             Assert.Equal(1, ruleSelectedCounter);
         }
+        
+        [Fact]
+        public void SelectFunctionDoesNotInvokeRuleSelectedEventIfAlreadySelected()
+        {
+            var ruleSelectedCounter = 0;
+            _sut.IsSelected = true;
+            _sut.RuleSelected += (s, e) =>
+            {
+                ruleSelectedCounter++;
+            };
+
+            _sut.SelectRuleCommand.Execute(null);
+            
+            Assert.Equal(0, ruleSelectedCounter);
+        }
     }
 }

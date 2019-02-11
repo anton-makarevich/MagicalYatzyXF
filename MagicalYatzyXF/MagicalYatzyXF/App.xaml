@@ -9,7 +9,8 @@
         <ResourceDictionary>
             <converters:ImageNameConverter x:Key="ImageNameConverter"/>
             <converters:StringUppercasedConverter x:Key="StringUppercasedConverter"/>
-            <converters:GridLenthConverter x:Key="GridLenthConverter"/>
+            <converters:GridLengthConverter x:Key="GridLengthConverter"/>
+            <converters:SelectionColorConverter x:Key="SelectionColorConverter"/>
 
             <Color x:Key = "SanetBlueColor">#009CD6</Color>
             

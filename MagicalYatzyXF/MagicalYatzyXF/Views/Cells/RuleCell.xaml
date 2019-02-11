@@ -5,7 +5,7 @@
     xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls;assembly=MagicalYatzyXF"
     x:Class="Sanet.MagicalYatzy.XF.Views.Cells.RuleCell">
     <controls:TappableContentView
-        BackgroundColor="Transparent"
+        BackgroundColor="{Binding IsSelected, Converter={StaticResource SelectionColorConverter}}"
         HorizontalOptions="FillAndExpand"
         VerticalOptions="FillAndExpand"
         Command="{Binding SelectRuleCommand}">
