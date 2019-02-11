@@ -1,8 +1,8 @@
 ﻿using System;
 using AppKit;
 using Foundation;
-using Sanet.MagicalYatzy.XF.Controls;
 using Sanet.MagicalYatzy.XF.Mac.Renderers;
+using Sanet.MagicalYatzy.XF.Views.Controls;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.MacOS;
 

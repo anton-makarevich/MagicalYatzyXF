@@ -1,9 +1,9 @@
-﻿using Sanet.MagicalYatzy.XF.Extensions;
-using System;
+﻿using System;
 using System.Windows.Input;
+using Sanet.MagicalYatzy.XF.Extensions;
 using Xamarin.Forms;
 
-namespace Sanet.MagicalYatzy.XF.Controls
+namespace Sanet.MagicalYatzy.XF.Views.Controls
 {
     public class TappableContentView : ContentView
     {

@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Xamarin.Forms;
 
-namespace Sanet.MagicalYatzy.XF.Controls.TabControl
+namespace Sanet.MagicalYatzy.XF.Views.Controls.TabControl
 {
     public class TabsStrip: ContentView
     {
@@ -22,7 +22,6 @@ namespace Sanet.MagicalYatzy.XF.Controls.TabControl
 
         private readonly TabBarIndicator _indicator;
 
-        private readonly RelativeLayout _mainLayout;
         #endregion
 
         #region Events
@@ -33,8 +32,8 @@ namespace Sanet.MagicalYatzy.XF.Controls.TabControl
 
         public TabsStrip()
         {
-            _mainLayout = new RelativeLayout();
-            Content = _mainLayout;
+            var mainLayout = new RelativeLayout();
+            Content = mainLayout;
 
             // Create tab control
             _buttonStack = new StackLayoutExtended
@@ -70,8 +69,8 @@ namespace Sanet.MagicalYatzy.XF.Controls.TabControl
                 }
             };
 
-            _mainLayout.Children.Add(_tabControl, () => new Rectangle(
-               0, 0, _mainLayout.Width, TabHeight)
+            mainLayout.Children.Add(_tabControl, () => new Rectangle(
+               0, 0, mainLayout.Width, TabHeight)
             );
 
             // Create content control
@@ -83,13 +82,16 @@ namespace Sanet.MagicalYatzy.XF.Controls.TabControl
                 BackgroundColor = Color.Transparent,
             };
 
-            _mainLayout.Children.Add(_contentView, () => new Rectangle(
-               0, TabHeight, _mainLayout.Width, _mainLayout.Height - TabHeight)
+            mainLayout.Children.Add(_contentView, () => new Rectangle(
+               0, TabHeight, mainLayout.Width, mainLayout.Height - TabHeight)
             );
 
             _children.CollectionChanged += (sender, e) => {
-                foreach (TabBarButton tabButton in _buttonStack.Children)
+                foreach (var view in _buttonStack.Children)
+                {
+                    var tabButton = (TabBarButton) view;
                     tabButton.ButtonPressed -= TabButtonPressed;
+                }
 
                 _contentView.Children.Clear();
                 _buttonStack.Children.Clear();
@@ -149,9 +151,13 @@ namespace Sanet.MagicalYatzy.XF.Controls.TabControl
                 var newElementLeft = _buttonStack.Children.ElementAt(idxOfNew).X;
 
                 var animation = new Animation();
-                var existingViewOutAnimation = new Animation((d) => existingChild.View.TranslationX = d,
-                    0, -translation, Easing.CubicInOut, () => {
-                        existingChild.View.IsVisible = false;
+                var existingViewOutAnimation = new Animation((d) =>
+                    {
+                        if (existingChild != null) existingChild.View.TranslationX = d;
+                    },
+                    0, -translation, Easing.CubicInOut, () =>
+                    {
+                        if (existingChild != null) existingChild.View.IsVisible = false;
                         _inTransition = false;
                     });
 

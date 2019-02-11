@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel;
 using Sanet.MagicalYatzy.Models.Game;
-using Xamarin.Forms;
 using Sanet.MagicalYatzy.XF.Extensions;
 using Sanet.MagicalYatzy.XF.Helpers;
-using SkiaSharp.Views.Forms;
 using SkiaSharp;
+using SkiaSharp.Views.Forms;
+using Xamarin.Forms;
 
-namespace Sanet.MagicalYatzy.XF.Controls.Game
+namespace Sanet.MagicalYatzy.XF.Views.Controls.Game
 {
     public class DieImage : ContentView
     {

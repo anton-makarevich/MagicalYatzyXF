@@ -1,7 +1,7 @@
 ﻿using Sanet.MagicalYatzy.XF.Views.Base;
 using Sanet.MagicalYatzy.ViewModels;
 using Xamarin.Forms.Xaml;
-using Sanet.MagicalYatzy.XF.Controls.TabControl;
+using Sanet.MagicalYatzy.XF.Views.Controls.TabControl;
 using Xamarin.Forms;
 using Sanet.MagicalYatzy.XF.Views.Fragments;
 

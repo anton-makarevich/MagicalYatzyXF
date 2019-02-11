@@ -5,7 +5,7 @@
              xmlns:base="clr-namespace:Sanet.MagicalYatzy.XF.Views.Base"
              xmlns:vm="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
              xmlns:loc="clr-namespace:Sanet.MagicalYatzy.XF.MarkupExtensions"
-             xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Controls"
+             xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls"
              x:TypeArguments="vm:LoginViewModel">
     <Grid
         BackgroundColor="Black"
