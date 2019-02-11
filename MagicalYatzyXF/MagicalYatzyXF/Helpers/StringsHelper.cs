@@ -1,30 +1,14 @@
-﻿using Sanet.MagicalYatzy.Models.Game;
-using Sanet.MagicalYatzy.Services;
-using System.Globalization;
-using System.Reflection;
-using System.Resources;
+﻿using Sanet.MagicalYatzy.Services;
 
 namespace Sanet.MagicalYatzy.XF.Helpers
 {
-    public static class StringsHelper
+    public static class StringsHelper //TODO check where we use it?
     {
         public static string Get(string text)
         {
-            if (text == null)
-                return "null string";
+            var localizationService = App.Container.GetInstance<ILocalizationService>();
 
-            var resourcePath = "Sanet.MagicalYatzy.Resources.Strings";
-            ILocalizationService localization = App.Container.GetInstance<ILocalizationService>();
-
-            ResourceManager resourceManager = new ResourceManager(resourcePath, typeof(Die).GetTypeInfo().Assembly);
-            CultureInfo ci = localization.SystemCulture;
-            var resourceString = resourceManager.GetString(text, ci);
-
-            if (resourceString == null)
-            {
-                resourceString = text;
-            }
-            return resourceString;
+            return localizationService.GetLocalizedString(text);
         }
     }
 }

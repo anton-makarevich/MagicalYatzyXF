@@ -10,7 +10,7 @@
     <PackageReference Include="SimpleInjector" Version="4.4.3" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.0" />
     <PackageReference Include="Xam.Plugin.Connectivity" Version="3.2.0" />
-    <PackageReference Include="Xamarin.Forms" Version="3.4.0.1029999" />
+    <PackageReference Include="Xamarin.Forms" Version="3.5.0.129452" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +21,10 @@
     <Compile Remove="Views\LobbyView.cs" />
     <Compile Update="Views\Cells\PlayerCell.xaml.cs">
       <DependentUpon>PlayerCell.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\LobbyViewNarrow.xaml.cs">
+      <DependentUpon>Views/LobbyViewNarrow.xaml</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -49,10 +53,12 @@
       <DependentUpon>MainMenuCell.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Update="Views\Cells\PlayerCell.xaml">
       <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Fragments\RulesFragment.xaml">
       <Generator></Generator>
     </EmbeddedResource>
   </ItemGroup>

@@ -22,6 +22,7 @@ namespace Sanet.MagicalYatzy.XF
             container.RegisterSingleton<IApiClient, LegacyWcfClient>();
             container.RegisterSingleton<IStorageService, LocalJsonStorageService>();
             container.RegisterSingleton<IPlayerService, PlayerService>();
+            container.RegisterSingleton<IRulesService, RulesService>();
 
             // Register misc classes
             container.Register<IDicePanel, DicePanel>();

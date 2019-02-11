@@ -5,6 +5,7 @@ using Sanet.MagicalYatzy.ViewModels;
 using NSubstitute;
 using Xunit;
 using Sanet.MagicalYatzy.Resources;
+using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Services.Navigation;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
@@ -16,12 +17,14 @@ namespace MagicalYatzyTests.ViewModelTests
         private readonly LobbyViewModel _sut;
         private readonly IPlayerService _playerService;
         private readonly INavigationService _navigationService = Substitute.For<INavigationService>();
+        private readonly IRulesService _rulesService = Substitute.For<IRulesService>();
+        private readonly ILocalizationService _localizationService = Substitute.For<ILocalizationService>();
 
         public LobbyViewModelTests()
         {
             _playerService = Substitute.For<IPlayerService>();
             var dicePanelMock = Substitute.For<IDicePanel>();
-            _sut = new LobbyViewModel(dicePanelMock, _playerService);
+            _sut = new LobbyViewModel(dicePanelMock, _playerService, _rulesService, _localizationService);
         }
 
         [Fact]
@@ -218,7 +221,7 @@ namespace MagicalYatzyTests.ViewModelTests
         }
 
         [Fact]
-        public void AddHumanCommandDoesNotAddPlayerIfnullIsReturned()
+        public void AddHumanCommandDoesNotAddPlayerIfNullIsReturned()
         {
             // Arrange
             _navigationService.ShowViewModelForResultAsync<LoginViewModel, IPlayer>()
@@ -291,6 +294,37 @@ namespace MagicalYatzyTests.ViewModelTests
             Assert.True(_sut.CanAddHuman);
             
             Assert.Equal(2,addHumanChangedCalled);
+        }
+
+        [Fact]
+        public void LoadRulesLoadsRules()
+        {
+            _rulesService.GetAllRules().Returns(new []{Rules.krBaby, Rules.krMagic});
+            
+            _sut.LoadRules();
+            
+            Assert.NotEmpty(_sut.Rules);
+        }
+
+        [Fact]
+        public void RulesAreLoadedOnPageAppear()
+        {
+            _rulesService.GetAllRules().Returns(new[] { Rules.krBaby, Rules.krMagic });
+
+            _sut.AttachHandlers();
+
+            Assert.NotEmpty(_sut.Rules);
+        }
+
+        [Fact]
+        public void RulesAreLoadedOnlyOnce()
+        {
+            _rulesService.GetAllRules().Returns(new[] { Rules.krBaby, Rules.krMagic });
+
+            _sut.LoadRules();
+            _sut.LoadRules();
+
+            Assert.Equal(2, _sut.Rules.Count);
         }
     }
 }

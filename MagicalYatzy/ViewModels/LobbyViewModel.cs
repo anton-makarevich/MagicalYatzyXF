@@ -6,6 +6,7 @@ using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using Sanet.MagicalYatzy.Resources;
+using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 
@@ -18,10 +19,17 @@ namespace Sanet.MagicalYatzy.ViewModels
         private readonly IPlayerService _playerService;
         private bool _canAddBot = true;
         private bool _canAddHuman = true;
+        private IRulesService _rulesService;
+        private readonly ILocalizationService _localizationService;
 
-        public LobbyViewModel(IDicePanel dicePanel, IPlayerService playerService) : base(dicePanel)
+        public LobbyViewModel(IDicePanel dicePanel, 
+            IPlayerService playerService, 
+            IRulesService rulesService,
+            ILocalizationService localizationService) : base(dicePanel)
         {
             _playerService = playerService;
+            _rulesService = rulesService;
+            _localizationService = localizationService;
         }
 
         public string PlayersTitle => Strings.PlayersLabel.ToUpper();
@@ -61,6 +69,8 @@ namespace Sanet.MagicalYatzy.ViewModels
             private set => SetProperty(ref _canAddHuman, value);
         }
 
+        public ObservableCollection<RuleViewModel> Rules { get; } = new ObservableCollection<RuleViewModel>();
+
         private void AddDefaultPlayer()
         {
             if (!Players.Any())
@@ -72,6 +82,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             base.AttachHandlers();
             AddDefaultPlayer();
             CheckCanAddPlayers();
+            LoadRules();
         }
 
         internal void AddPlayer(PlayerViewModel playerViewModel)
@@ -104,6 +115,17 @@ namespace Sanet.MagicalYatzy.ViewModels
         private void CheckCanAddPlayers()
         {
             CanAddBot = CanAddHuman = Players.Count < MaxPlayers;
+        }
+
+        public void LoadRules()
+        {
+            if (Rules.Any())
+                return;
+            var rules = _rulesService.GetAllRules().Select(r=>new RuleViewModel(r, _rulesService, _localizationService));
+            foreach (var rule in rules)
+            {
+                Rules.Add(rule);
+            }
         }
     }
 }
