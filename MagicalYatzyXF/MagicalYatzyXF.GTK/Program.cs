@@ -1,14 +1,24 @@
 ﻿using System;
-using Gtk;
+using Sanet.MagicalYatzy.XF;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.GTK;
+using Application = Gtk.Application;
 
 namespace MagicalYatzyXF.GTK
 {
     class MainClass
     {
+        [STAThread]
         public static void Main(string[] args)
         {
             Application.Init();
-            MainWindow win = new MainWindow();
+            Forms.Init();
+            var app = new App();
+            var win = new FormsWindow();
+            
+            win.LoadApplication(app);
+            win.SetApplicationTitle("MagicalYatzyXF.GTK");
+            
             win.Show();
             Application.Run();
         }
