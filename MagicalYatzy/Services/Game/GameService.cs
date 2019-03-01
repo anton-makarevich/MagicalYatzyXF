@@ -5,9 +5,12 @@ namespace Sanet.MagicalYatzy.Services.Game
 {
     public class GameService : IGameService
     {
-        public Task<IGame> CreateNewLocalGameAsync()
+        public async Task<IGame> CreateNewLocalGameAsync(Rules rule)
         {
-            return Task.FromResult(new YatzyGame() as IGame);
+            CurrentLocalGame = await Task.FromResult(new YatzyGame(rule) as IGame);
+            return CurrentLocalGame;
         }
+
+        public IGame CurrentLocalGame { get; private set; }
     }
 }

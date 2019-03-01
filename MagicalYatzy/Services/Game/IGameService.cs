@@ -5,6 +5,7 @@ namespace Sanet.MagicalYatzy.Services.Game
 {
     public interface IGameService
     {
-        Task<IGame> CreateNewLocalGameAsync();
+        Task<IGame> CreateNewLocalGameAsync(Rules rule);
+        IGame CurrentLocalGame { get; }
     }
 }

@@ -19,12 +19,18 @@ namespace MagicalYatzyTests.ViewModelTests
         private readonly INavigationService _navigationService = Substitute.For<INavigationService>();
         private readonly IRulesService _rulesService = Substitute.For<IRulesService>();
         private readonly ILocalizationService _localizationService = Substitute.For<ILocalizationService>();
+        private readonly IGameService _gameService = Substitute.For<IGameService>();
 
         public LobbyViewModelTests()
         {
             _playerService = Substitute.For<IPlayerService>();
             var dicePanelMock = Substitute.For<IDicePanel>();
-            _sut = new LobbyViewModel(dicePanelMock, _playerService, _rulesService, _localizationService);
+            _sut = new LobbyViewModel(
+                dicePanelMock, 
+                _playerService, 
+                _rulesService, 
+                _gameService,
+                _localizationService);
         }
 
         [Fact]
@@ -359,6 +365,90 @@ namespace MagicalYatzyTests.ViewModelTests
 
             Assert.Single(_sut.Rules.Where(r => r.IsSelected));
             Assert.Equal(babyRule?.Rule, _sut.SelectedRule?.Rule);
+        }
+
+        [Fact]
+        public async Task StartNewGameCallsStartNewGameWithSelectedRule()
+        {
+            _rulesService.GetAllRules().Returns(new[] { Rules.krBaby, Rules.krSimple });
+            _sut.LoadRules();
+            _sut.SetNavigationService(_navigationService);
+            var rule = _sut.Rules.First();
+            rule.SelectRuleCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            
+            _sut.StartGameCommand.Execute(null);
+
+            await _gameService.Received().CreateNewLocalGameAsync(rule.Rule);
+        }
+        
+        [Fact]
+        public async Task StartNewGameAddsPlayersToCurrentGame()
+        {
+            _rulesService.GetAllRules().Returns(new[] { Rules.krBaby, Rules.krSimple });
+            _sut.AddBotCommand.Execute(null);
+            var playerStub = new Player();
+            _navigationService.ShowViewModelForResultAsync<LoginViewModel, IPlayer>()
+                .Returns(Task.FromResult<IPlayer>(playerStub));
+            _sut.SetNavigationService(_navigationService);
+            _sut.AddHumanCommand.Execute(null);
+            _sut.LoadRules();
+            var rule = _sut.Rules.First();
+            rule.SelectRuleCommand.Execute(null);
+            
+            var game = new YatzyGame(rule.Rule);
+            _gameService.CreateNewLocalGameAsync(rule.Rule)
+                .Returns(Task.FromResult<IGame>(game));
+            
+            _sut.StartGameCommand.Execute(null);
+
+            await _gameService.Received().CreateNewLocalGameAsync(rule.Rule);
+            
+            Assert.Equal(2,game.NumberOfPlayers);
+            foreach (var playerViewModel in _sut.Players)
+            {
+                Assert.Contains(playerViewModel.Player, game.Players);
+            }
+        }
+        
+        [Fact]
+        public async Task StartNewGameNavigatesToGameViewModel()
+        {
+            _rulesService.GetAllRules().Returns(new[] { Rules.krBaby, Rules.krSimple });
+            _sut.LoadRules();
+            var rule = _sut.Rules.First();
+            rule.SelectRuleCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            _sut.SetNavigationService(_navigationService);
+            
+            _sut.StartGameCommand.Execute(null);
+
+            await _navigationService.Received().NavigateToViewModelAsync<GameViewModel>();
+        }
+        
+        [Fact]
+        public async Task StartNewGameDoesNotNavigateToGameViewModelIfNoPlayersAreAdded()
+        {
+            _rulesService.GetAllRules().Returns(new[] { Rules.krBaby, Rules.krSimple });
+            _sut.LoadRules();
+            var rule = _sut.Rules.First();
+            rule.SelectRuleCommand.Execute(null);
+            _sut.SetNavigationService(_navigationService);
+            
+            _sut.StartGameCommand.Execute(null);
+
+            await _navigationService.DidNotReceive().NavigateToViewModelAsync<GameViewModel>();
+        }
+        
+        [Fact]
+        public async Task StartNewGameDoesNotNavigateToGameViewModelIfRuleIsNotSelected()
+        {
+            _sut.AddBotCommand.Execute(null);
+            _sut.SetNavigationService(_navigationService);
+            
+            _sut.StartGameCommand.Execute(null);
+
+            await _navigationService.DidNotReceive().NavigateToViewModelAsync<GameViewModel>();
         }
     }
 }
