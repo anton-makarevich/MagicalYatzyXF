@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.ViewModels.Base;
@@ -42,6 +43,9 @@ namespace Sanet.MagicalYatzy.ViewModels
         public string AddBotImage => "AddBot.png";
         
         public string AddPlayerImage => "AddPlayer.png";
+
+        public string StartImage => "Start.png";
+        
         public ObservableCollection<PlayerViewModel> Players { get; } = new ObservableCollection<PlayerViewModel>();
         public ICommand AddBotCommand => new SimpleCommand(() =>
         {

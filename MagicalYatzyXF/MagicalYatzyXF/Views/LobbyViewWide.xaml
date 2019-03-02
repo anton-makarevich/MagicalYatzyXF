@@ -6,12 +6,15 @@
     xmlns:fragments="clr-namespace:Sanet.MagicalYatzy.XF.Views.Fragments"
     xmlns:vm="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
     xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls"
+    xmlns:loc="clr-namespace:Sanet.MagicalYatzy.XF.MarkupExtensions;assembly=MagicalYatzyXF"
     x:Class="Sanet.MagicalYatzy.XF.Views.LobbyViewWide"
     x:TypeArguments="vm:LobbyViewModel">
-    <Grid>
+    <Grid
+        Margin="0,0,0,5">
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <controls:AdaptiveStackPanel
             Grid.Row="1"
@@ -31,5 +34,11 @@
                 <fragments:RulesFragment/>
             </StackLayout>
         </controls:AdaptiveStackPanel>
+        <controls:ToolBarButton
+            Grid.Row="2" IsVisible="{Binding CanStartGame}"
+            HorizontalOptions="Center"
+            Command="{Binding StartGameCommand}"
+            ImageSource="{Binding StartImage, Converter={StaticResource ImageNameConverter}}" 
+            Text="{loc:Strings StartGameButton}"/>
     </Grid>
 </base:NavigationBackView>

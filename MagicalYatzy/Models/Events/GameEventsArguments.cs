@@ -25,19 +25,12 @@ namespace Sanet.MagicalYatzy.Models.Events
     public class MoveEventArgs : PlayerEventArgs
     {
         //new move order
-        int _move;
-        public int Move
-        {
-            get
-            {
-                return _move;
-            }
-        }
+        public int Move { get; }
 
         public MoveEventArgs(IPlayer player, int move)
             : base(player)
         {
-            _move = move;
+            Move = move;
         }
     }
     /// <summary>
@@ -46,25 +39,15 @@ namespace Sanet.MagicalYatzy.Models.Events
     public class FixDiceEventArgs : PlayerEventArgs
     {
         //dice with value to fix
-        int _value;
-        public int Value
-        {
-            get
-            {
-                return _value;
-            }
-        }
+        public int Value { get; }
+
         //fix or unfix
-        bool _isFixed;
-        public bool Isfixed
-        {
-            get { return _isFixed; }
-        }
+        public bool Isfixed { get; }
 
         public FixDiceEventArgs(IPlayer player, int value, bool isfixed) : base(player)
         {
-            _value = value;
-            _isFixed = isfixed;
+            Value = value;
+            Isfixed = isfixed;
         }
     }
 
@@ -73,14 +56,12 @@ namespace Sanet.MagicalYatzy.Models.Events
     /// </summary>
     public class ChatMessageEventArgs : EventArgs
     {
-        private readonly ChatMessage _message;
-
-        public ChatMessage Message { get { return _message; } }
+        public ChatMessage Message { get; }
 
 
         public ChatMessageEventArgs(ChatMessage message)
         {
-            _message = message;
+            Message = message;
         }
     }
 
@@ -111,83 +92,12 @@ namespace Sanet.MagicalYatzy.Models.Events
     public class ResultEventArgs : PlayerEventArgs
     {
         //new move order
-        IRollResult _result;
-        public IRollResult Result
-        {
-            get
-            {
-                return _result;
-            }
-        }
+        public IRollResult Result { get; }
 
         public ResultEventArgs(IPlayer player, IRollResult result)
             : base(player)
         {
-            _result = result;
-        }
-    }
-
-    public class StringEventArgs : EventArgs
-    {
-        private readonly string _str;
-        public string Str { get { return _str; } }
-
-        public StringEventArgs(string s)
-        {
-            _str = s;
-        }
-    }
-
-    /// <summary>
-    /// EventArgs avec un param d'un type quelconque (Key)
-    /// </summary>
-    /// <typeparam name="TKey"></typeparam>
-    public class KeyEventArgs<TKey> : EventArgs
-    {
-        private TKey _key;
-        public TKey Key { get { return _key; } }
-
-        public KeyEventArgs(TKey key)
-        {
-            _key = key;
-        }
-    }
-
-    /// <summary>
-    /// EventArgs avec un param d'un type quelconque (Key) et un autre param d'un type quelconque (Value)
-    /// </summary>
-    /// <typeparam name="TKey"></typeparam>
-    /// <typeparam name="TValue"></typeparam>
-    public class KeyValueEventArgs<TKey, TValue> : EventArgs
-    {
-        private TKey _key;
-        private TValue _value;
-        public TKey Key { get { return _key; } }
-        public TValue Value { get { return _value; } }
-
-        public KeyValueEventArgs(TKey key, TValue value)
-        {
-            _key = key;
-            _value = value;
-        }
-    }
-
-    /// <summary>
-    /// EventArgs avec un param d'un type quelconque (Key) et d'autres params d'un type quelconque (Values)
-    /// </summary>
-    /// <typeparam name="TKey"></typeparam>
-    /// <typeparam name="TValue"></typeparam>
-    public class KeyValuesEventArgs<TKey, TValue> : EventArgs
-    {
-        private TKey _key;
-        private TValue[] _values;
-        public TKey Key { get { return _key; } }
-        public TValue[] Values { get { return _values; } }
-
-        public KeyValuesEventArgs(TKey key, params TValue[] values)
-        {
-            _key = key;
-            _values = values;
+            Result = result;
         }
     }
 }

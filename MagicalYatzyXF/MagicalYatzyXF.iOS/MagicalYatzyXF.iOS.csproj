@@ -202,6 +202,10 @@
     <ImageAsset Include="Assets.xcassets\AddPlayer.imageset\AddPlayer%403x.png" />
     <ImageAsset Include="Assets.xcassets\AddPlayer.imageset\AddPlayer%402x.png" />
     <ImageAsset Include="Assets.xcassets\AddPlayer.imageset\AddPlayer.png" />
+    <ImageAsset Include="Assets.xcassets\Start.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Start.imageset\Start.png" />
+    <ImageAsset Include="Assets.xcassets\Start.imageset\Start%402x.png" />
+    <ImageAsset Include="Assets.xcassets\Start.imageset\Start%403x.png" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -253,6 +257,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets.xcassets\AddPlayer.imageset\" />
+    <Folder Include="Assets.xcassets\Start.imageset\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

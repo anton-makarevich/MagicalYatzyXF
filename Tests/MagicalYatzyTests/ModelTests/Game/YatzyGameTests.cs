@@ -236,6 +236,7 @@ namespace MagicalYatzyTests.ModelTests.Game
             {
                 turnChangedCount++;
                 currentPlayer = args.Player as Player;
+                Assert.Equal(1,args.Move);
             };
             
             _sut.JoinGame(player1);

@@ -5,12 +5,16 @@
     xmlns:base="clr-namespace:Sanet.MagicalYatzy.XF.Views.Base"
     xmlns:vm="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
     xmlns:tabControl="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls.TabControl;assembly=MagicalYatzyXF"
+    xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls;assembly=MagicalYatzyXF"
+    xmlns:loc="clr-namespace:Sanet.MagicalYatzy.XF.MarkupExtensions;assembly=MagicalYatzyXF"
     x:Class="Sanet.MagicalYatzy.XF.Views.LobbyViewNarrow"
     x:TypeArguments="vm:LobbyViewModel">
-    <Grid>
+    <Grid
+        Margin="0,0,0,5">
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <tabControl:TabsStrip
             Padding="10,0"
@@ -19,6 +23,12 @@
             TabIndicatorColor="{StaticResource SanetBlueColor}"
             FontSize="20"
             Grid.Row="1"
-                x:Name="tabBar"/>
+                x:Name="TabBar"/>
+        <controls:ToolBarButton
+            Grid.Row="2" IsVisible="{Binding CanStartGame}"
+            HorizontalOptions="Center"
+            Command="{Binding StartGameCommand}"
+            ImageSource="{Binding StartImage, Converter={StaticResource ImageNameConverter}}" 
+            Text="{loc:Strings StartGameButton}"/>
     </Grid>
 </base:NavigationBackView>

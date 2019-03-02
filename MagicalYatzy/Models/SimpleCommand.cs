@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace Sanet.MagicalYatzy.Models.Events
+namespace Sanet.MagicalYatzy.Models
 {
     public class SimpleCommand : ICommand
     {

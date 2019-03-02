@@ -131,6 +131,7 @@
     <Content Include="Assets\SanetDice.png" />
     <Content Include="Assets\Settings.png" />
     <Content Include="Assets\Share.png" />
+    <Content Include="Assets\Start.png" />
     <Content Include="Assets\Victory.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-100.png" />
