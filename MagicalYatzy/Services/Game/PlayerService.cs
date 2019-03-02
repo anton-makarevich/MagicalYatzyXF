@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
+using Sanet.MagicalYatzy.Services.Api;
 
 namespace Sanet.MagicalYatzy.Services.Game
 {

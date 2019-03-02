@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using MagicalYatzyTests.ServiceTests.Game;
 using Sanet.MagicalYatzy.Extensions;
-using Sanet.MagicalYatzy.Services;
+using Sanet.MagicalYatzy.Services.Api;
 using Xunit;
 
-namespace MagicalYatzyTests.ServiceTests
+namespace MagicalYatzyTests.ServiceTests.Api
 {
     public class LegacyWcfApiClientTests
     {
@@ -17,9 +17,9 @@ namespace MagicalYatzyTests.ServiceTests
             var player = await sut.LoginUserAsync(PlayerServiceTests.TestUserName, PlayerServiceTests.TestUserPassword);
 
             Assert.NotNull(player);
-            Assert.Equal(PlayerServiceTests.TestUserName, player?.Name);
-            Assert.NotEqual(PlayerServiceTests.TestUserPassword, player?.Password);
-            Assert.Equal(PlayerServiceTests.TestUserPassword, player?.Password?.Decrypt(33));
+            Assert.Equal(PlayerServiceTests.TestUserName, player.Name);
+            Assert.NotEqual(PlayerServiceTests.TestUserPassword, player.Password);
+            Assert.Equal(PlayerServiceTests.TestUserPassword, player.Password?.Decrypt(33));
         }
 
         [Fact]

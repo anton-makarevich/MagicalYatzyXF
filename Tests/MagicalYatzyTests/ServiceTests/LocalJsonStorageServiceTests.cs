@@ -1,7 +1,7 @@
-﻿using Sanet.MagicalYatzy.Models.Game;
-using Sanet.MagicalYatzy.Services;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Sanet.MagicalYatzy.Models.Game;
+using Sanet.MagicalYatzy.Services;
 using Xunit;
 
 namespace MagicalYatzyTests.ServiceTests

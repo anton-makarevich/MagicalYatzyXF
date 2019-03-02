@@ -685,7 +685,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\ApiClient\" />
+    <Folder Include="Services\Api\" />
     <Folder Include="Services\Navigation\" />
     <Folder Include="Views\" />
     <Folder Include="Utils\" />

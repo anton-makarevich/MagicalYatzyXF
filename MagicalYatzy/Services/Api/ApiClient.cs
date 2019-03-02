@@ -1,9 +1,9 @@
-﻿using Sanet.MagicalYatzy.Extensions;
-using Sanet.MagicalYatzy.Models.Game;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
+using Sanet.MagicalYatzy.Extensions;
+using Sanet.MagicalYatzy.Models.Game;
 
-namespace Sanet.MagicalYatzy.Services
+namespace Sanet.MagicalYatzy.Services.Api
 {
     public class ApiClient : IApiClient
     {

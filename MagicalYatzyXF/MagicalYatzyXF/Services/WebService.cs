@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Sanet.MagicalYatzy.Services.Api;
 
 namespace Sanet.MagicalYatzy.XF.Services
 {
