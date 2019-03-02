@@ -450,5 +450,34 @@ namespace MagicalYatzyTests.ViewModelTests
 
             await _navigationService.DidNotReceive().NavigateToViewModelAsync<GameViewModel>();
         }
+
+        [Fact]
+        public void CannotStartGameIfRuleIsNotSelected()
+        {
+            _sut.AddBotCommand.Execute(null);
+            
+            Assert.False(_sut.CanStartGame);
+        }
+        
+        [Fact]
+        public void CannotStartGameIfThereAreNoPlayers()
+        {
+            _rulesService.GetAllRules().Returns(new[] { Rules.krBaby, Rules.krSimple });
+            _sut.LoadRules();
+            _sut.Rules.First().SelectRuleCommand.Execute(null);
+            
+            Assert.False(_sut.CanStartGame);
+        }
+        
+        [Fact]
+        public void CanStartGameIfPlayersAreAddedAndRuleIsSelected()
+        {
+            _rulesService.GetAllRules().Returns(new[] { Rules.krBaby, Rules.krSimple });
+            _sut.LoadRules();
+            _sut.Rules.First().SelectRuleCommand.Execute(null);
+            _sut.AddBotCommand.Execute(null);
+            
+            Assert.True(_sut.CanStartGame);
+        }
     }
 }

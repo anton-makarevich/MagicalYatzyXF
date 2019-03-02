@@ -130,6 +130,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         private void CheckCanAddPlayers()
         {
             CanAddBot = CanAddHuman = Players.Count < MaxPlayers;
+            NotifyPropertyChanged(nameof(CanStartGame));
         }
 
         public void LoadRules()
@@ -161,12 +162,15 @@ namespace Sanet.MagicalYatzy.ViewModels
             var ruleToSelect = Rules.FirstOrDefault(r => r.Rule == rule);
             if (ruleToSelect != null)
                 ruleToSelect.IsSelected = true;
+            NotifyPropertyChanged(nameof(CanStartGame));
         }
 
         public ICommand StartGameCommand => new SimpleCommand(async () =>
         {
+            if (!CanStartGame) return;
             var rule = Rules.FirstOrDefault(f => f.IsSelected);
-            if (rule == null || !Players.Any()) return;
+            if (rule==null)
+                return;
             var game = await _gameService.CreateNewLocalGameAsync(rule.Rule);
             foreach (var playerViewModel in Players)
             {
@@ -175,5 +179,7 @@ namespace Sanet.MagicalYatzy.ViewModels
 
             await NavigationService.NavigateToViewModelAsync<GameViewModel>();
         });
+
+        public bool CanStartGame => Rules.FirstOrDefault(f => f.IsSelected) != null && Players.Any();
     }
 }
