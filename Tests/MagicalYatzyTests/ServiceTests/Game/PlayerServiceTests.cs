@@ -7,6 +7,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Xunit;
 using Sanet.MagicalYatzy.Extensions;
+using Sanet.MagicalYatzy.Services.Api;
 
 namespace MagicalYatzyTests.ServiceTests.Game
 {

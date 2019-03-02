@@ -1,7 +1,4 @@
 ﻿using Sanet.MagicalYatzy.Models.Game;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Sanet.MagicalYatzy.Services
 {
@@ -12,10 +9,7 @@ namespace Sanet.MagicalYatzy.Services
 
         public DiceStyle DieStyle { get; set; }
         public int DieAngle {
-            get
-            {
-                return _dieAngle;
-            }
+            get => _dieAngle;
             set
             {
                 if (value < 0)
@@ -26,7 +20,7 @@ namespace Sanet.MagicalYatzy.Services
             }
         }
         public int MaxRollLoop {
-            get { return _maxRollLoop; }
+            get => _maxRollLoop;
             set
             {
                 if (value < 20)

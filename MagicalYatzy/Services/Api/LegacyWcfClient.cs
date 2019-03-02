@@ -4,18 +4,18 @@ using MagicalYatzy.LegacyWcfService;
 using Sanet.MagicalYatzy.Extensions;
 using Sanet.MagicalYatzy.Models.Game;
 
-namespace Sanet.MagicalYatzy.Services
+namespace Sanet.MagicalYatzy.Services.Api
 {
     public class LegacyWcfClient:IApiClient
     {
         public async Task<IPlayer> LoginUserAsync(string username, string password)
         {
-            var address = new System.ServiceModel.EndpointAddress("http://sanet.by/KniffelService.asmx");
-            BasicHttpBinding bind = new BasicHttpBinding();
+            var address = new EndpointAddress("http://sanet.by/KniffelService.asmx");
+            var bind = new BasicHttpBinding();
             var client = new KniffelServiceSoapClient(bind,address);
-            int rolls = 0;
-            int manuals = 0;
-            int resets = 0;
+            const int rolls = 0;
+            const int manuals = 0;
+            const int resets = 0;
             password = password.Encrypt(33);
             try
             {

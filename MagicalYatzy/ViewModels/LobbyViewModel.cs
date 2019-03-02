@@ -20,15 +20,18 @@ namespace Sanet.MagicalYatzy.ViewModels
         private bool _canAddBot = true;
         private bool _canAddHuman = true;
         private IRulesService _rulesService;
+        private readonly IGameService _gameService;
         private readonly ILocalizationService _localizationService;
 
         public LobbyViewModel(IDicePanel dicePanel, 
             IPlayerService playerService, 
             IRulesService rulesService,
+            IGameService gameService,
             ILocalizationService localizationService) : base(dicePanel)
         {
             _playerService = playerService;
             _rulesService = rulesService;
+            _gameService = gameService;
             _localizationService = localizationService;
         }
 
@@ -127,6 +130,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         private void CheckCanAddPlayers()
         {
             CanAddBot = CanAddHuman = Players.Count < MaxPlayers;
+            NotifyPropertyChanged(nameof(CanStartGame));
         }
 
         public void LoadRules()
@@ -158,6 +162,24 @@ namespace Sanet.MagicalYatzy.ViewModels
             var ruleToSelect = Rules.FirstOrDefault(r => r.Rule == rule);
             if (ruleToSelect != null)
                 ruleToSelect.IsSelected = true;
+            NotifyPropertyChanged(nameof(CanStartGame));
         }
+
+        public ICommand StartGameCommand => new SimpleCommand(async () =>
+        {
+            if (!CanStartGame) return;
+            var rule = Rules.FirstOrDefault(f => f.IsSelected);
+            if (rule==null)
+                return;
+            var game = await _gameService.CreateNewLocalGameAsync(rule.Rule);
+            foreach (var playerViewModel in Players)
+            {
+                game.JoinGame(playerViewModel.Player);
+            }
+
+            await NavigationService.NavigateToViewModelAsync<GameViewModel>();
+        });
+
+        public bool CanStartGame => Rules.FirstOrDefault(f => f.IsSelected) != null && Players.Any();
     }
 }
