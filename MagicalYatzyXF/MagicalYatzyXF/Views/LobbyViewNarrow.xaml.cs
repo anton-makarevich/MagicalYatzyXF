@@ -17,8 +17,8 @@ namespace Sanet.MagicalYatzy.XF.Views
 
         protected override void OnViewModelSet()
         {
-            tabBar.TabChildren.Add(new TabItem(ViewModel.PlayersTitle, new PlayersFragment()));
-            tabBar.TabChildren.Add(new TabItem(ViewModel.RulesTitle, new RulesFragment()));
+            TabBar.TabChildren.Add(new TabItem(ViewModel.PlayersTitle, new PlayersFragment()));
+            TabBar.TabChildren.Add(new TabItem(ViewModel.RulesTitle, new RulesFragment()));
         }
     }
 }
