@@ -1,6 +1,7 @@
 ﻿using Sanet.MagicalYatzy.ViewModels.Base;
 using Sanet.MagicalYatzy.Services.Game;
 using System.Windows.Input;
+using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Events;
 
 namespace Sanet.MagicalYatzy.ViewModels
