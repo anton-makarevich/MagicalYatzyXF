@@ -17,7 +17,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         #region Fields
         private int _diceCount = 6;
-        internal Die _lastClickedDie;
+        private Die _lastClickedDie;
 
         private readonly IGameSettingsService _gameSettingsService;
         #endregion
@@ -40,7 +40,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         #region Properties
         public static double DeviceScale = 1;
         public bool TreeDScale { get; set; }
-        public double TreeDScaleCoef { get; set; }
+        public double TreeDScaleFactor { get; set; }
         public bool PlaySound { get; set; }
         public DiceStyle PanelStyle { get; } = DiceStyle.Classic;
         public List<Die> Dice { get; set; } = new List<Die>();
@@ -49,7 +49,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         /// </summary>
         public int DiceCount
         {
-            get { return _diceCount; }
+            get => _diceCount;
             set
             {
                 _diceCount = value;
@@ -66,7 +66,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         /// <summary>
         /// Allows user to click dice to lock their movement
         /// </summary>
-        public bool ClickToFix { get; set; } = false;
+        public bool ClickToFix { get; set; } 
 
         /// <summary>
         /// Summed Result of All the Dice
@@ -75,13 +75,13 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public bool AreAllDiceStopped => !Dice.Any(d => d.IsRolling || d.IsLanding);
 
-        internal bool IsRolling => Dice.Any(d => d.IsRolling);
+        public bool IsRolling => Dice.Any(d => d.IsRolling);
 
         public bool WithSound { get; set; } = false;
 
         public int RollDelay { get; set; } = 20;
 
-        public bool ManualSetMode { get; set; } = false;
+        public bool ManualSetMode { get; set; } 
 
         public Rectangle Bounds { get; private set; }
 
@@ -102,11 +102,11 @@ namespace Sanet.MagicalYatzy.Models.Game
         #region Methods
         public void ChangeDiceManually(int newValue)
         {
-            int oldvalue = _lastClickedDie.Result;
+            var oldValue = _lastClickedDie.Result;
             _lastClickedDie.Result = newValue;
             _lastClickedDie.DrawDie();
             ManualSetMode = false;
-            DieChangedManually?.Invoke(_lastClickedDie.IsFixed, oldvalue, _lastClickedDie.Result);
+            DieChangedManually?.Invoke(_lastClickedDie.IsFixed, oldValue, _lastClickedDie.Result);
         }
 
         public void ChangeDice(int oldValue, int newValue)
@@ -145,21 +145,21 @@ namespace Sanet.MagicalYatzy.Models.Game
                 overrideValues.Count == Dice.Count;
 
             //first values for fixed dices
-            int fixedDiceCount = Dice.Count(f => f.IsFixed);
+            var fixedDiceCount = Dice.Count(f => f.IsFixed);
 
-            for (int i = 0; i <= Dice.Count - 1; i++)
+            for (var i = 0; i <= Dice.Count - 1; i++)
             {
-                int initialResulrValue = 0;
+                var initialResultValue = 0;
                 var d = Dice[i];
                 if (d.IsFixed)
                     continue;
                 if (shouldOverrideValues)
                 {
-                    initialResulrValue = overrideValues[fixedDiceCount];
+                    initialResultValue = overrideValues[fixedDiceCount];
                     fixedDiceCount += 1;
                 }
 
-                d.InitializeRoll(initialResulrValue);
+                d.InitializeRoll(initialResultValue);
             }
 
             // Start playing the animation loop
@@ -173,13 +173,11 @@ namespace Sanet.MagicalYatzy.Models.Game
         {
             //determine if die was clicked
             _lastClickedDie = null;
-            foreach (Die d in Dice)
+            foreach (var dice in Dice)
             {
-                if (d.ClickedOn(clickLocation))
-                {
-                    _lastClickedDie = d;
-                    break;
-                }
+                if (!dice.ClickedOn(clickLocation)) continue;
+                _lastClickedDie = dice;
+                break;
             }
             //no die was clicked
             if (_lastClickedDie == null)
@@ -197,28 +195,24 @@ namespace Sanet.MagicalYatzy.Models.Game
             }
         }
 
-        public void FixDice(int index, bool isfixed)
+        public void FixDice(int index, bool isFixed)
         {
-            foreach (Die d in Dice)
+            foreach (var dice in Dice)
             {
-                if (d.Result == index && d.IsFixed == !isfixed)
-                {
-                    d.IsFixed = isfixed;
-                    d.DrawDie();
-                    return;
-                }
+                if (dice.Result != index || dice.IsFixed != !isFixed) continue;
+                dice.IsFixed = isFixed;
+                dice.DrawDie();
+                return;
             }
         }
 
         public void UnfixAll()
         {
-            foreach (Die dice in Dice)
+            foreach (var dice in Dice)
             {
-                if (dice.IsFixed)
-                {
-                    dice.IsFixed = false;
-                    dice.DrawDie();
-                }
+                if (!dice.IsFixed) continue;
+                dice.IsFixed = false;
+                dice.DrawDie();
             }
         }
 
@@ -229,10 +223,10 @@ namespace Sanet.MagicalYatzy.Models.Game
 
             Bounds = new Rectangle(0, 0, width, height);
 
-            foreach (Die d in Dice)
+            foreach (var dice in Dice)
             {
-                if (!Bounds.Contains(d.Bounds) || d.Bounds.Position.IsZero )
-                    FindDiePosition(d);
+                if (!Bounds.Contains(dice.Bounds) || dice.Bounds.Position.IsZero )
+                    FindDiePosition(dice);
             }
         }
         #endregion
@@ -265,8 +259,8 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         private void FindDiePosition(Die die)
         {
-            bool _isDone = false;
-            int attempt = 0;
+            bool isDone;
+            var attempt = 0;
 
             if (Bounds.Height < die.Bounds.Height || Bounds.Width < die.Bounds.Width)
                 return;
@@ -274,13 +268,13 @@ namespace Sanet.MagicalYatzy.Models.Game
             do
             {
                 attempt += 1;
-                _isDone = true;
+                isDone = true;
                 die.InitializeLocation();
-                foreach (Die otherDie in Dice)
+                foreach (var otherDie in Dice)
                 {
-                    _isDone = !die.Overlapping(otherDie);
+                    isDone = !die.Overlapping(otherDie);
                 }
-            } while (!(_isDone | attempt > MaxAttemptsToFindDicePosition));
+            } while (!(isDone | attempt > MaxAttemptsToFindDicePosition));
             die.DrawDie();
         }
 
@@ -292,10 +286,10 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         private void OnLoopCompleted()
         {
-            foreach (Die d in Dice)
+            foreach (var dice in Dice)
             {
-                d.UpdateDiePosition();
-                d.DrawDie();
+                dice.UpdateDiePosition();
+                dice.DrawDie();
             }
 
             HandleCollisions();
@@ -314,10 +308,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         private void HandleCollisions()
         {
-            Die di = null;
-            Die dj = null;
-            int i = 0;
-            int j = 0;
+            int i;
 
             if (DiceCount == 1)
                 return;
@@ -325,12 +316,13 @@ namespace Sanet.MagicalYatzy.Models.Game
             //can't use foreach loops here, want to start j loop index AFTER first loop
             for (i = 0; i <= Dice.Count - 2; i++)
             {
+                int j;
                 for (j = i + 1; j <= Dice.Count - 1; j++)
                 {
                     if (i == j)
                         continue;
-                    di = Dice[i];
-                    dj = Dice[j];
+                    var di = Dice[i];
+                    var dj = Dice[j];
                     di.HandleCollision(dj);
                 }
             }

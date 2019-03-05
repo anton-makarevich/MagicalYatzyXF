@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Sanet.MagicalYatzy.Models.Game;
 using Xunit;
 using Sanet.MagicalYatzy.Utils;
@@ -123,6 +124,22 @@ namespace MagicalYatzyTests.ModelTests.Game
         public void LocalPlayerHasPlayerName()
         {
             Assert.Contains(Strings.PlayerNameDefault, _sut.Name);
+        }
+
+        [Fact]
+        public void ReturnsIfScoreIsFilled()
+        {
+            const Scores score = Scores.Ones;
+            _sut.PrepareForGameStart(new Rule(Rules.krMagic));
+            _sut.Results.First(f => f.ScoreType == score).Value = 5;
+
+            foreach (var scoreType in EnumUtils.GetValues<Scores>())
+            {
+                if (scoreType != score)
+                    Assert.False(_sut.IsScoreFilled(scoreType));
+            }
+            
+            Assert.True(_sut.IsScoreFilled(score));
         }
     }
 }

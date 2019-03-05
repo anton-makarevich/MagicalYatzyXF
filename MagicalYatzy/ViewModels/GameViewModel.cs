@@ -38,6 +38,21 @@ namespace Sanet.MagicalYatzy.ViewModels
         {
             base.AttachHandlers();
             Game.DiceFixed += GameOnDiceFixed;
+            Game.DiceRolled += GameOnDiceRolled;
+        }
+
+        private void GameOnDiceRolled(object sender, RollEventArgs e)
+        {
+            do
+            {
+                DicePanel.RollDice(e.Value.ToList());
+            } while (!DicePanel.IsRolling);
+            
+//            CurrentPlayer.Player.CheckRollResults();
+//            _rollingPlayer = e.Player.Name;
+//            RollResults = null;
+//            SetCanRoll(false);
+//            NotifyPlayerChanged();
         }
 
         private void GameOnDiceFixed(object sender, FixDiceEventArgs e)
@@ -50,6 +65,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         {
             base.DetachHandlers();
             Game.DiceFixed -= GameOnDiceFixed;
+            Game.DiceRolled -= GameOnDiceRolled;
         }
     }
 }

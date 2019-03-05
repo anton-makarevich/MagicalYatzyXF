@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Sanet.MagicalYatzy.Extensions;
+using Sanet.MagicalYatzy.Models.Game.Extensions;
 using Sanet.MagicalYatzy.Models.Game.Magical;
 using Sanet.MagicalYatzy.Resources;
 
@@ -80,6 +81,86 @@ namespace Sanet.MagicalYatzy.Models.Game
             IsMyTurn = false;
         }
 
+        public void CheckRollResults(DieResult lastDiceResult, Rule rule)//test
+        {
+            foreach (var result in Results)
+            {
+                if (!result.HasValue)
+                {
+                    if (result.IsNumeric)
+                        result.PossibleValue = lastDiceResult.YatzyNumberScore((int)result.ScoreType);
+                    else
+                    switch (result.ScoreType)
+                    {
+                        case Scores.ThreeOfAKind:
+                            result.PossibleValue = lastDiceResult.YatzyOfAKindScore(3);
+                            break;
+                        case Scores.FourOfAKind:
+                            result.PossibleValue = lastDiceResult.YatzyOfAKindScore(4);
+                            break;
+                        case Scores.FullHouse:
+                           //if now kniffel extended rules and kniffel has value (0 or 50)
+                            if (IsScoreFilled(Scores.Kniffel) 
+                                && rule.HasExtendedBonuses 
+                                && lastDiceResult.YatzyFiveOfAKindScore()==50)
+                            {
+                                //and numeric result corresponded to that kniffel also filled
+                                var numericResult = GetResultForScore((Scores)lastDiceResult.DiceResults[0]);
+                                if (numericResult.HasValue)
+                                    result.PossibleValue = 25;//applying kniffel-joker
+                                else
+                                    result.PossibleValue = 0;
+                                break;
+                            }
+                            result.PossibleValue = lastDiceResult.YatzyFullHouseScore();
+                            break;
+                        case Scores.SmallStraight:
+                            if (IsScoreFilled(Scores.Kniffel) 
+                                && rule.HasExtendedBonuses 
+                                && lastDiceResult.YatzyFiveOfAKindScore() == 50)
+                            {
+                                //and numeric result corresponded to that kniffel also filled
+                                var numericResult = GetResultForScore((Scores)lastDiceResult.DiceResults[0]);
+                                if (numericResult.HasValue)
+                                    result.PossibleValue = 30;//applying kniffel-joker
+                                else
+                                    result.PossibleValue = 0;
+                                break;
+                            }
+                            result.PossibleValue = lastDiceResult.YatzySmallStraightScore();
+                            break;
+                        case Scores.LargeStraight:
+                            if (IsScoreFilled(Scores.Kniffel) 
+                                && rule.HasExtendedBonuses 
+                                && lastDiceResult.YatzyFiveOfAKindScore()==50)
+                            {
+                                //and numeric result corresponded to that kniffel also filled
+                                var numericResult = GetResultForScore((Scores)lastDiceResult.DiceResults[0]);
+                                if (numericResult.HasValue)
+                                    result.PossibleValue = 40;//applying kniffel-joker
+                                else
+                                    result.PossibleValue = 0;
+                                break;
+                            }
+                            result.PossibleValue = lastDiceResult.YatzyLargeStraightScore();
+                            break;
+                        case Scores.Total:
+                            result.PossibleValue = lastDiceResult.YatzyChanceScore();
+                            break;
+                        case Scores.Kniffel:
+                            result.PossibleValue = lastDiceResult.YatzyFiveOfAKindScore();
+                            break;
+                    }
+                }
+            }
+        }
+        
+        public bool IsScoreFilled(Scores score)
+        {
+            
+            var result =GetResultForScore(score);
+            return result != null && result.HasValue;
+        }
         #endregion
 
         public override bool Equals(object obj)
