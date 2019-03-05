@@ -39,7 +39,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         event EventHandler<ChatMessageEventArgs> ChatMessageSent;
         void NextTurn();
         event EventHandler<PlayerEventArgs> PlayerJoined;
-        List<Player> Players { get; }
+        List<IPlayer> Players { get; }
         int NumberOfPlayers { get; }
         void ReportMagicRoll();
         void ReportRoll();

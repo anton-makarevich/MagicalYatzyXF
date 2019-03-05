@@ -26,7 +26,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         bool IsMyTurn { get; set; }
 
-        bool IsReady { get;  }
+        bool IsReady { get; set; }
 
         string Language { get; set; }
 

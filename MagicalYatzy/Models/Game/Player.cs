@@ -4,7 +4,6 @@ using System.Linq;
 using Sanet.MagicalYatzy.Extensions;
 using Sanet.MagicalYatzy.Models.Game.Magical;
 using Sanet.MagicalYatzy.Resources;
-using Sanet.MagicalYatzy.Utils;
 
 namespace Sanet.MagicalYatzy.Models.Game
 {
@@ -95,7 +94,9 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public override int GetHashCode()
         {
-            return $"player{this.Name}{this.Password.Decrypt(33)}".GetHashCode();
+            // ReSharper disable NonReadonlyMemberInGetHashCode
+            return $"player{Name}{Password.Decrypt(33)}".GetHashCode();
+            // ReSharper restore NonReadonlyMemberInGetHashCode
         }
 
         private string GetUniqueInGameName(ICollection<string> names)
