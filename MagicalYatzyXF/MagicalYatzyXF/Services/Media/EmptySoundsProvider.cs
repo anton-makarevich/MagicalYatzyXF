@@ -1,4 +1,6 @@
-namespace Sanet.MagicalYatzy.Services.Media
+using Sanet.MagicalYatzy.Services.Media;
+
+namespace Sanet.MagicalYatzy.XF.Services.Media
 {
     public class EmptySoundsProvider:ISoundsProvider
     {

@@ -5,6 +5,7 @@ using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Services.Media;
 using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MagicalYatzy.XF.Services;
+using Sanet.MagicalYatzy.XF.Services.Media;
 using SimpleInjector;
 
 namespace Sanet.MagicalYatzy.XF
