@@ -188,7 +188,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
         
         [Fact]
-        public void FillsCorrectPossibleValueForChanseResult()
+        public void FillsCorrectPossibleValueForChanceResult()
         {
             // Arrange
             var rule = new Rule(Rules.krSimple);
@@ -293,6 +293,18 @@ namespace MagicalYatzyTests.ModelTests.Game
                 // Assert
                 Assert.Equal(30,_sut.Results.First(r=>r.ScoreType == scoreToCheck).PossibleValue);
             }
+        }
+        
+        [Fact]
+        public void UseArtifactChangeDecreaseArtifactsCount()
+        {
+            var artifact = new Artifact(Artifacts.ManualSet);
+
+            _sut.AvailableMagicalArtifacts = new List<Artifact> {artifact};
+            _sut.PrepareForGameStart(new Rule(Rules.krMagic));
+            _sut.UseArtifact(Artifacts.ManualSet);
+            
+            Assert.True(_sut.MagicalArtifactsForGame.First(f=>f.Type == Artifacts.ManualSet).IsUsed);
         }
     }
 }

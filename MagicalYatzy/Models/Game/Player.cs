@@ -120,6 +120,11 @@ namespace Sanet.MagicalYatzy.Models.Game
             }
         }
 
+        public void UseArtifact(Artifacts artifact)
+        {
+            MagicalArtifactsForGame.FirstOrDefault(f => f.Type == artifact)?.Use();
+        }
+
         private bool CheckYatzyJoker(DieResult lastDiceResult, Rule rule, RollResult result, int value)
         {
             if (!IsScoreFilled(Scores.Kniffel) || !rule.HasExtendedBonuses ||

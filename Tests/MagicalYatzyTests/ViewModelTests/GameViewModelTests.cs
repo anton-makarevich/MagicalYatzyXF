@@ -3,7 +3,9 @@ using System.Linq;
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
+using Sanet.MagicalYatzy.Models.Game.Magical;
 using Sanet.MagicalYatzy.Services.Game;
+using Sanet.MagicalYatzy.Services.Media;
 using Sanet.MagicalYatzy.ViewModels;
 using Xunit;
 
@@ -14,6 +16,7 @@ namespace MagicalYatzyTests.ViewModelTests
         private readonly GameViewModel _sut;
         private readonly IGameService _gameService;
         private readonly IDicePanel _dicePanel;
+        private readonly ISoundsProvider _soundsProvider;
         private readonly IPlayer _humanPlayer;
         private readonly IPlayer _botPlayer;
         
@@ -33,7 +36,8 @@ namespace MagicalYatzyTests.ViewModelTests
             });
             
             _dicePanel = Substitute.For<IDicePanel>();
-            _sut = new GameViewModel(_gameService, _dicePanel);
+            _soundsProvider = Substitute.For<ISoundsProvider>();
+            _sut = new GameViewModel(_gameService, _dicePanel, _soundsProvider);
         }
         
         [Fact]
@@ -149,6 +153,59 @@ namespace MagicalYatzyTests.ViewModelTests
 
             Assert.Equal(initialPlayersCount - 1, _sut.Players.Count);
             Assert.Null(_sut.Players.FirstOrDefault(p => p.Player.InGameId == _botPlayer.InGameId));
+        }
+        
+        [Fact]
+        public void GameOnDiceChangedPlaysMagicSound()
+        {
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            var results = new[] {2, 4, 6, 2, 1};
+            _sut.AttachHandlers();
+            
+            _gameService.CurrentLocalGame.DiceChanged += 
+                Raise.EventWith(null, new RollEventArgs(_humanPlayer,results));
+
+            _soundsProvider.Received().PlaySound("magic");
+        }
+        
+        [Fact]
+        public void GameOnDiceChangedUpdatesCurrentPlayersResults()
+        {
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            var results = new[] {2, 4, 6, 2, 1};
+            _sut.AttachHandlers();
+            
+            _gameService.CurrentLocalGame.DiceChanged += 
+                Raise.EventWith(null, new RollEventArgs(_humanPlayer,results));
+
+            _humanPlayer.ReceivedWithAnyArgs().CheckRollResults(null,null);
+        }
+        
+        [Fact]
+        public void GameOnDiceChangedConsumesPlayersArtifact()
+        {
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            var results = new[] {2, 4, 6, 2, 1};
+            _sut.AttachHandlers();
+            
+            _gameService.CurrentLocalGame.DiceChanged += 
+                Raise.EventWith(null, new RollEventArgs(_humanPlayer,results));
+
+            _humanPlayer.Received().UseArtifact(Artifacts.ManualSet);
+        }
+        
+        [Fact]
+        public void GameOnDiceChangedShowsResultsToSelectIfPlayerIsHuman()
+        {
+            _humanPlayer.IsHuman.Returns(true);
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            var results = new[] {2, 4, 6, 2, 1};
+            _sut.AttachHandlers();
+            
+            _gameService.CurrentLocalGame.DiceChanged += 
+                Raise.EventWith(null, new RollEventArgs(_humanPlayer,results));
+
+            Assert.NotNull(_sut.RollResults);
         }
     }
 }

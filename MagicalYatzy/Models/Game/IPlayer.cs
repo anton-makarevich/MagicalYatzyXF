@@ -55,5 +55,6 @@ namespace Sanet.MagicalYatzy.Models.Game
         RollResult GetResultForScore(Scores score);
 
         void CheckRollResults(DieResult lastDiceResult, Rule rule);
+        void UseArtifact(Artifacts artifact);
     }
 }

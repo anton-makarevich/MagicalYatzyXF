@@ -1,8 +1,11 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
+using Sanet.MagicalYatzy.Models.Game.Magical;
 using Sanet.MagicalYatzy.Services.Game;
+using Sanet.MagicalYatzy.Services.Media;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 
@@ -11,11 +14,16 @@ namespace Sanet.MagicalYatzy.ViewModels
     public class GameViewModel: DicePanelViewModel
     {
         private readonly IGameService _gameService;
+        private readonly ISoundsProvider _soundsProvider;
+        private ObservableCollection<RollResult> _rollResults;
 
-        public GameViewModel(IGameService gameService,
-            IDicePanel dicePanel):base(dicePanel)
+        public GameViewModel(
+            IGameService gameService,
+            IDicePanel dicePanel,
+            ISoundsProvider soundsProvider):base(dicePanel)
         {
             _gameService = gameService;
+            _soundsProvider = soundsProvider;
         }
 
         public IGame Game => _gameService?.CurrentLocalGame;
@@ -42,6 +50,25 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.DiceFixed += GameOnDiceFixed;
             Game.DiceRolled += GameOnDiceRolled;
             Game.PlayerLeft += GameOnPlayerLeft;
+            Game.DiceChanged += GameOnDiceChanged;
+        }
+
+        private void GameOnDiceChanged(object sender, RollEventArgs e)
+        {
+            _soundsProvider.PlaySound("magic");
+            CurrentPlayer.Player.CheckRollResults(new DieResult(){ DiceResults = e.Value.ToList()}, Game.Rules );
+            CurrentPlayer.Player.UseArtifact(Artifacts.ManualSet);
+            
+            if (e.Player.InGameId == CurrentPlayer.Player.InGameId && CurrentPlayer.Player.IsHuman)
+            {
+                RollResults = new ObservableCollection<RollResult>(CurrentPlayer.Player.Results.Where(f => !f.HasValue && f.ScoreType != Scores.Bonus));
+            }
+        }
+
+        public ObservableCollection<RollResult> RollResults
+        {
+            get => _rollResults;
+            private set => SetProperty(ref _rollResults, value);
         }
 
         private void GameOnPlayerLeft(object sender, PlayerEventArgs e)
@@ -75,6 +102,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.DiceFixed -= GameOnDiceFixed;
             Game.DiceRolled -= GameOnDiceRolled;
             Game.PlayerLeft -= GameOnPlayerLeft;
+            Game.DiceChanged -= GameOnDiceChanged;
         }
     }
 }

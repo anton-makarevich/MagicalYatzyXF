@@ -2,6 +2,7 @@
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Api;
 using Sanet.MagicalYatzy.Services.Game;
+using Sanet.MagicalYatzy.Services.Media;
 using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MagicalYatzy.XF.Services;
 using SimpleInjector;
@@ -14,7 +15,7 @@ namespace Sanet.MagicalYatzy.XF
         {
             // Register viewmodels for pages
             container.Register<MainMenuViewModel>();
-            container.Register<LoginViewModel>();
+            //container.Register<LoginViewModel>();
 
             // Register services
             container.RegisterSingleton<IGameSettingsService, GameSettingsService>();
@@ -25,6 +26,7 @@ namespace Sanet.MagicalYatzy.XF
             container.RegisterSingleton<IGameService, GameService>();
             container.RegisterSingleton<IPlayerService, PlayerService>();
             container.RegisterSingleton<IRulesService, RulesService>();
+            container.RegisterSingleton<ISoundsProvider, EmptySoundsProvider>();
 
             // Register misc classes
             container.Register<IDicePanel, DicePanel>();
