@@ -43,8 +43,24 @@ namespace MagicalYatzyTests.ViewModelTests
         }
 
         [Fact]
-        public void HasPlayersFromGameService()
+        public void DoesNotHavePlayersFromGameServiceWhenUntilViewIsNotActive()
         {
+            Assert.Empty(_sut.Players);
+        }
+
+        [Fact]
+        public void ClearPlayersOnViewHiding()
+        {
+            _sut.AttachHandlers();
+            Assert.NotEmpty(_sut.Players);
+            _sut.DetachHandlers();
+            Assert.Empty(_sut.Players);
+        }
+        
+        [Fact]
+        public void HasPlayersFromGameServiceWhenViewIsActive()
+        {
+            _sut.AttachHandlers();
             Assert.NotEmpty(_sut.Players);
             Assert.Equal(_gameService.CurrentLocalGame.Players.Count, _sut.Players.Count);
         }
@@ -53,6 +69,7 @@ namespace MagicalYatzyTests.ViewModelTests
         public void HasCurrentPlayer()
         {
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
             
             Assert.NotNull(_sut.CurrentPlayer);
         }
@@ -69,7 +86,7 @@ namespace MagicalYatzyTests.ViewModelTests
         }
         
         [Fact]
-        public void GameOnDiceFixedDoesNotDicePanelDiceWhenViewIsNotActive()
+        public void GameOnDiceFixedDoesNotFixDicePanelDiceWhenViewIsNotActive()
         {
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_botPlayer);
             _sut.AttachHandlers();
@@ -83,6 +100,7 @@ namespace MagicalYatzyTests.ViewModelTests
         [Fact]
         public void GameOnDiceRolledCallsRollDiceOnDicePanel()
         {
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
             _dicePanel.IsRolling.Returns(false, true);
             var results = new[] {2, 4, 6, 2, 1};
             _sut.AttachHandlers();
@@ -123,8 +141,8 @@ namespace MagicalYatzyTests.ViewModelTests
         [Fact]
         public void GameOnPlayerLeftRemovesPlayer()
         {
-            var initialPlayersCount = _sut.Players.Count;
             _sut.AttachHandlers();
+            var initialPlayersCount = _sut.Players.Count;
             
             _gameService.CurrentLocalGame.PlayerLeft += 
                 Raise.EventWith(null, new PlayerEventArgs(_botPlayer));

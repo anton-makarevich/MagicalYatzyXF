@@ -16,10 +16,6 @@ namespace Sanet.MagicalYatzy.ViewModels
             IDicePanel dicePanel):base(dicePanel)
         {
             _gameService = gameService;
-            foreach (var player in Game.Players)
-            {
-                Players.Add(new PlayerViewModel(player));
-            }
         }
 
         public IGame Game => _gameService?.CurrentLocalGame;
@@ -37,6 +33,12 @@ namespace Sanet.MagicalYatzy.ViewModels
         public override void AttachHandlers()
         {
             base.AttachHandlers();
+            
+            foreach (var player in Game.Players)
+            {
+                Players.Add(new PlayerViewModel(player));
+            }
+            
             Game.DiceFixed += GameOnDiceFixed;
             Game.DiceRolled += GameOnDiceRolled;
             Game.PlayerLeft += GameOnPlayerLeft;
@@ -67,6 +69,9 @@ namespace Sanet.MagicalYatzy.ViewModels
         public override void DetachHandlers()
         {
             base.DetachHandlers();
+            
+            Players.Clear();
+            
             Game.DiceFixed -= GameOnDiceFixed;
             Game.DiceRolled -= GameOnDiceRolled;
             Game.PlayerLeft -= GameOnPlayerLeft;
