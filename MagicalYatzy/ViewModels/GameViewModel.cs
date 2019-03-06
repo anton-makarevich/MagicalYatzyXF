@@ -43,16 +43,12 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         private void GameOnDiceRolled(object sender, RollEventArgs e)
         {
-            do
+            while (!DicePanel.IsRolling)
             {
                 DicePanel.RollDice(e.Value.ToList());
-            } while (!DicePanel.IsRolling);
-            
-//            CurrentPlayer.Player.CheckRollResults();
-//            _rollingPlayer = e.Player.Name;
-//            RollResults = null;
-//            SetCanRoll(false);
-//            NotifyPlayerChanged();
+            }
+
+            CurrentPlayer.Player.CheckRollResults(new DieResult(){ DiceResults = e.Value.ToList()},Game.Rules );
         }
 
         private void GameOnDiceFixed(object sender, FixDiceEventArgs e)

@@ -81,7 +81,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             IsMyTurn = false;
         }
 
-        public void CheckRollResults(DieResult lastDiceResult, Rule rule)//test
+        public void CheckRollResults(DieResult lastDiceResult, Rule rule)
         {
             foreach (var result in Results)
             {

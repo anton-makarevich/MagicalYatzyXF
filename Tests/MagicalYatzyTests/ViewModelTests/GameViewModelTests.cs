@@ -78,5 +78,32 @@ namespace MagicalYatzyTests.ViewModelTests
             
             _dicePanel.DidNotReceive().FixDice(2,true);
         }
+        
+        [Fact]
+        public void GameOnDiceRolledCallsRollDiceOnDicePanel()
+        {
+            _dicePanel.IsRolling.Returns(false, true);
+            var results = new[] {2, 4, 6, 2, 1};
+            _sut.AttachHandlers();
+            
+            _gameService.CurrentLocalGame.DiceRolled += 
+                Raise.EventWith(null, new RollEventArgs(_humanPlayer, results));
+
+            _dicePanel.Received(1).RollDice(Arg.Any<List<int>>());
+        }
+        
+        [Fact]
+        public void GameOnDiceRollCallsCheckRollResultsForCurrentPlayer()
+        {
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _dicePanel.IsRolling.Returns( true);
+            var results = new[] {2, 4, 6, 2, 1};
+            _sut.AttachHandlers();
+            
+            _gameService.CurrentLocalGame.DiceRolled += 
+                Raise.EventWith(null, new RollEventArgs(_botPlayer, results));
+
+            _humanPlayer.ReceivedWithAnyArgs().CheckRollResults(null,null);
+        }
     }
 }
