@@ -85,11 +85,10 @@ namespace Sanet.MagicalYatzy.Models.Game
         {
             foreach (var result in Results)
             {
-                if (!result.HasValue)
-                {
-                    if (result.IsNumeric)
-                        result.PossibleValue = lastDiceResult.YatzyNumberScore((int)result.ScoreType);
-                    else
+                if (result.HasValue) continue;
+                if (result.IsNumeric)
+                    result.PossibleValue = lastDiceResult.YatzyNumberScore((int)result.ScoreType);
+                else
                     switch (result.ScoreType)
                     {
                         case Scores.ThreeOfAKind:
@@ -99,49 +98,16 @@ namespace Sanet.MagicalYatzy.Models.Game
                             result.PossibleValue = lastDiceResult.YatzyOfAKindScore(4);
                             break;
                         case Scores.FullHouse:
-                           //if now kniffel extended rules and kniffel has value (0 or 50)
-                            if (IsScoreFilled(Scores.Kniffel) 
-                                && rule.HasExtendedBonuses 
-                                && lastDiceResult.YatzyFiveOfAKindScore()==50)
-                            {
-                                //and numeric result corresponded to that kniffel also filled
-                                var numericResult = GetResultForScore((Scores)lastDiceResult.DiceResults[0]);
-                                if (numericResult.HasValue)
-                                    result.PossibleValue = 25;//applying kniffel-joker
-                                else
-                                    result.PossibleValue = 0;
-                                break;
-                            }
+                            //if now kniffel extended rules and kniffel has value (0 or 50)
+                            if (CheckYatzyJoker(lastDiceResult, rule, result, 25)) break;
                             result.PossibleValue = lastDiceResult.YatzyFullHouseScore();
                             break;
                         case Scores.SmallStraight:
-                            if (IsScoreFilled(Scores.Kniffel) 
-                                && rule.HasExtendedBonuses 
-                                && lastDiceResult.YatzyFiveOfAKindScore() == 50)
-                            {
-                                //and numeric result corresponded to that kniffel also filled
-                                var numericResult = GetResultForScore((Scores)lastDiceResult.DiceResults[0]);
-                                if (numericResult.HasValue)
-                                    result.PossibleValue = 30;//applying kniffel-joker
-                                else
-                                    result.PossibleValue = 0;
-                                break;
-                            }
+                            if (CheckYatzyJoker(lastDiceResult, rule, result, 30)) break;
                             result.PossibleValue = lastDiceResult.YatzySmallStraightScore();
                             break;
                         case Scores.LargeStraight:
-                            if (IsScoreFilled(Scores.Kniffel) 
-                                && rule.HasExtendedBonuses 
-                                && lastDiceResult.YatzyFiveOfAKindScore()==50)
-                            {
-                                //and numeric result corresponded to that kniffel also filled
-                                var numericResult = GetResultForScore((Scores)lastDiceResult.DiceResults[0]);
-                                if (numericResult.HasValue)
-                                    result.PossibleValue = 40;//applying kniffel-joker
-                                else
-                                    result.PossibleValue = 0;
-                                break;
-                            }
+                            if (CheckYatzyJoker(lastDiceResult, rule, result, 40)) break;
                             result.PossibleValue = lastDiceResult.YatzyLargeStraightScore();
                             break;
                         case Scores.Total:
@@ -151,10 +117,19 @@ namespace Sanet.MagicalYatzy.Models.Game
                             result.PossibleValue = lastDiceResult.YatzyFiveOfAKindScore();
                             break;
                     }
-                }
             }
         }
-        
+
+        private bool CheckYatzyJoker(DieResult lastDiceResult, Rule rule, RollResult result, int value)
+        {
+            if (!IsScoreFilled(Scores.Kniffel) || !rule.HasExtendedBonuses ||
+                lastDiceResult.YatzyFiveOfAKindScore() != 50) return false;
+            //and numeric result corresponded to that kniffel also filled
+            var numericResult = GetResultForScore((Scores) lastDiceResult.DiceResults[0]);
+            result.PossibleValue = numericResult.HasValue ? value : 0;
+            return true;
+        }
+
         public bool IsScoreFilled(Scores score)
         {
             var result =GetResultForScore(score);
