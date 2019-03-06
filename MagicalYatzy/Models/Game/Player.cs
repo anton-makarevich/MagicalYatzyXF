@@ -157,7 +157,6 @@ namespace Sanet.MagicalYatzy.Models.Game
         
         public bool IsScoreFilled(Scores score)
         {
-            
             var result =GetResultForScore(score);
             return result != null && result.HasValue;
         }
