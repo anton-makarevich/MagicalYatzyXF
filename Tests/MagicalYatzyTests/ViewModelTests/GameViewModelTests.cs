@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
@@ -93,6 +94,19 @@ namespace MagicalYatzyTests.ViewModelTests
         }
         
         [Fact]
+        public void GameOnDiceRolledDoesNotCallRollDiceOnDicePanelWhenViewIsNotActive()
+        {
+            _dicePanel.IsRolling.Returns(false, true);
+            var results = new[] {2, 4, 6, 2, 1};
+            _sut.AttachHandlers();
+            _sut.DetachHandlers();
+            _gameService.CurrentLocalGame.DiceRolled += 
+                Raise.EventWith(null, new RollEventArgs(_humanPlayer, results));
+
+            _dicePanel.DidNotReceive().RollDice(Arg.Any<List<int>>());
+        }
+        
+        [Fact]
         public void GameOnDiceRollCallsCheckRollResultsForCurrentPlayer()
         {
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
@@ -104,6 +118,19 @@ namespace MagicalYatzyTests.ViewModelTests
                 Raise.EventWith(null, new RollEventArgs(_botPlayer, results));
 
             _humanPlayer.ReceivedWithAnyArgs().CheckRollResults(null,null);
+        }
+
+        [Fact]
+        public void GameOnPlayerLeftRemovesPlayer()
+        {
+            var initialPlayersCount = _sut.Players.Count;
+            _sut.AttachHandlers();
+            
+            _gameService.CurrentLocalGame.PlayerLeft += 
+                Raise.EventWith(null, new PlayerEventArgs(_botPlayer));
+
+            Assert.Equal(initialPlayersCount - 1, _sut.Players.Count);
+            Assert.Null(_sut.Players.FirstOrDefault(p => p.Player.InGameId == _botPlayer.InGameId));
         }
     }
 }

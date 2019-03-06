@@ -39,6 +39,13 @@ namespace Sanet.MagicalYatzy.ViewModels
             base.AttachHandlers();
             Game.DiceFixed += GameOnDiceFixed;
             Game.DiceRolled += GameOnDiceRolled;
+            Game.PlayerLeft += GameOnPlayerLeft;
+        }
+
+        private void GameOnPlayerLeft(object sender, PlayerEventArgs e)
+        {
+            var playerVm = Players.FirstOrDefault(p => p.Player.InGameId == e.Player.InGameId);
+            Players.Remove(playerVm);
         }
 
         private void GameOnDiceRolled(object sender, RollEventArgs e)
@@ -62,6 +69,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             base.DetachHandlers();
             Game.DiceFixed -= GameOnDiceFixed;
             Game.DiceRolled -= GameOnDiceRolled;
+            Game.PlayerLeft -= GameOnPlayerLeft;
         }
     }
 }
