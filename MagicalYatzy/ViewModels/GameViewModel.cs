@@ -51,6 +51,14 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.DiceRolled += GameOnDiceRolled;
             Game.PlayerLeft += GameOnPlayerLeft;
             Game.DiceChanged += GameOnDiceChanged;
+            Game.PlayerReady += GameOnPlayerReady;
+        }
+
+        private void GameOnPlayerReady(object sender, PlayerEventArgs e)
+        {
+            var playerViewModel = Players.FirstOrDefault(f => f.Player.InGameId == e.Player.InGameId);
+            if (playerViewModel!=null)
+                playerViewModel.Player.IsReady = e.Player.IsReady;        
         }
 
         private void GameOnDiceChanged(object sender, RollEventArgs e)

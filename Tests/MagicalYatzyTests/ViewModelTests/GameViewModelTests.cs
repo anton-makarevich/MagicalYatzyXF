@@ -207,5 +207,19 @@ namespace MagicalYatzyTests.ViewModelTests
 
             Assert.NotNull(_sut.RollResults);
         }
+
+        [Fact]
+        public void GameOnPlayerReadyUpdatePlayerIsReadyStatus()
+        {
+            var remoteHumanPlayer = Substitute.For<IPlayer>();
+            remoteHumanPlayer.InGameId.Returns("0");
+            remoteHumanPlayer.IsReady.Returns(true);
+            _sut.AttachHandlers();
+            
+            _gameService.CurrentLocalGame.PlayerReady += 
+                Raise.EventWith(null, new PlayerEventArgs(remoteHumanPlayer));
+            
+            Assert.True(_humanPlayer.IsReady);
+        }
     }
 }
