@@ -111,6 +111,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.DiceRolled -= GameOnDiceRolled;
             Game.PlayerLeft -= GameOnPlayerLeft;
             Game.DiceChanged -= GameOnDiceChanged;
+            Game.PlayerReady -= GameOnPlayerReady;
         }
     }
 }
