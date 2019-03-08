@@ -348,6 +348,21 @@ namespace MagicalYatzyTests.ViewModelTests
             _dicePanel.DidNotReceive().UnfixAll();
         }
 
+        [Fact]
+        public void RollLabelIsEmptyIfThereIsNoCurrentPlayer()
+        {
+            Assert.Empty(_sut.RollLabel);
+        }
+        
+        [Fact]
+        public void RollLabelContainsCurrentPlayerRoll()
+        {
+            _botPlayer.Roll.Returns(123);
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_botPlayer);
+            
+            Assert.Contains(_sut.RollLabel, _botPlayer.Roll.ToString());
+        }
+
         private void CheckIfGameStatusHasBeenRefreshed(Action testAction)
         {
             var currentPlayerUpdated = 0;

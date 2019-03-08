@@ -3,6 +3,7 @@ using System.Linq;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.Magical;
+using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Services.Media;
 using Sanet.MagicalYatzy.ViewModels.Base;
@@ -14,8 +15,9 @@ namespace Sanet.MagicalYatzy.ViewModels
     {
         private readonly IGameService _gameService;
         private readonly ISoundsProvider _soundsProvider;
-        private ObservableCollection<RollResult> _rollResults;
 
+        private ObservableCollection<RollResult> _rollResults;
+       
         public GameViewModel(
             IGameService gameService,
             IDicePanel dicePanel,
@@ -27,13 +29,12 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         public IGame Game => _gameService?.CurrentLocalGame;
         
-        public PlayerViewModel CurrentPlayer
-        {
-            get
-            {
-                return Game.CurrentPlayer == null ? null : Players.FirstOrDefault(f=>f.Player.InGameId==Game.CurrentPlayer.InGameId);
-            }
-        }
+        public string RollLabel => CurrentPlayer != null ? $"{Strings.roll} {CurrentPlayer.Player.Roll}" : string.Empty;
+        
+        public PlayerViewModel CurrentPlayer => 
+            Game.CurrentPlayer == null 
+            ? null 
+            : Players.FirstOrDefault(f=>f.Player.InGameId==Game.CurrentPlayer.InGameId);
 
         public ObservableCollection<PlayerViewModel> Players { get; } = new ObservableCollection<PlayerViewModel>();
 
@@ -135,7 +136,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         private void RefreshGameStatus()
         {
             NotifyPropertyChanged(nameof(CurrentPlayer));
-            //NotifyPropertyChanged(nameof(RollLabel);
+            NotifyPropertyChanged(nameof(RollLabel));
 //            NotifyPropertyChanged("CanFix");
 //            NotifyPropertyChanged("CanStart");
 //
