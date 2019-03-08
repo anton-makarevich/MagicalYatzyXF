@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NSubstitute;
@@ -19,7 +20,7 @@ namespace MagicalYatzyTests.ViewModelTests
         private readonly ISoundsProvider _soundsProvider;
         private readonly IPlayer _humanPlayer;
         private readonly IPlayer _botPlayer;
-        
+
         public GameViewModelTests()
         {
             _humanPlayer = Substitute.For<IPlayer>();
@@ -27,19 +28,19 @@ namespace MagicalYatzyTests.ViewModelTests
 
             _botPlayer = Substitute.For<IPlayer>();
             _botPlayer.InGameId.Returns("1");
-            
+
             _gameService = Substitute.For<IGameService>();
             _gameService.CurrentLocalGame.Players.Returns(new List<IPlayer>()
             {
                 _humanPlayer,
                 _botPlayer
             });
-            
+
             _dicePanel = Substitute.For<IDicePanel>();
             _soundsProvider = Substitute.For<ISoundsProvider>();
             _sut = new GameViewModel(_gameService, _dicePanel, _soundsProvider);
         }
-        
+
         [Fact]
         public void HasGame()
         {
@@ -60,7 +61,7 @@ namespace MagicalYatzyTests.ViewModelTests
             _sut.DetachHandlers();
             Assert.Empty(_sut.Players);
         }
-        
+
         [Fact]
         public void HasPlayersFromGameServiceWhenViewIsActive()
         {
@@ -74,8 +75,23 @@ namespace MagicalYatzyTests.ViewModelTests
         {
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
             _sut.AttachHandlers();
-            
+
             Assert.NotNull(_sut.CurrentPlayer);
+        }
+
+        [Fact]
+        public void HasCurrentPlayerIsTrueWhenThereIsCurrentPlayer()
+        {
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+
+            Assert.True(_sut.HasCurrentPlayer);
+        }
+
+        [Fact]
+        public void HasCurrentPlayerIsFalseWhenThereIsNoCurrentPlayer()
+        {
+            Assert.False(_sut.HasCurrentPlayer);
         }
 
         [Fact]
@@ -83,24 +99,26 @@ namespace MagicalYatzyTests.ViewModelTests
         {
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_botPlayer);
             _sut.AttachHandlers();
-            
-            _gameService.CurrentLocalGame.DiceFixed += Raise.EventWith(null, new FixDiceEventArgs(_humanPlayer,2,true));
-            
-            _dicePanel.Received().FixDice(2,true);
+
+            _gameService.CurrentLocalGame.DiceFixed +=
+                Raise.EventWith(null, new FixDiceEventArgs(_humanPlayer, 2, true));
+
+            _dicePanel.Received().FixDice(2, true);
         }
-        
+
         [Fact]
         public void GameOnDiceFixedDoesNotFixDicePanelDiceWhenViewIsNotActive()
         {
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_botPlayer);
             _sut.AttachHandlers();
             _sut.DetachHandlers();
-            
-            _gameService.CurrentLocalGame.DiceFixed += Raise.EventWith(null, new FixDiceEventArgs(_humanPlayer,2,true));
-            
-            _dicePanel.DidNotReceive().FixDice(2,true);
+
+            _gameService.CurrentLocalGame.DiceFixed +=
+                Raise.EventWith(null, new FixDiceEventArgs(_humanPlayer, 2, true));
+
+            _dicePanel.DidNotReceive().FixDice(2, true);
         }
-        
+
         [Fact]
         public void GameOnDiceRolledCallsRollDiceOnDicePanel()
         {
@@ -108,13 +126,13 @@ namespace MagicalYatzyTests.ViewModelTests
             _dicePanel.IsRolling.Returns(false, true);
             var results = new[] {2, 4, 6, 2, 1};
             _sut.AttachHandlers();
-            
-            _gameService.CurrentLocalGame.DiceRolled += 
+
+            _gameService.CurrentLocalGame.DiceRolled +=
                 Raise.EventWith(null, new RollEventArgs(_humanPlayer, results));
 
             _dicePanel.Received(1).RollDice(Arg.Any<List<int>>());
         }
-        
+
         [Fact]
         public void GameOnDiceRolledDoesNotCallRollDiceOnDicePanelWhenViewIsNotActive()
         {
@@ -122,24 +140,24 @@ namespace MagicalYatzyTests.ViewModelTests
             var results = new[] {2, 4, 6, 2, 1};
             _sut.AttachHandlers();
             _sut.DetachHandlers();
-            _gameService.CurrentLocalGame.DiceRolled += 
+            _gameService.CurrentLocalGame.DiceRolled +=
                 Raise.EventWith(null, new RollEventArgs(_humanPlayer, results));
 
             _dicePanel.DidNotReceive().RollDice(Arg.Any<List<int>>());
         }
-        
+
         [Fact]
         public void GameOnDiceRollCallsCheckRollResultsForCurrentPlayer()
         {
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
-            _dicePanel.IsRolling.Returns( true);
+            _dicePanel.IsRolling.Returns(true);
             var results = new[] {2, 4, 6, 2, 1};
             _sut.AttachHandlers();
-            
-            _gameService.CurrentLocalGame.DiceRolled += 
+
+            _gameService.CurrentLocalGame.DiceRolled +=
                 Raise.EventWith(null, new RollEventArgs(_botPlayer, results));
 
-            _humanPlayer.ReceivedWithAnyArgs().CheckRollResults(null,null);
+            _humanPlayer.ReceivedWithAnyArgs().CheckRollResults(null, null);
         }
 
         [Fact]
@@ -147,53 +165,53 @@ namespace MagicalYatzyTests.ViewModelTests
         {
             _sut.AttachHandlers();
             var initialPlayersCount = _sut.Players.Count;
-            
-            _gameService.CurrentLocalGame.PlayerLeft += 
+
+            _gameService.CurrentLocalGame.PlayerLeft +=
                 Raise.EventWith(null, new PlayerEventArgs(_botPlayer));
 
             Assert.Equal(initialPlayersCount - 1, _sut.Players.Count);
             Assert.Null(_sut.Players.FirstOrDefault(p => p.Player.InGameId == _botPlayer.InGameId));
         }
-        
+
         [Fact]
         public void GameOnDiceChangedPlaysMagicSound()
         {
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
             var results = new[] {2, 4, 6, 2, 1};
             _sut.AttachHandlers();
-            
-            _gameService.CurrentLocalGame.DiceChanged += 
-                Raise.EventWith(null, new RollEventArgs(_humanPlayer,results));
+
+            _gameService.CurrentLocalGame.DiceChanged +=
+                Raise.EventWith(null, new RollEventArgs(_humanPlayer, results));
 
             _soundsProvider.Received().PlaySound("magic");
         }
-        
+
         [Fact]
         public void GameOnDiceChangedUpdatesCurrentPlayersResults()
         {
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
             var results = new[] {2, 4, 6, 2, 1};
             _sut.AttachHandlers();
-            
-            _gameService.CurrentLocalGame.DiceChanged += 
-                Raise.EventWith(null, new RollEventArgs(_humanPlayer,results));
 
-            _humanPlayer.ReceivedWithAnyArgs().CheckRollResults(null,null);
+            _gameService.CurrentLocalGame.DiceChanged +=
+                Raise.EventWith(null, new RollEventArgs(_humanPlayer, results));
+
+            _humanPlayer.ReceivedWithAnyArgs().CheckRollResults(null, null);
         }
-        
+
         [Fact]
         public void GameOnDiceChangedConsumesPlayersArtifact()
         {
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
             var results = new[] {2, 4, 6, 2, 1};
             _sut.AttachHandlers();
-            
-            _gameService.CurrentLocalGame.DiceChanged += 
-                Raise.EventWith(null, new RollEventArgs(_humanPlayer,results));
+
+            _gameService.CurrentLocalGame.DiceChanged +=
+                Raise.EventWith(null, new RollEventArgs(_humanPlayer, results));
 
             _humanPlayer.Received().UseArtifact(Artifacts.ManualSet);
         }
-        
+
         [Fact]
         public void GameOnDiceChangedShowsResultsToSelectIfPlayerIsHuman()
         {
@@ -201,9 +219,9 @@ namespace MagicalYatzyTests.ViewModelTests
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
             var results = new[] {2, 4, 6, 2, 1};
             _sut.AttachHandlers();
-            
-            _gameService.CurrentLocalGame.DiceChanged += 
-                Raise.EventWith(null, new RollEventArgs(_humanPlayer,results));
+
+            _gameService.CurrentLocalGame.DiceChanged +=
+                Raise.EventWith(null, new RollEventArgs(_humanPlayer, results));
 
             Assert.NotNull(_sut.RollResults);
         }
@@ -215,11 +233,132 @@ namespace MagicalYatzyTests.ViewModelTests
             remoteHumanPlayer.InGameId.Returns("0");
             remoteHumanPlayer.IsReady.Returns(true);
             _sut.AttachHandlers();
-            
-            _gameService.CurrentLocalGame.PlayerReady += 
+
+            _gameService.CurrentLocalGame.PlayerReady +=
                 Raise.EventWith(null, new PlayerEventArgs(remoteHumanPlayer));
-            
+
             Assert.True(_humanPlayer.IsReady);
+        }
+
+        [Fact]
+        public void CanRollIsFalseWhenThereIsNoCurrentPlayer()
+        {
+            Assert.False(_sut.CanRoll);
+        }
+
+        [Fact]
+        public void CanRollIsTrueWhenCurrentPlayerIsHuman()
+        {
+            _humanPlayer.IsHuman.Returns(true);
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+
+            Assert.True(_sut.CanRoll);
+        }
+        
+        [Fact]
+        public void CanRollIsFalseWhenCurrentPlayerIsNotHuman()
+        {
+            _botPlayer.IsHuman.Returns(false);
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_botPlayer);
+            _sut.AttachHandlers();
+
+            Assert.False(_sut.CanRoll);
+        }
+
+        [Fact]
+        public void GameOnTurnChangedCallsUnfixAllOnDicePanel()
+        {
+            // Arrange
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            
+            // Act
+            _gameService.CurrentLocalGame.TurnChanged +=
+                Raise.EventWith(null, new MoveEventArgs(_humanPlayer,1));
+            
+            // Assert
+            _dicePanel.Received().UnfixAll();
+        }
+        
+        [Fact]
+        public void GameOnTurnChangedForceBotPlayerToMakeARoll()
+        {
+            // Arrange
+            _botPlayer.IsBot.Returns(true);
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_botPlayer);
+            _sut.AttachHandlers();
+            
+            // Act
+            _gameService.CurrentLocalGame.TurnChanged +=
+                Raise.EventWith(null, new MoveEventArgs(_botPlayer,1));
+            
+            // Assert
+            _gameService.CurrentLocalGame.Received().ReportRoll();
+        }
+        
+        [Fact]
+        public void GameOnTurnChangedUpdatesCanRollState()
+        {
+            // Arrange
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            var canRollUpdatedTimes = 0;
+            _sut.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(_sut.CanRoll)) canRollUpdatedTimes++;
+            };
+            
+            // Act
+            _gameService.CurrentLocalGame.TurnChanged +=
+                Raise.EventWith(null, new MoveEventArgs(_humanPlayer,1));
+            
+            // Assert
+            Assert.Equal(1,canRollUpdatedTimes);
+        }
+        
+        [Fact]
+        public void GameOnTurnChangedRefreshesGameStatus()
+        {
+            var testAction = new Action(() =>
+            {
+                _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+                _sut.AttachHandlers();
+            
+                _gameService.CurrentLocalGame.TurnChanged +=
+                    Raise.EventWith(null, new MoveEventArgs(_humanPlayer,1));
+            });
+            
+            CheckIfGameStatusHasBeenRefreshed(testAction);
+        }
+        
+        [Fact]
+        public void GameOnTurnChangedDoesNotCallUnfixAllOnDicePanelIfViewIsNotActive()
+        {
+            // Arrange
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            _sut.DetachHandlers();
+            
+            // Act
+            _gameService.CurrentLocalGame.TurnChanged +=
+                Raise.EventWith(null, new MoveEventArgs(_humanPlayer,1));
+            
+            // Assert
+            _dicePanel.DidNotReceive().UnfixAll();
+        }
+
+        private void CheckIfGameStatusHasBeenRefreshed(Action testAction)
+        {
+            var currentPlayerUpdated = 0;
+            _sut.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(_sut.CurrentPlayer)) currentPlayerUpdated++;
+            };
+
+            testAction();
+            
+            Assert.Equal(1,currentPlayerUpdated);
         }
     }
 }

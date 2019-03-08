@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Sanet.MagicalYatzy.Models.Events;
@@ -52,6 +51,19 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.PlayerLeft += GameOnPlayerLeft;
             Game.DiceChanged += GameOnDiceChanged;
             Game.PlayerReady += GameOnPlayerReady;
+            Game.TurnChanged += GameOnTurnChanged;
+        }
+
+        private void GameOnTurnChanged(object sender, MoveEventArgs e)
+        {
+            DicePanel.UnfixAll();
+
+            if (CurrentPlayer.Player.IsBot)
+            {
+                Game.ReportRoll();
+            }
+            NotifyPropertyChanged(nameof(CanRoll));
+            RefreshGameStatus();
         }
 
         private void GameOnPlayerReady(object sender, PlayerEventArgs e)
@@ -78,6 +90,10 @@ namespace Sanet.MagicalYatzy.ViewModels
             get => _rollResults;
             private set => SetProperty(ref _rollResults, value);
         }
+
+        public bool HasCurrentPlayer => CurrentPlayer != null;
+        public bool CanRoll => HasCurrentPlayer 
+                               && CurrentPlayer.Player.IsHuman;
 
         private void GameOnPlayerLeft(object sender, PlayerEventArgs e)
         {
@@ -112,6 +128,32 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.PlayerLeft -= GameOnPlayerLeft;
             Game.DiceChanged -= GameOnDiceChanged;
             Game.PlayerReady -= GameOnPlayerReady;
+            Game.TurnChanged -= GameOnTurnChanged;
+
+        }
+
+        private void RefreshGameStatus()
+        {
+            NotifyPropertyChanged(nameof(CurrentPlayer));
+            //NotifyPropertyChanged(nameof(RollLabel);
+//            NotifyPropertyChanged("CanFix");
+//            NotifyPropertyChanged("CanStart");
+//
+//            if (IsPlayerSelected)
+//            {
+//                Title = string.Format("{2} {0}, {1}", Game.Move, SelectedPlayer.Name, Messages.GAME_MOVE.Localize());
+//                foreach (var pw in Players)
+//                    pw.Refresh();
+//            }
+//            if (Game.Rules.Rule == Rules.krMagic)
+//            {
+//                NotifyPropertyChanged("IsMagicRollEnabled");
+//                NotifyPropertyChanged("IsManualSetEnabled");
+//                NotifyPropertyChanged("IsForthRollEnabled");
+//                NotifyPropertyChanged("IsMagicRollVisible");
+//                NotifyPropertyChanged("IsManualSetVisible");
+//                NotifyPropertyChanged("IsForthRollVisible");
+//            }
         }
     }
 }
