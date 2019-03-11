@@ -11,30 +11,37 @@ using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 
 namespace Sanet.MagicalYatzy.ViewModels
 {
-    public class GameViewModel: DicePanelViewModel
+    public class GameViewModel : DicePanelViewModel
     {
         private readonly IGameService _gameService;
         private readonly ISoundsProvider _soundsProvider;
 
         private ObservableCollection<RollResult> _rollResults;
-       
+
         public GameViewModel(
             IGameService gameService,
             IDicePanel dicePanel,
-            ISoundsProvider soundsProvider):base(dicePanel)
+            ISoundsProvider soundsProvider) : base(dicePanel)
         {
             _gameService = gameService;
             _soundsProvider = soundsProvider;
         }
 
         public IGame Game => _gameService?.CurrentLocalGame;
-        
-        public string RollLabel => CurrentPlayer != null ? $"{Strings.roll} {CurrentPlayer.Player.Roll}" : string.Empty;
+
+        public string RollLabel =>
+            CurrentPlayer != null
+                ? $"{Strings.roll} {CurrentPlayer.Player.Roll}"
+                : string.Empty;
+
+        public bool CanFix => HasCurrentPlayer 
+                              && CurrentPlayer.Player.IsHuman 
+                              && CurrentPlayer.Player.Roll != 1;
         
         public PlayerViewModel CurrentPlayer => 
             Game.CurrentPlayer == null 
-            ? null 
-            : Players.FirstOrDefault(f=>f.Player.InGameId==Game.CurrentPlayer.InGameId);
+                ? null 
+                : Players.FirstOrDefault(f=>f.Player.InGameId==Game.CurrentPlayer.InGameId);
 
         public ObservableCollection<PlayerViewModel> Players { get; } = new ObservableCollection<PlayerViewModel>();
 
@@ -137,7 +144,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         {
             NotifyPropertyChanged(nameof(CurrentPlayer));
             NotifyPropertyChanged(nameof(RollLabel));
-//            NotifyPropertyChanged("CanFix");
+            NotifyPropertyChanged(nameof(CanFix));
 //            NotifyPropertyChanged("CanStart");
 //
 //            if (IsPlayerSelected)

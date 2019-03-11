@@ -298,26 +298,6 @@ namespace MagicalYatzyTests.ViewModelTests
         }
         
         [Fact]
-        public void GameOnTurnChangedUpdatesCanRollState()
-        {
-            // Arrange
-            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
-            _sut.AttachHandlers();
-            var canRollUpdatedTimes = 0;
-            _sut.PropertyChanged += (sender, args) =>
-            {
-                if (args.PropertyName == nameof(_sut.CanRoll)) canRollUpdatedTimes++;
-            };
-            
-            // Act
-            _gameService.CurrentLocalGame.TurnChanged +=
-                Raise.EventWith(null, new MoveEventArgs(_humanPlayer,1));
-            
-            // Assert
-            Assert.Equal(1,canRollUpdatedTimes);
-        }
-        
-        [Fact]
         public void GameOnTurnChangedRefreshesGameStatus()
         {
             var testAction = new Action(() =>
@@ -363,17 +343,73 @@ namespace MagicalYatzyTests.ViewModelTests
             Assert.Contains(_sut.RollLabel, _botPlayer.Roll.ToString());
         }
 
+        [Fact]
+        public void CanFixIfThereIsCurrentHumanPlayerAndItIsNotFirstRoll()
+        {
+            _humanPlayer.IsHuman.Returns(true);
+            _humanPlayer.Roll.Returns(2);
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            
+            Assert.True(_sut.CanFix);
+        }
+        
+        [Fact]
+        public void CanNotFixIfThereIsCurrentHumanPlayerAndItIsFirstRoll()
+        {
+            _humanPlayer.IsHuman.Returns(true);
+            _humanPlayer.Roll.Returns(1);
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            
+            Assert.False(_sut.CanFix);
+        }
+        
+        [Fact]
+        public void CanNotFixIfCurrentPlayerIsNotHuman()
+        {
+            _botPlayer.IsHuman.Returns(false);
+            _botPlayer.Roll.Returns(2);
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_botPlayer);
+            _sut.AttachHandlers();
+            
+            Assert.False(_sut.CanFix);
+        }
+        
+        [Fact]
+        public void CanNotFixIfThereIsNoCurrentPlayer()
+        {
+            _sut.AttachHandlers();
+            
+            Assert.False(_sut.CanFix);
+        }
+
         private void CheckIfGameStatusHasBeenRefreshed(Action testAction)
         {
             var currentPlayerUpdated = 0;
+            var canRollUpdatedTimes = 0;
+            var canFixUpdatedTimes = 0;
             _sut.PropertyChanged += (sender, args) =>
             {
-                if (args.PropertyName == nameof(_sut.CurrentPlayer)) currentPlayerUpdated++;
+                switch (args.PropertyName)
+                {
+                    case nameof(_sut.CurrentPlayer):
+                        currentPlayerUpdated++;
+                        break;
+                    case nameof(_sut.CanRoll):
+                        canRollUpdatedTimes++;
+                        break;
+                    case nameof(_sut.CanFix):
+                        canFixUpdatedTimes++;
+                        break;
+                }
             };
 
             testAction();
             
             Assert.Equal(1,currentPlayerUpdated);
+            Assert.Equal(1,canRollUpdatedTimes);
+            Assert.Equal(1,canFixUpdatedTimes);
         }
     }
 }
