@@ -5,6 +5,7 @@ using NSubstitute;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.Magical;
+using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Services.Media;
 using Sanet.MagicalYatzy.ViewModels;
@@ -384,11 +385,40 @@ namespace MagicalYatzyTests.ViewModelTests
             Assert.False(_sut.CanFix);
         }
 
+        [Fact]
+        public void TitleContainsCurrentRoundIfThereIsCurrentPlayer()
+        {
+            _gameService.CurrentLocalGame.Round.Returns(2);
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            
+            Assert.Contains(_gameService.CurrentLocalGame.Round.ToString(),_sut.Title);
+        }
+        
+        [Fact]
+        public void TitleContainsCurrentPlayersName()
+        {
+            _humanPlayer.Name.Returns("Player 1");
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            
+            Assert.Contains(_humanPlayer.Name,_sut.Title);
+        }
+        
+        [Fact]
+        public void TitleContainsWaitingForPlayersTextIfThereIsNoPlayer()
+        {
+            _sut.AttachHandlers();
+            
+            Assert.Contains(Strings.WaitForPlayersLabel,_sut.Title);
+        }
+
         private void CheckIfGameStatusHasBeenRefreshed(Action testAction)
         {
             var currentPlayerUpdated = 0;
             var canRollUpdatedTimes = 0;
             var canFixUpdatedTimes = 0;
+            var titleUpdatedTimes = 0;
             _sut.PropertyChanged += (sender, args) =>
             {
                 switch (args.PropertyName)
@@ -402,6 +432,9 @@ namespace MagicalYatzyTests.ViewModelTests
                     case nameof(_sut.CanFix):
                         canFixUpdatedTimes++;
                         break;
+                    case nameof(_sut.Title):
+                        titleUpdatedTimes++;
+                        break;
                 }
             };
 
@@ -410,6 +443,7 @@ namespace MagicalYatzyTests.ViewModelTests
             Assert.Equal(1,currentPlayerUpdated);
             Assert.Equal(1,canRollUpdatedTimes);
             Assert.Equal(1,canFixUpdatedTimes);
+            Assert.Equal(1, titleUpdatedTimes);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         private readonly ISoundsProvider _soundsProvider;
 
         private ObservableCollection<RollResult> _rollResults;
-
+        
         public GameViewModel(
             IGameService gameService,
             IDicePanel dicePanel,
@@ -38,6 +38,10 @@ namespace Sanet.MagicalYatzy.ViewModels
                               && CurrentPlayer.Player.IsHuman 
                               && CurrentPlayer.Player.Roll != 1;
         
+        public string Title => (HasCurrentPlayer)
+            ? $"{Strings.roll} {Game.Round}, {CurrentPlayer.Player.Name}"
+            : Strings.WaitForPlayersLabel;
+ 
         public PlayerViewModel CurrentPlayer => 
             Game.CurrentPlayer == null 
                 ? null 
@@ -145,11 +149,10 @@ namespace Sanet.MagicalYatzy.ViewModels
             NotifyPropertyChanged(nameof(CurrentPlayer));
             NotifyPropertyChanged(nameof(RollLabel));
             NotifyPropertyChanged(nameof(CanFix));
-//            NotifyPropertyChanged("CanStart");
-//
+            NotifyPropertyChanged(nameof(Title));
+
 //            if (IsPlayerSelected)
 //            {
-//                Title = string.Format("{2} {0}, {1}", Game.Move, SelectedPlayer.Name, Messages.GAME_MOVE.Localize());
 //                foreach (var pw in Players)
 //                    pw.Refresh();
 //            }
