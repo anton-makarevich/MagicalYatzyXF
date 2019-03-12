@@ -85,6 +85,13 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.PlayerReady += GameOnPlayerReady;
             Game.TurnChanged += GameOnTurnChanged;
             Game.GameFinished += GameOnGameFinished;
+            Game.PlayerJoined += GameOnPlayerJoined;
+        }
+
+        private void GameOnPlayerJoined(object sender, PlayerEventArgs e)
+        {
+            if (e?.Player != null)
+                Players.Add(new PlayerViewModel(e.Player));
         }
 
         private async void GameOnGameFinished(object sender, EventArgs e)
@@ -168,6 +175,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.PlayerReady -= GameOnPlayerReady;
             Game.TurnChanged -= GameOnTurnChanged;
             Game.GameFinished -= GameOnGameFinished;
+            Game.PlayerJoined -= GameOnPlayerJoined;
         }
 
         private void RefreshGameStatus()

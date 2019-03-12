@@ -502,6 +502,32 @@ namespace MagicalYatzyTests.ViewModelTests
             _navigationService.DidNotReceive().NavigateToViewModelAsync<GameResultsViewModel>();
         }
 
+        [Fact]
+        public void GameOnPlayerJoinedAddsNewPlayerViewModelToCollection()
+        {
+            _sut.AttachHandlers();
+            var initialPlayersAmount = _sut.Players.Count;
+            
+            var newPlayer = new Player(PlayerType.Local);
+            
+            _gameService.CurrentLocalGame.PlayerJoined +=
+                Raise.EventWith(null, new PlayerEventArgs(newPlayer));
+            
+            Assert.Equal(initialPlayersAmount+1,_sut.Players.Count);
+        }
+        
+        [Fact]
+        public void GameOnPlayerJoinedHandledNullArgument()
+        {
+            _sut.AttachHandlers();
+            var initialPlayersAmount = _sut.Players.Count;
+            
+            _gameService.CurrentLocalGame.PlayerJoined +=
+                Raise.EventWith(null, new PlayerEventArgs(null));
+            
+            Assert.Equal(initialPlayersAmount,_sut.Players.Count);
+        }
+
         private void CheckIfGameStatusHasBeenRefreshed(Action testAction)
         {
             var currentPlayerUpdated = 0;
