@@ -8,6 +8,7 @@ using Sanet.MagicalYatzy.Models.Game.Magical;
 using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Services.Media;
+using Sanet.MagicalYatzy.Services.Navigation;
 using Sanet.MagicalYatzy.ViewModels;
 using Xunit;
 
@@ -17,6 +18,7 @@ namespace MagicalYatzyTests.ViewModelTests
     {
         private readonly GameViewModel _sut;
         private readonly IGameService _gameService;
+        private readonly INavigationService _navigationService;
         private readonly IDicePanel _dicePanel;
         private readonly ISoundsProvider _soundsProvider;
         private readonly IPlayer _humanPlayer;
@@ -37,6 +39,8 @@ namespace MagicalYatzyTests.ViewModelTests
                 _humanPlayer,
                 _botPlayer
             });
+
+            _navigationService = Substitute.For<INavigationService>();
 
             _dicePanel = Substitute.For<IDicePanel>();
             _soundsProvider = Substitute.For<ISoundsProvider>();
@@ -471,6 +475,31 @@ namespace MagicalYatzyTests.ViewModelTests
             _sut.AttachHandlers();
             
             Assert.True(_sut.IsManualSetVisible);
+        }
+
+        [Fact]
+        public void GameOnFinishedRedirectsToGameResultsScreen()
+        {
+            _sut.SetNavigationService(_navigationService);
+            _sut.AttachHandlers();
+            
+            _gameService.CurrentLocalGame.GameFinished +=
+                Raise.EventWith(null, new EventArgs());
+
+            _navigationService.Received().NavigateToViewModelAsync<GameResultsViewModel>();
+        }
+        
+        [Fact]
+        public void GameOnFinishedDoesNotRedirectToGameResultsScreenWhenViewIsNotActive()
+        {
+            _sut.SetNavigationService(_navigationService);
+            _sut.AttachHandlers();
+            _sut.DetachHandlers();
+            
+            _gameService.CurrentLocalGame.GameFinished +=
+                Raise.EventWith(null, new EventArgs());
+
+            _navigationService.DidNotReceive().NavigateToViewModelAsync<GameResultsViewModel>();
         }
 
         private void CheckIfGameStatusHasBeenRefreshed(Action testAction)

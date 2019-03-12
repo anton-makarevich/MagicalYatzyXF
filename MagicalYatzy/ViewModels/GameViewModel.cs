@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Sanet.MagicalYatzy.Models.Events;
@@ -83,6 +84,12 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.DiceChanged += GameOnDiceChanged;
             Game.PlayerReady += GameOnPlayerReady;
             Game.TurnChanged += GameOnTurnChanged;
+            Game.GameFinished += GameOnGameFinished;
+        }
+
+        private async void GameOnGameFinished(object sender, EventArgs e)
+        {
+            await NavigationService.NavigateToViewModelAsync<GameResultsViewModel>();
         }
 
         private void GameOnTurnChanged(object sender, MoveEventArgs e)
@@ -160,7 +167,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.DiceChanged -= GameOnDiceChanged;
             Game.PlayerReady -= GameOnPlayerReady;
             Game.TurnChanged -= GameOnTurnChanged;
-
+            Game.GameFinished -= GameOnGameFinished;
         }
 
         private void RefreshGameStatus()
