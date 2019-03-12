@@ -31,6 +31,7 @@ namespace MagicalYatzyTests.ViewModelTests
             _botPlayer.InGameId.Returns("1");
 
             _gameService = Substitute.For<IGameService>();
+            _gameService.CurrentLocalGame.Rules.Returns(new Rule(Rules.krSimple));
             _gameService.CurrentLocalGame.Players.Returns(new List<IPlayer>()
             {
                 _humanPlayer,
@@ -304,7 +305,9 @@ namespace MagicalYatzyTests.ViewModelTests
             var testAction = new Action(() =>
             {
                 _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
-                _sut.AttachHandlers();
+                _gameService.CurrentLocalGame.Rules.Returns(new Rule(Rules.krMagic));
+                if (_sut.Players.Count == 0)
+                    _sut.AttachHandlers();
             
                 _gameService.CurrentLocalGame.TurnChanged +=
                     Raise.EventWith(null, new MoveEventArgs(_humanPlayer,1));
@@ -413,12 +416,75 @@ namespace MagicalYatzyTests.ViewModelTests
             Assert.Contains(Strings.WaitForPlayersLabel,_sut.Title);
         }
 
+        [Fact]
+        public void MagicRollIsVisibleWhenCurrentPlayerHasCorrespondingArtifact()
+        {
+            _humanPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>() {new Artifact(Artifacts.MagicalRoll)});
+            _gameService.CurrentLocalGame.Rules.Returns(new Rule(Rules.krMagic));
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            
+            Assert.True(_sut.IsMagicRollVisible);
+        }
+        
+        [Fact]
+        public void MagicRollIsInvisibleWhenCurrentPlayerHasCorrespondingArtifactButRulesAreNotMagical()
+        {
+            _humanPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>() {new Artifact(Artifacts.MagicalRoll)});
+            _gameService.CurrentLocalGame.Rules.Returns(new Rule(Rules.krSimple));
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            
+            Assert.False(_sut.IsMagicRollVisible);
+        }
+        
+        [Fact]
+        public void MagicRollIsInvisibleWhenCurrentPlayerHasCorrespondingArtifactButItsUsed()
+        {
+            var usedArtifact = new Artifact(Artifacts.MagicalRoll);
+            usedArtifact.Use();
+            _humanPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>() {usedArtifact});
+            _gameService.CurrentLocalGame.Rules.Returns(new Rule(Rules.krMagic));
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            
+            Assert.False(_sut.IsMagicRollVisible);
+        }
+        
+        [Fact]
+        public void FourthRollIsVisibleWhenCurrentPlayerHasCorrespondingArtifact()
+        {
+            _humanPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>() {new Artifact(Artifacts.FourthRoll)});
+            _gameService.CurrentLocalGame.Rules.Returns(new Rule(Rules.krMagic));
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            
+            Assert.True(_sut.IsFourthRollVisible);
+        }
+
+        [Fact]
+        public void ManualSetIsVisibleWhenCurrentPlayerHasCorrespondingArtifact()
+        {
+            _humanPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>() {new Artifact(Artifacts.ManualSet)});
+            _gameService.CurrentLocalGame.Rules.Returns(new Rule(Rules.krMagic));
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            
+            Assert.True(_sut.IsManualSetVisible);
+        }
+
         private void CheckIfGameStatusHasBeenRefreshed(Action testAction)
         {
             var currentPlayerUpdated = 0;
             var canRollUpdatedTimes = 0;
             var canFixUpdatedTimes = 0;
             var titleUpdatedTimes = 0;
+            var playerResultsRefreshedTimes = 0;
+
+            var magicRollVisibilityCheckedTimes = 0;
+            var fourthRollVisibilityCheckedTimes = 0;
+            var manualSetRollVisibilityCheckedTimes = 0;
+            
             _sut.PropertyChanged += (sender, args) =>
             {
                 switch (args.PropertyName)
@@ -435,8 +501,31 @@ namespace MagicalYatzyTests.ViewModelTests
                     case nameof(_sut.Title):
                         titleUpdatedTimes++;
                         break;
+                    case nameof(_sut.IsMagicRollVisible):
+                        magicRollVisibilityCheckedTimes++;
+                        break;
+                    case nameof(_sut.IsManualSetVisible):
+                        manualSetRollVisibilityCheckedTimes++;
+                        break;
+                    case nameof(_sut.IsFourthRollVisible):
+                        fourthRollVisibilityCheckedTimes++;
+                        break;
                 }
             };
+            _sut.AttachHandlers();
+            
+            foreach (var playerViewModel in _sut.Players)
+            {
+                playerViewModel.PropertyChanged += (sender, args) =>
+                {
+                    switch (args.PropertyName)
+                    {
+                        case nameof(playerViewModel.Results):
+                            playerResultsRefreshedTimes++;
+                            break;
+                    }
+                };
+            }
 
             testAction();
             
@@ -444,6 +533,14 @@ namespace MagicalYatzyTests.ViewModelTests
             Assert.Equal(1,canRollUpdatedTimes);
             Assert.Equal(1,canFixUpdatedTimes);
             Assert.Equal(1, titleUpdatedTimes);
+            
+            if (_sut.HasCurrentPlayer)
+                Assert.Equal(_sut.Players.Count, playerResultsRefreshedTimes);
+
+            if (_sut.Game.Rules.CurrentRule != Rules.krMagic) return;
+            Assert.Equal(1,magicRollVisibilityCheckedTimes);
+            Assert.Equal(1,fourthRollVisibilityCheckedTimes);
+            Assert.Equal(1, manualSetRollVisibilityCheckedTimes);
         }
     }
 }

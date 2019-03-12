@@ -17,7 +17,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         private readonly ISoundsProvider _soundsProvider;
 
         private ObservableCollection<RollResult> _rollResults;
-        
+
         public GameViewModel(
             IGameService gameService,
             IDicePanel dicePanel,
@@ -46,6 +46,25 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.CurrentPlayer == null 
                 ? null 
                 : Players.FirstOrDefault(f=>f.Player.InGameId==Game.CurrentPlayer.InGameId);
+        
+        public bool IsMagicRollVisible => HasArtifact(Artifacts.MagicalRoll);
+        public bool IsFourthRollVisible => HasArtifact(Artifacts.FourthRoll);
+        public bool IsManualSetVisible => HasArtifact(Artifacts.ManualSet);
+
+        private bool HasArtifact(Artifacts artifactType)
+        {
+            if (Game.Rules.CurrentRule != Rules.krMagic)
+                return false;
+            
+            if (!HasCurrentPlayer)
+                return false;
+            
+            var artifact = CurrentPlayer.Player.MagicalArtifactsForGame
+                .FirstOrDefault(a=>a.Type == artifactType);
+ 
+            return artifact !=null
+                   && !artifact.IsUsed;
+        }
 
         public ObservableCollection<PlayerViewModel> Players { get; } = new ObservableCollection<PlayerViewModel>();
 
@@ -151,20 +170,16 @@ namespace Sanet.MagicalYatzy.ViewModels
             NotifyPropertyChanged(nameof(CanFix));
             NotifyPropertyChanged(nameof(Title));
 
-//            if (IsPlayerSelected)
-//            {
-//                foreach (var pw in Players)
-//                    pw.Refresh();
-//            }
-//            if (Game.Rules.Rule == Rules.krMagic)
-//            {
-//                NotifyPropertyChanged("IsMagicRollEnabled");
-//                NotifyPropertyChanged("IsManualSetEnabled");
-//                NotifyPropertyChanged("IsForthRollEnabled");
-//                NotifyPropertyChanged("IsMagicRollVisible");
-//                NotifyPropertyChanged("IsManualSetVisible");
-//                NotifyPropertyChanged("IsForthRollVisible");
-//            }
+            if (HasCurrentPlayer)
+            {
+                foreach (var pw in Players)
+                    pw.Refresh();
+            }
+
+            if (Game.Rules.CurrentRule != Rules.krMagic) return;
+            NotifyPropertyChanged(nameof(IsMagicRollVisible));
+            NotifyPropertyChanged(nameof(IsManualSetVisible));
+            NotifyPropertyChanged(nameof(IsFourthRollVisible));
         }
     }
 }

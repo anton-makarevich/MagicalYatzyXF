@@ -67,5 +67,12 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
             
             Assert.Equal(0, playerDeletedCount);
         }
+
+        [Fact]
+        public void HasRollResultsCollection()
+        {
+            Assert.NotNull(_sut.Results);
+            Assert.Equal(_sut.Player.Results.Count, _sut.Results.Count);
+        }
     }
 }
