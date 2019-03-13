@@ -11,5 +11,7 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
         {
             _rollResult = rollResult;
         }
+
+        public RollResult RollResult => _rollResult;
     }
 }

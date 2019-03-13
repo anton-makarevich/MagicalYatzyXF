@@ -109,5 +109,13 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
 
             Assert.Equal(1,totalUpdatedTimes);
         }
+
+        [Fact]
+        public void TotalReturnsPlayersTotalScore()
+        {
+            _player.Total.Returns(45);
+            
+            Assert.Equal(_player.Total, _sut.Total);
+        }
     }
 }
