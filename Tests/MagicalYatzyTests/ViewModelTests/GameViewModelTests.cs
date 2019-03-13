@@ -527,6 +527,52 @@ namespace MagicalYatzyTests.ViewModelTests
             
             Assert.Equal(initialPlayersAmount,_sut.Players.Count);
         }
+        
+        [Fact]
+        public void GameOnPlayerJoinedDoesNotAddNewPlayerViewModelToCollectionIfViewIsNotActive()
+        {
+            _sut.AttachHandlers();
+            
+            var newPlayer = new Player(PlayerType.Local);
+            
+            _sut.DetachHandlers();
+            
+            _gameService.CurrentLocalGame.PlayerJoined +=
+                Raise.EventWith(null, new PlayerEventArgs(newPlayer));
+            
+            Assert.Empty(_sut.Players);
+        }
+
+        [Fact]
+        public void GameOnStyleChangedChangesCurrentPlayerSelectedStyle()
+        {
+            _sut.AttachHandlers();
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            
+            var remotePlayer = new Player(PlayerType.Network){ SelectedStyle = DiceStyle.Blue};
+            
+            _gameService.CurrentLocalGame.StyleChanged +=
+                Raise.EventWith(null, new PlayerEventArgs(remotePlayer));
+            
+            Assert.Equal(remotePlayer.SelectedStyle, _humanPlayer.SelectedStyle);
+        }
+            
+        [Fact]
+        public void GameOnStyleChangedDoesNotChangeCurrentPlayerSelectedStyleIfViewIsNotActive()
+        {
+            _sut.AttachHandlers();
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+
+            var defaultStyle = _humanPlayer.SelectedStyle;
+            
+            var remotePlayer = new Player(PlayerType.Network){ SelectedStyle = DiceStyle.Blue};
+            _sut.DetachHandlers();
+            
+            _gameService.CurrentLocalGame.StyleChanged +=
+                Raise.EventWith(null, new PlayerEventArgs(remotePlayer));
+            
+            Assert.Equal(defaultStyle, _humanPlayer.SelectedStyle);
+        }
 
         private void CheckIfGameStatusHasBeenRefreshed(Action testAction)
         {

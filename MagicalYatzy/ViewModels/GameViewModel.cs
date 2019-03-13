@@ -86,6 +86,14 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.TurnChanged += GameOnTurnChanged;
             Game.GameFinished += GameOnGameFinished;
             Game.PlayerJoined += GameOnPlayerJoined;
+            Game.StyleChanged += GameOnStyleChanged;
+        }
+
+        private void GameOnStyleChanged(object sender, PlayerEventArgs e)
+        {
+            if (!HasCurrentPlayer)
+                return;
+            CurrentPlayer.Player.SelectedStyle = e.Player.SelectedStyle;
         }
 
         private void GameOnPlayerJoined(object sender, PlayerEventArgs e)
@@ -176,6 +184,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.TurnChanged -= GameOnTurnChanged;
             Game.GameFinished -= GameOnGameFinished;
             Game.PlayerJoined -= GameOnPlayerJoined;
+            Game.StyleChanged -= GameOnStyleChanged;
         }
 
         private void RefreshGameStatus()
