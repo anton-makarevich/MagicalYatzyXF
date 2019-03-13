@@ -87,6 +87,29 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.GameFinished += GameOnGameFinished;
             Game.PlayerJoined += GameOnPlayerJoined;
             Game.StyleChanged += GameOnStyleChanged;
+            Game.ResultApplied += GameOnResultApplied;
+        }
+
+        private void GameOnResultApplied(object sender, ResultEventArgs e)
+        {
+            if (!HasCurrentPlayer)
+                return;
+            
+            if (e.Result.PossibleValue > 0 || e.Result.HasBonus)
+            {
+                if (e.Result.PossibleValue == 50 || e.Result.HasBonus)
+                    _soundsProvider.PlaySound("fanfare");
+                else
+                    _soundsProvider.PlaySound("win");
+            }
+            else
+            {
+                _soundsProvider.PlaySound("wrong");
+            }
+
+            CurrentPlayer.ApplyRollResult(e.Result);
+            RefreshGameStatus();
+            RollResults = null;
         }
 
         private void GameOnStyleChanged(object sender, PlayerEventArgs e)
@@ -185,6 +208,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.GameFinished -= GameOnGameFinished;
             Game.PlayerJoined -= GameOnPlayerJoined;
             Game.StyleChanged -= GameOnStyleChanged;
+            Game.ResultApplied -= GameOnResultApplied;
         }
 
         private void RefreshGameStatus()

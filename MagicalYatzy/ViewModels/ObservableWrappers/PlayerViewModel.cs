@@ -44,9 +44,23 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
             NotifyPropertyChanged(nameof(Results));
         }
         
+        public int Total => _player.Total;
+
         public List<RollResultViewModel> Results =>
             Player.Results == null
                 ? null
                 : _results ?? (_results = Player.Results.Select(r => new RollResultViewModel(r)).ToList());
+
+        public void ApplyRollResult(IRollResult result)
+        {
+            var rollResult = Player.Results.FirstOrDefault(f => f.ScoreType == result.ScoreType);
+            if (rollResult != null)
+            {
+                rollResult.Value = result.PossibleValue;
+                rollResult.HasBonus = result.HasBonus;
+            }
+
+            NotifyPropertyChanged(nameof(Total));
+        }
     }
 }
