@@ -257,7 +257,6 @@ namespace MagicalYatzyTests.ModelTests.Game
 
             // Assert
             Assert.Equal(1, _sut.FixedDiceCount);
-            Assert.Equal(diceToSelect, _sut._lastClickedDie);
         }
 
         [Fact]

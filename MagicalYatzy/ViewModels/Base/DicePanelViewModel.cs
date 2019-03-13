@@ -1,7 +1,4 @@
 ﻿using Sanet.MagicalYatzy.Models.Game;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Sanet.MagicalYatzy.ViewModels.Base
 {

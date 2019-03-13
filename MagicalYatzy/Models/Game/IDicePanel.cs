@@ -12,13 +12,13 @@ namespace Sanet.MagicalYatzy.Models.Game
         bool DebugDrawMode { get; set; }
         int DiceCount { get; set; }
         bool ManualSetMode { get; set; }
-
+        bool IsRolling { get; }
         DiceStyle PanelStyle { get; }
         bool PlaySound { get; set; }
         DieResult Result { get; }
         int RollDelay { get; set; }
         bool TreeDScale { get; set; }
-        double TreeDScaleCoef { get; set; }
+        double TreeDScaleFactor { get; set; }
         bool WithSound { get; set; }
         Rectangle Bounds { get; }
         int FixedDiceCount { get; }
@@ -36,7 +36,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         void ChangeDice(int oldValue, int newValue);
         void UnfixAll();
         void DieClicked(Point clickLocation);
-        void FixDice(int index, bool isfixed);
+        void FixDice(int index, bool isFixed);
         bool RollDice(List<int> aResults);
         void Resize(int width, int height);
         void ChangeDiceManually(int newValue);

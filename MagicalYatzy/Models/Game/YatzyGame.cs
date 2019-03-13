@@ -26,7 +26,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         public YatzyGame(Rules rules)
         {
             Rules = new Rule(rules);
-            Players = new List<Player>();
+            Players = new List<IPlayer>();
             GameId = Guid.NewGuid().ToString("N");
         }
 
@@ -96,7 +96,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                 
         public int Round { get; private set; }
 
-        public List<Player> Players { get; private set; }
+        public List<IPlayer> Players { get; private set; }
         public int NumberOfPlayers => Players?.Count ?? 0;
 
         public bool ReRollMode //TODO can setter be private?
@@ -263,7 +263,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             lock (_syncRoot)
             {
                 if (Players == null)
-                    Players = new List<Player>();
+                    Players = new List<IPlayer>();
 
                 var seat = 0;
                 if (Players.Count(f => f.IsReady) == 0)

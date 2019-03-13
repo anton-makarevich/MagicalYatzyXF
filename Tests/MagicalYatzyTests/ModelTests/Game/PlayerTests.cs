@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Sanet.MagicalYatzy.Models.Game;
 using Xunit;
 using Sanet.MagicalYatzy.Utils;
@@ -123,6 +124,187 @@ namespace MagicalYatzyTests.ModelTests.Game
         public void LocalPlayerHasPlayerName()
         {
             Assert.Contains(Strings.PlayerNameDefault, _sut.Name);
+        }
+
+        [Fact]
+        public void ReturnsIfScoreIsFilled()
+        {
+            const Scores filledScore = Scores.Ones;
+            _sut.PrepareForGameStart(new Rule(Rules.krMagic));
+            _sut.Results.First(f => f.ScoreType == filledScore).Value = 5;
+
+            foreach (var scoreType in EnumUtils.GetValues<Scores>())
+            {
+                if (scoreType != filledScore)
+                    Assert.False(_sut.IsScoreFilled(scoreType));
+            }
+            
+            Assert.True(_sut.IsScoreFilled(filledScore));
+        }
+
+        [Fact]
+        public void FillsCorrectPossibleValueForNumericResult()
+        {
+            // Arrange
+            var rule = new Rule(Rules.krBaby);
+            const Scores scoreToCheck = Scores.Sixs;
+            _sut.PrepareForGameStart(rule);
+            
+            // Act
+            _sut.CheckRollResults(new DieResult(){DiceResults = new List<int>(){3,5,6,3,6}}, rule);
+            
+            // Assert
+            Assert.Equal(12,_sut.Results.First(r=>r.ScoreType == scoreToCheck).PossibleValue);
+        }
+        
+        [Fact]
+        public void FillsCorrectPossibleValueForThreeOfAKindResult()
+        {
+            // Arrange
+            var rule = new Rule(Rules.krSimple);
+            const Scores scoreToCheck = Scores.ThreeOfAKind;
+            _sut.PrepareForGameStart(rule);
+            
+            // Act
+            _sut.CheckRollResults(new DieResult(){DiceResults = new List<int>(){3,3,6,3,6}}, rule);
+            
+            // Assert
+            Assert.Equal(21,_sut.Results.First(r=>r.ScoreType == scoreToCheck).PossibleValue);
+        }
+        
+        [Fact]
+        public void FillsCorrectPossibleValueForFourOfAKindResult()
+        {
+            // Arrange
+            var rule = new Rule(Rules.krSimple);
+            const Scores scoreToCheck = Scores.FourOfAKind;
+            _sut.PrepareForGameStart(rule);
+            
+            // Act
+            _sut.CheckRollResults(new DieResult(){DiceResults = new List<int>(){3,3,3,3,6}}, rule);
+            
+            // Assert
+            Assert.Equal(18,_sut.Results.First(r=>r.ScoreType == scoreToCheck).PossibleValue);
+        }
+        
+        [Fact]
+        public void FillsCorrectPossibleValueForChanceResult()
+        {
+            // Arrange
+            var rule = new Rule(Rules.krSimple);
+            const Scores scoreToCheck = Scores.Total;
+            _sut.PrepareForGameStart(rule);
+            
+            // Act
+            _sut.CheckRollResults(new DieResult(){DiceResults = new List<int>(){3,3,3,3,6}}, rule);
+            
+            // Assert
+            Assert.Equal(18,_sut.Results.First(r=>r.ScoreType == scoreToCheck).PossibleValue);
+        }
+        
+        [Fact]
+        public void FillsCorrectPossibleValueForYatzyResult()
+        {
+            // Arrange
+            var rule = new Rule(Rules.krSimple);
+            const Scores scoreToCheck = Scores.Kniffel;
+            _sut.PrepareForGameStart(rule);
+            
+            // Act
+            _sut.CheckRollResults(new DieResult(){DiceResults = new List<int>(){3,3,3,3,3}}, rule);
+            
+            // Assert
+            Assert.Equal(50,_sut.Results.First(r=>r.ScoreType == scoreToCheck).PossibleValue);
+        }
+        
+        [Fact]
+        public void FillsCorrectPossibleValueForFullHouseResult()
+        {
+            // Arrange
+            var rule = new Rule(Rules.krSimple);
+            const Scores scoreToCheck = Scores.FullHouse;
+            _sut.PrepareForGameStart(rule);
+            
+            // Act
+            _sut.CheckRollResults(new DieResult(){DiceResults = new List<int>(){3,3,2,2,3}}, rule);
+            
+            // Assert
+            Assert.Equal(25,_sut.Results.First(r=>r.ScoreType == scoreToCheck).PossibleValue);
+        }
+        
+        [Fact]
+        public void FillsYatzyJokerAsPossibleValueForFullHouseResultWhenYatzyIsAlreadyFilledForRulesWithExtendedBonus()
+        {
+            // Arrange
+            var extendedRules = new[]
+            {
+                new Rule(Rules.krExtended),
+                new Rule(Rules.krMagic)
+            };
+            foreach (var rule in extendedRules)
+            {
+                const Scores scoreToCheck = Scores.FullHouse;
+                _sut.PrepareForGameStart(rule);
+                _sut.Results.Single(r => r.ScoreType == Scores.Kniffel).Value = 50;
+                _sut.Results.Single(r => r.ScoreType == Scores.Threes).Value = 6;
+            
+                // Act
+                _sut.CheckRollResults(new DieResult(){DiceResults = new List<int>(){3,3,3,3,3}}, rule);
+            
+                // Assert
+                Assert.Equal(25,_sut.Results.First(r=>r.ScoreType == scoreToCheck).PossibleValue);
+            }
+        }
+        
+        [Fact]
+        public void FillsCorrectPossibleValueForSmallStraightResult()
+        {
+            // Arrange
+            var rule = new Rule(Rules.krSimple);
+            const Scores scoreToCheck = Scores.SmallStraight;
+            _sut.PrepareForGameStart(rule);
+            
+            // Act
+            _sut.CheckRollResults(new DieResult(){DiceResults = new List<int>(){1,3,2,4,3}}, rule);
+            
+            // Assert
+            Assert.Equal(30,_sut.Results.First(r=>r.ScoreType == scoreToCheck).PossibleValue);
+        }
+        
+        [Fact]
+        public void FillsYatzyJokerAsPossibleValueForSmallStraightResultWhenYatzyIsAlreadyFilledForRulesWithExtendedBonus()
+        {
+            // Arrange
+            var extendedRules = new[]
+            {
+                new Rule(Rules.krExtended),
+                new Rule(Rules.krMagic)
+            };
+            foreach (var rule in extendedRules)
+            {
+                const Scores scoreToCheck = Scores.SmallStraight;
+                _sut.PrepareForGameStart(rule);
+                _sut.Results.Single(r => r.ScoreType == Scores.Kniffel).Value = 50;
+                _sut.Results.Single(r => r.ScoreType == Scores.Threes).Value = 6;
+            
+                // Act
+                _sut.CheckRollResults(new DieResult(){DiceResults = new List<int>(){3,3,3,3,3}}, rule);
+            
+                // Assert
+                Assert.Equal(30,_sut.Results.First(r=>r.ScoreType == scoreToCheck).PossibleValue);
+            }
+        }
+        
+        [Fact]
+        public void UseArtifactChangeDecreaseArtifactsCount()
+        {
+            var artifact = new Artifact(Artifacts.ManualSet);
+
+            _sut.AvailableMagicalArtifacts = new List<Artifact> {artifact};
+            _sut.PrepareForGameStart(new Rule(Rules.krMagic));
+            _sut.UseArtifact(Artifacts.ManualSet);
+            
+            Assert.True(_sut.MagicalArtifactsForGame.First(f=>f.Type == Artifacts.ManualSet).IsUsed);
         }
     }
 }

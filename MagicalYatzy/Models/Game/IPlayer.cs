@@ -26,7 +26,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         bool IsMyTurn { get; set; }
 
-        bool IsReady { get;  }
+        bool IsReady { get; set; }
 
         string Language { get; set; }
 
@@ -53,5 +53,8 @@ namespace Sanet.MagicalYatzy.Models.Game
         void PrepareForGameStart(Rule rule);
         
         RollResult GetResultForScore(Scores score);
+
+        void CheckRollResults(DieResult lastDiceResult, Rule rule);
+        void UseArtifact(Artifacts artifact);
     }
 }

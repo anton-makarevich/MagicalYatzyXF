@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
@@ -66,6 +67,55 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
             _sut.DeleteCommand.Execute(null);
             
             Assert.Equal(0, playerDeletedCount);
+        }
+
+        [Fact]
+        public void HasRollResultsCollection()
+        {
+            Assert.NotNull(_sut.Results);
+            Assert.Equal(_sut.Player.Results.Count, _sut.Results.Count);
+        }
+
+        [Fact]
+        public void ApplyRollResultUpdatesCorrespondingPlayersResult()
+        {
+            const Scores scoreType = Scores.Kniffel;
+            var playersResult = new RollResult(scoreType);
+            _player.Results.Returns(new List<RollResult>() {playersResult});
+            
+            var newResult = Substitute.For<IRollResult>();
+            newResult.PossibleValue.Returns(50);
+            newResult.HasBonus.Returns(true);
+            newResult.ScoreType.Returns(scoreType);
+            
+            _sut.ApplyRollResult(newResult);
+
+            Assert.Equal(newResult.PossibleValue,playersResult.Value);
+            Assert.Equal(newResult.HasBonus, playersResult.HasBonus);
+        }
+        
+        [Fact]
+        public void ApplyRollResultUpdatesPlayersTotal()
+        {
+            const Scores scoreType = Scores.Kniffel;
+            var totalUpdatedTimes = 0;
+            var newResult = Substitute.For<IRollResult>();
+            newResult.PossibleValue.Returns(50);
+            newResult.HasBonus.Returns(true);
+            newResult.ScoreType.Returns(scoreType);
+            _sut.PropertyChanged += (sender, args) => { totalUpdatedTimes++; };
+            
+            _sut.ApplyRollResult(newResult);
+
+            Assert.Equal(1,totalUpdatedTimes);
+        }
+
+        [Fact]
+        public void TotalReturnsPlayersTotalScore()
+        {
+            _player.Total.Returns(45);
+            
+            Assert.Equal(_player.Total, _sut.Total);
         }
     }
 }
