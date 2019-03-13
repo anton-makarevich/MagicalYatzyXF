@@ -733,7 +733,7 @@ namespace MagicalYatzyTests.ViewModelTests
         }
         
         [Fact]
-        public void GameOnRerolledConsumesArtefact()
+        public void GameOnRerolledConsumesArtifact()
         {
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
             _sut.AttachHandlers();
@@ -792,6 +792,59 @@ namespace MagicalYatzyTests.ViewModelTests
             _soundsProvider.DidNotReceiveWithAnyArgs().PlaySound("magic");
         }
 
+        [Fact]
+        public void GameOnMagicRollPlaysMagicSound()
+        {
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            
+            _gameService.CurrentLocalGame.MagicRollUsed +=
+                Raise.EventWith(null, new PlayerEventArgs(_humanPlayer));
+            
+            _soundsProvider.Received().PlaySound("magic");
+        }
+        
+        [Fact]
+        public void GameOnMagicRollConsumesArtifact()
+        {
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            
+            _gameService.CurrentLocalGame.MagicRollUsed +=
+                Raise.EventWith(null, new PlayerEventArgs(_humanPlayer));
+            
+            _humanPlayer.Received().UseArtifact(Artifacts.MagicalRoll);
+        }
+        
+        [Fact]
+        public void GameOnMagicRollRefreshesGameStatus()
+        {
+            var testAction = new Action(() =>
+            {
+                _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+                if (!_sut.Players.Any())
+                    _sut.AttachHandlers();
+            
+                _gameService.CurrentLocalGame.MagicRollUsed +=
+                    Raise.EventWith(null, new PlayerEventArgs(_humanPlayer));
+            });
+            
+            CheckIfGameStatusHasBeenRefreshed(testAction);
+        }
+        
+        [Fact]
+        public void GameOnMagicRollDoesNotPlayMagicSoundIfViewIsNotActive()
+        {
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            _sut.DetachHandlers();
+            
+            _gameService.CurrentLocalGame.MagicRollUsed +=
+                Raise.EventWith(null, new PlayerEventArgs(_humanPlayer));
+            
+            _soundsProvider.DidNotReceiveWithAnyArgs().PlaySound("magic");
+        }
+        
         private void CheckIfGameStatusHasBeenRefreshed(Action testAction)
         {
             var currentPlayerUpdated = 0;

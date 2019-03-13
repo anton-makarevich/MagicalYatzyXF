@@ -89,7 +89,8 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.StyleChanged += GameOnStyleChanged;
             Game.ResultApplied += GameOnResultApplied;
             Game.PlayerRerolled += GameOnPlayerRerolled;
-        }   
+            Game.MagicRollUsed += GameOnMagicRollUsed;
+        }
 
         private void GameOnResultApplied(object sender, ResultEventArgs e)
         {
@@ -175,6 +176,17 @@ namespace Sanet.MagicalYatzy.ViewModels
             RollResults = null;
             RefreshGameStatus();            
         }
+        
+        
+        private void GameOnMagicRollUsed(object sender, PlayerEventArgs e)
+        {
+            if (!HasCurrentPlayer)
+                return;
+            _soundsProvider.PlaySound("magic");
+            CurrentPlayer.Player.UseArtifact(Artifacts.MagicalRoll);
+            RefreshGameStatus();
+        }
+
 
         public ObservableCollection<RollResult> RollResults
         {
@@ -225,6 +237,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.StyleChanged -= GameOnStyleChanged;
             Game.ResultApplied -= GameOnResultApplied;            
             Game.PlayerRerolled -= GameOnPlayerRerolled;
+            Game.MagicRollUsed -= GameOnMagicRollUsed;
         }
 
         private void RefreshGameStatus()
