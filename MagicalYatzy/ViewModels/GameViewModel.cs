@@ -88,7 +88,8 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.PlayerJoined += GameOnPlayerJoined;
             Game.StyleChanged += GameOnStyleChanged;
             Game.ResultApplied += GameOnResultApplied;
-        }
+            Game.PlayerRerolled += GameOnPlayerRerolled;
+        }   
 
         private void GameOnResultApplied(object sender, ResultEventArgs e)
         {
@@ -151,6 +152,8 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         private void GameOnDiceChanged(object sender, RollEventArgs e)
         {
+            if (!HasCurrentPlayer)
+                return;
             _soundsProvider.PlaySound("magic");
             CurrentPlayer.Player.CheckRollResults(new DieResult(){ DiceResults = e.Value.ToList()}, Game.Rules );
             CurrentPlayer.Player.UseArtifact(Artifacts.ManualSet);
@@ -159,6 +162,18 @@ namespace Sanet.MagicalYatzy.ViewModels
             {
                 RollResults = new ObservableCollection<RollResult>(CurrentPlayer.Player.Results.Where(f => !f.HasValue && f.ScoreType != Scores.Bonus));
             }
+            RefreshGameStatus();
+        }
+        
+        private void GameOnPlayerRerolled(object sender, PlayerEventArgs e)
+        {
+            if (!HasCurrentPlayer)
+                return;
+            _soundsProvider.PlaySound("magic");
+            CurrentPlayer.Player.Roll = 1;
+            CurrentPlayer.Player.UseArtifact(Artifacts.FourthRoll);
+            RollResults = null;
+            RefreshGameStatus();            
         }
 
         public ObservableCollection<RollResult> RollResults
@@ -208,7 +223,8 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.GameFinished -= GameOnGameFinished;
             Game.PlayerJoined -= GameOnPlayerJoined;
             Game.StyleChanged -= GameOnStyleChanged;
-            Game.ResultApplied -= GameOnResultApplied;
+            Game.ResultApplied -= GameOnResultApplied;            
+            Game.PlayerRerolled -= GameOnPlayerRerolled;
         }
 
         private void RefreshGameStatus()

@@ -231,6 +231,23 @@ namespace MagicalYatzyTests.ViewModelTests
 
             Assert.NotNull(_sut.RollResults);
         }
+        
+        [Fact]
+        public void GameOnDiceChangedRefreshesGameStatus()
+        {
+            var testAction = new Action(() =>
+            {
+                _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+                var results = new[] {2, 4, 6, 2, 1};
+                if (!_sut.Players.Any())
+                    _sut.AttachHandlers();
+
+                _gameService.CurrentLocalGame.DiceChanged +=
+                    Raise.EventWith(null, new RollEventArgs(_humanPlayer, results));
+            });
+            
+            CheckIfGameStatusHasBeenRefreshed(testAction);
+        }
 
         [Fact]
         public void GameOnPlayerReadyUpdatePlayerIsReadyStatus()
@@ -689,6 +706,90 @@ namespace MagicalYatzyTests.ViewModelTests
                 Raise.EventWith(null, new ResultEventArgs(_humanPlayer, result));
             
             _soundsProvider.DidNotReceiveWithAnyArgs().PlaySound("wrong");
+        }
+
+        [Fact]
+        public void GameOnRerolledPlaysMagicSound()
+        {
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            
+            _gameService.CurrentLocalGame.PlayerRerolled +=
+                Raise.EventWith(null, new PlayerEventArgs(_humanPlayer));
+            
+            _soundsProvider.Received().PlaySound("magic");
+        }
+        
+        [Fact]
+        public void GameOnRerolledResetsPlayersRoll()
+        {
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            
+            _gameService.CurrentLocalGame.PlayerRerolled +=
+                Raise.EventWith(null, new PlayerEventArgs(_humanPlayer));
+            
+            Assert.Equal(1,_humanPlayer.Roll);
+        }
+        
+        [Fact]
+        public void GameOnRerolledConsumesArtefact()
+        {
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            
+            _gameService.CurrentLocalGame.PlayerRerolled +=
+                Raise.EventWith(null, new PlayerEventArgs(_humanPlayer));
+            
+            _humanPlayer.Received().UseArtifact(Artifacts.FourthRoll);
+        }
+        
+        [Fact]
+        public void GameOnRerolledClearsCurrentRollResults()
+        {
+            _humanPlayer.IsHuman.Returns(true);
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            var results = new[] {2, 4, 6, 2, 1};
+            _sut.AttachHandlers();
+
+            _gameService.CurrentLocalGame.DiceChanged +=
+                Raise.EventWith(null, new RollEventArgs(_humanPlayer, results));
+
+            Assert.NotNull(_sut.RollResults);
+            
+            _gameService.CurrentLocalGame.PlayerRerolled +=
+                Raise.EventWith(null, new PlayerEventArgs(_humanPlayer));
+            
+            Assert.Null(_sut.RollResults);
+        }
+        
+        [Fact]
+        public void GameOnRerolledRefreshesGameStatus()
+        {
+            var testAction = new Action(() =>
+            {
+                _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+                if (!_sut.Players.Any())
+                    _sut.AttachHandlers();
+            
+                _gameService.CurrentLocalGame.PlayerRerolled +=
+                    Raise.EventWith(null, new PlayerEventArgs(_humanPlayer));
+            });
+            
+            CheckIfGameStatusHasBeenRefreshed(testAction);
+        }
+        
+        [Fact]
+        public void GameOnRerolledDoesNotPlayMagicSoundIfViewIsNotActive()
+        {
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            _sut.DetachHandlers();
+            
+            _gameService.CurrentLocalGame.PlayerRerolled +=
+                Raise.EventWith(null, new PlayerEventArgs(_humanPlayer));
+            
+            _soundsProvider.DidNotReceiveWithAnyArgs().PlaySound("magic");
         }
 
         private void CheckIfGameStatusHasBeenRefreshed(Action testAction)
