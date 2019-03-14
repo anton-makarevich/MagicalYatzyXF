@@ -7,7 +7,7 @@
     xmlns:vm="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
     xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls"
     xmlns:loc="clr-namespace:Sanet.MagicalYatzy.XF.MarkupExtensions;assembly=MagicalYatzyXF"
-    x:Class="Sanet.MagicalYatzy.XF.Views.LobbyViewWide"
+    x:Class="Sanet.MagicalYatzy.XF.Views.Lobby.LobbyViewWide"
     x:TypeArguments="vm:LobbyViewModel">
     <Grid
         Margin="0,0,0,5">

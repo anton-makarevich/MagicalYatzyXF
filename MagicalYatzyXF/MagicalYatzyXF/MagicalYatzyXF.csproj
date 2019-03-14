@@ -22,8 +22,8 @@
     <Compile Update="Views\Cells\PlayerCell.xaml.cs">
       <DependentUpon>PlayerCell.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\LobbyViewNarrow.xaml.cs">
-      <DependentUpon>Views/LobbyViewNarrow.xaml</DependentUpon>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Lobby\LobbyViewNarrow.xaml.cs">
+      <DependentUpon>LobbyViewNarrow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -31,7 +31,7 @@
     <!-- https://bugzilla.xamarin.com/show_bug.cgi?id=55591 -->
     <None Remove="**\*.xaml" />
     
-    <Compile Update="**\*.xaml.cs" DependentUpon="ToolBarButton.xaml" />
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="**\*.xaml.cs" DependentUpon="LobbyViewWide.xaml" />
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Cells\MainMenuCell.xaml %28copy%29.cs">
       <DependentUpon>SecondaryMenuCell.xaml</DependentUpon>
     </Compile>
@@ -44,6 +44,7 @@
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="Views\Fragments\" />
+    <Folder Include="Views\Lobby\" />
   </ItemGroup>
 
   <ItemGroup>
