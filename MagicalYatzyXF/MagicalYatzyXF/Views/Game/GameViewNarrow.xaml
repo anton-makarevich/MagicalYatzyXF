@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<base:BaseView 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    x:Class="Sanet.MagicalYatzy.XF.Views.Game.GameViewNarrow"
+    xmlns:base="clr-namespace:Sanet.MagicalYatzy.XF.Views.Base"
+    xmlns:vm="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
+    x:TypeArguments="vm:GameViewModel">
+    <ContentPage.Content>
+    </ContentPage.Content>
+</base:BaseView>
+

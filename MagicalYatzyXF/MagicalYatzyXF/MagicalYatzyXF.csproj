@@ -26,12 +26,16 @@
       <DependentUpon>LobbyViewNarrow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Lobby\LobbyViewWide.xaml.cs">
+      <DependentUpon>LobbyViewWide.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <!-- https://bugzilla.xamarin.com/show_bug.cgi?id=55591 -->
     <None Remove="**\*.xaml" />
     
-    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="**\*.xaml.cs" DependentUpon="LobbyViewWide.xaml" />
+    <Compile Update="**\*.xaml.cs" DependentUpon="ResultsTable.xaml" />
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Cells\MainMenuCell.xaml %28copy%29.cs">
       <DependentUpon>SecondaryMenuCell.xaml</DependentUpon>
     </Compile>
@@ -45,6 +49,7 @@
     <Folder Include="Models\" />
     <Folder Include="Views\Fragments\" />
     <Folder Include="Views\Lobby\" />
+    <Folder Include="Views\Game\" />
   </ItemGroup>
 
   <ItemGroup>
