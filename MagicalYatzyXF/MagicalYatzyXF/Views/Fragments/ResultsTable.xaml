@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentView 
+<controls:HorizontalListView 
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     x:Class="Sanet.MagicalYatzy.XF.Views.Fragments.ResultsTable"
-    xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls;assembly=MagicalYatzyXF">
-    <ContentView.Content>
-        
-    </ContentView.Content>
-</ContentView>
+    xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls;assembly=MagicalYatzyXF"
+    xmlns:cells="clr-namespace:Sanet.MagicalYatzy.XF.Views.Cells;assembly=MagicalYatzyXF"
+    ItemsSource="{Binding Players}"
+    >
+    <controls:HorizontalListView.ItemTemplate>
+        <DataTemplate>
+            <cells:PlayerScoresCell/>
+        </DataTemplate>
+    </controls:HorizontalListView.ItemTemplate>
+</controls:HorizontalListView>

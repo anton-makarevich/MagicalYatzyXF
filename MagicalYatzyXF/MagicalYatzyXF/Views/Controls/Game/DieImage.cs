@@ -19,6 +19,8 @@ namespace Sanet.MagicalYatzy.XF.Views.Controls.Game
             _canvasView = new SKCanvasView();
             _canvasView.PaintSurface += OnCanvasViewPaintSurface;
             Content = _canvasView;
+            UpdateImage();
+            UpdatePosition();
         }
 
         private void OnDiePropertyChanged(object sender, PropertyChangedEventArgs e)

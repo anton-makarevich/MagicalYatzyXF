@@ -3,7 +3,7 @@ using Xamarin.Forms;
 
 namespace Sanet.MagicalYatzy.XF.Views.Controls.Game
 {
-    class DicePanelXF: AbsoluteLayout
+    public class DicePanelXF: AbsoluteLayout
     {
         private IDicePanel _dicePanelModel;
 
