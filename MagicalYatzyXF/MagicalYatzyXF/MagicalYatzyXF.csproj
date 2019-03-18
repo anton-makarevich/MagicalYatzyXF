@@ -19,17 +19,6 @@
   
   <ItemGroup>
     <Compile Remove="Views\LobbyView.cs" />
-    <Compile Update="Views\Cells\PlayerCell.xaml.cs">
-      <DependentUpon>PlayerCell.xaml</DependentUpon>
-    </Compile>
-    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Lobby\LobbyViewNarrow.xaml.cs">
-      <DependentUpon>LobbyViewNarrow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Lobby\LobbyViewWide.xaml.cs">
-      <DependentUpon>LobbyViewWide.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <!-- https://bugzilla.xamarin.com/show_bug.cgi?id=55591 -->
@@ -47,24 +36,6 @@
 
   <ItemGroup>
     <Folder Include="Models\" />
-    <Folder Include="Views\Fragments\" />
-    <Folder Include="Views\Lobby\" />
-    <Folder Include="Views\Game\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Views\Cells\MainMenuCell.xaml.cs">
-      <DependentUpon>MainMenuCell.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Views\Cells\PlayerCell.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Fragments\RulesFragment.xaml">
-      <Generator></Generator>
-    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

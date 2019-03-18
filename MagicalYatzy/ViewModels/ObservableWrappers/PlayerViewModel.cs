@@ -53,12 +53,8 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
 
         public void ApplyRollResult(IRollResult result)
         {
-            var rollResult = Player.Results.FirstOrDefault(f => f.ScoreType == result.ScoreType);
-            if (rollResult != null)
-            {
-                rollResult.Value = result.PossibleValue;
-                rollResult.HasBonus = result.HasBonus;
-            }
+            var rollResult = Results.FirstOrDefault(f => f.ScoreType == result.ScoreType);
+            rollResult?.ApplyResult(result);
 
             NotifyPropertyChanged(nameof(Total));
         }
