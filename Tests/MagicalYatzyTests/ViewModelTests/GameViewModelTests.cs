@@ -860,7 +860,7 @@ namespace MagicalYatzyTests.ViewModelTests
                 
                 _gameService.CurrentLocalGame.Rules.Returns(new Rule(rule));
                 IReadOnlyList<RollResult> rollResults = _gameService.CurrentLocalGame.Rules.ScoresForRule
-                    .Select(score => new RollResult(score)).Where(r => r.ScoreType != Scores.Bonus).ToList();
+                    .Select(score => new RollResult(score)).ToList();
                 _sut.AttachHandlers();
 
                 Assert.NotEmpty(_sut.RollResultsLabels);

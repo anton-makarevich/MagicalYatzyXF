@@ -201,7 +201,6 @@ namespace Sanet.MagicalYatzy.ViewModels
         
         public List<string> RollResultsLabels => Game.Rules.ScoresForRule
             .Select(score => new RollResult(score))
-            .Where(r => r.ScoreType != Scores.Bonus).ToList()
             .Select(s => _localizationService.GetLocalizedString(s.ScoreType.ToString())).ToList();
 
         public bool HasCurrentPlayer => CurrentPlayer != null;
