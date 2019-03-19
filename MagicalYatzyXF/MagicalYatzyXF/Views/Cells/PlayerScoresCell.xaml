@@ -1,35 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ViewCell xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
           xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls;assembly=MagicalYatzyXF"
+          xmlns:cells="clr-namespace:Sanet.MagicalYatzy.XF.Views.Cells;assembly=MagicalYatzyXF"
           x:Class="Sanet.MagicalYatzy.XF.Views.Cells.PlayerScoresCell">
-    <Grid
-        >
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <StackLayout
+        Orientation="Vertical">
         <Label
             TextColor="Yellow"
             Text="{Binding Name}" />
         <controls:BindableStackLayout 
-            Grid.Row="1"
             Orientation="Vertical"
             ItemsSource="{Binding Results}"
             VerticalOptions = "Start"
             BackgroundColor = "Transparent">
             <controls:BindableStackLayout.ItemTemplate>
                 <DataTemplate>
-                    <ViewCell>
-                        <Label
-                            TextColor="Yellow"
-                            Text="{Binding Value}" />
-                    </ViewCell>
+                    <cells:ScoreValueCell/>
                 </DataTemplate>
             </controls:BindableStackLayout.ItemTemplate>
         </controls:BindableStackLayout>
         <Label
-            Grid.Row="2" TextColor="Yellow"
+            TextColor="Red"
             Text="{Binding Total}" />
-    </Grid>
+    </StackLayout>
 </ViewCell>

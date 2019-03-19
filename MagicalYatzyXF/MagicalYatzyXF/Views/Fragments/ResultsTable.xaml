@@ -1,16 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<controls:BindableStackLayout 
+<StackLayout
+    Orientation="Horizontal"
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     x:Class="Sanet.MagicalYatzy.XF.Views.Fragments.ResultsTable"
     xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls;assembly=MagicalYatzyXF"
-    xmlns:cells="clr-namespace:Sanet.MagicalYatzy.XF.Views.Cells;assembly=MagicalYatzyXF"
-    ItemsSource="{Binding Players}"
-    Orientation="Horizontal"
-    >
-    <controls:BindableStackLayout.ItemTemplate>
-        <DataTemplate>
-            <cells:PlayerScoresCell/>
-        </DataTemplate>
-    </controls:BindableStackLayout.ItemTemplate>
-</controls:BindableStackLayout>
+    xmlns:cells="clr-namespace:Sanet.MagicalYatzy.XF.Views.Cells;assembly=MagicalYatzyXF">
+    <StackLayout
+        Orientation="Vertical">
+        <Label
+            TextColor="Yellow"
+            Text=" " />
+        <controls:BindableStackLayout 
+            Orientation="Vertical"
+            ItemsSource="{Binding RollResultsLabels}"
+            VerticalOptions = "Start"
+            BackgroundColor = "Transparent">
+            <controls:BindableStackLayout.ItemTemplate>
+                <DataTemplate>
+                    <cells:ScoreLabelCell/>
+                </DataTemplate>
+            </controls:BindableStackLayout.ItemTemplate>
+        </controls:BindableStackLayout>
+        <Label
+            TextColor="Red"
+            Text="Total" />
+    </StackLayout>
+    <controls:BindableStackLayout 
+        ItemsSource="{Binding Players}"
+        Orientation="Horizontal"
+        >
+        <controls:BindableStackLayout.ItemTemplate>
+            <DataTemplate>
+                <cells:PlayerScoresCell/>
+            </DataTemplate>
+        </controls:BindableStackLayout.ItemTemplate>
+    </controls:BindableStackLayout>
+</StackLayout>

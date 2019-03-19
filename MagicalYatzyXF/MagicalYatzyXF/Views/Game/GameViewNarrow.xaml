@@ -3,8 +3,22 @@
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     x:Class="Sanet.MagicalYatzy.XF.Views.Game.GameViewNarrow"
-    xmlns:game="clr-namespace:Sanet.MagicalYatzy.XF.Views.Game;assembly=MagicalYatzyXF">
-    <ContentPage.Content>
-    </ContentPage.Content>
+    xmlns:game="clr-namespace:Sanet.MagicalYatzy.XF.Views.Game;assembly=MagicalYatzyXF"
+    xmlns:tabControl="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls.TabControl;assembly=MagicalYatzyXF">
+    <Grid
+        Margin="0,0,0,5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <tabControl:TabsStrip
+            Padding="10,0"
+            BackgroundColor="Transparent"
+            TabBackColor="Transparent"
+            TabIndicatorColor="{StaticResource SanetBlueColor}"
+            FontSize="20"
+            x:Name="TabBar"/>
+    </Grid>
 </game:GameView>
 
