@@ -884,6 +884,21 @@ namespace MagicalYatzyTests.ViewModelTests
             Assert.Equal("RollReset.png", _sut.RollResetImage);
         }
 
+        [Fact]
+        public void RollCommandCallsReportRollOnGame()
+        {
+            // Arrange
+            _humanPlayer.IsHuman.Returns(true);
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            
+            // Act
+            _sut.RollCommand.Execute(null);
+            
+            // Assert
+            _gameService.CurrentLocalGame.Received().ReportRoll();
+        }
+
         #region Private methods
 
         private void CheckIfGameStatusHasBeenRefreshed(Action testAction)

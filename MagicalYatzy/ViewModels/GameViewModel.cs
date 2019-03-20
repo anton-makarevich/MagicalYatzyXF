@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
+using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.Magical;
@@ -214,6 +216,13 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         public string ScoresTitle => Strings.ResultsTableLabel.ToUpper();
         public string PanelTitle => Strings.DiceBoardLabel.ToUpper();
+        public ICommand RollCommand => new SimpleCommand(() =>
+        {
+            if (CanRoll)
+            {
+                Game?.ReportRoll();
+            }
+        });
 
         private void GameOnPlayerLeft(object sender, PlayerEventArgs e)
         {
