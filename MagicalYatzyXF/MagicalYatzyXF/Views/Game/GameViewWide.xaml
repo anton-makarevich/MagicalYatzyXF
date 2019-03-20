@@ -33,33 +33,29 @@
             WidthRequest="60"
             VerticalOptions="Center">
             <controls:ToolBarButton
-                
+                IsVisible="{Binding CanRoll}"
                 HorizontalOptions="Center"
                 Command="{Binding RollCommand}"
                 ImageSource="{Binding RollImage, Converter={StaticResource ImageNameConverter}}" 
                 Text="{loc:Strings roll}"/>
-           <!-- IsVisible="{Binding CanRoll}"-->
             <controls:ToolBarButton
-                
+                IsVisible="{Binding IsMagicRollVisible}"
                 HorizontalOptions="Center"
-                Command="{Binding RollCommand}"
+                Command="{Binding MagicRollCommand}"
                 ImageSource="{Binding MagicRollImage, Converter={StaticResource ImageNameConverter}}" 
                 Text="{loc:Strings MagicRollLabel}"/>
-           <!-- IsVisible="{Binding CanRoll}"-->
             <controls:ToolBarButton
-                
+                IsVisible="{Binding IsManualSetVisible}"
                 HorizontalOptions="Center"
-                Command="{Binding RollCommand}"
+                Command="{Binding ManualSetCommand}"
                 ImageSource="{Binding ManualSetImage, Converter={StaticResource ImageNameConverter}}" 
                 Text="{loc:Strings ManualSetLabel}"/>
-           <!-- IsVisible="{Binding CanRoll}"-->
             <controls:ToolBarButton
-                
+                IsVisible="{Binding IsRollResetVisible}"
                 HorizontalOptions="Center"
-                Command="{Binding RollCommand}"
+                Command="{Binding RollResetCommand}"
                 ImageSource="{Binding RollResetImage, Converter={StaticResource ImageNameConverter}}" 
                 Text="{loc:Strings ForthRollLabel}"/>
-           <!-- IsVisible="{Binding CanRoll}"-->
         </StackLayout>
     </Grid>
 </game:GameView>

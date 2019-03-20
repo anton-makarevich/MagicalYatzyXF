@@ -79,7 +79,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         public void HasArtifactsIfRulesAreMagicalAndAvailableArtifactsAreSet()
         {
             var artifact1 = new Artifact(Artifacts.ManualSet);
-            var artifact2 = new Artifact(Artifacts.FourthRoll);
+            var artifact2 = new Artifact(Artifacts.RollReset);
 
             _sut.AvailableMagicalArtifacts = new List<Artifact> {artifact1, artifact2};
             _sut.PrepareForGameStart(new Rule(Rules.krMagic));

@@ -56,7 +56,7 @@ namespace Sanet.MagicalYatzy.ViewModels
                 : Players.FirstOrDefault(f=>f.Player.InGameId==Game.CurrentPlayer.InGameId);
         
         public bool IsMagicRollVisible => HasArtifact(Artifacts.MagicalRoll);
-        public bool IsFourthRollVisible => HasArtifact(Artifacts.FourthRoll);
+        public bool IsRollResetVisible => HasArtifact(Artifacts.RollReset);
         public bool IsManualSetVisible => HasArtifact(Artifacts.ManualSet);
 
         public string RollImage => "Roll.png";
@@ -69,7 +69,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             if (Game.Rules.CurrentRule != Rules.krMagic)
                 return false;
             
-            if (!HasCurrentPlayer)
+            if (!CanRoll)
                 return false;
             
             var artifact = CurrentPlayer.Player.MagicalArtifactsForGame
@@ -184,7 +184,7 @@ namespace Sanet.MagicalYatzy.ViewModels
                 return;
             _soundsProvider.PlaySound("magic");
             CurrentPlayer.Player.Roll = 1;
-            CurrentPlayer.Player.UseArtifact(Artifacts.FourthRoll);
+            CurrentPlayer.Player.UseArtifact(Artifacts.RollReset);
             RollResults = null;
             RefreshGameStatus();            
         }
@@ -221,6 +221,30 @@ namespace Sanet.MagicalYatzy.ViewModels
             if (CanRoll)
             {
                 Game?.ReportRoll();
+            }
+        });
+
+        public ICommand MagicRollCommand => new SimpleCommand(() =>
+        {
+            if (IsMagicRollVisible)
+            {
+                Game?.ReportMagicRoll();
+            }
+        });
+
+        public ICommand ManualSetCommand => new SimpleCommand(() =>
+        {
+            if (IsManualSetVisible)
+            {
+                DicePanel.ManualSetMode = true;
+            }
+        });
+
+        public ICommand RollResetCommand => new SimpleCommand(() =>
+        {
+            if (IsRollResetVisible)
+            {
+                Game?.ResetRolls();
             }
         });
 
@@ -282,7 +306,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             if (Game.Rules.CurrentRule != Rules.krMagic) return;
             NotifyPropertyChanged(nameof(IsMagicRollVisible));
             NotifyPropertyChanged(nameof(IsManualSetVisible));
-            NotifyPropertyChanged(nameof(IsFourthRollVisible));
+            NotifyPropertyChanged(nameof(IsRollResetVisible));
         }
     }
 }

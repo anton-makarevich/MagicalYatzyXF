@@ -293,7 +293,7 @@ namespace MagicalYatzyTests.ModelTests.Game
             _sut.Resize(width, height);
             var diceToSelect = _sut.Dice.First();
             diceToSelect.Result = initialValue;
-            var pontInDice = diceToSelect.Bounds.Center;
+            var pointInDice = diceToSelect.Bounds.Center;
             _sut.DieManualChangeRequested += (update) => { update(valueToSet); };
             _sut.DieChangedManually += (isFixed, oldValue, newValue) => 
             {
@@ -302,7 +302,7 @@ namespace MagicalYatzyTests.ModelTests.Game
             };
 
             // Act
-            _sut.DieClicked( pontInDice );
+            _sut.DieClicked( pointInDice );
 
             // Assert
             Assert.Equal(0, _sut.FixedDiceCount);
