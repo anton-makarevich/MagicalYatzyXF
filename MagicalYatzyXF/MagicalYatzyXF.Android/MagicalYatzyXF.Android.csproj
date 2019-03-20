@@ -180,6 +180,24 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxhdpi\Start.png" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\MagicRoll.png" />
+    <AndroidResource Include="Resources\drawable\ManualSet.png" />
+    <AndroidResource Include="Resources\drawable\Roll.png" />
+    <AndroidResource Include="Resources\drawable\RollReset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-hdpi\MagicRoll.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ManualSet.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\Roll.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\RollReset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xxhdpi\MagicRoll.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ManualSet.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\Roll.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\RollReset.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Android.Support.Vector.Drawable.23.3.0\build\Xamarin.Android.Support.Vector.Drawable.targets" Condition="Exists('..\..\packages\Xamarin.Android.Support.Vector.Drawable.23.3.0\build\Xamarin.Android.Support.Vector.Drawable.targets')" />
 </Project>
