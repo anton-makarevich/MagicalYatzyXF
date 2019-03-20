@@ -444,6 +444,7 @@ namespace MagicalYatzyTests.ViewModelTests
         [Fact]
         public void MagicRollIsVisibleWhenCurrentPlayerHasCorrespondingArtifact()
         {
+            _humanPlayer.IsHuman.Returns(true);
             _humanPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>() {new Artifact(Artifacts.MagicalRoll)});
             _gameService.CurrentLocalGame.Rules.Returns(new Rule(Rules.krMagic));
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
@@ -479,17 +480,19 @@ namespace MagicalYatzyTests.ViewModelTests
         [Fact]
         public void FourthRollIsVisibleWhenCurrentPlayerHasCorrespondingArtifact()
         {
-            _humanPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>() {new Artifact(Artifacts.FourthRoll)});
+            _humanPlayer.IsHuman.Returns(true);
+            _humanPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>() {new Artifact(Artifacts.RollReset)});
             _gameService.CurrentLocalGame.Rules.Returns(new Rule(Rules.krMagic));
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
             _sut.AttachHandlers();
             
-            Assert.True(_sut.IsFourthRollVisible);
+            Assert.True(_sut.IsRollResetVisible);
         }
 
         [Fact]
         public void ManualSetIsVisibleWhenCurrentPlayerHasCorrespondingArtifact()
         {
+            _humanPlayer.IsHuman.Returns(true);
             _humanPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>() {new Artifact(Artifacts.ManualSet)});
             _gameService.CurrentLocalGame.Rules.Returns(new Rule(Rules.krMagic));
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
@@ -745,7 +748,7 @@ namespace MagicalYatzyTests.ViewModelTests
             _gameService.CurrentLocalGame.PlayerRerolled +=
                 Raise.EventWith(null, new PlayerEventArgs(_humanPlayer));
             
-            _humanPlayer.Received().UseArtifact(Artifacts.FourthRoll);
+            _humanPlayer.Received().UseArtifact(Artifacts.RollReset);
         }
         
         [Fact]
@@ -875,6 +878,142 @@ namespace MagicalYatzyTests.ViewModelTests
             Assert.Equal(Strings.DiceBoardLabel.ToUpper(), _sut.PanelTitle);
         }
 
+        [Fact]
+        public void ButtonImagesAreCorrect()
+        {
+            Assert.Equal("Roll.png", _sut.RollImage);
+            Assert.Equal("MagicRoll.png", _sut.MagicRollImage);
+            Assert.Equal("ManualSet.png", _sut.ManualSetImage);
+            Assert.Equal("RollReset.png", _sut.RollResetImage);
+        }
+
+        [Fact]
+        public void RollCommandCallsReportRollOnGame()
+        {
+            // Arrange
+            _humanPlayer.IsHuman.Returns(true);
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            
+            // Act
+            _sut.RollCommand.Execute(null);
+            
+            // Assert
+            _gameService.CurrentLocalGame.Received().ReportRoll();
+        }
+        
+        [Fact]
+        public void RollCommandDoesNotCallReportRollOnGameWhenCantRoll()
+        {
+            // Arrange
+            _sut.AttachHandlers();
+            
+            // Act
+            _sut.RollCommand.Execute(null);
+            
+            // Assert
+            _gameService.CurrentLocalGame.DidNotReceive().ReportRoll();
+        }
+
+        [Fact]
+        public void MagicRollCommandCallsCorrespondingGameMethod()
+        {
+            // Arrange
+            _gameService.CurrentLocalGame.Rules.Returns(new Rule(Rules.krMagic));
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _humanPlayer.IsHuman.Returns(true);
+            _humanPlayer.MagicalArtifactsForGame.Returns(new[]
+            {
+                new Artifact(Artifacts.MagicalRoll)
+            });
+            _sut.AttachHandlers();
+            
+            // Act
+            _sut.MagicRollCommand.Execute(null);
+            
+            // Assert
+            _gameService.CurrentLocalGame.Received().ReportMagicRoll();
+        }
+        
+        [Fact]
+        public void MagicRollCommandDoesNotCallCorrespondingGameMethodWhenItsNotPossible()
+        {
+            // Arrange
+            _sut.AttachHandlers();
+            
+            // Act
+            _sut.MagicRollCommand.Execute(null);
+            
+            // Assert
+            _gameService.CurrentLocalGame.DidNotReceive().ReportMagicRoll();
+        }
+
+        [Fact]
+        public void ManualSetCommandChangesDicePanelManualSetModeToOn()
+        {
+            // Arrange
+            _gameService.CurrentLocalGame.Rules.Returns(new Rule(Rules.krMagic));
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _humanPlayer.IsHuman.Returns(true);
+            _humanPlayer.MagicalArtifactsForGame.Returns(new[]
+            {
+                new Artifact(Artifacts.ManualSet)
+            });
+            _sut.AttachHandlers();
+            
+            // Act
+            _sut.ManualSetCommand.Execute(null);
+            
+            // Assert
+            Assert.True(_dicePanel.ManualSetMode);
+        }
+        
+        [Fact]
+        public void ManualSetCommandDoesNotChangeDicePanelManualSetModeWhenItsNotPossible()
+        {
+            // Arrange
+            _sut.AttachHandlers();
+            
+            // Act
+            _sut.ManualSetCommand.Execute(null);
+            
+            // Assert
+            Assert.False(_dicePanel.ManualSetMode);
+        }
+        
+        [Fact]
+        public void RollResetCommandCallsCorrespondingGameMethod()
+        {
+            // Arrange
+            _gameService.CurrentLocalGame.Rules.Returns(new Rule(Rules.krMagic));
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _humanPlayer.IsHuman.Returns(true);
+            _humanPlayer.MagicalArtifactsForGame.Returns(new[]
+            {
+                new Artifact(Artifacts.RollReset)
+            });
+            _sut.AttachHandlers();
+            
+            // Act
+            _sut.RollResetCommand.Execute(null);
+            
+            // Assert
+            _gameService.CurrentLocalGame.Received().ResetRolls();
+        }
+        
+        [Fact]
+        public void RollResetCommandDoesNotCallCorrespondingGameMethodWhenItsNotPossible()
+        {
+            // Arrange
+            _sut.AttachHandlers();
+            
+            // Act
+            _sut.RollResetCommand.Execute(null);
+            
+            // Assert
+            _gameService.CurrentLocalGame.DidNotReceive().ResetRolls();
+        }
+        
         #region Private methods
 
         private void CheckIfGameStatusHasBeenRefreshed(Action testAction)
@@ -911,7 +1050,7 @@ namespace MagicalYatzyTests.ViewModelTests
                     case nameof(_sut.IsManualSetVisible):
                         manualSetRollVisibilityCheckedTimes++;
                         break;
-                    case nameof(_sut.IsFourthRollVisible):
+                    case nameof(_sut.IsRollResetVisible):
                         fourthRollVisibilityCheckedTimes++;
                         break;
                 }

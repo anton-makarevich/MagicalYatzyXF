@@ -2,7 +2,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Magical
 {
     public enum Artifacts
     {
-        FourthRoll,
+        RollReset,
         ManualSet,
         MagicalRoll
     }

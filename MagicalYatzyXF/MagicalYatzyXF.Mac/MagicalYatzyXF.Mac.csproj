@@ -320,5 +320,19 @@
       <Link>Resources/Start.png</Link>
     </BundleResource>
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="..\MagicalYatzyXF.UWP\Assets\MagicRoll.png">
+      <Link>Resources/MagicRoll.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\MagicalYatzyXF.UWP\Assets\ManualSet.png">
+      <Link>Resources/ManualSet.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\MagicalYatzyXF.UWP\Assets\Roll.png">
+      <Link>Resources/Roll.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\MagicalYatzyXF.UWP\Assets\RollReset.png">
+      <Link>Resources/RollReset.png</Link>
+    </BundleResource>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>
