@@ -71,6 +71,23 @@ namespace MagicalYatzyTests.ViewModelTests
             _sut.DetachHandlers();
             Assert.Empty(_sut.Players);
         }
+        
+        [Fact]
+        public void HumanPlayersGetReadyAutomaticallyForLocalGame()
+        {
+            _humanPlayer.IsHuman.Returns(true);
+            
+            _sut.AttachHandlers();
+            
+            _gameService.CurrentLocalGame.Received().SetPlayerReady(_humanPlayer,true);
+            _gameService.CurrentLocalGame.DidNotReceive().SetPlayerReady(_botPlayer,true);
+        }
+        
+        [Fact]
+        public void RefreshesGameStatusOnPageActivation()
+        {
+            CheckIfGameStatusHasBeenRefreshed(()=>{},1);
+        }
 
         [Fact]
         public void HasPlayersFromGameServiceWhenViewIsActive()
@@ -1016,11 +1033,13 @@ namespace MagicalYatzyTests.ViewModelTests
         
         #region Private methods
 
-        private void CheckIfGameStatusHasBeenRefreshed(Action testAction)
+        // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
+        private void CheckIfGameStatusHasBeenRefreshed(Action testAction, int expectedTimesExecuted = 2)
         {
             var currentPlayerUpdated = 0;
             var rollLabelUpdatedTimes = 0;
             var canFixUpdatedTimes = 0;
+            var canRollUpdatedTimes = 0;
             var titleUpdatedTimes = 0;
             var playerResultsRefreshedTimes = 0;
 
@@ -1053,6 +1072,9 @@ namespace MagicalYatzyTests.ViewModelTests
                     case nameof(_sut.IsRollResetVisible):
                         fourthRollVisibilityCheckedTimes++;
                         break;
+                    case nameof(_sut.CanRoll):
+                        canRollUpdatedTimes++;
+                        break;
                 }
             };
             _sut.AttachHandlers();
@@ -1072,18 +1094,19 @@ namespace MagicalYatzyTests.ViewModelTests
 
             testAction();
             
-            Assert.Equal(1,currentPlayerUpdated);
-            Assert.Equal(1, rollLabelUpdatedTimes);
-            Assert.Equal(1,canFixUpdatedTimes);
-            Assert.Equal(1, titleUpdatedTimes);
+            Assert.Equal(expectedTimesExecuted,currentPlayerUpdated);
+            Assert.Equal(expectedTimesExecuted, rollLabelUpdatedTimes);
+            Assert.Equal(expectedTimesExecuted,canFixUpdatedTimes);
+            Assert.Equal(expectedTimesExecuted,canRollUpdatedTimes);
+            Assert.Equal(expectedTimesExecuted, titleUpdatedTimes);
             
             if (_sut.HasCurrentPlayer)
                 Assert.Equal(_sut.Players.Count, playerResultsRefreshedTimes);
 
             if (_sut.Game.Rules.CurrentRule != Rules.krMagic) return;
-            Assert.Equal(1,magicRollVisibilityCheckedTimes);
-            Assert.Equal(1,fourthRollVisibilityCheckedTimes);
-            Assert.Equal(1, manualSetRollVisibilityCheckedTimes);
+            Assert.True(magicRollVisibilityCheckedTimes>0);
+            Assert.True(fourthRollVisibilityCheckedTimes>0);
+            Assert.True(manualSetRollVisibilityCheckedTimes>0);
         }
         #endregion  
     }       

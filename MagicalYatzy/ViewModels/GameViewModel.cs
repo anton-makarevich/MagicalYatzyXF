@@ -87,6 +87,8 @@ namespace Sanet.MagicalYatzy.ViewModels
             
             foreach (var player in Game.Players)
             {
+                if (player.IsHuman && !player.IsReady)
+                    Game.SetPlayerReady(player,true);
                 Players.Add(new PlayerViewModel(player));
             }
             
@@ -102,6 +104,8 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.ResultApplied += GameOnResultApplied;
             Game.PlayerRerolled += GameOnPlayerRerolled;
             Game.MagicRollUsed += GameOnMagicRollUsed;
+            
+            RefreshGameStatus();
         }
 
         private void GameOnResultApplied(object sender, ResultEventArgs e)
@@ -152,7 +156,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             {
                 Game.ReportRoll();
             }
-            NotifyPropertyChanged(nameof(CanRoll));
+            
             RefreshGameStatus();
         }
 
@@ -173,7 +177,8 @@ namespace Sanet.MagicalYatzy.ViewModels
             
             if (e.Player.InGameId == CurrentPlayer.Player.InGameId && CurrentPlayer.Player.IsHuman)
             {
-                RollResults = new ObservableCollection<RollResult>(CurrentPlayer.Player.Results.Where(f => !f.HasValue && f.ScoreType != Scores.Bonus));
+                RollResults = new ObservableCollection<RollResult>(CurrentPlayer.Player.Results
+                    .Where(f => !f.HasValue && f.ScoreType != Scores.Bonus));
             }
             RefreshGameStatus();
         }
@@ -295,6 +300,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             NotifyPropertyChanged(nameof(CurrentPlayer));
             NotifyPropertyChanged(nameof(RollLabel));
             NotifyPropertyChanged(nameof(CanFix));
+            NotifyPropertyChanged(nameof(CanRoll));
             NotifyPropertyChanged(nameof(Title));
 
             if (HasCurrentPlayer)
