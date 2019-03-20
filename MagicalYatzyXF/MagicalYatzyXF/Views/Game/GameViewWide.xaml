@@ -4,8 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     x:Class="Sanet.MagicalYatzy.XF.Views.Game.GameViewWide"
     xmlns:fragments="clr-namespace:Sanet.MagicalYatzy.XF.Views.Fragments;assembly=MagicalYatzyXF"
-    xmlns:loc="clr-namespace:Sanet.MagicalYatzy.XF.MarkupExtensions;assembly=MagicalYatzyXF"
-    xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls"
     xmlns:game="clr-namespace:Sanet.MagicalYatzy.XF.Views.Game;assembly=MagicalYatzyXF">
     <Grid
         x:Name="PageGrid">
@@ -26,36 +24,11 @@
             Grid.Row="1"
             Grid.RowSpan="2" 
             Grid.Column="0" />
-        <StackLayout
+        <fragments:GameButtons
             Grid.Column="2"
             Grid.Row="1"
             Orientation="Vertical"
             WidthRequest="60"
-            VerticalOptions="Center">
-            <controls:ToolBarButton
-                IsVisible="{Binding CanRoll}"
-                HorizontalOptions="Center"
-                Command="{Binding RollCommand}"
-                ImageSource="{Binding RollImage, Converter={StaticResource ImageNameConverter}}" 
-                Text="{loc:Strings roll}"/>
-            <controls:ToolBarButton
-                IsVisible="{Binding IsMagicRollVisible}"
-                HorizontalOptions="Center"
-                Command="{Binding MagicRollCommand}"
-                ImageSource="{Binding MagicRollImage, Converter={StaticResource ImageNameConverter}}" 
-                Text="{loc:Strings MagicRollLabel}"/>
-            <controls:ToolBarButton
-                IsVisible="{Binding IsManualSetVisible}"
-                HorizontalOptions="Center"
-                Command="{Binding ManualSetCommand}"
-                ImageSource="{Binding ManualSetImage, Converter={StaticResource ImageNameConverter}}" 
-                Text="{loc:Strings ManualSetLabel}"/>
-            <controls:ToolBarButton
-                IsVisible="{Binding IsRollResetVisible}"
-                HorizontalOptions="Center"
-                Command="{Binding RollResetCommand}"
-                ImageSource="{Binding RollResetImage, Converter={StaticResource ImageNameConverter}}" 
-                Text="{loc:Strings ForthRollLabel}"/>
-        </StackLayout>
+            VerticalOptions="Center"/>
     </Grid>
 </game:GameView>

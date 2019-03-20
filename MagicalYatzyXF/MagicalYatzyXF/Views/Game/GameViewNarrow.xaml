@@ -3,10 +3,15 @@
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     x:Class="Sanet.MagicalYatzy.XF.Views.Game.GameViewNarrow"
+    xmlns:fragments="clr-namespace:Sanet.MagicalYatzy.XF.Views.Fragments;assembly=MagicalYatzyXF"
     xmlns:game="clr-namespace:Sanet.MagicalYatzy.XF.Views.Game;assembly=MagicalYatzyXF"
     xmlns:tabControl="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls.TabControl;assembly=MagicalYatzyXF">
     <Grid
         Margin="0,0,0,5">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         <tabControl:TabsStrip
             Padding="10,0"
             BackgroundColor="Transparent"
@@ -14,6 +19,11 @@
             TabIndicatorColor="{StaticResource SanetBlueColor}"
             FontSize="20"
             x:Name="TabBar"/>
+        <fragments:GameButtons
+            Grid.Row="1"
+            Orientation="Horizontal"
+            HeightRequest="60"
+            HorizontalOptions="Center"/>
     </Grid>
 </game:GameView>
 
