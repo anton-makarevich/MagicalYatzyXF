@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Linq;
-using Sanet.MagicalYatzy.XF.Views.Cells;
 using Xamarin.Forms;
 
 namespace Sanet.MagicalYatzy.XF.Views.Controls

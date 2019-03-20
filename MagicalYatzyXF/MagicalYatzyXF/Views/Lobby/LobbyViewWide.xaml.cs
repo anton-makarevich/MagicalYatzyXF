@@ -2,7 +2,7 @@
 using Sanet.MagicalYatzy.ViewModels;
 using Xamarin.Forms.Xaml;
 
-namespace Sanet.MagicalYatzy.XF.Views
+namespace Sanet.MagicalYatzy.XF.Views.Lobby
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LobbyViewWide : NavigationBackView<LobbyViewModel>

@@ -19,6 +19,8 @@ namespace Sanet.MagicalYatzy.XF.Views.Controls.Game
             _canvasView = new SKCanvasView();
             _canvasView.PaintSurface += OnCanvasViewPaintSurface;
             Content = _canvasView;
+            UpdateImage();
+            UpdatePosition();
         }
 
         private void OnDiePropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -45,7 +47,13 @@ namespace Sanet.MagicalYatzy.XF.Views.Controls.Game
 
         private void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
         {
+            if (string.IsNullOrWhiteSpace(_die.ImagePath))
+                _die.DrawDie();
             var source = DiceLoaderHelper.GetDiceImageByPath(_die.ImagePath);
+
+            if (source == null)
+                return;
+
             SKImageInfo info = args.Info;
             SKSurface surface = args.Surface;
             SKCanvas canvas = surface.Canvas;

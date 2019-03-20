@@ -6,9 +6,11 @@ using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.Magical;
 using Sanet.MagicalYatzy.Resources;
+using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Services.Media;
 using Sanet.MagicalYatzy.Services.Navigation;
+using Sanet.MagicalYatzy.Utils;
 using Sanet.MagicalYatzy.ViewModels;
 using Xunit;
 
@@ -42,9 +44,11 @@ namespace MagicalYatzyTests.ViewModelTests
 
             _navigationService = Substitute.For<INavigationService>();
 
+            var localizationService = Substitute.For<ILocalizationService>();
+
             _dicePanel = Substitute.For<IDicePanel>();
             _soundsProvider = Substitute.For<ISoundsProvider>();
-            _sut = new GameViewModel(_gameService, _dicePanel, _soundsProvider);
+            _sut = new GameViewModel(_gameService, _dicePanel, _soundsProvider, localizationService);
         }
 
         [Fact]
@@ -844,7 +848,35 @@ namespace MagicalYatzyTests.ViewModelTests
             
             _soundsProvider.DidNotReceiveWithAnyArgs().PlaySound("magic");
         }
+
+        [Fact]
+        public void AmountOfResultsLabelsMatchesAmountOfRollResultsForEveryRule()
+        {
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _humanPlayer.IsHuman.Returns(true);
+            foreach (var rule in EnumUtils.GetValues<Rules>())
+            {
+                _sut.DetachHandlers();
+                
+                _gameService.CurrentLocalGame.Rules.Returns(new Rule(rule));
+                IReadOnlyList<RollResult> rollResults = _gameService.CurrentLocalGame.Rules.ScoresForRule
+                    .Select(score => new RollResult(score)).ToList();
+                _sut.AttachHandlers();
+
+                Assert.NotEmpty(_sut.RollResultsLabels);
+                Assert.Equal(rollResults.Count, _sut.RollResultsLabels.Count);
+            }
+        }
         
+        [Fact]
+        public void PanelTitlesAreCorrect()
+        {
+            Assert.Equal(Strings.ResultsTableLabel.ToUpper(), _sut.ScoresTitle);
+            Assert.Equal(Strings.DiceBoardLabel.ToUpper(), _sut.PanelTitle);
+        }
+
+        #region Private methods
+
         private void CheckIfGameStatusHasBeenRefreshed(Action testAction)
         {
             var currentPlayerUpdated = 0;
@@ -914,5 +946,6 @@ namespace MagicalYatzyTests.ViewModelTests
             Assert.Equal(1,fourthRollVisibilityCheckedTimes);
             Assert.Equal(1, manualSetRollVisibilityCheckedTimes);
         }
-    }
+        #endregion  
+    }       
 }

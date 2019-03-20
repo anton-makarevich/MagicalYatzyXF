@@ -2,10 +2,9 @@
 using Sanet.MagicalYatzy.ViewModels;
 using Xamarin.Forms.Xaml;
 using Sanet.MagicalYatzy.XF.Views.Controls.TabControl;
-using Xamarin.Forms;
 using Sanet.MagicalYatzy.XF.Views.Fragments;
 
-namespace Sanet.MagicalYatzy.XF.Views
+namespace Sanet.MagicalYatzy.XF.Views.Lobby
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LobbyViewNarrow : NavigationBackView<LobbyViewModel>

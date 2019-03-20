@@ -1,6 +1,4 @@
-﻿using System;
-using Sanet.MagicalYatzy.Models;
-using Sanet.MagicalYatzy.ViewModels;
+﻿using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MagicalYatzy.XF.Views.Base;
 using Xamarin.Forms.Xaml;
 

@@ -14,10 +14,9 @@ namespace Sanet.MagicalYatzy.XF
     {
         public static void RegisterMainModule(this Container container)
         {
-            // Register viewmodels for pages
+            // Register app start viewmodel
             container.Register<MainMenuViewModel>();
-            //container.Register<LoginViewModel>();
-
+            
             // Register services
             container.RegisterSingleton<IGameSettingsService, GameSettingsService>();
             container.RegisterSingleton<ILocalizationService, LocalizationService>();

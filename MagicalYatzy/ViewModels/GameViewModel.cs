@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.Magical;
 using Sanet.MagicalYatzy.Resources;
+using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Services.Media;
 using Sanet.MagicalYatzy.ViewModels.Base;
@@ -16,16 +18,19 @@ namespace Sanet.MagicalYatzy.ViewModels
     {
         private readonly IGameService _gameService;
         private readonly ISoundsProvider _soundsProvider;
+        private readonly ILocalizationService _localizationService;
 
         private ObservableCollection<RollResult> _rollResults;
 
         public GameViewModel(
             IGameService gameService,
             IDicePanel dicePanel,
-            ISoundsProvider soundsProvider) : base(dicePanel)
+            ISoundsProvider soundsProvider,
+            ILocalizationService localizationService) : base(dicePanel)
         {
             _gameService = gameService;
             _soundsProvider = soundsProvider;
+            _localizationService = localizationService;
         }
 
         public IGame Game => _gameService?.CurrentLocalGame;
@@ -193,10 +198,17 @@ namespace Sanet.MagicalYatzy.ViewModels
             get => _rollResults;
             private set => SetProperty(ref _rollResults, value);
         }
+        
+        public List<string> RollResultsLabels => Game.Rules.ScoresForRule
+            .Select(score => new RollResult(score))
+            .Select(s => _localizationService.GetLocalizedString(s.ScoreType.ToString())).ToList();
 
         public bool HasCurrentPlayer => CurrentPlayer != null;
         public bool CanRoll => HasCurrentPlayer 
                                && CurrentPlayer.Player.IsHuman;
+
+        public string ScoresTitle => Strings.ResultsTableLabel.ToUpper();
+        public string PanelTitle => Strings.DiceBoardLabel.ToUpper();
 
         private void GameOnPlayerLeft(object sender, PlayerEventArgs e)
         {

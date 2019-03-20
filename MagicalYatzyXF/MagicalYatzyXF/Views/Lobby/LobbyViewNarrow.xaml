@@ -7,7 +7,7 @@
     xmlns:tabControl="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls.TabControl;assembly=MagicalYatzyXF"
     xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls;assembly=MagicalYatzyXF"
     xmlns:loc="clr-namespace:Sanet.MagicalYatzy.XF.MarkupExtensions;assembly=MagicalYatzyXF"
-    x:Class="Sanet.MagicalYatzy.XF.Views.LobbyViewNarrow"
+    x:Class="Sanet.MagicalYatzy.XF.Views.Lobby.LobbyViewNarrow"
     x:TypeArguments="vm:LobbyViewModel">
     <Grid
         Margin="0,0,0,5">

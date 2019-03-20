@@ -3,9 +3,9 @@
 namespace Sanet.MagicalYatzy.XF.Views.Fragments
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PlayersFragment
+    public partial class ResultsTable
     {
-        public PlayersFragment()
+        public ResultsTable()
         {
             InitializeComponent();
         }
