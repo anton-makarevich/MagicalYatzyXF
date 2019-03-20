@@ -125,9 +125,13 @@
     <Content Include="Assets\About.png" />
     <Content Include="Assets\BotPlayer.png" />
     <Content Include="Assets\Facebook.png" />
+    <Content Include="Assets\MagicRoll.png" />
     <Content Include="Assets\Mail.png" />
+    <Content Include="Assets\ManualSet.png" />
     <Content Include="Assets\OnlineGame.png" />
     <Content Include="Assets\Rate.png" />
+    <Content Include="Assets\Roll.png" />
+    <Content Include="Assets\RollReset.png" />
     <Content Include="Assets\SanetDice.png" />
     <Content Include="Assets\Settings.png" />
     <Content Include="Assets\Share.png" />
