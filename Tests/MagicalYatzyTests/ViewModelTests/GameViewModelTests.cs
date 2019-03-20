@@ -875,6 +875,15 @@ namespace MagicalYatzyTests.ViewModelTests
             Assert.Equal(Strings.DiceBoardLabel.ToUpper(), _sut.PanelTitle);
         }
 
+        [Fact]
+        public void ButtonImagesAreCorrect()
+        {
+            Assert.Equal("Roll.png", _sut.RollImage);
+            Assert.Equal("MagicRoll.png", _sut.MagicRollImage);
+            Assert.Equal("ManualSet.png", _sut.ManualSetImage);
+            Assert.Equal("RollReset.png", _sut.RollResetImage);
+        }
+
         #region Private methods
 
         private void CheckIfGameStatusHasBeenRefreshed(Action testAction)

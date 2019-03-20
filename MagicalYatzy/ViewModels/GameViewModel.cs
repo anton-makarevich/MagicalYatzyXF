@@ -57,6 +57,11 @@ namespace Sanet.MagicalYatzy.ViewModels
         public bool IsFourthRollVisible => HasArtifact(Artifacts.FourthRoll);
         public bool IsManualSetVisible => HasArtifact(Artifacts.ManualSet);
 
+        public string RollImage => "Roll.png";
+        public string MagicRollImage => "MagicRoll.png";
+        public string ManualSetImage => "ManualSet.png";
+        public string RollResetImage => "RollReset.png";
+
         private bool HasArtifact(Artifacts artifactType)
         {
             if (Game.Rules.CurrentRule != Rules.krMagic)
