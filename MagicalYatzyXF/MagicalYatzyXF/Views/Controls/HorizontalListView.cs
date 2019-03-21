@@ -131,7 +131,6 @@ namespace Sanet.MagicalYatzy.XF.Views.Controls
             {
                 Console.WriteLine(ex.Message);
             }
-
         }
 
         private void CreateItem(object item)

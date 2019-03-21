@@ -17,41 +17,38 @@ namespace Sanet.MagicalYatzy.XF.iOS.Renderers
 		/// </summary>
 		public new static void Init()
 		{
+			// ReSharper disable once UnusedVariable
 			var temp = DateTime.Now;
 		}
 
 		#region Touch Handlers
 
-		public override void TouchesBegan(Foundation.NSSet touches, UIEvent evt)
+		public override void TouchesBegan(NSSet touches, UIEvent evt)
 		{
-            Element.OnTouchesBegan(GetFirstPoint(touches));
-		    
+            Element.OnTouchesBegan(GetFirstPoint(touches));   
 		}
 
-		public override void TouchesEnded(Foundation.NSSet touches, UIEvent evt)
+		public override void TouchesEnded(NSSet touches, UIEvent evt)
 		{
             Element.OnTouchesEnded(GetFirstPoint(touches));
 		}
 
-		public override void TouchesCancelled(Foundation.NSSet touches, UIEvent evt)
+		public override void TouchesCancelled(NSSet touches, UIEvent evt)
 		{
 			// Ignore 
 		}
 
-		public override void TouchesMoved(Foundation.NSSet touches, UIEvent evt)
+		public override void TouchesMoved(NSSet touches, UIEvent evt)
 		{
 			// Ignore 
 		}
 
         private Point GetFirstPoint(NSSet touches) 
         {
-			UITouch touch = touches.AnyObject as UITouch;
-			if (touch != null)
-			{
-				var posc = touch.LocationInView(touch.View);
-				return new Point(posc.X, posc.Y);
-			}
-            return new Point();
+			var touch = touches.AnyObject as UITouch;
+			if (touch == null) return new Point();
+			var location = touch.LocationInView(touch.View);
+			return new Point(location.X, location.Y);
         }
 
 		#endregion

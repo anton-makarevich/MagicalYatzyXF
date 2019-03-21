@@ -62,7 +62,6 @@ namespace Sanet.MagicalYatzy.XF.Views.Controls.Game
 
             canvas.DrawBitmap(source,
                     new SKRect(0, 0, info.Width, info.Height));
-
         }
     }
 }

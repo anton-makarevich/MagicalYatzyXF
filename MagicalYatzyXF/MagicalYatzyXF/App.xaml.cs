@@ -24,7 +24,6 @@ namespace Sanet.MagicalYatzy.XF
         public static FormFactor FormFactor => 
             (Device.Idiom == TargetIdiom.Phone) ? FormFactor.Narrow : FormFactor.Wide;
 
-
         protected override void OnStart()
         {
             // Handle when your app starts

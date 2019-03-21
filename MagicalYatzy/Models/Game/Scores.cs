@@ -22,6 +22,5 @@
         Pairs,
         TwoPairs,
         OnePair
-
     }
 }

@@ -159,6 +159,5 @@ namespace Sanet.MagicalYatzy.ViewModels
             NotifyPropertyChanged(nameof(PlayerName));
             NotifyPropertyChanged(nameof(PlayerImage));
         }
-
     }
 }

@@ -29,7 +29,6 @@ namespace Sanet.MagicalYatzy.XF.Services
                     }
                 }
             };
-
         }
 
         public async Task<T> GetAsync<T>(string url)

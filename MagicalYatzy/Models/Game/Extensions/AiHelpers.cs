@@ -4,7 +4,6 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
     {
         public static int NumPairs(this DieResult result)
         {
-
             var occurrences = new int[7];
             var numberOfPairs = 0;
 
@@ -32,7 +31,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             {
                 occurrences[res] += 1;
             }
-            for (var i = 1;i<5;i++)
+            for (var i = 1; i<5; i++)
                 if (occurrences[i] >= 1 & occurrences[i+1] >= 1 & occurrences[i+2] >= 1)
                 {
                     if (i >= 4 || occurrences[i + 3] < 1) return (i, count);

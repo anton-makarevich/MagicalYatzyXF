@@ -16,9 +16,9 @@ namespace Sanet.MagicalYatzy.Models.Events
         public PlayerEventArgs(IPlayer player)
         {
             _player = player;
-
         }
     }
+    
     /// <summary>
     /// Event when move changed
     /// </summary>
@@ -33,6 +33,7 @@ namespace Sanet.MagicalYatzy.Models.Events
             Move = move;
         }
     }
+    
     /// <summary>
     /// Event when player fix (unfix) dice with value
     /// </summary>
@@ -57,7 +58,6 @@ namespace Sanet.MagicalYatzy.Models.Events
     public class ChatMessageEventArgs : EventArgs
     {
         public ChatMessage Message { get; }
-
 
         public ChatMessageEventArgs(ChatMessage message)
         {
@@ -86,6 +86,7 @@ namespace Sanet.MagicalYatzy.Models.Events
             _value = value;
         }
     }
+    
     /// <summary>
     /// Event to notified about score applied
     /// </summary>

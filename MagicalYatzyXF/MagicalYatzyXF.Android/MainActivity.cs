@@ -21,4 +21,3 @@ namespace Sanet.MagicalYatzy.XF.Droid
         }
     }
 }
-

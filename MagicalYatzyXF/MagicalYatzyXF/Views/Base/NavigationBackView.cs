@@ -44,4 +44,3 @@ namespace Sanet.MagicalYatzy.XF.Views.Base
         }
     }
 }
-

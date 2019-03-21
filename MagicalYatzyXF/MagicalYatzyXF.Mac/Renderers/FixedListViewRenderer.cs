@@ -1,5 +1,4 @@
-﻿using System;
-using AppKit;
+﻿using AppKit;
 using MagicalYatzyXF.Mac.Renderers;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.MacOS;
@@ -12,21 +11,17 @@ namespace MagicalYatzyXF.Mac.Renderers
 		protected override void SetBackgroundColor(Color color)
 		{
 			base.SetBackgroundColor(Color.Transparent);
-			if (NativeTableView != null)
-			{
-				var scroller = Control as NSScrollView;
+			if (NativeTableView == null) return;
 
-				if (scroller != null)
-                {
-                    scroller.HasVerticalScroller = false;
-                    scroller.DrawsBackground = false;
-                    scroller.ContentView.BackgroundColor = NSColor.Clear;
-                }
-				NativeTableView.GridColor = NSColor.Clear;//color.ToNSColor(NSColor.Red);
-				NativeTableView.BackgroundColor = NSColor.Clear;
-				NativeTableView.HeaderView = null;
-				            
+			if (Control is NSScrollView scroller)
+			{
+				scroller.HasVerticalScroller = false;
+				scroller.DrawsBackground = false;
+				scroller.ContentView.BackgroundColor = NSColor.Clear;
 			}
+			NativeTableView.GridColor = NSColor.Clear; //color.ToNSColor(NSColor.Red);
+			NativeTableView.BackgroundColor = NSColor.Clear;
+			NativeTableView.HeaderView = null;
 		}
 	}
 }
