@@ -193,8 +193,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             RollResults = null;
             RefreshGameStatus();            
         }
-        
-        
+       
         private void GameOnMagicRollUsed(object sender, PlayerEventArgs e)
         {
             if (!HasCurrentPlayer)
@@ -203,7 +202,6 @@ namespace Sanet.MagicalYatzy.ViewModels
             CurrentPlayer.Player.UseArtifact(Artifacts.MagicalRoll);
             RefreshGameStatus();
         }
-
 
         public ObservableCollection<RollResult> RollResults
         {
