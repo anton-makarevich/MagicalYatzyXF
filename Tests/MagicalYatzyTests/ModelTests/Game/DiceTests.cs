@@ -28,19 +28,19 @@ namespace MagicalYatzyTests.ModelTests.Game
             // Arrange
             const int thisDirection = 3;
             const int othersDirection = -3;
-            _sut._directionX = thisDirection;
+            _sut.DirectionX = thisDirection;
             var otherDice = new Die(_dicePanelMock, _gameSettingMock)
             {
                 PosX = 40,
-                _directionX = -othersDirection
+                DirectionX = -othersDirection
             };
 
             // Act
             _sut.HandleCollision(otherDice);
 
             // Assert
-            Assert.Equal(thisDirection * -1, _sut._directionX);
-            Assert.Equal(othersDirection * -1, otherDice._directionX);
+            Assert.Equal(thisDirection * -1, _sut.DirectionX);
+            Assert.Equal(othersDirection * -1, otherDice.DirectionX);
         }
 
         [Fact]
@@ -49,19 +49,19 @@ namespace MagicalYatzyTests.ModelTests.Game
             // Arrange
             const int thisDirection = 3;
             const int othersDirection = 2;
-            _sut._directionX = thisDirection;
+            _sut.DirectionX = thisDirection;
             var otherDice = new Die(_dicePanelMock, _gameSettingMock)
             {
                 PosX = 40,
-                _directionX = -othersDirection
+                DirectionX = -othersDirection
             };
 
             // Act
             _sut.HandleCollision(otherDice);
 
             // Assert
-            Assert.Equal(thisDirection * -1, _sut._directionX);
-            Assert.Equal(othersDirection, otherDice._directionX);
+            Assert.Equal(thisDirection * -1, _sut.DirectionX);
+            Assert.Equal(othersDirection, otherDice.DirectionX);
         }
 
         [Fact]
@@ -70,19 +70,19 @@ namespace MagicalYatzyTests.ModelTests.Game
             // Arrange
             const int thisDirection = -2;
             const int othersDirection = -3;
-            _sut._directionX = thisDirection;
+            _sut.DirectionX = thisDirection;
             var otherDice = new Die(_dicePanelMock, _gameSettingMock)
             {
                 PosX = 40,
-                _directionX = -othersDirection
+                DirectionX = -othersDirection
             };
 
             // Act
             _sut.HandleCollision(otherDice);
 
             // Assert
-            Assert.Equal(thisDirection, _sut._directionX);
-            Assert.Equal(othersDirection * -1, otherDice._directionX);
+            Assert.Equal(thisDirection, _sut.DirectionX);
+            Assert.Equal(othersDirection * -1, otherDice.DirectionX);
         }
 
         [Fact]
@@ -91,19 +91,19 @@ namespace MagicalYatzyTests.ModelTests.Game
             // Arrange
             const int thisDirection = 3;
             const int othersDirection = -3;
-            _sut._directionY = thisDirection;
+            _sut.DirectionY = thisDirection;
             var otherDice = new Die(_dicePanelMock, _gameSettingMock)
             {
                 PosY = 40,
-                _directionY = -othersDirection
+                DirectionY = -othersDirection
             };
 
             // Act
             _sut.HandleCollision(otherDice);
 
             // Assert
-            Assert.Equal(thisDirection * -1, _sut._directionY);
-            Assert.Equal(othersDirection * -1, otherDice._directionY);
+            Assert.Equal(thisDirection * -1, _sut.DirectionY);
+            Assert.Equal(othersDirection * -1, otherDice.DirectionY);
         }
 
         [Fact]
@@ -112,19 +112,19 @@ namespace MagicalYatzyTests.ModelTests.Game
             // Arrange
             const int thisDirection = 3;
             const int othersDirection = 2;
-            _sut._directionY = thisDirection;
+            _sut.DirectionY = thisDirection;
             var otherDice = new Die(_dicePanelMock, _gameSettingMock)
             {
                 PosY = 40,
-                _directionY = -othersDirection
+                DirectionY = -othersDirection
             };
 
             // Act
             _sut.HandleCollision(otherDice);
 
             // Assert
-            Assert.Equal(thisDirection * -1, _sut._directionY);
-            Assert.Equal(othersDirection, otherDice._directionY);
+            Assert.Equal(thisDirection * -1, _sut.DirectionY);
+            Assert.Equal(othersDirection, otherDice.DirectionY);
         }
 
         [Fact]
@@ -133,19 +133,19 @@ namespace MagicalYatzyTests.ModelTests.Game
             // Arrange
             const int thisDirection = -2;
             const int othersDirection = -3;
-            _sut._directionY = thisDirection;
+            _sut.DirectionY = thisDirection;
             var otherDice = new Die(_dicePanelMock, _gameSettingMock)
             {
                 PosY = 40,
-                _directionY = -othersDirection
+                DirectionY = -othersDirection
             };
 
             // Act
             _sut.HandleCollision(otherDice);
 
             // Assert
-            Assert.Equal(thisDirection, _sut._directionY);
-            Assert.Equal(othersDirection * -1, otherDice._directionY);
+            Assert.Equal(thisDirection, _sut.DirectionY);
+            Assert.Equal(othersDirection * -1, otherDice.DirectionY);
         }
 
         [Fact]
@@ -154,7 +154,7 @@ namespace MagicalYatzyTests.ModelTests.Game
             // Arrange
             _sut.IsFixed = true;
 
-            //Act
+            // Act
             _sut.DrawDie();
 
             // Assert
@@ -164,11 +164,32 @@ namespace MagicalYatzyTests.ModelTests.Game
         [Fact]
         public void ImagePathPointsToPngImage()
         {
-            //Act
+            // Act
             _sut.DrawDie();
 
             // Assert
             Assert.EndsWith("png", _sut.ImagePath);
+        }
+
+        [Fact]
+        public void DrawDiceCalculatesFrameIfDiceIsNotRolling()
+        {
+            for (var result = 1; result < 7; result++)
+            {
+                for (var angle = 0; angle < 6; angle++)
+                {
+                    // Arrange
+                    _gameSettingMock.DieAngle.Returns(angle);
+                    _sut.Result = result;
+                    var expectedFrame = (result - 1) * 6 + angle;
+
+                    // Act
+                    _sut.DrawDie();
+
+                    // Assert
+                    Assert.EndsWith($"{expectedFrame}.png", _sut.ImagePath);
+                }
+            }
         }
     }
 }

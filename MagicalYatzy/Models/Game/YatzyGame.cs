@@ -344,7 +344,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                 //1) check how many free hands we have
                 var freeHands = Rule.PokerHands.Where(score => !CurrentPlayer.GetResultForScore(score).HasValue).ToList();
                 if (freeHands.Count==0)
-                    ReportRoll();// no available hands - just roll
+                    ReportRoll(); //no available hands - just roll
                 else
                 {
                     _lastRollResults = freeHands[_randomizer.Next(freeHands.Count)].GetMagicResults();
@@ -401,7 +401,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                 IsPlaying = false;
                 Round = 1;
 
-                for (var playerIndex = 0;playerIndex<NumberOfPlayers;playerIndex++)
+                for (var playerIndex = 0; playerIndex<NumberOfPlayers; playerIndex++)
                 {
                     var player = Players[playerIndex];
                     player.Roll = 1;
