@@ -3,6 +3,7 @@
 Xamarin.Forms version. I use it as a playground for anything I would like to try with XF
 
 **Status:**
+[![CodeFactor](https://www.codefactor.io/repository/github/anton-makarevich/magicalyatzyxf/badge)](https://www.codefactor.io/repository/github/anton-makarevich/magicalyatzyxf)
 
 |   |Shared   |Android   |iOS   |UWP   |Mac
 |:-|:-:|:-:|:-:|:-:|:-:|
