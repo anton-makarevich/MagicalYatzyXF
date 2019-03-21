@@ -217,7 +217,8 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         public bool HasCurrentPlayer => CurrentPlayer != null;
         public bool CanRoll => HasCurrentPlayer 
-                               && CurrentPlayer.Player.IsHuman;
+                               && CurrentPlayer.Player.IsHuman
+                               && !DicePanel.IsRolling;
 
         public string ScoresTitle => Strings.ResultsTableLabel.ToUpper();
         public string PanelTitle => Strings.DiceBoardLabel.ToUpper();
@@ -267,6 +268,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             }
 
             CurrentPlayer.Player.CheckRollResults(new DieResult(){ DiceResults = e.Value.ToList()},Game.Rules );
+            RefreshGameStatus();
         }
 
         private void GameOnDiceFixed(object sender, FixDiceEventArgs e)

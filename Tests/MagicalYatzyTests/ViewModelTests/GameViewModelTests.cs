@@ -186,6 +186,23 @@ namespace MagicalYatzyTests.ViewModelTests
 
             _humanPlayer.ReceivedWithAnyArgs().CheckRollResults(null, null);
         }
+        
+        [Fact]
+        public void GameOnDiceRolledRefreshesGameStatus()
+        {
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _dicePanel.IsRolling.Returns(true);
+            var testAction = new Action(() => { 
+                var results = new[] {2, 4, 6, 2, 1};
+                if (!_sut.Players.Any())
+                    _sut.AttachHandlers();
+
+                _gameService.CurrentLocalGame.DiceRolled +=
+                    Raise.EventWith(null, new RollEventArgs(_botPlayer, results));
+            });
+            
+            CheckIfGameStatusHasBeenRefreshed(testAction);
+        }
 
         [Fact]
         public void GameOnPlayerLeftRemovesPlayer()
@@ -304,6 +321,17 @@ namespace MagicalYatzyTests.ViewModelTests
         public void CanRollIsFalseWhenCurrentPlayerIsNotHuman()
         {
             _botPlayer.IsHuman.Returns(false);
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_botPlayer);
+            _sut.AttachHandlers();
+
+            Assert.False(_sut.CanRoll);
+        }
+
+        [Fact]
+        public void CanRollIsFalseWhenDiceAreRolling()
+        {
+            _botPlayer.IsHuman.Returns(true);
+            _dicePanel.IsRolling.Returns(true);
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_botPlayer);
             _sut.AttachHandlers();
 
@@ -931,7 +959,7 @@ namespace MagicalYatzyTests.ViewModelTests
             // Assert
             _gameService.CurrentLocalGame.DidNotReceive().ReportRoll();
         }
-
+        
         [Fact]
         public void MagicRollCommandCallsCorrespondingGameMethod()
         {
