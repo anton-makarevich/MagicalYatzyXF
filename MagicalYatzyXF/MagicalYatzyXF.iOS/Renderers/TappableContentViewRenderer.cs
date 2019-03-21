@@ -54,4 +54,3 @@ namespace Sanet.MagicalYatzy.XF.iOS.Renderers
 		#endregion
 	}
 }
-
