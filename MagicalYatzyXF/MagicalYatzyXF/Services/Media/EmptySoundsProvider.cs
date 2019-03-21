@@ -6,7 +6,6 @@ namespace Sanet.MagicalYatzy.XF.Services.Media
     {
         public void PlaySound(string sound)
         {
-            
         }
     }
 }

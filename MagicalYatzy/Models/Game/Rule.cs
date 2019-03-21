@@ -70,7 +70,6 @@ namespace Sanet.MagicalYatzy.Models.Game
                             Scores.Kniffel
                         };
                 }
-
             }
         }
 
@@ -88,7 +87,6 @@ namespace Sanet.MagicalYatzy.Models.Game
         /// Helper method to get if we play with standard bonuses
         /// </summary>
         public bool HasStandardBonus => CurrentRule == Rules.krStandard || CurrentRule == Rules.krExtended || CurrentRule == Rules.krMagic;
-
 
         /// <summary>
         /// returns list of available hands

@@ -40,4 +40,3 @@ namespace Sanet.MagicalYatzy.XF.Mac.Renderers
 		#endregion
 	}
 }
-

@@ -4,7 +4,6 @@ using Xamarin.Forms.Xaml;
 
 namespace Sanet.MagicalYatzy.XF.Views
 {
-
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LoginView : BaseView<LoginViewModel>
     {

@@ -382,7 +382,6 @@ namespace Sanet.MagicalYatzy.Models.Game
             {
                 dBot.BounceY();
             }
-
         }
 
         private void BounceX()

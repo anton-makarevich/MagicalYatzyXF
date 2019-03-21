@@ -4,6 +4,5 @@ namespace Sanet.MagicalYatzy.ViewModels
 {
     public class GameResultsViewModel:BaseViewModel
     {
-        
     }
 }
