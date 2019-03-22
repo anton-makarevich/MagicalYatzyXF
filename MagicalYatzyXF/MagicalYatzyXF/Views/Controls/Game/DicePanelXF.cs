@@ -25,7 +25,7 @@ namespace Sanet.MagicalYatzy.XF.Views.Controls.Game
             }
         }
 
-        private void OnDieAdded(Die die)
+        private void OnDieAdded(object sender, Die die)
         {
             Children.Add(new DieImage(die));
         }

@@ -4,13 +4,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     x:Class="Sanet.MagicalYatzy.XF.Views.Game.GameViewWide"
     xmlns:fragments="clr-namespace:Sanet.MagicalYatzy.XF.Views.Fragments;assembly=MagicalYatzyXF"
-    xmlns:game="clr-namespace:Sanet.MagicalYatzy.XF.Views.Game;assembly=MagicalYatzyXF">
+    xmlns:game="clr-namespace:Sanet.MagicalYatzy.XF.Views.Game;assembly=MagicalYatzyXF"
+    xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls;assembly=MagicalYatzyXF" 
+    xmlns:cells="clr-namespace:Sanet.MagicalYatzy.XF.Views.Cells">
     <Grid
         x:Name="PageGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="60"/><!--Auto-->
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -30,5 +32,16 @@
             Orientation="Vertical"
             WidthRequest="60"
             VerticalOptions="Center"/>
+        <controls:HorizontalListView 
+            Grid.Row="2" 
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            ItemsSource="{Binding RollResults}">
+            <controls:HorizontalListView.ItemTemplate>
+                <DataTemplate>
+                    <cells:RollResultCell/>
+                </DataTemplate>
+            </controls:HorizontalListView.ItemTemplate>
+        </controls:HorizontalListView>
     </Grid>
 </game:GameView>

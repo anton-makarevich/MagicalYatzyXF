@@ -28,17 +28,17 @@ namespace Sanet.MagicalYatzy.Models.Game
         public event DieChangedEventHandler DieChangedManually;
         public event DieManualChangeRequestEventHandler DieManualChangeRequested;
 
-        public event Action RollEnded;
-        public event Action RollStarted;
-        public event Action<Die> DieAdded;
-        public event Action<Die> DieRemoved;
+        public event EventHandler RollEnded;
+        public event EventHandler RollStarted;
+        public event EventHandler<Die> DieAdded;
+        public event EventHandler<Die> DieRemoved;
 
         internal bool AreDiceGenerated => (Dice != null);
 
         #endregion
 
         #region Properties
-        public static double DeviceScale = 1;
+
         public bool TreeDScale { get; set; }
         public double TreeDScaleFactor { get; set; }
         public bool PlaySound { get; set; }
@@ -139,7 +139,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                 return false;
             }
 
-            RollStarted?.Invoke();
+            RollStarted?.Invoke(this,null);
 
             var shouldOverrideValues = overrideValues != null && 
                 overrideValues.Count == Dice.Count;
@@ -239,7 +239,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             {
                 foreach (var die in Dice)
                 {
-                    DieRemoved?.Invoke(die);
+                    DieRemoved?.Invoke(this,die);
                 }
             }
 
@@ -247,13 +247,13 @@ namespace Sanet.MagicalYatzy.Models.Game
 
             while (Dice.Count < DiceCount)
             {
-                var d = new Die(this, _gameSettingsService);
+                var dice = new Die(this, _gameSettingsService);
 
-                FindDiePosition(d);
+                FindDiePosition(dice);
 
-                Dice.Add(d);
+                Dice.Add(dice);
 
-                DieAdded?.Invoke(d);
+                DieAdded?.Invoke(this, dice);
             }
         }
 
@@ -302,7 +302,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             }
             else
             {
-                RollEnded?.Invoke();
+                RollEnded?.Invoke(this,null);
             }
         }
 

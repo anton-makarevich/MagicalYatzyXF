@@ -28,10 +28,10 @@ namespace Sanet.MagicalYatzy.Models.Game
         event DieFrozenEventHandler DieFixed;
         event DieManualChangeRequestEventHandler DieManualChangeRequested;
 
-        event Action RollEnded;
-        event Action RollStarted;
-        event Action<Die> DieAdded;
-        event Action<Die> DieRemoved;
+        event EventHandler RollEnded;
+        event EventHandler RollStarted;
+        event EventHandler<Die> DieAdded;
+        event EventHandler<Die> DieRemoved;
 
         void ChangeDice(int oldValue, int newValue);
         void UnfixAll();

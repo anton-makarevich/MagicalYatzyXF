@@ -104,9 +104,24 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.ResultApplied += GameOnResultApplied;
             Game.PlayerRerolled += GameOnPlayerRerolled;
             Game.MagicRollUsed += GameOnMagicRollUsed;
+
+            DicePanel.RollEnded += DicePanelOnRollEnded;
             
             RefreshGameStatus();
         }
+
+        private void DicePanelOnRollEnded(object sender, EventArgs e)
+        {
+            if (!HasCurrentPlayer || !CurrentPlayer.Player.IsHuman)
+                return;
+
+            CurrentPlayer.Player.Roll++;
+
+            SetRollResults();
+
+            RefreshGameStatus();
+        }
+
 
         private void GameOnResultApplied(object sender, ResultEventArgs e)
         {
@@ -172,17 +187,21 @@ namespace Sanet.MagicalYatzy.ViewModels
             if (!HasCurrentPlayer)
                 return;
             _soundsProvider.PlaySound("magic");
-            CurrentPlayer.Player.CheckRollResults(new DieResult(){ DiceResults = e.Value.ToList()}, Game.Rules );
+            CurrentPlayer.Player.CheckRollResults(new DieResult() { DiceResults = e.Value.ToList() }, Game.Rules);
             CurrentPlayer.Player.UseArtifact(Artifacts.ManualSet);
-            
             if (e.Player.InGameId == CurrentPlayer.Player.InGameId && CurrentPlayer.Player.IsHuman)
             {
-                RollResults = new ObservableCollection<RollResult>(CurrentPlayer.Player.Results
-                    .Where(f => !f.HasValue && f.ScoreType != Scores.Bonus));
+                SetRollResults();
             }
             RefreshGameStatus();
         }
-        
+
+        private void SetRollResults()
+        {
+            RollResults = new ObservableCollection<RollResult>(CurrentPlayer.Player.Results
+                .Where(f => !f.HasValue && f.ScoreType != Scores.Bonus));
+        }
+
         private void GameOnPlayerRerolled(object sender, PlayerEventArgs e)
         {
             if (!HasCurrentPlayer)
@@ -293,6 +312,8 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.ResultApplied -= GameOnResultApplied;            
             Game.PlayerRerolled -= GameOnPlayerRerolled;
             Game.MagicRollUsed -= GameOnMagicRollUsed;
+
+            DicePanel.RollEnded -= DicePanelOnRollEnded;
         }
 
         private void RefreshGameStatus()

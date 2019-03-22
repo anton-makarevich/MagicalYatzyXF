@@ -1058,6 +1058,35 @@ namespace MagicalYatzyTests.ViewModelTests
             // Assert
             _gameService.CurrentLocalGame.DidNotReceive().ResetRolls();
         }
+
+        [Fact]
+        public void DicePanelOnRollEndedUpdatesCurrentPlayerRoll()
+        {
+            _humanPlayer.IsHuman.Returns(true);
+            _humanPlayer.Roll = 1;
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+
+            _dicePanel.RollEnded +=
+                Raise.Event();
+            
+            Assert.Equal(2,_humanPlayer.Roll);
+        }
+        
+        [Fact]
+        public void DicePanelOnRollEndedDoesNotUpdateCurrentPlayerRollIfViewIsNotActive()
+        {
+            _humanPlayer.IsHuman.Returns(true);
+            _humanPlayer.Roll = 1;
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            _sut.DetachHandlers();
+
+            _dicePanel.RollEnded +=
+                Raise.Event();
+            
+            Assert.Equal(1,_humanPlayer.Roll);
+        }
         
         #region Private methods
 

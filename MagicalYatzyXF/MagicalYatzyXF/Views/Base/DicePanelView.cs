@@ -1,4 +1,5 @@
-﻿using Sanet.MagicalYatzy.ViewModels.Base;
+﻿using System;
+using Sanet.MagicalYatzy.ViewModels.Base;
 using Sanet.MagicalYatzy.XF.Views.Controls.Game;
 using Xamarin.Forms;
 
@@ -33,10 +34,10 @@ namespace Sanet.MagicalYatzy.XF.Views.Base
             InitDicePanel();
             base.OnAppearing();
             ViewModel.DicePanel.RollEnded += Roll;
-            Roll();
+            Roll(null,null);
         }
 
-        void Roll()
+        void Roll(object sender, EventArgs e)
         {
             ViewModel.DicePanel.RollDice(null);
         }
