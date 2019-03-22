@@ -1,17 +1,21 @@
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 using Xunit;
+using Sanet.MagicalYatzy.Resources;
+using Sanet.MagicalYatzy.Services;
+using NSubstitute;
 
 namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
 {
     public class RollResultViewModelTest
     {
         private readonly RollResult _rollResult = new RollResult(Scores.Ones);
+        private readonly ILocalizationService _localizationService = Substitute.For<ILocalizationService>();
         private readonly RollResultViewModel _sut;
 
         public RollResultViewModelTest()
         {
-            _sut = new RollResultViewModel(_rollResult);
+            _sut = new RollResultViewModel(_rollResult, _localizationService);
         }
 
         [Fact]
@@ -39,10 +43,18 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
         }
 
         [Fact]
+        public void PossibleValueIsCorrect()
+        {
+            _rollResult.PossibleValue = 3;
+            
+            Assert.Equal(3,_sut.PossibleValue);
+        }
+
+        [Fact]
         public void HasBonusIsCorrect()
         {
             var kniffelRollResult = new RollResult(Scores.Kniffel);
-            var sut = new RollResultViewModel(kniffelRollResult);
+            var sut = new RollResultViewModel(kniffelRollResult, _localizationService);
             kniffelRollResult.HasBonus = true;
             
             Assert.True(sut.HasBonus);
@@ -52,7 +64,7 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
         public void ApplyResultChangesValueAndBonus()
         {
             var kniffelRollResult = new RollResult(Scores.Kniffel);
-            var sut = new RollResultViewModel(kniffelRollResult);
+            var sut = new RollResultViewModel(kniffelRollResult, _localizationService);
             
             var newRollResult = new RollResult(Scores.Kniffel);
             newRollResult.PossibleValue = 50;
@@ -64,7 +76,18 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
             Assert.True(sut.HasValue);
             Assert.True(sut.HasBonus);
         }
-        
+
+        [Fact]
+        public void ApplyResultCalledWithNullParameterAppliesSelfResult()
+        {
+            _rollResult.PossibleValue = 4;
+
+            _sut.ApplyResult();
+
+            Assert.Equal(4, _sut.Value);
+            Assert.True(_sut.HasValue);
+        }
+
         [Fact]
         public void ApplyResultNotifiesAboutChangesInValueAndBonus()
         {
@@ -95,6 +118,15 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
             Assert.Equal(1, valueChangedTimes);
             Assert.Equal(1,hasValueChangedTimes);
             Assert.Equal(1, hasBonusChangedTimes);
+        }
+
+        [Fact]
+        public void ShortNameIsCorrect()
+        {
+            var expectedName = Strings.OnesShort;
+            _localizationService.GetLocalizedString("OnesShort").Returns(expectedName);
+
+            Assert.Equal(expectedName, _sut.ShortName);
         }
     }
 }

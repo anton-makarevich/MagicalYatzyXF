@@ -36,7 +36,9 @@
             Grid.Row="2" 
             Grid.Column="0"
             Grid.ColumnSpan="3"
-            ItemsSource="{Binding RollResults}">
+            HorizontalOptions="Center"
+            ItemsSource="{Binding RollResults}"
+            ItemSelected="RollResultSelected">
             <controls:HorizontalListView.ItemTemplate>
                 <DataTemplate>
                     <cells:RollResultCell/>

@@ -52,7 +52,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             if (!CanAddBot)
                 return;
             var newBot = new Player(PlayerType.AI, Players.Select(p=>p.Name).ToList());
-            AddPlayer(new PlayerViewModel(newBot));
+            AddPlayer(new PlayerViewModel(newBot, _localizationService));
         });
 
         public bool CanAddBot
@@ -67,7 +67,7 @@ namespace Sanet.MagicalYatzy.ViewModels
                 return;
             var player = await NavigationService.ShowViewModelForResultAsync<LoginViewModel,IPlayer>();
             if (player != null)
-                AddPlayer(new PlayerViewModel(player));
+                AddPlayer(new PlayerViewModel(player, _localizationService));
         });
 
         public bool CanAddHuman
@@ -82,7 +82,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         private void AddDefaultPlayer()
         {
             if (!Players.Any())
-                AddPlayer(new PlayerViewModel(_playerService.CurrentPlayer));
+                AddPlayer(new PlayerViewModel(_playerService.CurrentPlayer, _localizationService));
         }
 
         public override void AttachHandlers()

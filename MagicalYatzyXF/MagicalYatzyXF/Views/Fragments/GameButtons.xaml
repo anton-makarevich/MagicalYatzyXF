@@ -11,7 +11,7 @@
         HorizontalOptions="Center"
         Command="{Binding RollCommand}"
         ImageSource="{Binding RollImage, Converter={StaticResource ImageNameConverter}}" 
-        Text="{loc:Strings roll}"/>
+        Text="{Binding RollLabel}"/>
     <controls:ToolBarButton
         IsVisible="{Binding IsMagicRollVisible}"
         HorizontalOptions="Center"

@@ -22,7 +22,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         private readonly ISoundsProvider _soundsProvider;
         private readonly ILocalizationService _localizationService;
 
-        private ObservableCollection<RollResult> _rollResults;
+        private ObservableCollection<RollResultViewModel> _rollResults;
 
         public GameViewModel(
             IGameService gameService,
@@ -47,7 +47,7 @@ namespace Sanet.MagicalYatzy.ViewModels
                               && CurrentPlayer.Player.Roll != 1;
         
         public string Title => (HasCurrentPlayer)
-            ? $"{Strings.roll} {Game.Round}, {CurrentPlayer.Player.Name}"
+            ? $"{Strings.MoveLabel} {Game.Round}, {CurrentPlayer.Player.Name} {Strings.roll} {CurrentPlayer.Player.Roll}"
             : Strings.WaitForPlayersLabel;
  
         public PlayerViewModel CurrentPlayer => 
@@ -89,7 +89,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             {
                 if (player.IsHuman && !player.IsReady)
                     Game.SetPlayerReady(player,true);
-                Players.Add(new PlayerViewModel(player));
+                Players.Add(new PlayerViewModel(player, _localizationService));
             }
             
             Game.DiceFixed += GameOnDiceFixed;
@@ -121,7 +121,6 @@ namespace Sanet.MagicalYatzy.ViewModels
 
             RefreshGameStatus();
         }
-
 
         private void GameOnResultApplied(object sender, ResultEventArgs e)
         {
@@ -155,7 +154,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         private void GameOnPlayerJoined(object sender, PlayerEventArgs e)
         {
             if (e?.Player != null)
-                Players.Add(new PlayerViewModel(e.Player));
+                Players.Add(new PlayerViewModel(e.Player, _localizationService));
         }
 
         private async void GameOnGameFinished(object sender, EventArgs e)
@@ -198,7 +197,7 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         private void SetRollResults()
         {
-            RollResults = new ObservableCollection<RollResult>(CurrentPlayer.Player.Results
+            RollResults = new ObservableCollection<RollResultViewModel>(CurrentPlayer.Results
                 .Where(f => !f.HasValue && f.ScoreType != Scores.Bonus));
         }
 
@@ -222,7 +221,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             RefreshGameStatus();
         }
 
-        public ObservableCollection<RollResult> RollResults
+        public ObservableCollection<RollResultViewModel> RollResults
         {
             get => _rollResults;
             private set => SetProperty(ref _rollResults, value);

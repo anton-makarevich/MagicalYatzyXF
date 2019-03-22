@@ -7,9 +7,18 @@
             <RowDefinition/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
-        <Label Text="V"/>
+        <Label 
+            TextColor="White"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            FontSize="24"
+            Text="{Binding PossibleValue}"/>
         <Label
             Grid.Row="1"
-            Text="d"/>
+            TextColor="White"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            FontSize="16"
+            Text="{Binding ShortName}"/>
     </Grid>
 </ViewCell>

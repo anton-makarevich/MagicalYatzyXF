@@ -1060,6 +1060,20 @@ namespace MagicalYatzyTests.ViewModelTests
         }
 
         [Fact]
+        public void TitleContainsRollNumber()
+        {
+            _humanPlayer.IsHuman.Returns(true);
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+
+            for (var roll = 1; roll < 4; roll++)
+            {
+                _humanPlayer.Roll = roll;
+                Assert.Contains(roll.ToString(), _sut.Title);
+            }
+        }
+
+        [Fact]
         public void DicePanelOnRollEndedUpdatesCurrentPlayerRoll()
         {
             _humanPlayer.IsHuman.Returns(true);
@@ -1086,6 +1100,40 @@ namespace MagicalYatzyTests.ViewModelTests
                 Raise.Event();
             
             Assert.Equal(1,_humanPlayer.Roll);
+        }
+        
+        [Fact]
+        public void DicePanelOnRollEndedPopulatesRollResults()
+        {
+            _humanPlayer.IsHuman.Returns(true);
+            _humanPlayer.Roll = 1;
+            _humanPlayer.Results.Returns(new List<RollResult>() {new RollResult(Scores.Ones)});
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+
+            _dicePanel.RollEnded +=
+                Raise.Event();
+            
+            Assert.NotNull(_sut.RollResults);
+            Assert.NotEmpty(_sut.RollResults);
+        }
+        
+        [Fact]
+        public void DicePanelOnRollRefreshesGameStatus()
+        {
+            _humanPlayer.IsHuman.Returns(true);
+            _humanPlayer.Roll = 1;
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+
+            var testAction = new Action(() =>
+            {
+                if (!_sut.Players.Any())
+                    _sut.AttachHandlers();
+                _dicePanel.RollEnded +=
+                    Raise.Event();
+            });
+            
+            CheckIfGameStatusHasBeenRefreshed(testAction);
         }
         
         #region Private methods

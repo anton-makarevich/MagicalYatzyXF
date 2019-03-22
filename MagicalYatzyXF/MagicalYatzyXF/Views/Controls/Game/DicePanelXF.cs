@@ -3,11 +3,11 @@ using Xamarin.Forms;
 
 namespace Sanet.MagicalYatzy.XF.Views.Controls.Game
 {
-    public class DicePanelXF: AbsoluteLayout
+    public class DicePanelXf: AbsoluteLayout
     {
         private IDicePanel _dicePanelModel;
 
-        public DicePanelXF()
+        public DicePanelXf()
         {
             BackgroundColor = Color.Black;
         }

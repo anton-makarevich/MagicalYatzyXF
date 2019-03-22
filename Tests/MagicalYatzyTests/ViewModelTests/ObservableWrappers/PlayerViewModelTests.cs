@@ -3,6 +3,7 @@ using NSubstitute;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 using Xunit;
+using Sanet.MagicalYatzy.Services;
 
 namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
 {
@@ -10,11 +11,12 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
     {
         private readonly PlayerViewModel _sut;
         private readonly IPlayer _player;
+        private readonly ILocalizationService _localizationService = Substitute.For<ILocalizationService>();
         
         public PlayerViewModelTests()
         {
             _player = Substitute.For<IPlayer>();
-            _sut = new PlayerViewModel(_player);
+            _sut = new PlayerViewModel(_player, _localizationService);
         }
 
         [Fact]
