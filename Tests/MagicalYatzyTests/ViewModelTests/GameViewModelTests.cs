@@ -908,7 +908,7 @@ namespace MagicalYatzyTests.ViewModelTests
                 
                 _gameService.CurrentLocalGame.Rules.Returns(new Rule(rule));
                 IReadOnlyList<RollResult> rollResults = _gameService.CurrentLocalGame.Rules.ScoresForRule
-                    .Select(score => new RollResult(score)).ToList();
+                    .Select(score => new RollResult(score, rule)).ToList();
                 _sut.AttachHandlers();
 
                 Assert.NotEmpty(_sut.RollResultsLabels);
@@ -1107,7 +1107,7 @@ namespace MagicalYatzyTests.ViewModelTests
         {
             _humanPlayer.IsHuman.Returns(true);
             _humanPlayer.Roll = 1;
-            _humanPlayer.Results.Returns(new List<RollResult>() {new RollResult(Scores.Ones)});
+            _humanPlayer.Results.Returns(new List<RollResult>() {new RollResult(Scores.Ones, Rules.krSimple)});
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
             _sut.AttachHandlers();
 

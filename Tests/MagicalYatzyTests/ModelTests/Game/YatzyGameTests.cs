@@ -117,7 +117,7 @@ namespace MagicalYatzyTests.ModelTests.Game
             StartGame();
             var resultAppliedCount = 0;
             RollResult appliedResult = null;
-            var result = new RollResult(Scores.SmallStraight);
+            var result = new RollResult(Scores.SmallStraight, Rules.krSimple);
             
             _sut.ResultApplied += (sender, args) =>
             {
@@ -137,7 +137,7 @@ namespace MagicalYatzyTests.ModelTests.Game
             StartGame();
             var resultAppliedCount = 0;
             var appliedResults = new List<RollResult>();
-            var result = new RollResult(Scores.Ones);
+            var result = new RollResult(Scores.Ones, Rules.krSimple);
             
             _sut.ResultApplied += (sender, args) =>
             {

@@ -49,9 +49,11 @@ namespace Sanet.MagicalYatzy.Models.Game
         public int Roll { get ; set ; }
 
         public int SeatNo { get; set; }
-   
-        public int Total => default;
-        
+
+        public int Total => (Results == null)
+            ? 0 
+            : Results.Where(r => r.HasValue).Select(r => r.Value).Sum() + Results.Count(f=>f.HasBonus)*100;
+
         public IReadOnlyList<RollResult> Results { get; private set; }
         
         public IReadOnlyList<Artifact> MagicalArtifactsForGame { get; private set; }
@@ -76,7 +78,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                 MagicalArtifactsForGame = AvailableMagicalArtifacts?.Distinct().ToList();
             }
 
-            Results = rule.ScoresForRule.Select(score => new RollResult(score)).ToList();
+            Results = rule.ScoresForRule.Select(score => new RollResult(score, rule.CurrentRule)).ToList();
             InGameId = Guid.NewGuid().ToString("N");
             IsMyTurn = false;
         }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Utils;
 using Xunit;
@@ -7,7 +8,7 @@ namespace MagicalYatzyTests.ModelTests.Game
 {
     public class RollResultTests
     {
-        private readonly RollResult _sut = new RollResult(Scores.Ones);
+        private readonly RollResult _sut = new RollResult(Scores.Ones, Rules.krSimple);
         
         [Fact]
         public void HasCorrectMaxValueForSpecifiedScoreType()
@@ -32,7 +33,7 @@ namespace MagicalYatzyTests.ModelTests.Game
 
             foreach (var score in allScores)
             {
-                var sut = new RollResult(score);
+                var sut = new RollResult(score, Rules.krExtended);
                 Assert.Equal(!maxValues.ContainsKey(score) ? 0 : maxValues[score], sut.MaxValue);
             }
         }
@@ -87,24 +88,49 @@ namespace MagicalYatzyTests.ModelTests.Game
 
             foreach (var score in allScores)
             {
-                var sut = new RollResult(score);
+                var sut = new RollResult(score, Rules.krStandard);
                 Assert.Equal(numericScores.Contains(score) , sut.IsNumeric);
             }
         }
 
         [Fact]
-        public void KniffelScoreCanHaveBonus()
+        public void ExtendedRulesCanHaveBonus()
         {
-            var sut = new RollResult(Scores.Kniffel);
-            sut.HasBonus = true;
-            Assert.True(sut.HasBonus);
+            var extendedRules = new[] {Rules.krExtended, Rules.krMagic};
+            foreach (var rule in extendedRules)
+            {
+                var sut = new RollResult(Scores.Ones, rule) {HasBonus = true};
+                Assert.True(sut.HasBonus);
+            }  
         }
         
         [Fact]
-        public void NonKniffelScoreCannotHaveBonus()
+        public void NotExtendedRulesCannotHaveBonus()
         {
-            _sut.HasBonus = true;
-            Assert.False(_sut.HasBonus);
+            var notExtendedRules = new[] {Rules.krBaby, Rules.krSimple, Rules.krStandard};
+            foreach (var rule in notExtendedRules)
+            {
+                var sut = new RollResult(Scores.Ones, rule) {HasBonus = true};
+                Assert.False(sut.HasBonus);
+            } 
+        }
+
+        [Fact]
+        public void KniffelCanNotHaveExtraBonus()
+        {
+            var sut = new RollResult(Scores.Kniffel, Rules.krExtended) {HasBonus = true};
+            Assert.False(sut.HasBonus);
+        }
+        
+        [Fact]
+        public void NotKniffelCanHaveExtraBonus()
+        {
+            var scores = EnumUtils.GetValues<Scores>().Where(s => s != Scores.Kniffel);
+            foreach (var score in scores)
+            {
+                var sut = new RollResult(score, Rules.krExtended) {HasBonus = true};
+                Assert.True(sut.HasBonus);
+            }
         }
 
         [Fact]

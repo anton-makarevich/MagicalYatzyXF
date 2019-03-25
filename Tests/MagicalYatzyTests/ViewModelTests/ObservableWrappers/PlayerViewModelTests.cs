@@ -81,12 +81,12 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
         [Fact]
         public void ApplyRollResultUpdatesCorrespondingPlayersResult()
         {
-            const Scores scoreType = Scores.Kniffel;
-            var playersResult = new RollResult(scoreType);
+            const Scores scoreType = Scores.Ones;
+            var playersResult = new RollResult(scoreType,Rules.krExtended);
             _player.Results.Returns(new List<RollResult>() {playersResult});
             
             var newResult = Substitute.For<IRollResult>();
-            newResult.PossibleValue.Returns(50);
+            newResult.PossibleValue.Returns(5);
             newResult.HasBonus.Returns(true);
             newResult.ScoreType.Returns(scoreType);
             

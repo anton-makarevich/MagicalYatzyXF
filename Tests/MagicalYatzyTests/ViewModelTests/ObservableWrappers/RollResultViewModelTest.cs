@@ -9,7 +9,7 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
 {
     public class RollResultViewModelTest
     {
-        private readonly RollResult _rollResult = new RollResult(Scores.Ones);
+        private readonly RollResult _rollResult = new RollResult(Scores.Ones, Rules.krSimple);
         private readonly ILocalizationService _localizationService = Substitute.For<ILocalizationService>();
         private readonly RollResultViewModel _sut;
 
@@ -53,7 +53,7 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
         [Fact]
         public void HasBonusIsCorrect()
         {
-            var kniffelRollResult = new RollResult(Scores.Kniffel);
+            var kniffelRollResult = new RollResult(Scores.Ones, Rules.krExtended);
             var sut = new RollResultViewModel(kniffelRollResult, _localizationService);
             kniffelRollResult.HasBonus = true;
             
@@ -63,16 +63,16 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
         [Fact]
         public void ApplyResultChangesValueAndBonus()
         {
-            var kniffelRollResult = new RollResult(Scores.Kniffel);
+            var kniffelRollResult = new RollResult(Scores.Ones,Rules.krExtended);
             var sut = new RollResultViewModel(kniffelRollResult, _localizationService);
             
-            var newRollResult = new RollResult(Scores.Kniffel);
-            newRollResult.PossibleValue = 50;
+            var newRollResult = new RollResult(Scores.Ones, Rules.krExtended);
+            newRollResult.PossibleValue = 5;
             newRollResult.HasBonus = true;
             
             sut.ApplyResult(newRollResult);
             
-            Assert.Equal(50, sut.Value);
+            Assert.Equal(5, sut.Value);
             Assert.True(sut.HasValue);
             Assert.True(sut.HasBonus);
         }
@@ -91,7 +91,7 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
         [Fact]
         public void ApplyResultNotifiesAboutChangesInValueAndBonus()
         {
-            var newRollResult = new RollResult(Scores.Ones);
+            var newRollResult = new RollResult(Scores.Ones, Rules.krSimple);
 
             var valueChangedTimes = 0;
             var hasValueChangedTimes = 0;
