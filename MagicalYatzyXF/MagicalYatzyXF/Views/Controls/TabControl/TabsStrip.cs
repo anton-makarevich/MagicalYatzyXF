@@ -124,6 +124,8 @@ namespace Sanet.MagicalYatzy.XF.Views.Controls.TabControl
 
         public void Activate(TabItem tabChild, bool animate)
         {
+            if (tabChild == null)
+                return;
             var existingChild = TabChildren.FirstOrDefault(t => t.View ==
                _contentView.Children.FirstOrDefault(v => v.IsVisible));
 
