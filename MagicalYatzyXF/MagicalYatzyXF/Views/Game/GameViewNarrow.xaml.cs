@@ -1,4 +1,5 @@
-﻿using Sanet.MagicalYatzy.XF.Views.Controls.TabControl;
+﻿using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
+using Sanet.MagicalYatzy.XF.Views.Controls.TabControl;
 using Sanet.MagicalYatzy.XF.Views.Fragments;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -6,9 +7,9 @@ using Xamarin.Forms.Xaml;
 namespace Sanet.MagicalYatzy.XF.Views.Game
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class GameViewNarrow : GameView
+    public partial class GameViewNarrow
     {
-        private Grid diceGrid = new Grid();
+        private readonly Grid _diceGrid = new Grid();
         public GameViewNarrow()
         {
             InitializeComponent();
@@ -17,14 +18,20 @@ namespace Sanet.MagicalYatzy.XF.Views.Game
         protected override void InitDicePanel()
         {
             base.InitDicePanel();
-            diceGrid.Children.Add(DicePanel);
+            _diceGrid.Children.Add(DicePanel);
         }
 
         protected override void OnViewModelSet()
         {
-            diceGrid.BackgroundColor = Color.Blue;
+            _diceGrid.BackgroundColor = Color.Blue;
             TabBar.TabChildren.Add(new TabItem(ViewModel.ScoresTitle, new ResultsTable()));
-            TabBar.TabChildren.Add(new TabItem(ViewModel.PanelTitle, diceGrid));
+            TabBar.TabChildren.Add(new TabItem(ViewModel.PanelTitle, _diceGrid));
+        }
+        
+        private void RollResultSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            if (e?.SelectedItem is RollResultViewModel viewModel)
+                ViewModel.ApplyRollResult(viewModel.RollResult);
         }
     }
 }
