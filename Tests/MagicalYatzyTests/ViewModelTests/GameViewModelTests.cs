@@ -30,6 +30,7 @@ namespace MagicalYatzyTests.ViewModelTests
         {
             _humanPlayer = Substitute.For<IPlayer>();
             _humanPlayer.InGameId.Returns("0");
+            _humanPlayer.Roll = 1;
 
             _botPlayer = Substitute.For<IPlayer>();
             _botPlayer.InGameId.Returns("1");
@@ -307,6 +308,28 @@ namespace MagicalYatzyTests.ViewModelTests
             Assert.False(_sut.CanRoll);
         }
 
+        [Fact]
+        public void CanRollIsFalseWhenPlayersRollIsOutsideOfRange()
+        {
+            _humanPlayer.IsHuman.Returns(true);
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _humanPlayer.Roll = YatzyGame.MaxRoll+1;
+            _sut.AttachHandlers();
+            
+            Assert.False(_sut.CanRoll);
+        }
+        
+        [Fact]
+        public void CanRollIsTrueWhenPlayersRollIsEqualToMaxRolls()
+        {
+            _humanPlayer.IsHuman.Returns(true);
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _humanPlayer.Roll = YatzyGame.MaxRoll;
+            _sut.AttachHandlers();
+            
+            Assert.True(_sut.CanRoll);
+        }
+        
         [Fact]
         public void CanRollIsTrueWhenCurrentPlayerIsHuman()
         {
@@ -771,19 +794,7 @@ namespace MagicalYatzyTests.ViewModelTests
             
             _soundsProvider.Received().PlaySound("magic");
         }
-        
-        [Fact]
-        public void GameOnRerolledResetsPlayersRoll()
-        {
-            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
-            _sut.AttachHandlers();
-            
-            _gameService.CurrentLocalGame.PlayerRerolled +=
-                Raise.EventWith(null, new PlayerEventArgs(_humanPlayer));
-            
-            Assert.Equal(1,_humanPlayer.Roll);
-        }
-        
+
         [Fact]
         public void GameOnRerolledConsumesArtifact()
         {
@@ -908,7 +919,7 @@ namespace MagicalYatzyTests.ViewModelTests
                 
                 _gameService.CurrentLocalGame.Rules.Returns(new Rule(rule));
                 IReadOnlyList<RollResult> rollResults = _gameService.CurrentLocalGame.Rules.ScoresForRule
-                    .Select(score => new RollResult(score)).ToList();
+                    .Select(score => new RollResult(score, rule)).ToList();
                 _sut.AttachHandlers();
 
                 Assert.NotEmpty(_sut.RollResultsLabels);
@@ -1057,6 +1068,80 @@ namespace MagicalYatzyTests.ViewModelTests
             
             // Assert
             _gameService.CurrentLocalGame.DidNotReceive().ResetRolls();
+        }
+
+        [Fact]
+        public void TitleContainsRollNumber()
+        {
+            _humanPlayer.IsHuman.Returns(true);
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+
+            for (var roll = 1; roll < 4; roll++)
+            {
+                _gameService.CurrentLocalGame.Roll.Returns(roll);
+                Assert.Contains(roll.ToString(), _sut.Title);
+            }
+        }
+ 
+        [Fact]
+        public void DicePanelOnRollEndedDoesNotUpdateCurrentPlayerRollIfViewIsNotActive()
+        {
+            _humanPlayer.IsHuman.Returns(true);
+            _humanPlayer.Roll = 1;
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+            _sut.DetachHandlers();
+
+            _dicePanel.RollEnded +=
+                Raise.Event();
+            
+            Assert.Equal(1,_humanPlayer.Roll);
+        }
+        
+        [Fact]
+        public void DicePanelOnRollEndedPopulatesRollResults()
+        {
+            _humanPlayer.IsHuman.Returns(true);
+            _humanPlayer.Roll = 1;
+            _humanPlayer.Results.Returns(new List<RollResult>() {new RollResult(Scores.Ones, Rules.krSimple)});
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            _sut.AttachHandlers();
+
+            _dicePanel.RollEnded +=
+                Raise.Event();
+            
+            Assert.NotNull(_sut.RollResults);
+            Assert.NotEmpty(_sut.RollResults);
+        }
+        
+        [Fact]
+        public void DicePanelOnRollRefreshesGameStatus()
+        {
+            _humanPlayer.IsHuman.Returns(true);
+            _humanPlayer.Roll = 1;
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+
+            var testAction = new Action(() =>
+            {
+                if (!_sut.Players.Any())
+                    _sut.AttachHandlers();
+                _dicePanel.RollEnded +=
+                    Raise.Event();
+            });
+            
+            CheckIfGameStatusHasBeenRefreshed(testAction);
+        }
+
+        [Fact]
+        public void ApplyRollResultCallsCorrespondingMethodOnCurrentPlayer()
+        {
+            var rollResult = new RollResult(Scores.Ones, Rules.krSimple);
+            _sut.AttachHandlers();
+
+            _sut.ApplyRollResult(rollResult);
+            
+            _gameService.CurrentLocalGame.Received().ApplyScore(rollResult);
         }
         
         #region Private methods

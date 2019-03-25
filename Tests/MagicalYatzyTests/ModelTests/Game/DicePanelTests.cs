@@ -68,7 +68,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         {
             // Arrange
             var rollStartFired = false;
-            _sut.RollStarted += () => { rollStartFired = true; };
+            _sut.RollStarted += (s,e) => { rollStartFired = true; };
             // Act
             _sut.RollDice(null);
 
@@ -82,7 +82,7 @@ namespace MagicalYatzyTests.ModelTests.Game
             // Arrange
             var rollEndFired = false;
             _sut.RollDelay = 0;
-            _sut.RollEnded += () => { rollEndFired = true; };
+            _sut.RollEnded += (s,e) => { rollEndFired = true; };
             // Act
             _sut.RollDice(null);
 

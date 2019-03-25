@@ -4,18 +4,25 @@ namespace Sanet.MagicalYatzy.Models.Game
 {
     public class RollResult : IRollResult
     {
+        private readonly Rules _rule;
         private int _value;
         private bool _hasBonus;
         private int _possibleValue;
 
-        public RollResult(Scores score)
+        public RollResult(Scores score, Rules rule)
         {
+            _rule = rule;
             ScoreType = score;
         }
 
         public bool HasBonus
         {
-            get => ScoreType == Scores.Kniffel && _hasBonus;
+            get
+            {
+                if (!new Rule(_rule).HasExtendedBonuses)
+                    return false;
+                return ScoreType != Scores.Kniffel && _hasBonus;
+            }
             set => _hasBonus = value;
         }
 

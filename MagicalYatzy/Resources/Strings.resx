@@ -385,7 +385,7 @@
     <value>2</value>
   </data>
   <data name="MoveLabel" xml:space="preserve">
-    <value>round</value>
+    <value>Round</value>
   </data>
   <data name="AgainLabel" xml:space="preserve">
     <value>play again</value>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Sanet.MagicalYatzy.XF.Views.Cells.RollResultCell">
+    <Grid
+        HeightRequest="60"
+        WidthRequest="60">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <Label 
+            TextColor="White"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            FontSize="24"
+            Text="{Binding PossibleValue}"/>
+        <Label
+            Grid.Row="1"
+            TextColor="White"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            FontSize="16"
+            Text="{Binding ShortName}"/>
+    </Grid>
+</ViewCell>

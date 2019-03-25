@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Sanet.MagicalYatzy.Models.Chat;
 using Sanet.MagicalYatzy.Models.Game;
@@ -29,9 +30,24 @@ namespace MagicalYatzyTests.ModelTests.Game
         private void RollDiceToHaveValue(int requiredValue, int requiredNumberOfValues)
         {
             var numberOfValues = 0;
+            if (_sut.CurrentPlayer == null)
+            {
+                if (_sut.Players == null || !_sut.Players.Any())
+                {
+                    var player = new Player(PlayerType.Local);
+                    _sut.JoinGame(player);
+                }
+
+                foreach (var player in _sut.Players)
+                {
+                    _sut.SetPlayerReady(player,true);
+                }
+            }
             _sut.DiceRolled += (sender, args) => { numberOfValues = args.Value.Count(f => f == requiredValue); };
             do
             {
+                Debug.Assert(_sut.CurrentPlayer != null, "_sut.CurrentPlayer != null");
+                _sut.CurrentPlayer.Roll = 1;
                 _sut.ReportRoll();
             } while (numberOfValues != requiredNumberOfValues);
         }
@@ -117,7 +133,7 @@ namespace MagicalYatzyTests.ModelTests.Game
             StartGame();
             var resultAppliedCount = 0;
             RollResult appliedResult = null;
-            var result = new RollResult(Scores.SmallStraight);
+            var result = new RollResult(Scores.SmallStraight, Rules.krSimple);
             
             _sut.ResultApplied += (sender, args) =>
             {
@@ -137,7 +153,7 @@ namespace MagicalYatzyTests.ModelTests.Game
             StartGame();
             var resultAppliedCount = 0;
             var appliedResults = new List<RollResult>();
-            var result = new RollResult(Scores.Ones);
+            var result = new RollResult(Scores.Ones, Rules.krSimple);
             
             _sut.ResultApplied += (sender, args) =>
             {
@@ -648,6 +664,91 @@ namespace MagicalYatzyTests.ModelTests.Game
             _sut.SendChatMessage(message);
 
             Assert.Equal(1, chatMessageCalled);
+        }
+
+        [Fact]
+        public void NextTurnResetsPlayersRolls()
+        {
+            var player1 = new Player();
+            var player2 = new Player();           
+            _sut.JoinGame(player1);
+            _sut.JoinGame(player2);
+            _sut.SetPlayerReady(player1, true);
+            _sut.SetPlayerReady(player2, true);
+            player1.Roll = 2;
+            player2.Roll = 3;
+            
+            _sut.NextTurn();
+            
+            Assert.Equal(1,player1.Roll);
+            Assert.Equal(1,player2.Roll);
+        }
+
+        [Fact]
+        public void ReportRollIncrementsPlayersRollCounter()
+        {
+            var player1 = new Player();
+            _sut.JoinGame(player1);
+            _sut.SetPlayerReady(player1, true);
+            
+            _sut.ReportRoll();
+            
+            Assert.Equal(2, player1.Roll);
+        }
+        
+        [Fact]
+        public void ReportRollInvolesDiceRolledEvent()
+        {
+            var player1 = new Player();
+            var diceRolledInvokedTimes = 0;
+            _sut.JoinGame(player1);
+            _sut.SetPlayerReady(player1, true);
+            _sut.DiceRolled += (sender, args) => { diceRolledInvokedTimes++; }; 
+            
+            player1.Roll = 3;
+            
+            _sut.ReportRoll();
+            
+            Assert.Equal(1,diceRolledInvokedTimes);
+        }
+        
+        [Fact]
+        public void ReportRollDoesNotRollDicesIfMaxAmountOfRollsIsReached()
+        {
+            var player1 = new Player();
+            var diceRolledInvokedTimes = 0;
+            _sut.JoinGame(player1);
+            _sut.SetPlayerReady(player1, true);
+            _sut.DiceRolled += (sender, args) => { diceRolledInvokedTimes++; }; 
+            
+            player1.Roll = 4;
+            
+            _sut.ReportRoll();
+            
+            Assert.Equal(0,diceRolledInvokedTimes);
+        }
+
+        [Fact]
+        public void RollIsAlvaysInCorrectRange()
+        {
+            var player1 = new Player();
+            _sut.JoinGame(player1);
+            _sut.SetPlayerReady(player1, true);
+            
+            player1.Roll = 1;
+            Assert.Equal(1, _sut.Roll);
+            
+            player1.Roll = 2;
+            Assert.Equal(2, _sut.Roll);
+            
+            player1.Roll = 3;
+            Assert.Equal(3, _sut.Roll);
+            
+            player1.Roll = -1;
+            Assert.Equal(1, _sut.Roll);
+            
+            player1.Roll = 4;
+            Assert.Equal(3, _sut.Roll);
         }
     }
 }

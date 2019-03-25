@@ -1,4 +1,5 @@
-﻿using Sanet.MagicalYatzy.ViewModels.Base;
+﻿using System;
+using Sanet.MagicalYatzy.ViewModels.Base;
 using Sanet.MagicalYatzy.XF.Views.Controls.Game;
 using Xamarin.Forms;
 
@@ -6,14 +7,14 @@ namespace Sanet.MagicalYatzy.XF.Views.Base
 {
     public class DicePanelView<TViewModel> : BaseView<TViewModel> where TViewModel : DicePanelViewModel
     {
-        private DicePanelXF _dicePanel;
+        private DicePanelXf _dicePanel;
         protected void InitDicePanel()
         {
             if (_dicePanel != null)
                 return;
             if (Content is Grid pageGrid && ViewModel?.DicePanel != null)
             {
-                _dicePanel = new DicePanelXF
+                _dicePanel = new DicePanelXf
                 {
                     InputTransparent = Device.RuntimePlatform == Device.macOS
                 };
@@ -33,10 +34,10 @@ namespace Sanet.MagicalYatzy.XF.Views.Base
             InitDicePanel();
             base.OnAppearing();
             ViewModel.DicePanel.RollEnded += Roll;
-            Roll();
+            Roll(null,null);
         }
 
-        void Roll()
+        void Roll(object sender, EventArgs e)
         {
             ViewModel.DicePanel.RollDice(null);
         }

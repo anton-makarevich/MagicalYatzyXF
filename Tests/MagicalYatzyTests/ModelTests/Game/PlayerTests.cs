@@ -306,5 +306,27 @@ namespace MagicalYatzyTests.ModelTests.Game
             
             Assert.True(_sut.MagicalArtifactsForGame.First(f=>f.Type == Artifacts.ManualSet).IsUsed);
         }
+
+        [Fact]
+        public void ReturnsCorrectTotalScoreDependingOnRules()
+        {
+            foreach (var ruleType in EnumUtils.GetValues<Rules>())
+            {
+                var rule = new Rule(ruleType);
+                _sut.PrepareForGameStart(rule);
+
+                foreach (var score in EnumUtils.GetValues<Scores>())
+                {
+                    var result = _sut.Results.LastOrDefault(r => r.ScoreType == score);
+                    if (result != null)
+                        result.Value = result.MaxValue;
+                }
+           
+                var expectedTotal = _sut.Results.Where(r => r.HasValue).Select(r => r.Value).Sum() + _sut.Results.Count(f=>f.HasBonus)*100;
+                
+                // Assert
+                Assert.Equal(expectedTotal,_sut.Total);
+            }
+        }
     }
 }

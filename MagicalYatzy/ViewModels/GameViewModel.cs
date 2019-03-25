@@ -22,7 +22,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         private readonly ISoundsProvider _soundsProvider;
         private readonly ILocalizationService _localizationService;
 
-        private ObservableCollection<RollResult> _rollResults;
+        private ObservableCollection<RollResultViewModel> _rollResults;
 
         public GameViewModel(
             IGameService gameService,
@@ -39,7 +39,7 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         public string RollLabel =>
             CurrentPlayer != null
-                ? $"{Strings.roll} {CurrentPlayer.Player.Roll}"
+                ? $"{Strings.roll} {Game.Roll}"
                 : string.Empty;
 
         public bool CanFix => HasCurrentPlayer 
@@ -47,7 +47,7 @@ namespace Sanet.MagicalYatzy.ViewModels
                               && CurrentPlayer.Player.Roll != 1;
         
         public string Title => (HasCurrentPlayer)
-            ? $"{Strings.roll} {Game.Round}, {CurrentPlayer.Player.Name}"
+            ? $"{Strings.MoveLabel} {Game.Round}, {CurrentPlayer.Player.Name} {Strings.roll} {Game.Roll}"
             : Strings.WaitForPlayersLabel;
  
         public PlayerViewModel CurrentPlayer => 
@@ -89,7 +89,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             {
                 if (player.IsHuman && !player.IsReady)
                     Game.SetPlayerReady(player,true);
-                Players.Add(new PlayerViewModel(player));
+                Players.Add(new PlayerViewModel(player, _localizationService));
             }
             
             Game.DiceFixed += GameOnDiceFixed;
@@ -104,7 +104,19 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.ResultApplied += GameOnResultApplied;
             Game.PlayerRerolled += GameOnPlayerRerolled;
             Game.MagicRollUsed += GameOnMagicRollUsed;
+
+            DicePanel.RollEnded += DicePanelOnRollEnded;
             
+            RefreshGameStatus();
+        }
+
+        private void DicePanelOnRollEnded(object sender, EventArgs e)
+        {
+            if (!HasCurrentPlayer || !CurrentPlayer.Player.IsHuman)
+                return;
+
+            SetRollResults();
+
             RefreshGameStatus();
         }
 
@@ -140,7 +152,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         private void GameOnPlayerJoined(object sender, PlayerEventArgs e)
         {
             if (e?.Player != null)
-                Players.Add(new PlayerViewModel(e.Player));
+                Players.Add(new PlayerViewModel(e.Player, _localizationService));
         }
 
         private async void GameOnGameFinished(object sender, EventArgs e)
@@ -172,23 +184,26 @@ namespace Sanet.MagicalYatzy.ViewModels
             if (!HasCurrentPlayer)
                 return;
             _soundsProvider.PlaySound("magic");
-            CurrentPlayer.Player.CheckRollResults(new DieResult(){ DiceResults = e.Value.ToList()}, Game.Rules );
+            CurrentPlayer.Player.CheckRollResults(new DieResult() { DiceResults = e.Value.ToList() }, Game.Rules);
             CurrentPlayer.Player.UseArtifact(Artifacts.ManualSet);
-            
             if (e.Player.InGameId == CurrentPlayer.Player.InGameId && CurrentPlayer.Player.IsHuman)
             {
-                RollResults = new ObservableCollection<RollResult>(CurrentPlayer.Player.Results
-                    .Where(f => !f.HasValue && f.ScoreType != Scores.Bonus));
+                SetRollResults();
             }
             RefreshGameStatus();
         }
-        
+
+        private void SetRollResults()
+        {
+            RollResults = new ObservableCollection<RollResultViewModel>(CurrentPlayer.Results
+                .Where(f => !f.HasValue && f.ScoreType != Scores.Bonus));
+        }
+
         private void GameOnPlayerRerolled(object sender, PlayerEventArgs e)
         {
             if (!HasCurrentPlayer)
                 return;
             _soundsProvider.PlaySound("magic");
-            CurrentPlayer.Player.Roll = 1;
             CurrentPlayer.Player.UseArtifact(Artifacts.RollReset);
             RollResults = null;
             RefreshGameStatus();            
@@ -203,20 +218,23 @@ namespace Sanet.MagicalYatzy.ViewModels
             RefreshGameStatus();
         }
 
-        public ObservableCollection<RollResult> RollResults
+        public ObservableCollection<RollResultViewModel> RollResults
         {
             get => _rollResults;
             private set => SetProperty(ref _rollResults, value);
         }
         
         public List<string> RollResultsLabels => Game.Rules.ScoresForRule
-            .Select(score => new RollResult(score))
+            .Select(score => new RollResult(score,Game.Rules.CurrentRule))
             .Select(s => _localizationService.GetLocalizedString(s.ScoreType.ToString())).ToList();
 
         public bool HasCurrentPlayer => CurrentPlayer != null;
-        public bool CanRoll => HasCurrentPlayer 
+
+        public bool CanRoll => HasCurrentPlayer
                                && CurrentPlayer.Player.IsHuman
-                               && !DicePanel.IsRolling;
+                               && !DicePanel.IsRolling
+                               && CurrentPlayer.Player.Roll > 0
+                               && CurrentPlayer.Player.Roll <= YatzyGame.MaxRoll;
 
         public string ScoresTitle => Strings.ResultsTableLabel.ToUpper();
         public string PanelTitle => Strings.DiceBoardLabel.ToUpper();
@@ -293,6 +311,8 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.ResultApplied -= GameOnResultApplied;            
             Game.PlayerRerolled -= GameOnPlayerRerolled;
             Game.MagicRollUsed -= GameOnMagicRollUsed;
+
+            DicePanel.RollEnded -= DicePanelOnRollEnded;
         }
 
         private void RefreshGameStatus()
@@ -313,6 +333,11 @@ namespace Sanet.MagicalYatzy.ViewModels
             NotifyPropertyChanged(nameof(IsMagicRollVisible));
             NotifyPropertyChanged(nameof(IsManualSetVisible));
             NotifyPropertyChanged(nameof(IsRollResetVisible));
+        }
+
+        public void ApplyRollResult(IRollResult rollResult)
+        {
+            Game.ApplyScore(rollResult);
         }
     }
 }

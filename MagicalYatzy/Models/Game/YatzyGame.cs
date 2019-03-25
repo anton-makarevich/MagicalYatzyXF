@@ -11,6 +11,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 {
     public class YatzyGame: IGame
     {
+        public const int MaxRoll = 3;
         //sync object
         private readonly object _syncRoot = new object();
         
@@ -22,7 +23,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         private Queue<int> _thisTurnValues = new Queue<int>();
         private bool _reRollMode;
         private readonly Random _randomizer = new Random();
-
+        
         public YatzyGame(Rules rules)
         {
             Rules = new Rule(rules);
@@ -85,7 +86,8 @@ namespace Sanet.MagicalYatzy.Models.Game
                     if (p.Roll > roll)
                         roll = p.Roll;
                 }
-                return roll;
+
+                return (roll <= MaxRoll) ? roll : MaxRoll;
             }
         }
         
@@ -307,6 +309,10 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public void NextTurn()
         {
+            foreach (var player in Players)
+            {
+                player.Roll = 1;
+            }
             //if current round is last
             if (Round == Rules.MaxRound)
             {
@@ -363,6 +369,9 @@ namespace Sanet.MagicalYatzy.Models.Game
         {
             lock (_syncRoot)
             {
+                if (CurrentPlayer == null || CurrentPlayer.Roll > MaxRoll)
+                    return;
+                
                 var diceIndexToSet = 0;
                 _lastRollResults = new int[5];
                 for (var diceCounter = diceIndexToSet; diceCounter < _fixedRollResults.Count; diceCounter++)
@@ -384,6 +393,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                 }
 
                 DiceRolled?.Invoke(this, new RollEventArgs(CurrentPlayer, _lastRollResults));
+                CurrentPlayer.Roll++;
             }
         }
         

@@ -58,7 +58,7 @@ namespace MagicalYatzyTests.ViewModelTests
         [Fact]
         public void CallingDeleteOnPlayerViewModelRemovesItFromList()
         {
-            var newPlayerVm = new PlayerViewModel(Substitute.For<IPlayer>());
+            var newPlayerVm = new PlayerViewModel(Substitute.For<IPlayer>(), _localizationService);
 
             _sut.AttachHandlers();
             _sut.AddPlayer(newPlayerVm);
@@ -81,7 +81,7 @@ namespace MagicalYatzyTests.ViewModelTests
         [Fact]
         public void PlayersCouldBeDeletedIfThereAreMoreThanTwoInTheList()
         {
-            var newPlayerVm = new PlayerViewModel(Substitute.For<IPlayer>());
+            var newPlayerVm = new PlayerViewModel(Substitute.For<IPlayer>(), _localizationService);
 
             _sut.AttachHandlers();
             _sut.AddPlayer(newPlayerVm);
@@ -96,7 +96,7 @@ namespace MagicalYatzyTests.ViewModelTests
         [Fact]
         public void PlayersCanNotBeDeletedIfOnlyOneRemainsAfterDeletion()
         {
-            var newPlayerVm = new PlayerViewModel(Substitute.For<IPlayer>());
+            var newPlayerVm = new PlayerViewModel(Substitute.For<IPlayer>(), _localizationService);
 
             _sut.AttachHandlers();
             _sut.AddPlayer(newPlayerVm);
