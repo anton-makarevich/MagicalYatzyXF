@@ -1,7 +1,6 @@
 ﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Sanet.MagicalYatzy.XF.Views.Controls;
-using System;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 
 namespace Sanet.MagicalYatzy.XF.Views.Game
@@ -25,7 +24,7 @@ namespace Sanet.MagicalYatzy.XF.Views.Game
         public void RollResultSelected(object sender, SelectEventArgs e)
         {
             if (e?.ItemData is RollResultViewModel viewModel)
-                viewModel.ApplyResult();
+                ViewModel.ApplyRollResult(viewModel.RollResult);
         }
     }
 }

@@ -19,6 +19,12 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
         }
 
         [Fact]
+        public void HasCorrectRollResultValue()
+        {
+            Assert.Equal(_rollResult, _sut.RollResult);
+        }
+        
+        [Fact]
         public void ValueIsEqualToValueIfModelHasValue()
         {
             _rollResult.Value = 5;

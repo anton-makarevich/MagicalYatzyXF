@@ -39,7 +39,7 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         public string RollLabel =>
             CurrentPlayer != null
-                ? $"{Strings.roll} {CurrentPlayer.Player.Roll}"
+                ? $"{Strings.roll} {Game.Roll}"
                 : string.Empty;
 
         public bool CanFix => HasCurrentPlayer 
@@ -47,7 +47,7 @@ namespace Sanet.MagicalYatzy.ViewModels
                               && CurrentPlayer.Player.Roll != 1;
         
         public string Title => (HasCurrentPlayer)
-            ? $"{Strings.MoveLabel} {Game.Round}, {CurrentPlayer.Player.Name} {Strings.roll} {CurrentPlayer.Player.Roll}"
+            ? $"{Strings.MoveLabel} {Game.Round}, {CurrentPlayer.Player.Name} {Strings.roll} {Game.Roll}"
             : Strings.WaitForPlayersLabel;
  
         public PlayerViewModel CurrentPlayer => 
@@ -114,8 +114,6 @@ namespace Sanet.MagicalYatzy.ViewModels
         {
             if (!HasCurrentPlayer || !CurrentPlayer.Player.IsHuman)
                 return;
-
-            CurrentPlayer.Player.Roll++;
 
             SetRollResults();
 
@@ -206,7 +204,6 @@ namespace Sanet.MagicalYatzy.ViewModels
             if (!HasCurrentPlayer)
                 return;
             _soundsProvider.PlaySound("magic");
-            CurrentPlayer.Player.Roll = 1;
             CurrentPlayer.Player.UseArtifact(Artifacts.RollReset);
             RollResults = null;
             RefreshGameStatus();            
@@ -232,9 +229,12 @@ namespace Sanet.MagicalYatzy.ViewModels
             .Select(s => _localizationService.GetLocalizedString(s.ScoreType.ToString())).ToList();
 
         public bool HasCurrentPlayer => CurrentPlayer != null;
-        public bool CanRoll => HasCurrentPlayer 
+
+        public bool CanRoll => HasCurrentPlayer
                                && CurrentPlayer.Player.IsHuman
-                               && !DicePanel.IsRolling;
+                               && !DicePanel.IsRolling
+                               && CurrentPlayer.Player.Roll > 0
+                               && CurrentPlayer.Player.Roll <= YatzyGame.MaxRoll;
 
         public string ScoresTitle => Strings.ResultsTableLabel.ToUpper();
         public string PanelTitle => Strings.DiceBoardLabel.ToUpper();
@@ -333,6 +333,11 @@ namespace Sanet.MagicalYatzy.ViewModels
             NotifyPropertyChanged(nameof(IsMagicRollVisible));
             NotifyPropertyChanged(nameof(IsManualSetVisible));
             NotifyPropertyChanged(nameof(IsRollResetVisible));
+        }
+
+        public void ApplyRollResult(IRollResult rollResult)
+        {
+            Game.ApplyScore(rollResult);
         }
     }
 }

@@ -6,10 +6,10 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
 {
     public class RollResultViewModel:BindableBase
     {
-        private readonly RollResult _rollResult;
+        private readonly IRollResult _rollResult;
         private readonly ILocalizationService _localizationService;
 
-        public RollResultViewModel(RollResult rollResult, ILocalizationService localizationService)
+        public RollResultViewModel(IRollResult rollResult, ILocalizationService localizationService)
         {
             _rollResult = rollResult;
             _localizationService = localizationService;
@@ -22,6 +22,7 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
         public bool HasBonus => _rollResult.HasBonus;
 
         public string ShortName => _localizationService.GetLocalizedString(_rollResult.ScoreType+"Short");
+        public IRollResult RollResult => _rollResult;
 
         public void ApplyResult(IRollResult result = null)
         {
