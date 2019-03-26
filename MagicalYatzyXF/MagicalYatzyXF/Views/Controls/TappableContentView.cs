@@ -12,32 +12,31 @@ namespace Sanet.MagicalYatzy.XF.Views.Controls
 		private readonly int _tapTime = 1500;
 
         public static readonly BindableProperty CommandProperty =
-            BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(TappableContentView), null);
+            BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(TappableContentView));
 
 		public ICommand Command
 		{
-			get { return (ICommand)GetValue(CommandProperty); }
-			set { SetValue(CommandProperty, value); }
-		}
+			get => (ICommand)GetValue(CommandProperty);
+            set => SetValue(CommandProperty, value);
+        }
 
         public static readonly BindableProperty CommandParameterProperty =
-            BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(TappableContentView), null);
+            BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(TappableContentView));
         
 		public object CommandParameter
 		{
-			get { return GetValue(CommandParameterProperty); }
-			set { SetValue(CommandParameterProperty, value); }
-		}
+			get => GetValue(CommandParameterProperty);
+            set => SetValue(CommandParameterProperty, value);
+        }
 
         public virtual void OnTouchesBegan(Point point)
         {
-            if (IsEnabled)
-            {
-                _startTapTime = DateTime.Now;
-                this.AnimateClick();
-            }
+            if (!IsEnabled) return;
+            _startTapTime = DateTime.Now;
+            this.AnimateClick();
         }
 
+        // ReSharper disable once UnusedParameter.Global
         public virtual void OnTouchesEnded(Point point)
         {
             if (IsEnabled)
