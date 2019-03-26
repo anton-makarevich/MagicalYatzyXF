@@ -46,8 +46,7 @@ namespace Sanet.MagicalYatzy.XF.Views.Game
         {
             TabBar.Activate(TabBar.TabChildren.First(), true);
         }
-
-
+        
         protected override void OnDisappearing()
         {
             ViewModel.Game.ResultApplied -= Game_ResultApplied;
@@ -59,6 +58,5 @@ namespace Sanet.MagicalYatzy.XF.Views.Game
         {
             TabBar.Activate(TabBar.TabChildren.Last(), true);
         }
-
     }
 }
