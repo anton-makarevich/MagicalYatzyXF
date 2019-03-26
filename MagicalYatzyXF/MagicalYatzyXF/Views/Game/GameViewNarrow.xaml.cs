@@ -3,6 +3,7 @@ using Sanet.MagicalYatzy.XF.Views.Controls.TabControl;
 using Sanet.MagicalYatzy.XF.Views.Fragments;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using System.Linq;
 
 namespace Sanet.MagicalYatzy.XF.Views.Game
 {
@@ -32,6 +33,30 @@ namespace Sanet.MagicalYatzy.XF.Views.Game
         {
             if (e?.SelectedItem is RollResultViewModel viewModel)
                 ViewModel.ApplyRollResult(viewModel.RollResult);
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            ViewModel.Game.ResultApplied += Game_ResultApplied;
+            ViewModel.DicePanel.RollStarted += DicePanelOnRollStarted;
+        }
+
+        void Game_ResultApplied(object sender, MagicalYatzy.Models.Events.ResultEventArgs e)
+        {
+            TabBar.Activate(TabBar.TabChildren.First(), true);
+        }
+        
+        protected override void OnDisappearing()
+        {
+            ViewModel.Game.ResultApplied -= Game_ResultApplied;
+            ViewModel.DicePanel.RollStarted -= DicePanelOnRollStarted;
+            base.OnDisappearing();
+        }
+
+        void DicePanelOnRollStarted(object sender, System.EventArgs e)
+        {
+            TabBar.Activate(TabBar.TabChildren.Last(), true);
         }
     }
 }
