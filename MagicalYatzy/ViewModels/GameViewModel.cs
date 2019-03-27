@@ -317,9 +317,10 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         private void RefreshGameStatus()
         {
+            DicePanel.ClickToFix = CanFix;
+
             NotifyPropertyChanged(nameof(CurrentPlayer));
             NotifyPropertyChanged(nameof(RollLabel));
-            NotifyPropertyChanged(nameof(CanFix));
             NotifyPropertyChanged(nameof(CanRoll));
             NotifyPropertyChanged(nameof(Title));
 

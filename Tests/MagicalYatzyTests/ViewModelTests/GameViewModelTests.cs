@@ -1151,7 +1151,6 @@ namespace MagicalYatzyTests.ViewModelTests
         {
             var currentPlayerUpdated = 0;
             var rollLabelUpdatedTimes = 0;
-            var canFixUpdatedTimes = 0;
             var canRollUpdatedTimes = 0;
             var titleUpdatedTimes = 0;
             var playerResultsRefreshedTimes = 0;
@@ -1169,9 +1168,6 @@ namespace MagicalYatzyTests.ViewModelTests
                         break;
                     case nameof(_sut.RollLabel):
                         rollLabelUpdatedTimes++;
-                        break;
-                    case nameof(_sut.CanFix):
-                        canFixUpdatedTimes++;
                         break;
                     case nameof(_sut.Title):
                         titleUpdatedTimes++;
@@ -1206,10 +1202,11 @@ namespace MagicalYatzyTests.ViewModelTests
             }
 
             testAction();
+
+            Assert.Equal(_sut.CanFix, _dicePanel.ClickToFix);
             
             Assert.Equal(expectedTimesExecuted,currentPlayerUpdated);
             Assert.Equal(expectedTimesExecuted, rollLabelUpdatedTimes);
-            Assert.Equal(expectedTimesExecuted,canFixUpdatedTimes);
             Assert.Equal(expectedTimesExecuted,canRollUpdatedTimes);
             Assert.Equal(expectedTimesExecuted, titleUpdatedTimes);
             
