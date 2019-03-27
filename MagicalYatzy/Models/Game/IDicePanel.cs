@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Sanet.MagicalYatzy.Models.Common;
+using Sanet.MagicalYatzy.Models.Events;
 using static Sanet.MagicalYatzy.Models.Events.GameEvents;
 
 namespace Sanet.MagicalYatzy.Models.Game
@@ -25,7 +26,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         bool AreAllDiceFixed { get; }
 
         event DieChangedEventHandler DieChangedManually;
-        event DieFrozenEventHandler DieFixed;
+        event EventHandler<DiceFixedEventArgs> DieFixed;
         event DieManualChangeRequestEventHandler DieManualChangeRequested;
 
         event EventHandler RollEnded;

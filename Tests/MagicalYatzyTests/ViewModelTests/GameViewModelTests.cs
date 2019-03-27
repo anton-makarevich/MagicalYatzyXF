@@ -1143,6 +1143,33 @@ namespace MagicalYatzyTests.ViewModelTests
             
             _gameService.CurrentLocalGame.Received().ApplyScore(rollResult);
         }
+
+        [Fact]
+        public void FixDiceOnDicePanelNotifiesGame()
+        {
+            const int diceValue = 2;
+            const bool isFixed = true;
+            _sut.AttachHandlers();
+            
+            _dicePanel.DieFixed +=
+                Raise.EventWith(null, new DiceFixedEventArgs(isFixed,diceValue));
+
+            _gameService.CurrentLocalGame.Received().FixDice(diceValue,isFixed);
+        }
+        
+        [Fact]
+        public void FixDiceOnDicePanelDoesNotNotifyGameWhenViewIsNotActive()
+        {
+            const int diceValue = 2;
+            const bool isFixed = true;
+            _sut.AttachHandlers();
+            _sut.DetachHandlers();
+            
+            _dicePanel.DieFixed +=
+                Raise.EventWith(null, new DiceFixedEventArgs(isFixed,diceValue));
+
+            _gameService.CurrentLocalGame.DidNotReceive().FixDice(diceValue,isFixed);
+        }
         
         #region Private methods
 

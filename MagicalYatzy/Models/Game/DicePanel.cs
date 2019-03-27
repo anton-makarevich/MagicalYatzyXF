@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Sanet.MagicalYatzy.Models.Events;
 using static Sanet.MagicalYatzy.Models.Events.GameEvents;
 
 namespace Sanet.MagicalYatzy.Models.Game
@@ -24,7 +25,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         #region Events
 
-        public event DieFrozenEventHandler DieFixed;
+        public event EventHandler<DiceFixedEventArgs> DieFixed;
         public event DieChangedEventHandler DieChangedManually;
         public event DieManualChangeRequestEventHandler DieManualChangeRequested;
 
@@ -191,7 +192,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             {
                 _lastClickedDie.IsFixed = !_lastClickedDie.IsFixed;
                 _lastClickedDie.DrawDie();
-                DieFixed?.Invoke(_lastClickedDie.IsFixed, _lastClickedDie.Result);
+                DieFixed?.Invoke(this, new DiceFixedEventArgs(_lastClickedDie.IsFixed, _lastClickedDie.Result));
             }
         }
 
