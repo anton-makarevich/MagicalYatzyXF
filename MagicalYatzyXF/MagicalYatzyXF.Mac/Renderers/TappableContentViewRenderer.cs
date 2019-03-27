@@ -1,13 +1,13 @@
 ﻿using System;
 using AppKit;
 using Foundation;
-using Sanet.MagicalYatzy.XF.Mac.Renderers;
+using MagicalYatzyXF.Mac.Renderers;
 using Sanet.MagicalYatzy.XF.Views.Controls;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.MacOS;
 
 [assembly: ExportRenderer(typeof(TappableContentView), typeof(TappableContentViewRenderer))]
-namespace Sanet.MagicalYatzy.XF.Mac.Renderers
+namespace MagicalYatzyXF.Mac.Renderers
 {
     [Preserve(AllMembers = true)]
 	public class TappableContentViewRenderer : VisualElementRenderer<TappableContentView>
@@ -15,8 +15,10 @@ namespace Sanet.MagicalYatzy.XF.Mac.Renderers
 		/// <summary>
 		/// Used for registration with dependency service
 		/// </summary>
+		// ReSharper disable once UnusedMember.Global
 		public static void Init()
 		{
+			// ReSharper disable once UnusedVariable
 			var temp = DateTime.Now;
 		}
 
@@ -34,7 +36,8 @@ namespace Sanet.MagicalYatzy.XF.Mac.Renderers
 
         private Point GetFirstPoint(NSEvent theEvent) 
         {
-            return theEvent.LocationInWindow.ToPoint();
+             var locationInView = ConvertPointFromView(theEvent.LocationInWindow, null);
+             return new Point(locationInView.X, Bounds.Height - locationInView.Y);
         }
 
 		#endregion

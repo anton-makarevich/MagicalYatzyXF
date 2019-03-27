@@ -19,7 +19,7 @@ namespace Sanet.MagicalYatzy.XF.Views.Game
             if (DicePanel != null)
                 return;
 
-            DicePanel = new DicePanelXf
+            DicePanel = new DicePanelXf(true)
             {
                 InputTransparent = Device.RuntimePlatform == Device.macOS, 
                 DicePanel = ViewModel.DicePanel

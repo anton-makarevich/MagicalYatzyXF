@@ -106,8 +106,14 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.MagicRollUsed += GameOnMagicRollUsed;
 
             DicePanel.RollEnded += DicePanelOnRollEnded;
+            DicePanel.DieFixed += DicePanelOnDieFixed;
             
             RefreshGameStatus();
+        }
+
+        private void DicePanelOnDieFixed(object sender, DiceFixedEventArgs e)
+        {
+            Game.FixDice(e.Value,e.IsFixed);
         }
 
         private void DicePanelOnRollEnded(object sender, EventArgs e)
@@ -313,13 +319,15 @@ namespace Sanet.MagicalYatzy.ViewModels
             Game.MagicRollUsed -= GameOnMagicRollUsed;
 
             DicePanel.RollEnded -= DicePanelOnRollEnded;
+            DicePanel.DieFixed -= DicePanelOnDieFixed;
         }
 
         private void RefreshGameStatus()
         {
+            DicePanel.ClickToFix = CanFix;
+
             NotifyPropertyChanged(nameof(CurrentPlayer));
             NotifyPropertyChanged(nameof(RollLabel));
-            NotifyPropertyChanged(nameof(CanFix));
             NotifyPropertyChanged(nameof(CanRoll));
             NotifyPropertyChanged(nameof(Title));
 

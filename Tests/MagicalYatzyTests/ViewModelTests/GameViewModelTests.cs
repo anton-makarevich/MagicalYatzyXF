@@ -1143,6 +1143,33 @@ namespace MagicalYatzyTests.ViewModelTests
             
             _gameService.CurrentLocalGame.Received().ApplyScore(rollResult);
         }
+
+        [Fact]
+        public void FixDiceOnDicePanelNotifiesGame()
+        {
+            const int diceValue = 2;
+            const bool isFixed = true;
+            _sut.AttachHandlers();
+            
+            _dicePanel.DieFixed +=
+                Raise.EventWith(null, new DiceFixedEventArgs(isFixed,diceValue));
+
+            _gameService.CurrentLocalGame.Received().FixDice(diceValue,isFixed);
+        }
+        
+        [Fact]
+        public void FixDiceOnDicePanelDoesNotNotifyGameWhenViewIsNotActive()
+        {
+            const int diceValue = 2;
+            const bool isFixed = true;
+            _sut.AttachHandlers();
+            _sut.DetachHandlers();
+            
+            _dicePanel.DieFixed +=
+                Raise.EventWith(null, new DiceFixedEventArgs(isFixed,diceValue));
+
+            _gameService.CurrentLocalGame.DidNotReceive().FixDice(diceValue,isFixed);
+        }
         
         #region Private methods
 
@@ -1151,7 +1178,6 @@ namespace MagicalYatzyTests.ViewModelTests
         {
             var currentPlayerUpdated = 0;
             var rollLabelUpdatedTimes = 0;
-            var canFixUpdatedTimes = 0;
             var canRollUpdatedTimes = 0;
             var titleUpdatedTimes = 0;
             var playerResultsRefreshedTimes = 0;
@@ -1169,9 +1195,6 @@ namespace MagicalYatzyTests.ViewModelTests
                         break;
                     case nameof(_sut.RollLabel):
                         rollLabelUpdatedTimes++;
-                        break;
-                    case nameof(_sut.CanFix):
-                        canFixUpdatedTimes++;
                         break;
                     case nameof(_sut.Title):
                         titleUpdatedTimes++;
@@ -1206,10 +1229,11 @@ namespace MagicalYatzyTests.ViewModelTests
             }
 
             testAction();
+
+            Assert.Equal(_sut.CanFix, _dicePanel.ClickToFix);
             
             Assert.Equal(expectedTimesExecuted,currentPlayerUpdated);
             Assert.Equal(expectedTimesExecuted, rollLabelUpdatedTimes);
-            Assert.Equal(expectedTimesExecuted,canFixUpdatedTimes);
             Assert.Equal(expectedTimesExecuted,canRollUpdatedTimes);
             Assert.Equal(expectedTimesExecuted, titleUpdatedTimes);
             
