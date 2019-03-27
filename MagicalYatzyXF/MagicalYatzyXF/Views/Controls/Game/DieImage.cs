@@ -11,7 +11,7 @@ namespace Sanet.MagicalYatzy.XF.Views.Controls.Game
     public class DieImage : ContentView
     {
         private readonly Die _die;
-        SKCanvasView _canvasView;
+        readonly SKCanvasView _canvasView;
         public DieImage(Die die)
         {
             _die = die;
@@ -29,7 +29,7 @@ namespace Sanet.MagicalYatzy.XF.Views.Controls.Game
             {
                 UpdatePosition();
             }
-            else if (e.PropertyName == nameof(_die.ImagePath))
+            else if (e.PropertyName == nameof(_die.ImagePath) || e.PropertyName == nameof(_die.Opacity))
             {
                 UpdateImage();
             }
@@ -54,14 +54,18 @@ namespace Sanet.MagicalYatzy.XF.Views.Controls.Game
             if (source == null)
                 return;
 
-            SKImageInfo info = args.Info;
-            SKSurface surface = args.Surface;
-            SKCanvas canvas = surface.Canvas;
+            var info = args.Info;
+            var surface = args.Surface;
+            var canvas = surface.Canvas;
 
             canvas.Clear();
-
-            canvas.DrawBitmap(source,
-                    new SKRect(0, 0, info.Width, info.Height));
+            
+            using (var paint = new SKPaint())
+            {
+                var rect = new SKRect(0, 0, info.Width, info.Height);
+                paint.Color = paint.Color.WithAlpha((byte)(_die.Opacity*255));
+                canvas.DrawBitmap(source, rect, paint);
+            }
         }
     }
 }

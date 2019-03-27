@@ -289,8 +289,8 @@ namespace Sanet.MagicalYatzy.Models.Game
             {
                 Frame = (Result - 1) * 6 + _gameSettingsService.DieAngle;
                 _rotationString = "stop.";
+                Opacity = IsFixed? 0.5f: 1;
                 ImagePath = GetFramePicPath();
-                Opacity =IsFixed? 0.5f: 1;
             }
             NotifyPropertyChanged(nameof(Bounds));
         }
