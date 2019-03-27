@@ -99,7 +99,11 @@ namespace MagicalYatzyTests.ModelTests.Game
             var extendedRules = new[] {Rules.krExtended, Rules.krMagic};
             foreach (var rule in extendedRules)
             {
-                var sut = new RollResult(Scores.Ones, rule) {HasBonus = true};
+                var sut = new RollResult(Scores.Ones, rule)
+                {
+                    Value = 5,
+                    HasBonus = true
+                };
                 Assert.True(sut.HasBonus);
             }  
         }
@@ -116,6 +120,18 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
+        public void ResultWithoutValuDoesNotHaveExtraBonus()
+        {
+            var sut = new RollResult(Scores.Ones, Rules.krExtended)
+            {
+                HasBonus = true
+            };
+
+            Assert.False(sut.HasValue);
+            Assert.False(sut.HasBonus);
+        }
+
+        [Fact]
         public void KniffelCanNotHaveExtraBonus()
         {
             var sut = new RollResult(Scores.Kniffel, Rules.krExtended) {HasBonus = true};
@@ -128,7 +144,11 @@ namespace MagicalYatzyTests.ModelTests.Game
             var scores = EnumUtils.GetValues<Scores>().Where(s => s != Scores.Kniffel);
             foreach (var score in scores)
             {
-                var sut = new RollResult(score, Rules.krExtended) {HasBonus = true};
+                var sut = new RollResult(score, Rules.krExtended)
+                {
+                    HasBonus = true
+                };
+                sut.Value = sut.MaxValue;
                 Assert.True(sut.HasBonus);
             }
         }

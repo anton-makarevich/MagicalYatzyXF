@@ -59,7 +59,7 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
         [Fact]
         public void HasBonusIsCorrect()
         {
-            var kniffelRollResult = new RollResult(Scores.Ones, Rules.krExtended);
+            var kniffelRollResult = new RollResult(Scores.Ones, Rules.krExtended) { Value = 5 };
             var sut = new RollResultViewModel(kniffelRollResult, _localizationService);
             kniffelRollResult.HasBonus = true;
             
@@ -69,12 +69,10 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
         [Fact]
         public void ApplyResultChangesValueAndBonus()
         {
-            var kniffelRollResult = new RollResult(Scores.Ones,Rules.krExtended);
+            var kniffelRollResult = new RollResult(Scores.Ones, Rules.krExtended);
             var sut = new RollResultViewModel(kniffelRollResult, _localizationService);
             
-            var newRollResult = new RollResult(Scores.Ones, Rules.krExtended);
-            newRollResult.PossibleValue = 5;
-            newRollResult.HasBonus = true;
+            var newRollResult = ( 5, true);
             
             sut.ApplyResult(newRollResult);
             
@@ -97,7 +95,7 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
         [Fact]
         public void ApplyResultNotifiesAboutChangesInValueAndBonus()
         {
-            var newRollResult = new RollResult(Scores.Ones, Rules.krSimple);
+            var newRollResult = (5, true);
 
             var valueChangedTimes = 0;
             var hasValueChangedTimes = 0;
