@@ -25,6 +25,12 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
         }
         
         [Fact]
+        public void HasCorrectStatus()
+        {
+            Assert.Equal(_rollResult.Status, _sut.Status);
+        }
+        
+        [Fact]
         public void ValueIsEqualToValueIfModelHasValue()
         {
             _rollResult.Value = 5;
@@ -93,13 +99,14 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
         }
 
         [Fact]
-        public void ApplyResultNotifiesAboutChangesInValueAndBonus()
+        public void ApplyResultNotifiesAboutChangesInValueBonusAndStatus()
         {
             var newRollResult = (5, true);
 
             var valueChangedTimes = 0;
             var hasValueChangedTimes = 0;
             var hasBonusChangedTimes = 0;
+            var hasStatusChangedTimes = 0;
 
             _sut.PropertyChanged += (sender, args) =>
             {
@@ -114,6 +121,9 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
                     case nameof(_sut.HasBonus):
                         hasBonusChangedTimes++;
                         break;
+                    case nameof(_sut.Status):
+                        hasStatusChangedTimes++;
+                        break;
                 }
             }; 
             
@@ -122,6 +132,7 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
             Assert.Equal(1, valueChangedTimes);
             Assert.Equal(1,hasValueChangedTimes);
             Assert.Equal(1, hasBonusChangedTimes);
+            Assert.Equal(1, hasStatusChangedTimes);
         }
 
         [Fact]

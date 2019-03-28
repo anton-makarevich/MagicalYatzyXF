@@ -163,5 +163,27 @@ namespace MagicalYatzyTests.ModelTests.Game
             _sut.PossibleValue = 6;
             Assert.Equal(2,_sut.PossibleValue);
         }
+
+        [Fact]
+        public void StatusIsNoValueWhenThereIsNoValue()
+        {
+            Assert.Equal(ScoreStatus.NoValue, _sut.Status);
+        }
+        
+        [Fact]
+        public void StatusIsValueWhenThereIsValue()
+        {
+            _sut.Value = 5;
+            Assert.Equal(ScoreStatus.Value, _sut.Status);
+        }
+        
+        [Fact]
+        public void StatusIsBonusWhenThereIsBonus()
+        {
+            var sut = new RollResult(Scores.Ones, Rules.krExtended);
+            sut.Value = 5;
+            sut.HasBonus = true;
+            Assert.Equal(ScoreStatus.Bonus, sut.Status);
+        }
     }
 }

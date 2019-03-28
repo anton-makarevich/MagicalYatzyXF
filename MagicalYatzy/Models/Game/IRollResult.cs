@@ -10,5 +10,6 @@ namespace Sanet.MagicalYatzy.Models.Game
         int PossibleValue { get; set; }
         Scores ScoreType { get; }
         int Value { get; set; }
+        ScoreStatus Status { get; }
     }
 }

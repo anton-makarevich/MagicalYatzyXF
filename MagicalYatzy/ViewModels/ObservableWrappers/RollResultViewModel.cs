@@ -23,6 +23,7 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
 
         public string ShortName => _localizationService.GetLocalizedString(_rollResult.ScoreType+"Short");
         public IRollResult RollResult => _rollResult;
+        public ScoreStatus Status => _rollResult.Status;
 
         public void ApplyResult((int, bool)? result = null)
         {
@@ -34,6 +35,7 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
             NotifyPropertyChanged(nameof(Value));
             NotifyPropertyChanged(nameof(HasValue));
             NotifyPropertyChanged(nameof(HasBonus));
+            NotifyPropertyChanged(nameof(Status));
         }
     }
 }
