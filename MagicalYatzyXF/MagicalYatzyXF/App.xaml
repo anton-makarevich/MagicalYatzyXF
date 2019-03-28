@@ -11,6 +11,7 @@
             <converters:StringUppercasedConverter x:Key="StringUppercasedConverter"/>
             <converters:GridLengthConverter x:Key="GridLengthConverter"/>
             <converters:SelectionColorConverter x:Key="SelectionColorConverter"/>
+            <converters:ScoreStatusToColorConverter x:Key="ScoreStatusToColorConverter"/>
 
             <Color x:Key = "SanetBlueColor">#009CD6</Color>
             

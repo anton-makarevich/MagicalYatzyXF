@@ -35,7 +35,11 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
         {
             const int score = 30;
 
-            return result.DiceResults.Distinct().Count() >= 4 && result.DiceResults.Contains(3) ? score : 0;
+            return result.DiceResults.Distinct().Count() >= 4 
+                   && result.DiceResults.Contains(3) 
+                   && result.DiceResults.Contains(4)
+                ? score 
+                : 0;
         }
 
         public static int YatzyLargeStraightScore(this DieResult result)
