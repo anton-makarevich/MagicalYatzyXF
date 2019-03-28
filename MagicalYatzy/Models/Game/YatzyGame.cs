@@ -80,12 +80,8 @@ namespace Sanet.MagicalYatzy.Models.Game
             get
             {
                 var roll = 1;
-                if (Players == null) return roll;
-                foreach (var p in Players)
-                {
-                    if (p.Roll > roll)
-                        roll = p.Roll;
-                }
+                if (CurrentPlayer != null && CurrentPlayer.Roll > roll)
+                    roll = CurrentPlayer.Roll;
 
                 return (roll <= MaxRoll) ? roll : MaxRoll;
             }

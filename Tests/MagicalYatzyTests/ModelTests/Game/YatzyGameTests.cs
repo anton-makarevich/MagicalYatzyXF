@@ -729,7 +729,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void RollIsAlvaysInCorrectRange()
+        public void RollIsAlwaysInCorrectRange()
         {
             var player1 = new Player();
             _sut.JoinGame(player1);
@@ -749,6 +749,33 @@ namespace MagicalYatzyTests.ModelTests.Game
             
             player1.Roll = 4;
             Assert.Equal(3, _sut.Roll);
+        }
+        
+        [Fact]
+        public void RollIsEqualToCurrentPlayersRoll()
+        {
+            var player1 = new Player();
+            _sut.JoinGame(player1);
+            _sut.SetPlayerReady(player1, true);
+            
+            var player2 = new Player();
+            _sut.JoinGame(player2);
+            _sut.SetPlayerReady(player2, true);
+            
+            player1.Roll = 1;
+            Assert.Equal(1, _sut.Roll);
+            
+            player1.Roll = 2;
+            Assert.Equal(2, _sut.Roll);
+            
+            player2.Roll = 3;
+            Assert.Equal(2, _sut.Roll);
+            
+            player1.Roll = -1;
+            Assert.Equal(1, _sut.Roll);
+            
+            player2.Roll = 3;
+            Assert.Equal(1, _sut.Roll);
         }
     }
 }

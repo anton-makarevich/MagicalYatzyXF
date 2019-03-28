@@ -84,7 +84,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
         [Fact]
         public void SmallStraightReturnsZeroIfThereAreLessThanFourValuesInRow()
         {
-            var sut = new DieResult {DiceResults = new List<int> {1, 5, 2, 4, 2}};
+            var sut = new DieResult {DiceResults = new List<int> {1, 5, 2, 3, 2}};
             var result = sut.YatzySmallStraightScore();
             Assert.Equal(0,result);
         }
@@ -100,7 +100,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
         [Fact]
         public void LargeStraightReturnsZeroIfThereAreLessThanFiveValuesInRow()
         {
-            var sut = new DieResult {DiceResults = new List<int> {6, 5, 6, 4, 3}};
+            var sut = new DieResult {DiceResults = new List<int> {1, 2, 3, 5, 6}};
             var result = sut.YatzyLargeStraightScore();
             Assert.Equal(0,result);
         }

@@ -206,6 +206,26 @@ namespace MagicalYatzyTests.ViewModelTests
         }
 
         [Fact]
+        public void GameOnDiceRolledRemovesCurrentRollResults()
+        {
+            _dicePanel.IsRolling.Returns(true);
+            _humanPlayer.IsHuman.Returns(true);
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+            var results = new[] { 2, 4, 6, 2, 1 };
+            _sut.AttachHandlers();
+
+            _gameService.CurrentLocalGame.DiceChanged +=
+                Raise.EventWith(null, new RollEventArgs(_humanPlayer, results));
+
+            Assert.NotNull(_sut.RollResults);
+
+            _gameService.CurrentLocalGame.DiceRolled +=
+                Raise.EventWith(null, new RollEventArgs(_humanPlayer, results));
+
+            Assert.Null(_sut.RollResults);
+        }
+
+        [Fact]
         public void GameOnPlayerLeftRemovesPlayer()
         {
             _sut.AttachHandlers();

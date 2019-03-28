@@ -4,7 +4,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     x:Class="Sanet.MagicalYatzy.XF.Views.Cells.ScoreValueCell"
     >
-    <Label
-        TextColor="Yellow"
-        Text="{Binding Value}" />
+    <Grid
+        BackgroundColor="{Binding Status, Converter={StaticResource ScoreStatusToColorConverter}}">
+        <Label
+            HorizontalOptions="Center"
+            TextColor="White"
+            Text="{Binding Value}" />
+    </Grid>
+    
 </ViewCell>

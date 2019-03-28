@@ -289,6 +289,7 @@ namespace Sanet.MagicalYatzy.ViewModels
                 DicePanel.RollDice(e.Value.ToList());
             }
 
+            RollResults = null;
             CurrentPlayer.Player.CheckRollResults(new DieResult(){ DiceResults = e.Value.ToList()},Game.Rules );
             RefreshGameStatus();
         }

@@ -23,17 +23,19 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
 
         public string ShortName => _localizationService.GetLocalizedString(_rollResult.ScoreType+"Short");
         public IRollResult RollResult => _rollResult;
+        public ScoreStatus Status => _rollResult.Status;
 
-        public void ApplyResult(IRollResult result = null)
+        public void ApplyResult((int, bool)? result = null)
         {
             if (result == null)
-                result = _rollResult;
-            _rollResult.Value = result.PossibleValue;
-            _rollResult.HasBonus = result.HasBonus;
+                result = (_rollResult.PossibleValue, _rollResult.HasBonus);
+            _rollResult.Value = result.Value.Item1;
+            _rollResult.HasBonus = result.Value.Item2;
             
             NotifyPropertyChanged(nameof(Value));
             NotifyPropertyChanged(nameof(HasValue));
             NotifyPropertyChanged(nameof(HasBonus));
+            NotifyPropertyChanged(nameof(Status));
         }
     }
 }

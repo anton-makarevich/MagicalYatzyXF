@@ -23,7 +23,8 @@
             </controls:BindableStackLayout.ItemTemplate>
         </controls:BindableStackLayout>
         <Label
-            TextColor="Red"
+            TextColor="{StaticResource SanetBlueColor}"
+            FontSize="Large"
             Text="Total" />
     </StackLayout>
     <controls:BindableStackLayout 

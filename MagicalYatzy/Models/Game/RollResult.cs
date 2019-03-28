@@ -19,6 +19,8 @@ namespace Sanet.MagicalYatzy.Models.Game
         {
             get
             {
+                if (!HasValue)
+                    return false;
                 if (!new Rule(_rule).HasExtendedBonuses)
                     return false;
                 return ScoreType != Scores.Kniffel && _hasBonus;
@@ -28,6 +30,13 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public bool HasValue { get; private set; }
 
+        public ScoreStatus Status =>
+            (HasBonus) 
+                ? ScoreStatus.Bonus 
+                : (HasValue) 
+                    ? ScoreStatus.Value 
+                    : ScoreStatus.NoValue;
+        
         public bool IsNumeric =>
             (ScoreType == Scores.Ones ||
              ScoreType == Scores.Twos ||

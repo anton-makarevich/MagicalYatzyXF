@@ -6,7 +6,8 @@
     <StackLayout
         Orientation="Vertical">
         <Label
-            TextColor="Yellow"
+            BackgroundColor="{Binding IsMyTurn, Converter={StaticResource BoolToSanetColorConverter}}"
+            TextColor="White"
             Text="{Binding Name}" />
         <controls:BindableStackLayout 
             Orientation="Vertical"
@@ -20,7 +21,9 @@
             </controls:BindableStackLayout.ItemTemplate>
         </controls:BindableStackLayout>
         <Label
-            TextColor="Red"
+            TextColor="White"
+            FontSize="Large"
+            HorizontalOptions="Center"
             Text="{Binding Total}" />
     </StackLayout>
 </ViewCell>

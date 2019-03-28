@@ -45,6 +45,7 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
         public void Refresh()
         {
             NotifyPropertyChanged(nameof(Results));
+            NotifyPropertyChanged(nameof(IsMyTurn));
         }
         
         public int Total => _player.Total;
@@ -54,10 +55,12 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
                 ? null
                 : _results ?? (_results = Player.Results.Select(r => new RollResultViewModel(r,_localizationService)).ToList());
 
+        public bool IsMyTurn => _player.IsMyTurn;
+
         public void ApplyRollResult(IRollResult result)
         {
             var rollResult = Results.FirstOrDefault(f => f.ScoreType == result.ScoreType);
-            rollResult?.ApplyResult(result);
+            rollResult?.ApplyResult((result.PossibleValue,result.HasBonus));
 
             NotifyPropertyChanged(nameof(Total));
         }
