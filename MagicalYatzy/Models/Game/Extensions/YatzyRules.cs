@@ -46,7 +46,11 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
         {
             const int score = 40;
             
-            return result.DiceResults.Distinct().Count() == 5 ? score : 0;
+            return result.DiceResults.Distinct().Count() == 5 
+                   && result.DiceResults.Contains(3) 
+                   && result.DiceResults.Contains(4)
+                ? score 
+                : 0;
         }
 
         public static int YatzyFullHouseScore(this DieResult result)

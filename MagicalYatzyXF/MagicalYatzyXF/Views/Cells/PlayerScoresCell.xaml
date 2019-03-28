@@ -6,6 +6,7 @@
     <StackLayout
         Orientation="Vertical">
         <Label
+            BackgroundColor="{Binding IsMyTurn, Converter={StaticResource BoolToSanetColorConverter}}"
             TextColor="White"
             Text="{Binding Name}" />
         <controls:BindableStackLayout 

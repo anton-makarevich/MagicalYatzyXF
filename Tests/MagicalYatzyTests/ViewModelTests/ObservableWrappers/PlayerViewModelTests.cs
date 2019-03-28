@@ -24,6 +24,14 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
         {
             Assert.Equal(_player, _sut.Player);
         }
+
+        [Fact]
+        public void HasCorrectIsMyTurnValue()
+        {
+            _player.IsMyTurn.Returns(true);
+            
+            Assert.True(_sut.IsMyTurn);
+        }
         
         [Fact]
         public void HasAllBasicPropertiesEqualToPlayerObject()
@@ -118,6 +126,25 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
             _player.Total.Returns(45);
             
             Assert.Equal(_player.Total, _sut.Total);
+        }
+
+        [Fact]
+        public void RefreshMethodRaisesResultsAndIsMyTurnProperties()
+        {
+            var resultsUpdatedTimes = 0;
+            var isMyTurnUpdatedTimes = 0;
+            _sut.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(_sut.Results))
+                    resultsUpdatedTimes++;
+                if (args.PropertyName == nameof(_sut.IsMyTurn))
+                    isMyTurnUpdatedTimes++;
+            };
+            
+            _sut.Refresh();
+            
+            Assert.Equal(1,resultsUpdatedTimes);
+            Assert.Equal(1, isMyTurnUpdatedTimes);
         }
     }
 }
