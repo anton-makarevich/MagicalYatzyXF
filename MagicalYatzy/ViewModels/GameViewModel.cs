@@ -126,14 +126,14 @@ namespace Sanet.MagicalYatzy.ViewModels
             RefreshGameStatus();
         }
 
-        private void GameOnResultApplied(object sender, ResultEventArgs e)
+        private void GameOnResultApplied(object sender, RollResultEventArgs e)
         {
             if (!HasCurrentPlayer)
                 return;
             
-            if (e.Result.PossibleValue > 0 || e.Result.HasBonus)
+            if (e.Value > 0 || e.HasBonus)
             {
-                if (e.Result.PossibleValue == 50 || e.Result.HasBonus)
+                if (e.Value == 50 || e.HasBonus)
                     _soundsProvider.PlaySound("fanfare");
                 else
                     _soundsProvider.PlaySound("win");
@@ -143,7 +143,7 @@ namespace Sanet.MagicalYatzy.ViewModels
                 _soundsProvider.PlaySound("wrong");
             }
 
-            CurrentPlayer.ApplyRollResult(e.Result);
+            CurrentPlayer.ApplyRollResult(e);
             RefreshGameStatus();
             RollResults = null;
         }

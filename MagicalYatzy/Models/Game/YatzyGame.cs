@@ -14,8 +14,8 @@ namespace Sanet.MagicalYatzy.Models.Game
         public const int MaxRoll = 3;
         //sync object
         private readonly object _syncRoot = new object();
-        
-        private readonly IDiceGenerator _diceGenerator = new RandomDiceGenerator();
+
+        private readonly IDiceGenerator _diceGenerator = new AllOfKindTestGenerator();//RandomDiceGenerator();
         
         private bool _isPlaying;
         private int[] _lastRollResults;
@@ -53,7 +53,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         
         public event EventHandler<PlayerEventArgs> PlayerJoined;
         
-        public event EventHandler<ResultEventArgs> ResultApplied;
+        public event EventHandler<RollResultEventArgs> ResultApplied;
         #endregion
 
         #region Properties
@@ -122,10 +122,16 @@ namespace Sanet.MagicalYatzy.Models.Game
             {
                 //check if already have kniffel
                 var kniffelResult = CurrentPlayer.GetResultForScore(Scores.Kniffel);
-                result.HasBonus = (LastDiceResult.YatzyFiveOfAKindScore() == 50 && kniffelResult.Value==kniffelResult.MaxValue);
+                result.HasBonus = (LastDiceResult.YatzyFiveOfAKindScore() == 50 
+                                   && kniffelResult.Value==kniffelResult.MaxValue);
             }
             //sending result to everyone
-            ResultApplied?.Invoke(this, new ResultEventArgs(CurrentPlayer, result));
+            ResultApplied?.Invoke(
+                this,
+                new RollResultEventArgs(CurrentPlayer, 
+                    result.PossibleValue,
+                    result.ScoreType,
+                    false));
             //update players results on server
 #if SERVER
             result.Value = result.PossibleValue;
@@ -145,8 +151,8 @@ namespace Sanet.MagicalYatzy.Models.Game
                     && (notFilledNumeric == 0 || totalNumericScore > 62)
                     && (result.IsNumeric && !bonusResult.HasValue))
                 {
-                    bonusResult.PossibleValue = (totalNumericScore > 62) ? bonusResult.MaxValue : 0;
-                    ResultApplied?.Invoke(this, new ResultEventArgs(CurrentPlayer, bonusResult));
+                    var possibleValue = (totalNumericScore > 62) ? bonusResult.MaxValue : 0;
+                    ResultApplied?.Invoke(this, new RollResultEventArgs(CurrentPlayer, possibleValue, bonusResult.ScoreType, false));
 #if SERVER
                     bonusResult.Value = bonusResult.PossibleValue;
 #endif

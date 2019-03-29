@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using Sanet.MagicalYatzy.Models;
+using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using Sanet.MagicalYatzy.Services;
@@ -57,10 +58,10 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
 
         public bool IsMyTurn => _player.IsMyTurn;
 
-        public void ApplyRollResult(IRollResult result)
+        public void ApplyRollResult(RollResultEventArgs result)
         {
             var rollResult = Results.FirstOrDefault(f => f.ScoreType == result.ScoreType);
-            rollResult?.ApplyResult((result.PossibleValue,result.HasBonus));
+            rollResult?.ApplyResult((result.Value,result.HasBonus));
 
             NotifyPropertyChanged(nameof(Total));
         }

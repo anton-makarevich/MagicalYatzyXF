@@ -689,14 +689,11 @@ namespace MagicalYatzyTests.ViewModelTests
         [Fact]
         public void GameOnResultAplliedPlaysSadSoundIfValueIsZeroAndNotBonus()
         {
-            var result = Substitute.For<IRollResult>();
-            result.PossibleValue.Returns(0);
-            result.HasBonus.Returns(false);
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
             _sut.AttachHandlers();
             
             _gameService.CurrentLocalGame.ResultApplied +=
-                Raise.EventWith(null, new ResultEventArgs(_humanPlayer, result));
+                Raise.EventWith(null, new RollResultEventArgs(_humanPlayer, 0, Scores.Ones,false));
             
             _soundsProvider.Received().PlaySound("wrong");
         }
@@ -704,14 +701,11 @@ namespace MagicalYatzyTests.ViewModelTests
         [Fact]
         public void GameOnResultAplliedPlaysWinSoundIfValueIsNotZeroAndNotBonus()
         {
-            var result = Substitute.For<IRollResult>();
-            result.PossibleValue.Returns(40);
-            result.HasBonus.Returns(false);
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
             _sut.AttachHandlers();
             
             _gameService.CurrentLocalGame.ResultApplied +=
-                Raise.EventWith(null, new ResultEventArgs(_humanPlayer, result));
+                Raise.EventWith(null, new RollResultEventArgs(_humanPlayer, 40, Scores.LargeStraight, false));
             
             _soundsProvider.Received().PlaySound("win");
         }
@@ -719,14 +713,11 @@ namespace MagicalYatzyTests.ViewModelTests
         [Fact]
         public void GameOnResultAplliedPlaysFanfareSoundIfValueIsYatzy()
         {
-            var result = Substitute.For<IRollResult>();
-            result.PossibleValue.Returns(50);
-            result.HasBonus.Returns(false);
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
             _sut.AttachHandlers();
             
             _gameService.CurrentLocalGame.ResultApplied +=
-                Raise.EventWith(null, new ResultEventArgs(_humanPlayer, result));
+                Raise.EventWith(null, new RollResultEventArgs(_humanPlayer, 50, Scores.Kniffel,false));
             
             _soundsProvider.Received().PlaySound("fanfare");
         }
@@ -734,14 +725,11 @@ namespace MagicalYatzyTests.ViewModelTests
         [Fact]
         public void GameOnResultAplliedPlaysFanfareSoundInCaseOfBonus()
         {
-            var result = Substitute.For<IRollResult>();
-            result.PossibleValue.Returns(40);
-            result.HasBonus.Returns(true);
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
             _sut.AttachHandlers();
             
             _gameService.CurrentLocalGame.ResultApplied +=
-                Raise.EventWith(null, new ResultEventArgs(_humanPlayer, result));
+                Raise.EventWith(null, new RollResultEventArgs(_humanPlayer, 40, Scores.LargeStraight, true));
             
             _soundsProvider.Received().PlaySound("fanfare");
         }
@@ -751,15 +739,12 @@ namespace MagicalYatzyTests.ViewModelTests
         {
             var testAction = new Action(() =>
             {
-                var result = Substitute.For<IRollResult>();
-                result.PossibleValue.Returns(40);
-                result.HasBonus.Returns(true);
                 _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
                 if (!_sut.Players.Any())
                     _sut.AttachHandlers();
             
                 _gameService.CurrentLocalGame.ResultApplied +=
-                    Raise.EventWith(null, new ResultEventArgs(_humanPlayer, result));
+                    Raise.EventWith(null, new RollResultEventArgs(_humanPlayer, 40, Scores.LargeStraight, false));
             });
             
             CheckIfGameStatusHasBeenRefreshed(testAction);
@@ -768,9 +753,6 @@ namespace MagicalYatzyTests.ViewModelTests
         [Fact]
         public void GameOnResultRemovesCurrentRollResults()
         {
-            var result = Substitute.For<IRollResult>();
-            result.PossibleValue.Returns(40);
-            result.HasBonus.Returns(true);
             _humanPlayer.IsHuman.Returns(true);
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
             var results = new[] {2, 4, 6, 2, 1};
@@ -782,7 +764,7 @@ namespace MagicalYatzyTests.ViewModelTests
             Assert.NotNull(_sut.RollResults);
             
             _gameService.CurrentLocalGame.ResultApplied +=
-                Raise.EventWith(null, new ResultEventArgs(_humanPlayer, result));
+                Raise.EventWith(null, new RollResultEventArgs(_humanPlayer, 40, Scores.LargeStraight, true));
 
             Assert.Null(_sut.RollResults);
         }
@@ -790,15 +772,12 @@ namespace MagicalYatzyTests.ViewModelTests
         [Fact]
         public void GameOnResultAplliedDoesNotPlayAnySoundIfViewIsNotActive()
         {
-            var result = Substitute.For<IRollResult>();
-            result.PossibleValue.Returns(0);
-            result.HasBonus.Returns(false);
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
             _sut.AttachHandlers();
             _sut.DetachHandlers();
             
             _gameService.CurrentLocalGame.ResultApplied +=
-                Raise.EventWith(null, new ResultEventArgs(_humanPlayer, result));
+                Raise.EventWith(null, new RollResultEventArgs(_humanPlayer, 0, Scores.Ones, false));
             
             _soundsProvider.DidNotReceiveWithAnyArgs().PlaySound("wrong");
         }

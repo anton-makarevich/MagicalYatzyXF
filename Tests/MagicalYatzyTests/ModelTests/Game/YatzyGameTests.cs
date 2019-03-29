@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Chat;
+using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.Extensions;
 using Sanet.MagicalYatzy.Models.Game.Magical;
@@ -134,19 +135,19 @@ namespace MagicalYatzyTests.ModelTests.Game
             player.InGameId.Returns("0");
             StartGame(player);
             var resultAppliedCount = 0;
-            RollResult appliedResult = null;
+            RollResultEventArgs appliedResult = null;
             var result = new RollResult(Scores.SmallStraight, Rules.krSimple);
             
             _sut.ResultApplied += (sender, args) =>
             {
                 resultAppliedCount++;
-                appliedResult = args.Result as RollResult;
+                appliedResult = args;
             };
             
             _sut.ApplyScore(result);
             
             Assert.Equal(1,resultAppliedCount);
-            Assert.Equal(result,appliedResult);
+            Assert.Equal(result.ScoreType,appliedResult.ScoreType);
         }
 
         [Fact]
@@ -170,20 +171,20 @@ namespace MagicalYatzyTests.ModelTests.Game
 
             player.Results.Returns(results);
             StartGame(player);
-            var appliedResults = new List<RollResult>();
+            var appliedResults = new List<RollResultEventArgs>();
             var resultToAdd = new RollResult(scoreToAdd, rule);
             
             _sut.ResultApplied += (sender, args) =>
             {
-                appliedResults.Add(args.Result as RollResult);
+                appliedResults.Add(args);
             };
             
             _sut.ApplyScore(resultToAdd);
             var bonusResult = appliedResults.LastOrDefault();
             Assert.Equal(2,appliedResults.Count);
-            Assert.Equal(resultToAdd,appliedResults.FirstOrDefault());
+            Assert.Equal(resultToAdd.ScoreType, appliedResults.FirstOrDefault()?.ScoreType);
             Assert.Equal(Scores.Bonus, bonusResult?.ScoreType);
-            Assert.Equal(35,bonusResult?.PossibleValue);
+            Assert.Equal(35,bonusResult?.Value);
         }
         
         [Fact]
@@ -205,18 +206,18 @@ namespace MagicalYatzyTests.ModelTests.Game
 
             player.Results.Returns(results);
             StartGame(player);
-            var appliedResults = new List<RollResult>();
+            var appliedResults = new List<RollResultEventArgs>();
             var resultToAdd = new RollResult(scoreToAdd, rule);
             
             _sut.ResultApplied += (sender, args) =>
             {
-                appliedResults.Add(args.Result as RollResult);
+                appliedResults.Add(args);
             };
             
             _sut.ApplyScore(resultToAdd);
             
             Assert.Single(appliedResults);
-            Assert.Equal(resultToAdd,appliedResults.FirstOrDefault());
+            Assert.Equal(resultToAdd.ScoreType,appliedResults.FirstOrDefault()?.ScoreType);
         }
         
         [Fact]
@@ -240,21 +241,21 @@ namespace MagicalYatzyTests.ModelTests.Game
 
             player.Results.Returns(results);
             StartGame(player);
-            var appliedResults = new List<RollResult>();
+            var appliedResults = new List<RollResultEventArgs>();
             var resultToAdd = new RollResult(scoreToAdd, rule);
             
             _sut.ResultApplied += (sender, args) =>
             {
-                appliedResults.Add(args.Result as RollResult);
+                appliedResults.Add(args);
             };
             
             _sut.ApplyScore(resultToAdd);
             
             var bonusResult = appliedResults.LastOrDefault();
             Assert.Equal(2,appliedResults.Count);
-            Assert.Equal(resultToAdd,appliedResults.FirstOrDefault());
+            Assert.Equal(resultToAdd.ScoreType,appliedResults.FirstOrDefault()?.ScoreType);
             Assert.Equal(Scores.Bonus, bonusResult?.ScoreType);
-            Assert.Equal(35,bonusResult?.PossibleValue);
+            Assert.Equal(35,bonusResult?.Value);
         }
         
         [Fact]
@@ -277,18 +278,18 @@ namespace MagicalYatzyTests.ModelTests.Game
 
             player.Results.Returns(results);
             StartGame(player);
-            var appliedResults = new List<RollResult>();
+            var appliedResults = new List<RollResultEventArgs>();
             var resultToAdd = new RollResult(scoreToAdd, rule);
             
             _sut.ResultApplied += (sender, args) =>
             {
-                appliedResults.Add(args.Result as RollResult);
+                appliedResults.Add(args);
             };
             
             _sut.ApplyScore(resultToAdd);
             
             Assert.Single(appliedResults);
-            Assert.Equal(resultToAdd,appliedResults.FirstOrDefault());
+            Assert.Equal(resultToAdd.ScoreType,appliedResults.FirstOrDefault()?.ScoreType);
         }
         
         [Fact]
@@ -311,18 +312,18 @@ namespace MagicalYatzyTests.ModelTests.Game
 
             player.Results.Returns(results);
             StartGame(player);
-            var appliedResults = new List<RollResult>();
+            var appliedResults = new List<RollResultEventArgs>();
             var resultToAdd = new RollResult(scoreToAdd, rule);
             
             _sut.ResultApplied += (sender, args) =>
             {
-                appliedResults.Add(args.Result as RollResult);
+                appliedResults.Add(args);
             };
             
             _sut.ApplyScore(resultToAdd);
             
             Assert.Single(appliedResults);
-            Assert.Equal(resultToAdd,appliedResults.FirstOrDefault());
+            Assert.Equal(resultToAdd.ScoreType,appliedResults.FirstOrDefault()?.ScoreType);
         }
 
 

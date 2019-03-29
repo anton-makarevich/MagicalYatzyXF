@@ -86,19 +86,4 @@ namespace Sanet.MagicalYatzy.Models.Events
             _value = value;
         }
     }
-    
-    /// <summary>
-    /// Event to notified about score applied
-    /// </summary>
-    public class ResultEventArgs : PlayerEventArgs
-    {
-        //new move order
-        public IRollResult Result { get; }
-
-        public ResultEventArgs(IPlayer player, IRollResult result)
-            : base(player)
-        {
-            Result = result;
-        }
-    }
 }

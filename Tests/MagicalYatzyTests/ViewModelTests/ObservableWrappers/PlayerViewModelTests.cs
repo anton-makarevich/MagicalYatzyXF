@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using NSubstitute;
+using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 using Xunit;
@@ -93,15 +94,10 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
             var playersResult = new RollResult(scoreType,Rules.krExtended);
             _player.Results.Returns(new List<RollResult>() {playersResult});
             
-            var newResult = Substitute.For<IRollResult>();
-            newResult.PossibleValue.Returns(5);
-            newResult.HasBonus.Returns(true);
-            newResult.ScoreType.Returns(scoreType);
-            
-            _sut.ApplyRollResult(newResult);
+            _sut.ApplyRollResult(new RollResultEventArgs(_player,5, scoreType, true));
 
-            Assert.Equal(newResult.PossibleValue,playersResult.Value);
-            Assert.Equal(newResult.HasBonus, playersResult.HasBonus);
+            Assert.Equal(5,playersResult.Value);
+            Assert.True(playersResult.HasBonus);
         }
         
         [Fact]
@@ -115,7 +111,7 @@ namespace MagicalYatzyTests.ViewModelTests.ObservableWrappers
             newResult.ScoreType.Returns(scoreType);
             _sut.PropertyChanged += (sender, args) => { totalUpdatedTimes++; };
             
-            _sut.ApplyRollResult(newResult);
+            _sut.ApplyRollResult(new RollResultEventArgs(_player, 50, scoreType, true));
 
             Assert.Equal(1,totalUpdatedTimes);
         }
