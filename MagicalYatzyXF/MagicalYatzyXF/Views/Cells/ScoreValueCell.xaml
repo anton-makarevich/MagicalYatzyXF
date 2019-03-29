@@ -10,6 +10,13 @@
             HorizontalOptions="Center"
             TextColor="White"
             Text="{Binding Value}" />
+        <Label
+            HorizontalOptions="End"
+            VerticalOptions="End"
+            IsVisible="{Binding HasBonus}"
+            TextColor="{StaticResource SanetBlueColor}"
+            FontSize="Small"
+            Text="+100" />
     </Grid>
     
 </ViewCell>
