@@ -42,7 +42,7 @@ namespace Sanet.MagicalYatzy.XF.Views.Game
             ViewModel.DicePanel.RollStarted += DicePanelOnRollStarted;
         }
 
-        void Game_ResultApplied(object sender, MagicalYatzy.Models.Events.ResultEventArgs e)
+        void Game_ResultApplied(object sender, MagicalYatzy.Models.Events.RollResultEventArgs e)
         {
             TabBar.Activate(TabBar.TabChildren.First(), true);
         }

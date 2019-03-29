@@ -7,6 +7,7 @@ using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MagicalYatzy.XF.Services;
 using Sanet.MagicalYatzy.XF.Services.Media;
 using SimpleInjector;
+using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
 
 namespace Sanet.MagicalYatzy.XF
 {
@@ -16,8 +17,9 @@ namespace Sanet.MagicalYatzy.XF
         {
             // Register app start viewmodel
             container.Register<MainMenuViewModel>();
-            
+
             // Register services
+            container.RegisterSingleton<IDiceGenerator, RandomDiceGenerator>();
             container.RegisterSingleton<IGameSettingsService, GameSettingsService>();
             container.RegisterSingleton<ILocalizationService, LocalizationService>();
             container.RegisterSingleton<IWebService, WebService>();
