@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Sanet.MagicalYatzy.Models.Game;
+using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
 using Sanet.MagicalYatzy.Services.Game;
 using Xunit;
 
@@ -7,7 +8,7 @@ namespace MagicalYatzyTests.ServiceTests.Game
 {
     public class GameServiceTests
     {
-        private readonly IGameService _sut = new GameService();
+        private readonly IGameService _sut = new GameService(new RandomDiceGenerator());
         [Fact]
         public async Task CreateNewLocalGameReturnsGameObject()
         {

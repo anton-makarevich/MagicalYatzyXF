@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.ViewModels;
 using NSubstitute;
+using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
 using Xunit;
 using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Services;
@@ -402,7 +403,7 @@ namespace MagicalYatzyTests.ViewModelTests
             var rule = _sut.Rules.First();
             rule.SelectRuleCommand.Execute(null);
             
-            var game = new YatzyGame(rule.Rule);
+            var game = new YatzyGame(rule.Rule, Substitute.For<IDiceGenerator>());
             _gameService.CreateNewLocalGameAsync(rule.Rule)
                 .Returns(Task.FromResult<IGame>(game));
             

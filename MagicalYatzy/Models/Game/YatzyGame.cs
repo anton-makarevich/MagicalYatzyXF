@@ -15,7 +15,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         //sync object
         private readonly object _syncRoot = new object();
 
-        private readonly IDiceGenerator _diceGenerator = new AllOfKindTestGenerator();//RandomDiceGenerator();
+        private readonly IDiceGenerator _diceGenerator;
         
         private bool _isPlaying;
         private int[] _lastRollResults;
@@ -24,14 +24,15 @@ namespace Sanet.MagicalYatzy.Models.Game
         private bool _reRollMode;
         private readonly Random _randomizer = new Random();
         
-        public YatzyGame(Rules rules)
+        public YatzyGame(Rules rules, IDiceGenerator diceGenerator)
         {
+            _diceGenerator = diceGenerator;
             Rules = new Rule(rules);
             Players = new List<IPlayer>();
             GameId = Guid.NewGuid().ToString("N");
         }
 
-        public YatzyGame():this(Game.Rules.krExtended)
+        public YatzyGame():this(Game.Rules.krExtended, new RandomDiceGenerator())
         {
         }
         
@@ -117,12 +118,13 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public void ApplyScore(IRollResult result)
         {
+            var hasBonus = false;
             //check for kniffel bonus
             if (Rules.HasExtendedBonuses && result.ScoreType != Scores.Kniffel)
             {
                 //check if already have kniffel
                 var kniffelResult = CurrentPlayer.GetResultForScore(Scores.Kniffel);
-                result.HasBonus = (LastDiceResult.YatzyFiveOfAKindScore() == 50 
+                hasBonus = (LastDiceResult.YatzyFiveOfAKindScore() == 50 
                                    && kniffelResult.Value==kniffelResult.MaxValue);
             }
             //sending result to everyone
@@ -131,7 +133,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                 new RollResultEventArgs(CurrentPlayer, 
                     result.PossibleValue,
                     result.ScoreType,
-                    false));
+                    hasBonus));
             //update players results on server
 #if SERVER
             result.Value = result.PossibleValue;

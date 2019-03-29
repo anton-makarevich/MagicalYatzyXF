@@ -5,6 +5,7 @@ using NSubstitute;
 using Sanet.MagicalYatzy.Models.Chat;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
+using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
 using Sanet.MagicalYatzy.Models.Game.Extensions;
 using Sanet.MagicalYatzy.Models.Game.Magical;
 using Sanet.MagicalYatzy.Utils;
@@ -66,7 +67,7 @@ namespace MagicalYatzyTests.ModelTests.Game
 
             foreach (var rule in allRules)
             {
-                var sut = new YatzyGame(rule);
+                var sut = new YatzyGame(rule, Substitute.For<IDiceGenerator>());
                 Assert.Equal(rule,sut.Rules.CurrentRule);
             }
         }
@@ -76,7 +77,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         {
             Assert.NotNull(_sut.Players);
             
-            var sut = new YatzyGame(Rules.krBaby);
+            var sut = new YatzyGame(Rules.krBaby, Substitute.For<IDiceGenerator>());
             Assert.NotNull(sut.Players);
         }
 
@@ -86,7 +87,7 @@ namespace MagicalYatzyTests.ModelTests.Game
             Assert.NotNull(_sut.GameId);
             Assert.NotEmpty(_sut.GameId);
             
-            var sut = new YatzyGame(Rules.krBaby);
+            var sut = new YatzyGame(Rules.krBaby, Substitute.For<IDiceGenerator>());
             Assert.NotNull(sut.GameId);
             Assert.NotEmpty(sut.GameId);
         }
@@ -225,7 +226,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         {
             const Scores scoreToAdd = Scores.Ones;
             const Rules rule = Rules.krStandard;
-            _sut = new YatzyGame(rule);
+            _sut = new YatzyGame(rule, Substitute.For<IDiceGenerator>());
             var player = Substitute.For<IPlayer>();
             player.IsReady.Returns(true);
             player.InGameId.Returns("0");
@@ -263,7 +264,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         {
             const Scores scoreToAdd = Scores.Ones;
             const Rules rule = Rules.krSimple;
-            _sut = new YatzyGame(rule);
+            _sut = new YatzyGame(rule, Substitute.For<IDiceGenerator>());
             var player = Substitute.For<IPlayer>();
             player.IsReady.Returns(true);
             player.InGameId.Returns("0");
@@ -297,7 +298,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         {
             const Scores scoreToAdd = Scores.Ones;
             const Rules rule = Rules.krStandard;
-            _sut = new YatzyGame(rule);
+            _sut = new YatzyGame(rule, Substitute.For<IDiceGenerator>());
             var player = Substitute.For<IPlayer>();
             player.IsReady.Returns(true);
             player.InGameId.Returns("0");
@@ -325,7 +326,151 @@ namespace MagicalYatzyTests.ModelTests.Game
             Assert.Single(appliedResults);
             Assert.Equal(resultToAdd.ScoreType,appliedResults.FirstOrDefault()?.ScoreType);
         }
+        
+        [Fact]
+        public void ApplyingScoreAddsKniffelBonusWhenApplicable()
+        {
+            const Scores scoreToAdd = Scores.Ones;
+            const Rules rule = Rules.krExtended;
+            var diceGenerator = Substitute.For<IDiceGenerator>();
+            diceGenerator.GetNextDiceResult().ReturnsForAnyArgs(1);
+            _sut = new YatzyGame(rule, diceGenerator);
+            var player = Substitute.For<IPlayer>();
+            player.IsReady.Returns(true);
+            player.InGameId.Returns("0");
+            player.GetResultForScore(Scores.Kniffel).Returns(new RollResult(Scores.Kniffel, rule)
+            {
+                Value = 50
+            });
 
+            StartGame(player);
+            _sut.ReportRoll();
+            var appliedResults = new List<RollResultEventArgs>();
+            var resultToAdd = Substitute.For<IRollResult>();
+            resultToAdd.PossibleValue.Returns(5);
+            resultToAdd.ScoreType.Returns(scoreToAdd);
+            
+            _sut.ResultApplied += (sender, args) =>
+            {
+                appliedResults.Add(args);
+            };
+            
+            _sut.ApplyScore(resultToAdd);
+            
+            Assert.Single(appliedResults);
+            Assert.Equal(resultToAdd.ScoreType,appliedResults.FirstOrDefault()?.ScoreType);
+            Assert.True(appliedResults.FirstOrDefault()?.HasBonus);
+        }
+        
+        [Fact]
+        public void ApplyingScoreDoesNotAddKniffelBonusWhenKniffelItselfIsNotFilled()
+        {
+            const Scores scoreToAdd = Scores.Ones;
+            const Rules rule = Rules.krExtended;
+            var diceGenerator = Substitute.For<IDiceGenerator>();
+            diceGenerator.GetNextDiceResult().ReturnsForAnyArgs(1);
+            _sut = new YatzyGame(rule, diceGenerator);
+            var player = Substitute.For<IPlayer>();
+            player.IsReady.Returns(true);
+            player.InGameId.Returns("0");
+            player.GetResultForScore(Scores.Kniffel).Returns(new RollResult(Scores.Kniffel, rule)
+            {
+                Value = 0
+            });
+
+            StartGame(player);
+            _sut.ReportRoll();
+            var appliedResults = new List<RollResultEventArgs>();
+            var resultToAdd = Substitute.For<IRollResult>();
+            resultToAdd.PossibleValue.Returns(5);
+            resultToAdd.ScoreType.Returns(scoreToAdd);
+            
+            _sut.ResultApplied += (sender, args) =>
+            {
+                appliedResults.Add(args);
+            };
+            
+            _sut.ApplyScore(resultToAdd);
+            
+            Assert.Single(appliedResults);
+            Assert.Equal(resultToAdd.ScoreType,appliedResults.FirstOrDefault()?.ScoreType);
+            Assert.False(appliedResults.FirstOrDefault()?.HasBonus);
+        }
+        
+        [Fact]
+        public void ApplyingScoreDoesNotAddKniffelBonusWhenRuleDoesNotSupportExtendedBonus()
+        {
+            const Scores scoreToAdd = Scores.Ones;
+            const Rules rule = Rules.krStandard;
+            var diceGenerator = Substitute.For<IDiceGenerator>();
+            diceGenerator.GetNextDiceResult().ReturnsForAnyArgs(1);
+            _sut = new YatzyGame(rule, diceGenerator);
+            var player = Substitute.For<IPlayer>();
+            player.IsReady.Returns(true);
+            player.InGameId.Returns("0");
+            player.GetResultForScore(Scores.Kniffel).Returns(new RollResult(Scores.Kniffel, rule)
+            {
+                Value = 50
+            });
+
+            StartGame(player);
+            _sut.ReportRoll();
+            var appliedResults = new List<RollResultEventArgs>();
+            var resultToAdd = Substitute.For<IRollResult>();
+            resultToAdd.PossibleValue.Returns(5);
+            resultToAdd.ScoreType.Returns(scoreToAdd);
+            
+            _sut.ResultApplied += (sender, args) =>
+            {
+                appliedResults.Add(args);
+            };
+            
+            _sut.ApplyScore(resultToAdd);
+            
+            Assert.Single(appliedResults);
+            Assert.Equal(resultToAdd.ScoreType,appliedResults.FirstOrDefault()?.ScoreType);
+            Assert.False(appliedResults.FirstOrDefault()?.HasBonus);
+        }
+        
+        [Fact]
+        public void ApplyingScoreDoesNotAddKniffelBonusWhenRollValueIsNotKniffel()
+        {
+            const Scores scoreToAdd = Scores.Ones;
+            const Rules rule = Rules.krExtended;
+            var diceGenerator = Substitute.For<IDiceGenerator>();
+            var i = 1;
+            diceGenerator.GetNextDiceResult().ReturnsForAnyArgs(info =>
+            {
+                i++;
+                return i-1;
+            });
+            _sut = new YatzyGame(rule, diceGenerator);
+            var player = Substitute.For<IPlayer>();
+            player.IsReady.Returns(true);
+            player.InGameId.Returns("0");
+            player.GetResultForScore(Scores.Kniffel).Returns(new RollResult(Scores.Kniffel, rule)
+            {
+                Value = 50
+            });
+
+            StartGame(player);
+            _sut.ReportRoll();
+            var appliedResults = new List<RollResultEventArgs>();
+            var resultToAdd = Substitute.For<IRollResult>();
+            resultToAdd.PossibleValue.Returns(5);
+            resultToAdd.ScoreType.Returns(scoreToAdd);
+            
+            _sut.ResultApplied += (sender, args) =>
+            {
+                appliedResults.Add(args);
+            };
+            
+            _sut.ApplyScore(resultToAdd);
+            
+            Assert.Single(appliedResults);
+            Assert.Equal(resultToAdd.ScoreType,appliedResults.FirstOrDefault()?.ScoreType);
+            Assert.False(appliedResults.FirstOrDefault()?.HasBonus);
+        }
 
         [Fact]
         public void JoinGameAddsPlayerAndFiresPlayerJoinedEvent()
@@ -501,7 +646,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         [Fact]
         public void ManualChangeReplacesValueWhenItIsFixed()
         {
-            _sut = new YatzyGame(Rules.krMagic);
+            _sut = new YatzyGame(Rules.krMagic, new RandomDiceGenerator());
             const int valueToChange = 4;
             const int valueToChangeTo = 5;
             var diceChangedCount = 0;
@@ -524,7 +669,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         [Fact]
         public void ManualChangeWorksOnlyForMagicRules()
         {
-            _sut = new YatzyGame(Rules.krStandard);
+            _sut = new YatzyGame(Rules.krStandard, new RandomDiceGenerator());
             const int valueToChange = 4;
             const int valueToChangeTo = 5;
             var diceChangedCount = 0;
@@ -547,7 +692,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         [Fact]
         public void ManualChangeReplacesValueWhenItIsNotFixed()
         {
-            _sut = new YatzyGame(Rules.krMagic);
+            _sut = new YatzyGame(Rules.krMagic, new RandomDiceGenerator());
             const int valueToChange = 4;
             const int valueToChangeTo = 5;
             var diceChangedCount = 0;
@@ -570,7 +715,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         [Fact]
         public void ManualChangeDoesNotReplacesValueWhenItIsNotInResult()
         {
-            _sut = new YatzyGame(Rules.krMagic);
+            _sut = new YatzyGame(Rules.krMagic, Substitute.For<IDiceGenerator>());
             const int valueToChange = 4;
             const int valueToChangeTo = 5;
             var diceChangedCount = 0;
@@ -613,7 +758,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         [Fact]
         public void MagicalRollDoesNotSetAnyOfEmptyPokerHandsIfPlayerDoesNotHaveArtifacts()
         {
-            _sut = new YatzyGame(Rules.krMagic);
+            _sut = new YatzyGame(Rules.krMagic, Substitute.For<IDiceGenerator>());
             
             var player = new Player();
             _sut.JoinGame(player);
@@ -638,7 +783,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         [Fact]
         public void MagicalRollSetsAnyOfEmptyPokerHandsAndFiresEvent()
         {
-            _sut = new YatzyGame(Rules.krMagic);
+            _sut = new YatzyGame(Rules.krMagic, Substitute.For<IDiceGenerator>());
 
             var player = new Player
             {
@@ -666,7 +811,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         [Fact]
         public void MagicalRollInitializeStandartRollIfAllPokerHandsAreOccupied()
         {
-            _sut = new YatzyGame(Rules.krMagic);
+            _sut = new YatzyGame(Rules.krMagic, Substitute.For<IDiceGenerator>());
 
             var player = new Player
             {
