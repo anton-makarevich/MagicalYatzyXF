@@ -300,6 +300,11 @@ namespace Sanet.MagicalYatzy.ViewModels
                 DicePanel.FixDice(e.Value,e.Isfixed);        
         }
 
+        public void ApplyRollResult(IRollResult rollResult)
+        {
+            Game.ApplyScore(rollResult);
+        }
+
         public override void DetachHandlers()
         {
             base.DetachHandlers();
@@ -342,11 +347,6 @@ namespace Sanet.MagicalYatzy.ViewModels
             NotifyPropertyChanged(nameof(IsMagicRollVisible));
             NotifyPropertyChanged(nameof(IsManualSetVisible));
             NotifyPropertyChanged(nameof(IsRollResetVisible));
-        }
-
-        public void ApplyRollResult(IRollResult rollResult)
-        {
-            Game.ApplyScore(rollResult);
         }
     }
 }

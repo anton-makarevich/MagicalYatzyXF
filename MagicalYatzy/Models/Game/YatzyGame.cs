@@ -136,23 +136,20 @@ namespace Sanet.MagicalYatzy.Models.Game
             //check for numeric bonus and apply it
             if (Rules.HasStandardBonus)
             {
-                var bonusResult=CurrentPlayer.Results?.FirstOrDefault(f=>f.ScoreType== Scores.Bonus);
-                if (bonusResult != null && (result.IsNumeric && !bonusResult.HasValue))
+                var bonusResult = CurrentPlayer.Results?.FirstOrDefault(f => f.ScoreType == Scores.Bonus);
+                var totalNumericScore = CurrentPlayer.TotalNumeric;
+                var notFilledNumeric = CurrentPlayer.Results?
+                    .Where(f => f.IsNumeric && f.ScoreType != result.ScoreType)
+                    .Count(f => !f.HasValue);
+                if (bonusResult != null
+                    && (notFilledNumeric == 0 || totalNumericScore > 62)
+                    && (result.IsNumeric && !bonusResult.HasValue))
                 {
-                    var possibleBonusValue = -1;
-                    if (CurrentPlayer.TotalNumeric > 62)
-                        possibleBonusValue = 35;
-                    else if (CurrentPlayer.TotalNumeric + CurrentPlayer.MaxRemainingNumeric < 63)
-                        possibleBonusValue = 0;
-       
-                    if (possibleBonusValue > -1)
-                    {
-                        bonusResult.PossibleValue = possibleBonusValue;
-                        ResultApplied?.Invoke(this, new ResultEventArgs(CurrentPlayer, bonusResult));
+                    bonusResult.PossibleValue = (totalNumericScore > 62) ? bonusResult.MaxValue : 0;
+                    ResultApplied?.Invoke(this, new ResultEventArgs(CurrentPlayer, bonusResult));
 #if SERVER
-                        bonusResult.Value = bonusResult.PossibleValue;
+                    bonusResult.Value = bonusResult.PossibleValue;
 #endif
-                    }
                 }
             }
 
@@ -277,7 +274,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                
                 player.SeatNo = seat;
                 player.PrepareForGameStart(Rules);
-                Players.Add(player as Player);
+                Players.Add(player);
                 PlayerJoined?.Invoke(this, new PlayerEventArgs(player));
             }
         }

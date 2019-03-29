@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using NSubstitute;
 using Sanet.MagicalYatzy.Models.Chat;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.Extensions;
@@ -20,9 +21,8 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
         
         
-        private void StartGame()
+        private void StartGame(IPlayer player)
         {
-            var player = new Player();
             _sut.JoinGame(player);
             _sut.SetPlayerReady(player,true);
         }
@@ -130,7 +130,9 @@ namespace MagicalYatzyTests.ModelTests.Game
         [Fact]
         public void ApplyingScoreInvokesResultAppliedEventForResultOnlyIfResultIsNotNumeric()
         {
-            StartGame();
+            var player = Substitute.For<IPlayer>();
+            player.InGameId.Returns("0");
+            StartGame(player);
             var resultAppliedCount = 0;
             RollResult appliedResult = null;
             var result = new RollResult(Scores.SmallStraight, Rules.krSimple);
@@ -148,25 +150,181 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
 
         [Fact]
-        public void ApplyingScoreInvokesResultAppliedEventForResultItselfAndBonusIfResultIsNumeric()
+        public void ApplyingScoreInvokesResultAppliedEventForResultItselfAndBonusIfResultIsNumericAndBonusCanBeApplied()
         {
-            StartGame();
-            var resultAppliedCount = 0;
+            const Scores scoreToAdd = Scores.Ones;
+            const Rules rule = Rules.krStandard;
+            var player = Substitute.For<IPlayer>();
+            player.TotalNumeric.Returns(65);
+            player.MaxRemainingNumeric.Returns(40);
+            player.IsReady.Returns(true);
+            player.InGameId.Returns("0");
+            var results = new List<RollResult>();
+            foreach (var score in  EnumUtils.GetValues<Scores>())
+            {
+                var result = new RollResult(score, rule);
+                if (score != scoreToAdd && score != Scores.Bonus)
+                    result.Value = result.MaxValue;
+                results.Add(result);
+            }
+
+            player.Results.Returns(results);
+            StartGame(player);
             var appliedResults = new List<RollResult>();
-            var result = new RollResult(Scores.Ones, Rules.krSimple);
+            var resultToAdd = new RollResult(scoreToAdd, rule);
             
             _sut.ResultApplied += (sender, args) =>
             {
-                resultAppliedCount++;
                 appliedResults.Add(args.Result as RollResult);
             };
             
-            _sut.ApplyScore(result);
-            
-            Assert.Equal(2,resultAppliedCount);
-            Assert.Equal(result,appliedResults.FirstOrDefault());
-            Assert.Equal(Scores.Bonus, appliedResults.LastOrDefault()?.ScoreType);
+            _sut.ApplyScore(resultToAdd);
+            var bonusResult = appliedResults.LastOrDefault();
+            Assert.Equal(2,appliedResults.Count);
+            Assert.Equal(resultToAdd,appliedResults.FirstOrDefault());
+            Assert.Equal(Scores.Bonus, bonusResult?.ScoreType);
+            Assert.Equal(35,bonusResult?.PossibleValue);
         }
+        
+        [Fact]
+        public void DoesNotInvokeResultAppliedEventForBonusIfBonusIsAlreadyFilled()
+        {
+            const Scores scoreToAdd = Scores.Ones;
+            const Rules rule = Rules.krStandard;
+            var player = Substitute.For<IPlayer>();
+            player.IsReady.Returns(true);
+            player.InGameId.Returns("0");
+            var results = new List<RollResult>();
+            foreach (var score in  EnumUtils.GetValues<Scores>())
+            {
+                var result = new RollResult(score, rule);
+                if (score != scoreToAdd)
+                    result.Value = result.MaxValue;
+                results.Add(result);
+            }
+
+            player.Results.Returns(results);
+            StartGame(player);
+            var appliedResults = new List<RollResult>();
+            var resultToAdd = new RollResult(scoreToAdd, rule);
+            
+            _sut.ResultApplied += (sender, args) =>
+            {
+                appliedResults.Add(args.Result as RollResult);
+            };
+            
+            _sut.ApplyScore(resultToAdd);
+            
+            Assert.Single(appliedResults);
+            Assert.Equal(resultToAdd,appliedResults.FirstOrDefault());
+        }
+        
+        [Fact]
+        public void InvokesResultAppliedEventForBonusIfNotAllNumericAreFilledButNumericScoreIsEnoughForBonus()
+        {
+            const Scores scoreToAdd = Scores.Ones;
+            const Rules rule = Rules.krStandard;
+            _sut = new YatzyGame(rule);
+            var player = Substitute.For<IPlayer>();
+            player.IsReady.Returns(true);
+            player.InGameId.Returns("0");
+            player.TotalNumeric.Returns(65);
+            var results = new List<RollResult>();
+            foreach (var score in  EnumUtils.GetValues<Scores>())
+            {
+                var result = new RollResult(score, rule);
+                if (!result.IsNumeric && score != Scores.Bonus)
+                    result.Value = result.MaxValue;
+                results.Add(result);
+            }
+
+            player.Results.Returns(results);
+            StartGame(player);
+            var appliedResults = new List<RollResult>();
+            var resultToAdd = new RollResult(scoreToAdd, rule);
+            
+            _sut.ResultApplied += (sender, args) =>
+            {
+                appliedResults.Add(args.Result as RollResult);
+            };
+            
+            _sut.ApplyScore(resultToAdd);
+            
+            var bonusResult = appliedResults.LastOrDefault();
+            Assert.Equal(2,appliedResults.Count);
+            Assert.Equal(resultToAdd,appliedResults.FirstOrDefault());
+            Assert.Equal(Scores.Bonus, bonusResult?.ScoreType);
+            Assert.Equal(35,bonusResult?.PossibleValue);
+        }
+        
+        [Fact]
+        public void ApplyingScoreDoesNotInvokesResultAppliedEventForBonusIfRuleDoesNotHaveBonus()
+        {
+            const Scores scoreToAdd = Scores.Ones;
+            const Rules rule = Rules.krSimple;
+            _sut = new YatzyGame(rule);
+            var player = Substitute.For<IPlayer>();
+            player.IsReady.Returns(true);
+            player.InGameId.Returns("0");
+            var results = new List<RollResult>();
+            foreach (var score in  EnumUtils.GetValues<Scores>())
+            {
+                var result = new RollResult(score, rule);
+                if (score != scoreToAdd && score != Scores.Bonus)
+                    result.Value = result.MaxValue;
+                results.Add(result);
+            }
+
+            player.Results.Returns(results);
+            StartGame(player);
+            var appliedResults = new List<RollResult>();
+            var resultToAdd = new RollResult(scoreToAdd, rule);
+            
+            _sut.ResultApplied += (sender, args) =>
+            {
+                appliedResults.Add(args.Result as RollResult);
+            };
+            
+            _sut.ApplyScore(resultToAdd);
+            
+            Assert.Single(appliedResults);
+            Assert.Equal(resultToAdd,appliedResults.FirstOrDefault());
+        }
+        
+        [Fact]
+        public void ApplyingScoreDoesNotInvokesResultAppliedEventForBonusIfNotAllNumericAreFilled()
+        {
+            const Scores scoreToAdd = Scores.Ones;
+            const Rules rule = Rules.krStandard;
+            _sut = new YatzyGame(rule);
+            var player = Substitute.For<IPlayer>();
+            player.IsReady.Returns(true);
+            player.InGameId.Returns("0");
+            var results = new List<RollResult>();
+            foreach (var score in  EnumUtils.GetValues<Scores>())
+            {
+                var result = new RollResult(score, rule);
+                if (!result.IsNumeric && score != Scores.Bonus)
+                    result.Value = result.MaxValue;
+                results.Add(result);
+            }
+
+            player.Results.Returns(results);
+            StartGame(player);
+            var appliedResults = new List<RollResult>();
+            var resultToAdd = new RollResult(scoreToAdd, rule);
+            
+            _sut.ResultApplied += (sender, args) =>
+            {
+                appliedResults.Add(args.Result as RollResult);
+            };
+            
+            _sut.ApplyScore(resultToAdd);
+            
+            Assert.Single(appliedResults);
+            Assert.Equal(resultToAdd,appliedResults.FirstOrDefault());
+        }
+
 
         [Fact]
         public void JoinGameAddsPlayerAndFiresPlayerJoinedEvent()

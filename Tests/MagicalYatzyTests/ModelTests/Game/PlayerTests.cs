@@ -158,6 +158,48 @@ namespace MagicalYatzyTests.ModelTests.Game
         }
         
         [Fact]
+        public void CorrectlyCalculatesNumericScores()
+        {
+            // Arrange
+            var rule = new Rule(Rules.krBaby);
+            _sut.PrepareForGameStart(rule);
+            
+            // Act
+            foreach (var score in rule.ScoresForRule)
+            {
+                var result = _sut.Results.FirstOrDefault(r => r.ScoreType == score);
+                if (result != null && result.ScoreType != Scores.Ones)
+                {
+                    result.Value = result.MaxValue;
+                }
+            }
+            
+            // Assert
+            Assert.Equal(100,_sut.TotalNumeric);
+        }
+        
+        [Fact]
+        public void CorrectlyCalculatesMaxreminingNumericScore()
+        {
+            // Arrange
+            var rule = new Rule(Rules.krBaby);
+            _sut.PrepareForGameStart(rule);
+            
+            // Act
+            foreach (var score in rule.ScoresForRule)
+            {
+                var result = _sut.Results.FirstOrDefault(r => r.ScoreType == score);
+                if (result != null && result.ScoreType == Scores.Ones)
+                {
+                    result.Value = result.MaxValue;
+                }
+            }
+            
+            // Assert
+            Assert.Equal(100,_sut.MaxRemainingNumeric);
+        }
+        
+        [Fact]
         public void FillsCorrectPossibleValueForThreeOfAKindResult()
         {
             // Arrange

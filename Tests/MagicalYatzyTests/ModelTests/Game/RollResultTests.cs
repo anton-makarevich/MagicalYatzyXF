@@ -21,6 +21,7 @@ namespace MagicalYatzyTests.ModelTests.Game
                 {Scores.Fours, 20},
                 {Scores.Fives, 25},
                 {Scores.Sixs, 30},
+                {Scores.Bonus, 35},
                 {Scores.ThreeOfAKind, 30},
                 {Scores.FourOfAKind, 30},
                 {Scores.FullHouse, 25},

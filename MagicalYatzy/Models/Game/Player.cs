@@ -41,7 +41,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public string Language { get; set; }
 
-        public int MaxRemainingNumeric => default;
+        public int MaxRemainingNumeric => 105-TotalNumeric;
 
         public string Name { get; set; }
         public string Password { get; set; }
@@ -60,7 +60,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         
         public IReadOnlyList<Artifact> AvailableMagicalArtifacts { get; set; }
 
-        public int TotalNumeric => default;
+        public int TotalNumeric => Results?.Where(f => f.IsNumeric && f.HasValue).Sum(f=>f.Value) ?? 0;
 
         public PlayerType Type { get; }
         public string InGameId { get; private set; }
