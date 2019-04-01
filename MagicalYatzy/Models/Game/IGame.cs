@@ -46,7 +46,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         bool ReRollMode { get; set; }
         void ResetRolls();
         void RestartGame();
-        event EventHandler<ResultEventArgs> ResultApplied;
+        event EventHandler<RollResultEventArgs> ResultApplied;
         Rule Rules { get; }
 
         void LeaveGame(IPlayer player);

@@ -64,19 +64,17 @@ namespace Sanet.MagicalYatzy.Models.Game
                     case Scores.Fives:
                         return 25;
                     case Scores.Sixs:
-                        return 30;
                     case Scores.ThreeOfAKind:
-                        return 30;
-                    case Scores.FourOfAKind:
-                        return 30;
-                    case Scores.FullHouse:
-                        return 25;
                     case Scores.SmallStraight:
-                        return 30;
-                    case Scores.LargeStraight:
-                        return 40;
+                    case Scores.FourOfAKind:
                     case Scores.Total:
                         return 30;
+                    case Scores.Bonus:
+                        return 35;
+                    case Scores.FullHouse:
+                        return 25;
+                    case Scores.LargeStraight:
+                        return 40;
                     case Scores.Kniffel:
                         return 50;
                 }

@@ -14,8 +14,8 @@ namespace Sanet.MagicalYatzy.Models.Game
         public const int MaxRoll = 3;
         //sync object
         private readonly object _syncRoot = new object();
-        
-        private readonly IDiceGenerator _diceGenerator = new RandomDiceGenerator();
+
+        private readonly IDiceGenerator _diceGenerator;
         
         private bool _isPlaying;
         private int[] _lastRollResults;
@@ -24,14 +24,15 @@ namespace Sanet.MagicalYatzy.Models.Game
         private bool _reRollMode;
         private readonly Random _randomizer = new Random();
         
-        public YatzyGame(Rules rules)
+        public YatzyGame(Rules rules, IDiceGenerator diceGenerator)
         {
+            _diceGenerator = diceGenerator;
             Rules = new Rule(rules);
             Players = new List<IPlayer>();
             GameId = Guid.NewGuid().ToString("N");
         }
 
-        public YatzyGame():this(Game.Rules.krExtended)
+        public YatzyGame():this(Game.Rules.krExtended, new RandomDiceGenerator())
         {
         }
         
@@ -53,7 +54,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         
         public event EventHandler<PlayerEventArgs> PlayerJoined;
         
-        public event EventHandler<ResultEventArgs> ResultApplied;
+        public event EventHandler<RollResultEventArgs> ResultApplied;
         #endregion
 
         #region Properties
@@ -117,15 +118,22 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public void ApplyScore(IRollResult result)
         {
+            var hasBonus = false;
             //check for kniffel bonus
             if (Rules.HasExtendedBonuses && result.ScoreType != Scores.Kniffel)
             {
                 //check if already have kniffel
                 var kniffelResult = CurrentPlayer.GetResultForScore(Scores.Kniffel);
-                result.HasBonus = (LastDiceResult.YatzyFiveOfAKindScore() == 50 && kniffelResult.Value==kniffelResult.MaxValue);
+                hasBonus = (LastDiceResult.YatzyFiveOfAKindScore() == 50 
+                                   && kniffelResult.Value==kniffelResult.MaxValue);
             }
             //sending result to everyone
-            ResultApplied?.Invoke(this, new ResultEventArgs(CurrentPlayer, result));
+            ResultApplied?.Invoke(
+                this,
+                new RollResultEventArgs(CurrentPlayer, 
+                    result.PossibleValue,
+                    result.ScoreType,
+                    hasBonus));
             //update players results on server
 #if SERVER
             result.Value = result.PossibleValue;
@@ -136,23 +144,20 @@ namespace Sanet.MagicalYatzy.Models.Game
             //check for numeric bonus and apply it
             if (Rules.HasStandardBonus)
             {
-                var bonusResult=CurrentPlayer.Results?.FirstOrDefault(f=>f.ScoreType== Scores.Bonus);
-                if (bonusResult != null && (result.IsNumeric && !bonusResult.HasValue))
+                var bonusResult = CurrentPlayer.Results?.FirstOrDefault(f => f.ScoreType == Scores.Bonus);
+                var totalNumericScore = CurrentPlayer.TotalNumeric;
+                var notFilledNumeric = CurrentPlayer.Results?
+                    .Where(f => f.IsNumeric && f.ScoreType != result.ScoreType)
+                    .Count(f => !f.HasValue);
+                if (bonusResult != null
+                    && (notFilledNumeric == 0 || totalNumericScore > 62)
+                    && (result.IsNumeric && !bonusResult.HasValue))
                 {
-                    var possibleBonusValue = -1;
-                    if (CurrentPlayer.TotalNumeric > 62)
-                        possibleBonusValue = 35;
-                    else if (CurrentPlayer.TotalNumeric + CurrentPlayer.MaxRemainingNumeric < 63)
-                        possibleBonusValue = 0;
-       
-                    if (possibleBonusValue > -1)
-                    {
-                        bonusResult.PossibleValue = possibleBonusValue;
-                        ResultApplied?.Invoke(this, new ResultEventArgs(CurrentPlayer, bonusResult));
+                    var possibleValue = (totalNumericScore > 62) ? bonusResult.MaxValue : 0;
+                    ResultApplied?.Invoke(this, new RollResultEventArgs(CurrentPlayer, possibleValue, bonusResult.ScoreType, false));
 #if SERVER
-                        bonusResult.Value = bonusResult.PossibleValue;
+                    bonusResult.Value = bonusResult.PossibleValue;
 #endif
-                    }
                 }
             }
 
@@ -277,7 +282,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                
                 player.SeatNo = seat;
                 player.PrepareForGameStart(Rules);
-                Players.Add(player as Player);
+                Players.Add(player);
                 PlayerJoined?.Invoke(this, new PlayerEventArgs(player));
             }
         }
