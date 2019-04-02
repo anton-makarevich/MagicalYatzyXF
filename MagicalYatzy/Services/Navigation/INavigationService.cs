@@ -20,5 +20,6 @@ namespace Sanet.MagicalYatzy.Services.Navigation
 
         Task NavigateBackAsync();
         Task CloseAsync();
+        Task NavigateToRootAsync();
     }
 }

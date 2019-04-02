@@ -72,5 +72,19 @@ namespace MagicalYatzyTests.ViewModelTests
         {
             Assert.Equal("PlayAgain" ,_sut.RestartImage);
         }
+
+        [Fact]
+        public async Task CloseShouldNavigateToTheRoot()
+        {
+            _sut.CloseCommand.Execute(null);
+
+            await _navigationService.Received().NavigateToRootAsync();
+        }
+
+        [Fact]
+        public void CloseImageHasCorrectValue()
+        {
+            Assert.Equal("close", _sut.CloseImage);
+        }
     }
 }

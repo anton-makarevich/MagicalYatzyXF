@@ -22,6 +22,7 @@
             Text="{loc:Strings GameFinishedLabel}"
             />
         <controls:BindableStackLayout
+            WidthRequest="{Binding PageWidth}"
             HorizontalOptions="Center"
             VerticalOptions="Center"
             Grid.Row="1"
@@ -44,11 +45,11 @@
                 Command="{Binding RestartGameCommand}"
                 ImageSource="{Binding RestartImage, Converter={StaticResource ImageNameConverter}}" 
                 Text="{loc:Strings AgainLabel}"/>
-            <!-- <controls:ToolBarButton -->
-            <!--     HorizontalOptions="Center" -->
-            <!--     Command="{Binding MagicRollCommand}" -->
-            <!--     ImageSource="{Binding MagicRollImage, Converter={StaticResource ImageNameConverter}}"  -->
-            <!--     Text="{loc:Strings MagicRollLabel}"/> -->
+            <controls:ToolBarButton
+                HorizontalOptions="Center"
+                Command="{Binding CloseCommand}"
+                ImageSource="{Binding CloseImage, Converter={StaticResource ImageNameConverter}}"
+                Text="{loc:Strings CloseButtonContent}"/>
         </StackLayout>
     </Grid>
 </base:BaseView>

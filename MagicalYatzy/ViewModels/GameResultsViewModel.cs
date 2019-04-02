@@ -42,6 +42,10 @@ namespace Sanet.MagicalYatzy.ViewModels
         }));
 
         public string RestartImage => "PlayAgain";
+        public ICommand CloseCommand => 
+            new SimpleCommand(async () => await NavigationService.NavigateToRootAsync());
+
+        public string CloseImage => "close";
 
         public override void AttachHandlers()
         {
