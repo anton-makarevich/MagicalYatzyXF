@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<base:BaseView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Sanet.MagicalYatzy.XF.Views.GameResultsView"
+             xmlns:base="clr-namespace:Sanet.MagicalYatzy.XF.Views.Base"
+             xmlns:vm="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
+             xmlns:loc="clr-namespace:Sanet.MagicalYatzy.XF.MarkupExtensions"
+             xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls"
+             x:TypeArguments="vm:GameResultsViewModel">
+    <Grid
+        BackgroundColor="Black"
+        Padding = "10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+            <RowDefinition Height = "Auto"/>
+        </Grid.RowDefinitions>
+        
+        <Label VerticalTextAlignment = "Center"
+            HorizontalTextAlignment = "Center"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            Grid.Row="1"
+            Style="{StaticResource DescriptionLabelStyle}"
+            Text="{loc:Strings GameFinishedLabel}"
+            />
+    </Grid>
+</base:BaseView>

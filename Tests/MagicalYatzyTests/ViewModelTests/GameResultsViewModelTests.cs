@@ -29,7 +29,7 @@ namespace MagicalYatzyTests.ViewModelTests
                 _humanPlayer,
             });
             
-            var localizationService = Substitute.For<ILocalizationService>();
+            Substitute.For<ILocalizationService>();
             _sut = new GameResultsViewModel(_gameService, _localizationService);
         }
         
