@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
+using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.ViewModels.Base;
@@ -26,6 +28,18 @@ namespace Sanet.MagicalYatzy.ViewModels
             get => _players;
             set => SetProperty(ref _players, value);
         }
+
+        public ICommand RestartGameCommand => new SimpleCommand((async () =>
+        {
+            var players = _gameService.CurrentLocalGame.Players;
+            var rule = _gameService.CurrentLocalGame.Rules.CurrentRule;
+            var game = await _gameService.CreateNewLocalGameAsync(rule);
+            foreach (var player in players)
+            {
+                game.JoinGame(player);
+            }
+            await NavigationService.NavigateToViewModelAsync<GameViewModel>();
+        }));
 
         public override void AttachHandlers()
         {

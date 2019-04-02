@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewCell 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    x:Class="Sanet.MagicalYatzy.XF.Views.Cells.GameResultCell">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Label
+            HorizontalOptions="Start"
+            TextColor="{StaticResource SanetBlueColor}"
+            Text="{Binding Name}" />
+        <Label
+            Grid.Column="1"
+            HorizontalOptions="Start"
+            TextColor="{StaticResource SanetBlueColor}"
+            Text="{Binding Total}" />
+    </Grid>
+</ViewCell>

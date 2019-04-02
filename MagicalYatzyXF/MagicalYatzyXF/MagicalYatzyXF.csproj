@@ -24,7 +24,7 @@
     <!-- https://bugzilla.xamarin.com/show_bug.cgi?id=55591 -->
     <None Remove="**\*.xaml" />
     
-    <Compile Update="**\*.xaml.cs" DependentUpon="GameResultsView.xaml" />
+    <Compile Update="**\*.xaml.cs" DependentUpon="GameResultCell.xaml" />
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Cells\MainMenuCell.xaml %28copy%29.cs">
       <DependentUpon>SecondaryMenuCell.xaml</DependentUpon>
     </Compile>
