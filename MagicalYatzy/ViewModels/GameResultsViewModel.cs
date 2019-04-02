@@ -41,6 +41,8 @@ namespace Sanet.MagicalYatzy.ViewModels
             await NavigationService.NavigateToViewModelAsync<GameViewModel>();
         }));
 
+        public string RestartImage => "PlayAgain";
+
         public override void AttachHandlers()
         {
             base.AttachHandlers();

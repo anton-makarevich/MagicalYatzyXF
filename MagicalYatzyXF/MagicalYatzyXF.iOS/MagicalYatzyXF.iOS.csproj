@@ -222,6 +222,10 @@
     <ImageAsset Include="Assets.xcassets\RollReset.imageset\ResetRoll.png" />
     <ImageAsset Include="Assets.xcassets\RollReset.imageset\ResetRoll%402x.png" />
     <ImageAsset Include="Assets.xcassets\RollReset.imageset\ResetRoll%403x.png" />
+    <ImageAsset Include="Assets.xcassets\PlayAgain.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\PlayAgain.imageset\PlayAgain-1.png" />
+    <ImageAsset Include="Assets.xcassets\PlayAgain.imageset\PlayAgain%402x.png" />
+    <ImageAsset Include="Assets.xcassets\PlayAgain.imageset\PlayAgain%403x.png" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -278,6 +282,7 @@
     <Folder Include="Assets.xcassets\Roll.imageset\" />
     <Folder Include="Assets.xcassets\ManualSet.imageset\" />
     <Folder Include="Assets.xcassets\RollReset.imageset\" />
+    <Folder Include="Assets.xcassets\PlayAgain.imageset\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

@@ -33,5 +33,22 @@
                 </DataTemplate>
             </controls:BindableStackLayout.ItemTemplate>
         </controls:BindableStackLayout>
+        <StackLayout
+            HeightRequest="60"
+            Grid.Row="2"
+            Orientation="Horizontal"
+            HorizontalOptions="Center"
+            Spacing="16">
+            <controls:ToolBarButton
+                HorizontalOptions="Center"
+                Command="{Binding RestartGameCommand}"
+                ImageSource="{Binding RestartImage, Converter={StaticResource ImageNameConverter}}" 
+                Text="{loc:Strings AgainLabel}"/>
+            <!-- <controls:ToolBarButton -->
+            <!--     HorizontalOptions="Center" -->
+            <!--     Command="{Binding MagicRollCommand}" -->
+            <!--     ImageSource="{Binding MagicRollImage, Converter={StaticResource ImageNameConverter}}"  -->
+            <!--     Text="{loc:Strings MagicRollLabel}"/> -->
+        </StackLayout>
     </Grid>
 </base:BaseView>

@@ -66,5 +66,11 @@ namespace MagicalYatzyTests.ViewModelTests
 
             await _navigationService.Received().NavigateToViewModelAsync<GameViewModel>();
         }
+
+        [Fact]
+        public void RestartImageHasCorrectValue()
+        {
+            Assert.Equal("PlayAgain" ,_sut.RestartImage);
+        }
     }
 }

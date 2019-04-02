@@ -334,5 +334,10 @@
       <Link>Resources/RollReset.png</Link>
     </BundleResource>
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="..\MagicalYatzyXF.UWP\Assets\PlayAgain.png">
+      <Link>Resources/PlayAgain.png</Link>
+    </BundleResource>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>
