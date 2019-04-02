@@ -48,7 +48,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                             Scores.FullHouse,
                             Scores.SmallStraight,
                             Scores.LargeStraight,
-                            Scores.Total,
+                            Scores.Chance,
                             Scores.Kniffel
                         };
                     default:
@@ -66,7 +66,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                             Scores.FullHouse,
                             Scores.SmallStraight,
                             Scores.LargeStraight,
-                            Scores.Total,
+                            Scores.Chance,
                             Scores.Kniffel
                         };
                 }

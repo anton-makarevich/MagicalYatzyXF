@@ -67,7 +67,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                     case Scores.ThreeOfAKind:
                     case Scores.SmallStraight:
                     case Scores.FourOfAKind:
-                    case Scores.Total:
+                    case Scores.Chance:
                         return 30;
                     case Scores.Bonus:
                         return 35;

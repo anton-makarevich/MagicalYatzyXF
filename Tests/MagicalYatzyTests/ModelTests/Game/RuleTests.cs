@@ -57,7 +57,7 @@ namespace MagicalYatzyTests.ModelTests.Game
                 Scores.FullHouse,
                 Scores.SmallStraight,
                 Scores.LargeStraight,
-                Scores.Total,
+                Scores.Chance,
                 Scores.Kniffel
             };
 
@@ -89,7 +89,7 @@ namespace MagicalYatzyTests.ModelTests.Game
                 Scores.FullHouse,
                 Scores.SmallStraight,
                 Scores.LargeStraight,
-                Scores.Total,
+                Scores.Chance,
                 Scores.Kniffel
             };
 
@@ -121,7 +121,7 @@ namespace MagicalYatzyTests.ModelTests.Game
                 Scores.FullHouse,
                 Scores.SmallStraight,
                 Scores.LargeStraight,
-                Scores.Total,
+                Scores.Chance,
                 Scores.Kniffel
             };
 
@@ -153,7 +153,7 @@ namespace MagicalYatzyTests.ModelTests.Game
                 Scores.FullHouse,
                 Scores.SmallStraight,
                 Scores.LargeStraight,
-                Scores.Total,
+                Scores.Chance,
                 Scores.Kniffel
             };
 

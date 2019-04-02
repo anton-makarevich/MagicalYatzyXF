@@ -234,7 +234,7 @@ namespace MagicalYatzyTests.ModelTests.Game
         {
             // Arrange
             var rule = new Rule(Rules.krSimple);
-            const Scores scoreToCheck = Scores.Total;
+            const Scores scoreToCheck = Scores.Chance;
             _sut.PrepareForGameStart(rule);
             
             // Act
