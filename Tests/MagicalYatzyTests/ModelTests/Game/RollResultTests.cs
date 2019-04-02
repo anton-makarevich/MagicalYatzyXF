@@ -27,7 +27,7 @@ namespace MagicalYatzyTests.ModelTests.Game
                 {Scores.FullHouse, 25},
                 {Scores.SmallStraight, 30},
                 {Scores.LargeStraight, 40},
-                {Scores.Total, 30},
+                {Scores.Chance, 30},
                 {Scores.Kniffel, 50}
             };
             var allScores = EnumUtils.GetValues<Scores>();

@@ -129,6 +129,7 @@
     <Content Include="Assets\Mail.png" />
     <Content Include="Assets\ManualSet.png" />
     <Content Include="Assets\OnlineGame.png" />
+    <Content Include="Assets\PlayAgain.png" />
     <Content Include="Assets\Rate.png" />
     <Content Include="Assets\Roll.png" />
     <Content Include="Assets\RollReset.png" />

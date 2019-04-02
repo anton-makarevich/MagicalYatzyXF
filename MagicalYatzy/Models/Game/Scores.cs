@@ -13,7 +13,7 @@
         FullHouse = 9,
         SmallStraight = 10,
         LargeStraight = 11,
-        Total = 12,
+        Chance = 12,
         Kniffel = 13,
         Bonus,
         ThreeInRow,

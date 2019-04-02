@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<base:BaseView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Sanet.MagicalYatzy.XF.Views.GameResultsView"
+             xmlns:base="clr-namespace:Sanet.MagicalYatzy.XF.Views.Base"
+             xmlns:vm="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
+             xmlns:loc="clr-namespace:Sanet.MagicalYatzy.XF.MarkupExtensions"
+             xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls"
+             xmlns:cells="clr-namespace:Sanet.MagicalYatzy.XF.Views.Cells;assembly=MagicalYatzyXF"
+             x:TypeArguments="vm:GameResultsViewModel">
+    <Grid
+        BackgroundColor="Black"
+        Padding = "10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+            <RowDefinition Height = "Auto"/>
+        </Grid.RowDefinitions>
+        
+        <Label
+            Style="{StaticResource CaptionLabelStyle}"
+            Text="{loc:Strings GameFinishedLabel}"
+            />
+        <controls:BindableStackLayout
+            WidthRequest="{Binding PageWidth}"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            Grid.Row="1"
+            ItemsSource="{Binding Players}"
+            BackgroundColor = "Transparent">
+            <controls:BindableStackLayout.ItemTemplate>
+                <DataTemplate>
+                    <cells:GameResultCell />
+                </DataTemplate>
+            </controls:BindableStackLayout.ItemTemplate>
+        </controls:BindableStackLayout>
+        <StackLayout
+            HeightRequest="60"
+            Grid.Row="2"
+            Orientation="Horizontal"
+            HorizontalOptions="Center"
+            Spacing="16">
+            <controls:ToolBarButton
+                HorizontalOptions="Center"
+                Command="{Binding RestartGameCommand}"
+                ImageSource="{Binding RestartImage, Converter={StaticResource ImageNameConverter}}" 
+                Text="{loc:Strings AgainLabel}"/>
+            <controls:ToolBarButton
+                HorizontalOptions="Center"
+                Command="{Binding CloseCommand}"
+                ImageSource="{Binding CloseImage, Converter={StaticResource ImageNameConverter}}"
+                Text="{loc:Strings CloseButtonContent}"/>
+        </StackLayout>
+    </Grid>
+</base:BaseView>

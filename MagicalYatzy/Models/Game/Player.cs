@@ -112,7 +112,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                             if (CheckYatzyJoker(lastDiceResult, rule, result, 40)) break;
                             result.PossibleValue = lastDiceResult.YatzyLargeStraightScore();
                             break;
-                        case Scores.Total:
+                        case Scores.Chance:
                             result.PossibleValue = lastDiceResult.YatzyChanceScore();
                             break;
                         case Scores.Kniffel:

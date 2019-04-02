@@ -135,6 +135,20 @@ namespace Sanet.MagicalYatzy.XF.Services
             await FormsNavigation.PopModalAsync();
         }
 
+        public async Task NavigateToRootAsync()
+        {
+            try
+            {
+                await CloseAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            
+            await FormsNavigation.PopToRootAsync();
+        }
+
         public Task ShowViewModelAsync<T>(T viewModel) where T : BaseViewModel
         {
             return OpenViewModelAsync(viewModel, true);
