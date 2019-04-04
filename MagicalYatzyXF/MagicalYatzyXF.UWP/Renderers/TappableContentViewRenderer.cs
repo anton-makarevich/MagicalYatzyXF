@@ -1,5 +1,5 @@
-﻿using Sanet.MagicalYatzy.XF.Controls;
-using Sanet.MagicalYatzy.XF.UWP.Renderers;
+﻿using Sanet.MagicalYatzy.XF.UWP.Renderers;
+using Sanet.MagicalYatzy.XF.Views.Controls;
 using System;
 using Windows.UI.Xaml.Controls;
 using Xamarin.Forms.Platform.UWP;

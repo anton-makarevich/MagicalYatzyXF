@@ -41,11 +41,11 @@ namespace Sanet.MagicalYatzy.ViewModels
             await NavigationService.NavigateToViewModelAsync<GameViewModel>();
         }));
 
-        public string RestartImage => "PlayAgain";
+        public string RestartImage => "PlayAgain.png";
         public ICommand CloseCommand => 
             new SimpleCommand(async () => await NavigationService.NavigateToRootAsync());
 
-        public string CloseImage => "close";
+        public string CloseImage => "close.png";
 
         public override void AttachHandlers()
         {
