@@ -70,7 +70,7 @@ namespace MagicalYatzyTests.ViewModelTests
         [Fact]
         public void RestartImageHasCorrectValue()
         {
-            Assert.Equal("PlayAgain" ,_sut.RestartImage);
+            Assert.Equal("PlayAgain.png" ,_sut.RestartImage);
         }
 
         [Fact]
@@ -84,7 +84,7 @@ namespace MagicalYatzyTests.ViewModelTests
         [Fact]
         public void CloseImageHasCorrectValue()
         {
-            Assert.Equal("close", _sut.CloseImage);
+            Assert.Equal("close.png", _sut.CloseImage);
         }
     }
 }
