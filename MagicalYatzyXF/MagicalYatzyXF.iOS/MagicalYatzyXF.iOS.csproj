@@ -198,34 +198,90 @@
     <ImageAsset Include="Assets.xcassets\BotPlayer.imageset\BotPlayer%403x.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AddPlayer.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\AddPlayer.imageset\AddPlayer%403x.png" />
-    <ImageAsset Include="Assets.xcassets\AddPlayer.imageset\AddPlayer%402x.png" />
-    <ImageAsset Include="Assets.xcassets\AddPlayer.imageset\AddPlayer.png" />
-    <ImageAsset Include="Assets.xcassets\Start.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\Start.imageset\Start.png" />
-    <ImageAsset Include="Assets.xcassets\Start.imageset\Start%402x.png" />
-    <ImageAsset Include="Assets.xcassets\Start.imageset\Start%403x.png" />
-    <ImageAsset Include="Assets.xcassets\MagicRoll.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\MagicRoll.imageset\MagicRoll.png" />
-    <ImageAsset Include="Assets.xcassets\MagicRoll.imageset\MagicRoll%402x.png" />
-    <ImageAsset Include="Assets.xcassets\MagicRoll.imageset\MagicRoll%403x.png" />
-    <ImageAsset Include="Assets.xcassets\Roll.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\Roll.imageset\Roll.png" />
-    <ImageAsset Include="Assets.xcassets\Roll.imageset\Roll%402x.png" />
-    <ImageAsset Include="Assets.xcassets\Roll.imageset\Roll%403x.png" />
-    <ImageAsset Include="Assets.xcassets\ManualSet.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\ManualSet.imageset\ManualSet.png" />
-    <ImageAsset Include="Assets.xcassets\ManualSet.imageset\ManualSet%402x.png" />
-    <ImageAsset Include="Assets.xcassets\ManualSet.imageset\ManualSet%403x.png" />
-    <ImageAsset Include="Assets.xcassets\RollReset.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\RollReset.imageset\ResetRoll.png" />
-    <ImageAsset Include="Assets.xcassets\RollReset.imageset\ResetRoll%402x.png" />
-    <ImageAsset Include="Assets.xcassets\RollReset.imageset\ResetRoll%403x.png" />
-    <ImageAsset Include="Assets.xcassets\PlayAgain.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\PlayAgain.imageset\PlayAgain-1.png" />
-    <ImageAsset Include="Assets.xcassets\PlayAgain.imageset\PlayAgain%402x.png" />
-    <ImageAsset Include="Assets.xcassets\PlayAgain.imageset\PlayAgain%403x.png" />
+    <ImageAsset Include="Assets.xcassets\AddPlayer.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AddPlayer.imageset\AddPlayer%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AddPlayer.imageset\AddPlayer%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AddPlayer.imageset\AddPlayer.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\Start.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\Start.imageset\Start.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\Start.imageset\Start%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\Start.imageset\Start%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\MagicRoll.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\MagicRoll.imageset\MagicRoll.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\MagicRoll.imageset\MagicRoll%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\MagicRoll.imageset\MagicRoll%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\Roll.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\Roll.imageset\Roll.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\Roll.imageset\Roll%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\Roll.imageset\Roll%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ManualSet.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ManualSet.imageset\ManualSet.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ManualSet.imageset\ManualSet%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ManualSet.imageset\ManualSet%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\RollReset.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\RollReset.imageset\ResetRoll.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\RollReset.imageset\ResetRoll%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\RollReset.imageset\ResetRoll%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PlayAgain.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PlayAgain.imageset\PlayAgain-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PlayAgain.imageset\PlayAgain%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PlayAgain.imageset\PlayAgain%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
