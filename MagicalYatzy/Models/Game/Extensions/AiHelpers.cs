@@ -84,8 +84,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             var result = player.GetResultForScore(Scores.Kniffel);
             if (result != null && !result.HasValue && result.PossibleValue == result.MaxValue)
                 return false;
-            //If Scores(7) = -1 And Now(7) > 25 Then Return False
-            //If Scores(8) = -1 And Now(8) > 25 Then Return False
+            
             result = player.GetResultForScore(Scores.FullHouse);
             if (result != null && !result.HasValue && result.PossibleValue == result.MaxValue)
                 return false;

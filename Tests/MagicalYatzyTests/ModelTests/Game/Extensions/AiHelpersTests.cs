@@ -1,7 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.Extensions;
+using Sanet.MagicalYatzy.Utils;
 using Xunit;
 
 namespace MagicalYatzyTests.ModelTests.Game.Extensions
@@ -56,21 +59,59 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
         }
 
         [Fact]
-        public void BotDoesNotNeedToRollAgainIfGotKniffel()
+        public void BotDoesNotNeedToRollAgainIfGotImportantScore()
         {
-            var botPlayer = GetBotPlayerWithMaxResultFor(Scores.Kniffel);
+            var importantScores = new[]
+            {
+                Scores.Kniffel,
+                Scores.LargeStraight,
+                Scores.SmallStraight,
+                Scores.FullHouse
+            };
 
-            Assert.False(botPlayer.AiNeedsToRollAgain());
+            foreach (var score in importantScores)
+            {
+                var botPlayer = GetBotPlayerWithMaxResultFor(score);
+
+                Assert.False(botPlayer.AiNeedsToRollAgain());   
+            }
+        }
+        
+        [Fact]
+        public void BotNeedsToRollAgainIfDidNotGetImportantScore()
+        {
+            var importantScores = new[]
+            {
+                Scores.Kniffel,
+                Scores.LargeStraight,
+                Scores.SmallStraight,
+                Scores.FullHouse
+            };
+
+            var notImportantScores = EnumUtils.GetValues<Scores>()
+                .Where(s => !importantScores.Contains(s)).ToList();
+
+            foreach (var score in notImportantScores)
+            {
+                var botPlayer = GetBotPlayerWithMaxResultFor(score);
+                foreach (var importantScore in importantScores)
+                {
+                    botPlayer.GetResultForScore(importantScore).ReturnsNull();
+                }
+                
+                Assert.True(botPlayer.AiNeedsToRollAgain());   
+            }
         }
 
         private static IPlayer GetBotPlayerWithMaxResultFor(Scores score)
         {
             var botPlayer = Substitute.For<IPlayer>();
             var result = Substitute.For<IRollResult>();
+            var maxValue = new RollResult(score, Rules.krSimple).MaxValue;
             result.ScoreType.Returns(score);
             result.HasValue.Returns(false);
-            result.PossibleValue.Returns(new RollResult(score, Rules.krSimple).MaxValue);
-            botPlayer.Results.Returns(new List<IRollResult>() {result});
+            result.PossibleValue.Returns(maxValue);
+            result.MaxValue.Returns(maxValue);
             return botPlayer;
         }
     }
