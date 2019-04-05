@@ -44,5 +44,61 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
 
             return (0,0);
         }
+
+        public static int MinAllowableValue(this RollResult result)
+        {
+            switch (result.ScoreType)
+            {
+                case Scores.Ones:
+                    return 1;
+                case Scores.Twos:
+                    return 2;
+                case Scores.Threes:
+                    return 3;
+                case Scores.Fours:
+                    return 4;
+                case Scores.Fives:
+                    return 5;
+                case Scores.Sixs:
+                    return 6;
+                case Scores.ThreeOfAKind:
+                    return 22;
+                case Scores.FourOfAKind:
+                    return 17;
+                case Scores.FullHouse:
+                    return 25;
+                case Scores.SmallStraight:
+                    return 30;
+                case Scores.LargeStraight:
+                    return 40;
+                case Scores.Chance:
+                    return 25;
+                case Scores.Kniffel:
+                    return 50;
+            }
+            return 0;
+        }
+        
+        public static bool AiNeedsToRollAgain(this IPlayer player)
+        {
+            var result = player.GetResultForScore(Scores.Kniffel);
+            if (result != null && !result.HasValue && result.PossibleValue == result.MaxValue)
+                return false;
+            //If Scores(7) = -1 And Now(7) > 25 Then Return False
+            //If Scores(8) = -1 And Now(8) > 25 Then Return False
+            result = player.GetResultForScore(Scores.FullHouse);
+            if (result != null && !result.HasValue && result.PossibleValue == result.MaxValue)
+                return false;
+
+            result = player.GetResultForScore(Scores.LargeStraight);
+            if (result != null && !result.HasValue)
+            {
+                if (result.PossibleValue == result.MaxValue)
+                    return false;
+            }
+            
+            result = player.GetResultForScore(Scores.SmallStraight);
+            return result == null || result.HasValue || result.PossibleValue != result.MaxValue;
+        }
     }
 }

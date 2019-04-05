@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using NSubstitute;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.Extensions;
 using Xunit;
@@ -40,6 +41,37 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
             (firstValue, numberOfValuesInRow) = sut.XInRow();
             Assert.Equal(2,firstValue);
             Assert.Equal(5,numberOfValuesInRow);
+        }
+
+        [Fact]
+        public void MinAllowedValueIsMoreThanZeroForEveryScoreExceptBonus()
+        {
+            var rule = new Rule(Rules.krSimple);
+            foreach (var score in rule.ScoresForRule)
+            {
+                var result = new RollResult(score, rule.CurrentRule);
+                
+                Assert.True(result.MinAllowableValue()>0);
+            }
+        }
+
+        [Fact]
+        public void BotDoesNotNeedToRollAgainIfGotKniffel()
+        {
+            var botPlayer = GetBotPlayerWithMaxResultFor(Scores.Kniffel);
+
+            Assert.False(botPlayer.AiNeedsToRollAgain());
+        }
+
+        private static IPlayer GetBotPlayerWithMaxResultFor(Scores score)
+        {
+            var botPlayer = Substitute.For<IPlayer>();
+            var result = Substitute.For<IRollResult>();
+            result.ScoreType.Returns(score);
+            result.HasValue.Returns(false);
+            result.PossibleValue.Returns(new RollResult(score, Rules.krSimple).MaxValue);
+            botPlayer.Results.Returns(new List<IRollResult>() {result});
+            return botPlayer;
         }
     }
 }
