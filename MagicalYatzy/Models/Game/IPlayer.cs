@@ -56,5 +56,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         void CheckRollResults(DieResult lastDiceResult, Rule rule);
         void UseArtifact(Artifacts artifact);
+
+        bool IsScoreFilled(Scores score);
     }
 }

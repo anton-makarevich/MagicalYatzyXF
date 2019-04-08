@@ -103,6 +103,58 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
             }
         }
 
+        [Fact]
+        public void WhenBotPlayerGetsThreeDiceOfValueFiveHeFixesThem()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){5,5,5,2,3}};
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = GetBotPlayerWithResultForScore(Scores.Fives, 15);
+            
+            botPlayer.AiFixDice(game);
+            
+            game.Received().FixAllDice(5,true);
+        }
+        
+        [Fact]
+        public void WhenBotPlayerGetsThreeDiceOfValueSixHeFixesThem()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){6,6,6,2,3}};
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = GetBotPlayerWithResultForScore(Scores.Sixs, 18);
+            
+            botPlayer.AiFixDice(game);
+            
+            game.Received().FixAllDice(6,true);
+        }
+        
+        [Fact]
+        public void WhenBotPlayerGetsThreeDiceInRowAndNeedsLargeStraightHeFixesThem()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){1,6,6,2,3}};
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = GetBotPlayerWithResultForScore(Scores.LargeStraight, 0);
+            
+            botPlayer.AiFixDice(game);
+            
+            game.Received().FixDice(1,true);
+            game.Received().FixDice(2,true);
+            game.Received().FixDice(3,true);
+        }
+
+        private IPlayer GetBotPlayerWithResultForScore(Scores score, int value)
+        {
+            var botPlayer = Substitute.For<IPlayer>();
+            var result = Substitute.For<IRollResult>();
+            result.ScoreType.Returns(score);
+            result.HasValue.Returns(false);
+            result.PossibleValue.Returns(value);
+            botPlayer.GetResultForScore(score).Returns(result);
+            return botPlayer;
+        }
+
         private static IPlayer GetBotPlayerWithMaxResultFor(Scores score)
         {
             var botPlayer = Substitute.For<IPlayer>();

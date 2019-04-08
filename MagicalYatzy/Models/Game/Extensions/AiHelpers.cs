@@ -99,5 +99,105 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             result = player.GetResultForScore(Scores.SmallStraight);
             return result == null || result.HasValue || result.PossibleValue != result.MaxValue;
         }
+        
+        
+        public static void AiFixDice(this IPlayer player, IGame game)
+        {
+            int[] n = new int[7];
+            
+            // the amount of dice with every value 
+            for (int i = 1; i <= 6; i++)
+            {
+                n[i] = game.LastDiceResult.YatzyNumberScore(i) / i;
+            }
+            
+            IRollResult result;
+            // check for 3 fives or sixs
+            for (int i = 6; i >= 5; i += -1)
+            {
+                result = player.GetResultForScore((Scores)i);
+                if (result != null && !result.HasValue && n[i] > 2)
+                {
+                    game.FixAllDice(i, true);
+                    return;
+                }
+            }
+
+            // check if we need in row values (no large straight) 
+            result = player.GetResultForScore(Scores.LargeStraight);
+            if (result != null && !result.HasValue)
+            {
+                var inRowValues = game.LastDiceResult.XInRow();
+                int count= inRowValues.numberOfValuesInRow; //count of dices in row (3 || 4)
+                int first = inRowValues.firstValue; //first dice in row
+                if (first > 0)
+                {
+                    for (int i = first; i < first + count; i++)
+                    {
+                        if (!game.IsDiceFixed(i))
+                            game.FixDice(i, true);
+                    }
+                    return;
+                }
+            }
+            
+
+            // check for full house
+            result = player.GetResultForScore(Scores.FullHouse);
+            if (result != null && !result.HasValue)
+            {
+                if (game.LastDiceResult.NumPairs()==2)
+                {
+                    for (int j = 1; j <= 6; j++)
+                    {
+                        if (n[j] > 1)
+                            game.FixAllDice(j, true);
+                    }
+                    return;
+                }
+            }
+
+            for (int j = 5; j >= 1; j += -1)
+            {
+
+                for (int i = 6; i >= 1; i += -1)
+                {
+                    //not clear what does this condition do
+                    //if more then 2 same or numerics then fix (why?) 
+                    if (j > 2 | player.AllNumericFilled)
+                    {
+                        if (!player.IsScoreFilled(Scores.Kniffel) |
+                            !player.IsScoreFilled(Scores.ThreeOfAKind) |
+                            !player.IsScoreFilled(Scores.FourOfAKind) |
+                            !player.IsScoreFilled((Scores)i))
+                        {
+                            if (n[i] == j)
+                            {
+                                game.FixAllDice(i,true);
+                                return;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (!player.IsScoreFilled((Scores)i))
+                        {
+                            if (n[i] == j)
+                            {
+                                game.FixAllDice(i, true);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            if (!player.IsScoreFilled(Scores.Chance))
+            {
+                for (int i = 6; i >= 4; i += -1)
+                {
+                    game.FixAllDice(i, true);
+                }
+            }
+        }
     }
 }
