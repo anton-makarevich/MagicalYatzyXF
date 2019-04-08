@@ -100,7 +100,6 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             return result == null || result.HasValue || result.PossibleValue != result.MaxValue;
         }
         
-        
         public static void AiFixDice(this IPlayer player, IGame game)
         {
             int[] n = new int[7];
@@ -141,7 +140,6 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
                 }
             }
             
-
             // check for full house
             result = player.GetResultForScore(Scores.FullHouse);
             if (result != null && !result.HasValue)
@@ -159,7 +157,6 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
 
             for (int j = 5; j >= 1; j += -1)
             {
-
                 for (int i = 6; i >= 1; i += -1)
                 {
                     //not clear what does this condition do
