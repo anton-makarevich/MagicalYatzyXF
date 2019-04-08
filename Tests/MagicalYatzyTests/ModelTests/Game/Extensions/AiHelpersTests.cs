@@ -163,55 +163,55 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
         public void IfBotGotTwoSameDiceAndDoesNotHaveKniffelThenHeFixesThem()
         {
             var game = Substitute.For<IGame>();
-            var diceResult = new DieResult() { DiceResults = new List<int>(){4,4,1,2,4}};
+            var diceResult = new DieResult() { DiceResults = new List<int>(){3,4,1,3,3}};
             game.LastDiceResult.Returns(diceResult);
             var botPlayer = GetBotPlayerWithResultForScore(Scores.Kniffel, 0);
             SetValueForScore(botPlayer, Scores.LargeStraight);
-            SetValueForScore(botPlayer, Scores.Fours);
+            SetValueForScore(botPlayer, Scores.Threes);
 
             botPlayer.AiFixDice(game);
             
-            game.Received().FixAllDice(4,true);
+            game.Received().FixAllDice(3,true);
         }
         
         [Fact]
         public void IfBotGotTwoSameDiceAndDoesNotHaveThreeOfKindThenHeFixesThem()
         {
             var game = Substitute.For<IGame>();
-            var diceResult = new DieResult() { DiceResults = new List<int>(){4,4,1,2,4}};
+            var diceResult = new DieResult() { DiceResults = new List<int>(){3,4,1,3,3}};
             game.LastDiceResult.Returns(diceResult);
             var botPlayer = GetBotPlayerWithResultForScore(Scores.Kniffel, 0);
             SetValueForScore(botPlayer, Scores.LargeStraight);
             SetValueForScore(botPlayer, Scores.Kniffel);
-            SetValueForScore(botPlayer, Scores.Fours);
+            SetValueForScore(botPlayer, Scores.Threes);
 
             botPlayer.AiFixDice(game);
             
-            game.Received().FixAllDice(4,true);
+            game.Received().FixAllDice(3,true);
         }
         
         [Fact]
         public void IfBotGotTwoSameDiceAndDoesNotHaveFourOfKindThenHeFixesThem()
         {
             var game = Substitute.For<IGame>();
-            var diceResult = new DieResult() { DiceResults = new List<int>(){4,4,1,2,4}};
+            var diceResult = new DieResult() { DiceResults = new List<int>(){3,4,1,3,3}};
             game.LastDiceResult.Returns(diceResult);
             var botPlayer = GetBotPlayerWithResultForScore(Scores.Kniffel, 0);
             SetValueForScore(botPlayer, Scores.LargeStraight);
             SetValueForScore(botPlayer, Scores.Kniffel);
             SetValueForScore(botPlayer, Scores.ThreeOfAKind);
-            SetValueForScore(botPlayer, Scores.Fours);
+            SetValueForScore(botPlayer, Scores.Threes);
 
             botPlayer.AiFixDice(game);
             
-            game.Received().FixAllDice(4,true);
+            game.Received().FixAllDice(3,true);
         }
         
         [Fact]
         public void IfBotGotTwoSameDiceAndNeedsCorrespondingNumericThenHeFixesThem()
         {
             var game = Substitute.For<IGame>();
-            var diceResult = new DieResult() { DiceResults = new List<int>(){4,4,1,2,4}};
+            var diceResult = new DieResult() { DiceResults = new List<int>(){3,4,1,3,3}};
             game.LastDiceResult.Returns(diceResult);
             var botPlayer = GetBotPlayerWithResultForScore(Scores.Kniffel, 0);
             SetValueForScore(botPlayer, Scores.LargeStraight);
@@ -221,7 +221,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
             
             botPlayer.AiFixDice(game);
             
-            game.Received().FixAllDice(4,true);
+            game.Received().FixAllDice(3,true);
         }
         
         [Fact]
