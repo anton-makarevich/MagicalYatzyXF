@@ -244,7 +244,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
         }
         
         [Fact]
-        public void IfBotGotDoesNotHabeChanceButHasEverythingElseHeFixesTheHighestValue()
+        public void IfBotGotDoesNotHaveChanceButHasEverythingElseHeFixesTheValuesHigherThanFour()
         {
             var game = Substitute.For<IGame>();
             var diceResult = new DieResult() { DiceResults = new List<int>(){4,5,1,2,2}};
@@ -264,6 +264,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
             botPlayer.AiFixDice(game);
             
             game.Received().FixAllDice(5,true);
+            game.Received().FixAllDice(4,true);
         }
 
         private IPlayer GetBotPlayerWithResultForScore(Scores score, int value)
