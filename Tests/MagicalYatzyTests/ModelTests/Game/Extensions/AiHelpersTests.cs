@@ -272,29 +272,162 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
             game.Received().FixAllDice(4,true);
         }
         #endregion
+        
+        #region FillLogic
 
-        #region Private methods
+        [Fact]
+        public void WhenBotGetsKniffelItFillsItRightAway()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){5,5,5,5,5}};
+            const Scores score = Scores.Kniffel;
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = Substitute.For<IPlayer>();
+            var result = GetResultWithMaxValueForScore(score);
+            botPlayer.GetResultForScore(score).Returns(result);
+            
+            botPlayer.AiDecideFill(game);
+            
+            game.Received().ApplyScore(result);
+        }
+        
+        [Fact]
+        public void WhenBotGetsFullHouseItFillsItRightAway()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){5,5,5,2,2}};
+            const Scores score = Scores.FullHouse;
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = Substitute.For<IPlayer>();
+            var result = GetResultWithMaxValueForScore(score);
+            botPlayer.GetResultForScore(score).Returns(result);
+            
+            botPlayer.AiDecideFill(game);
+            
+            game.Received().ApplyScore(result);
+        }
+        
+        [Fact]
+        public void WhenBotGetsAtLeastFourSixsItFillsThemOnLastRoll()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){6,6,6,6,2}};
+            const Scores score = Scores.Sixs;
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = Substitute.For<IPlayer>();
+            botPlayer.Roll.Returns(3);
+            var result = GetRollResultForScoreWithValue(score, 24);
+            botPlayer.GetResultForScore(score).Returns(result);
+            
+            botPlayer.AiDecideFill(game);
+            
+            game.Received().ApplyScore(result);
+        }
+        
+        [Fact]
+        public void WhenBotGetsAtLeastFourSixsItDoesNotFillThemUntilLastRoll()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){6,6,6,6,2}};
+            const Scores score = Scores.Sixs;
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = Substitute.For<IPlayer>();
+            botPlayer.Roll.Returns(2);
+            var result = GetRollResultForScoreWithValue(score, 24);
+            botPlayer.GetResultForScore(score).Returns(result);
+            
+            botPlayer.AiDecideFill(game);
+            
+            game.DidNotReceive().ApplyScore(result);
+        }
+        
+        [Fact]
+        public void WhenBotGetsLargeStraightItFillsItRightAway()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){2,3,4,5,6}};
+            const Scores score = Scores.LargeStraight;
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = Substitute.For<IPlayer>();
+            var result = GetResultWithMaxValueForScore(score);
+            botPlayer.GetResultForScore(score).Returns(result);
+            
+            botPlayer.AiDecideFill(game);
+            
+            game.Received().ApplyScore(result);
+        }
+        
+        [Fact]
+        public void WhenBotGetsSmallStraightItFillsItOnLastRoll()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){1,3,4,5,6}};
+            const Scores score = Scores.SmallStraight;
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = Substitute.For<IPlayer>();
+            botPlayer.Roll.Returns(3);
+            var result = GetResultWithMaxValueForScore(score);
+            botPlayer.GetResultForScore(score).Returns(result);
+            
+            botPlayer.AiDecideFill(game);
+            
+            game.Received().ApplyScore(result);
+        }
+        
+        [Fact]
+        public void WhenBotGetsSmallStraightItDoesNotFillItUntilLastRoll()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){1,3,4,5,6}};
+            const Scores score = Scores.SmallStraight;
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = Substitute.For<IPlayer>();
+            botPlayer.Roll.Returns(2);
+            var result = GetResultWithMaxValueForScore(score);
+            botPlayer.GetResultForScore(score).Returns(result);
+            
+            botPlayer.AiDecideFill(game);
+            
+            game.DidNotReceive().ApplyScore(result);
+        }
+        
+        #endregion
+
+        #region PrivateMethods
         private IPlayer GetBotPlayerWithResultForScore(Scores score, int value)
         {
             var botPlayer = Substitute.For<IPlayer>();
+            var result = GetRollResultForScoreWithValue(score, value);
+            botPlayer.GetResultForScore(score).Returns(result);
+            return botPlayer;
+        }
+        
+        private IRollResult GetRollResultForScoreWithValue(Scores score, int value)
+        {
             var result = Substitute.For<IRollResult>();
             result.ScoreType.Returns(score);
             result.HasValue.Returns(false);
             result.PossibleValue.Returns(value);
-            botPlayer.GetResultForScore(score).Returns(result);
-            return botPlayer;
+            return result;
         }
 
         private static IPlayer GetBotPlayerWithMaxResultFor(Scores score)
         {
             var botPlayer = Substitute.For<IPlayer>();
+            var result = GetResultWithMaxValueForScore(score);
+            botPlayer.GetResultForScore(score).Returns(result);
+            return botPlayer;
+        }
+
+        private static IRollResult GetResultWithMaxValueForScore(Scores score)
+        {
             var result = Substitute.For<IRollResult>();
             var maxValue = new RollResult(score, Rules.krSimple).MaxValue;
             result.ScoreType.Returns(score);
             result.HasValue.Returns(false);
             result.PossibleValue.Returns(maxValue);
             result.MaxValue.Returns(maxValue);
-            return botPlayer;
+            return result;
         }
 
         private void SetValueForScore(IPlayer player, Scores score)

@@ -182,9 +182,9 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             }
         }
         
-        public static void AiDecideFill(this Player player, IGame game)
+        public static void AiDecideFill(this IPlayer player, IGame game)
         {
-            //this has been converted from my old vb kniffel game
+            //this has been converted from my old kniffel game
 
             int[] n = new int[7];
 
@@ -196,7 +196,10 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             
             // check for kniffel
             var result=player.GetResultForScore(Scores.Kniffel);
-            if (result!=null && !result.HasValue && result.PossibleValue == result.MaxValue)
+            if (result!=null 
+                && !result.HasValue 
+                && result.PossibleValue == result.MaxValue 
+                && result.PossibleValue > 0)
             {
                 game.ApplyScore(result);
                 return;
@@ -204,7 +207,10 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
 
             // check full house
             result = player.GetResultForScore(Scores.FullHouse);
-            if (result != null && !result.HasValue && result.PossibleValue == result.MaxValue)
+            if (result != null 
+                && !result.HasValue 
+                && result.PossibleValue == result.MaxValue
+                && result.PossibleValue > 0)
             {
                 game.ApplyScore(result);
                 return;
@@ -212,7 +218,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             
             // sixs if at least 4 of them and no value 
             result = player.GetResultForScore(Scores.Sixs);
-            if (result != null && !result.HasValue && n[6] == 4)
+            if (result != null && !result.HasValue && n[6] == 4 && player.Roll == 3)
             {
                 game.ApplyScore(result);
                 return;
@@ -220,7 +226,10 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
 
             // check for LS
             result = player.GetResultForScore(Scores.LargeStraight);
-            if (result != null && !result.HasValue && result.PossibleValue >= result.MinAllowableValue())
+            if (result != null 
+                && !result.HasValue 
+                && result.PossibleValue >= result.MinAllowableValue()
+                && result.PossibleValue > 0)
             {
                 game.ApplyScore(result);
                 return;
