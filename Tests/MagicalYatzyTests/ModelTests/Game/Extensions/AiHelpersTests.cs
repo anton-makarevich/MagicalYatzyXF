@@ -11,6 +11,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
 {
     public class AiHelpersTests
     {
+        #region ResultHelpers
         [Fact]
         public void NumPairsReturnsCorrectAmountOfPairs()
         {
@@ -57,7 +58,9 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
                 Assert.True(result.MinAllowableValue()>0);
             }
         }
+        #endregion
 
+        #region RollAgain
         [Fact]
         public void BotDoesNotNeedToRollAgainIfGotImportantScore()
         {
@@ -102,7 +105,9 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
                 Assert.True(botPlayer.AiNeedsToRollAgain());   
             }
         }
-
+        #endregion
+        
+        #region FixDiceLogic
         [Fact]
         public void WhenBotPlayerGotThreeDiceOfValueFiveHeFixesThem()
         {
@@ -266,7 +271,9 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
             game.Received().FixAllDice(5,true);
             game.Received().FixAllDice(4,true);
         }
+        #endregion
 
+        #region Private methods
         private IPlayer GetBotPlayerWithResultForScore(Scores score, int value)
         {
             var botPlayer = Substitute.For<IPlayer>();
@@ -301,5 +308,6 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
             player.GetResultForScore(score).Returns(result);
             player.IsScoreFilled(score).Returns(true);
         }
+        #endregion
     }
 }
