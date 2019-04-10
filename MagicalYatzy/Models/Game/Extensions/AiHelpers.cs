@@ -25,8 +25,8 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
 
             return numberOfPairs;
         }
-        
-        public static (int firstValue,int numberOfValuesInRow) XInRow(this DieResult result)
+
+        public static (int firstValue, int numberOfValuesInRow) XInRow(this DieResult result)
         {
             var occurrences = new int[7];
             var count = 3;
@@ -34,18 +34,19 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             {
                 occurrences[res] += 1;
             }
-            for (var i = 1; i<5; i++)
-                if (occurrences[i] >= 1 & occurrences[i+1] >= 1 & occurrences[i+2] >= 1)
+
+            for (var i = 1; i < 5; i++)
+                if (occurrences[i] >= 1 & occurrences[i + 1] >= 1 & occurrences[i + 2] >= 1)
                 {
                     if (i >= 4 || occurrences[i + 3] < 1) return (i, count);
                     count = 4;
                     if (i < 3 && occurrences[i + 4] >= 1)
                         count = 5;
 
-                    return (i,count);
+                    return (i, count);
                 }
 
-            return (0,0);
+            return (0, 0);
         }
 
         public static int MinAllowableValue(this IRollResult result)
@@ -79,15 +80,16 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
                 case Scores.Kniffel:
                     return 50;
             }
+
             return 0;
         }
-        
+
         public static bool AiNeedsToRollAgain(this IPlayer player)
         {
             var result = player.GetResultForScore(Scores.Kniffel);
             if (result != null && !result.HasValue && result.PossibleValue == result.MaxValue)
                 return false;
-            
+
             result = player.GetResultForScore(Scores.FullHouse);
             if (result != null && !result.HasValue && result.PossibleValue == result.MaxValue)
                 return false;
@@ -98,27 +100,27 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
                 if (result.PossibleValue == result.MaxValue)
                     return false;
             }
-            
+
             result = player.GetResultForScore(Scores.SmallStraight);
             return result == null || result.HasValue || result.PossibleValue != result.MaxValue;
         }
-        
+
         public static void AiFixDice(this IPlayer player, IGame game)
         {
             var amountOfDiceForValue = new List<(int diceValue, int amountOfDice)>();
-            
+
             // the amount of dice with every value 
             for (var diceValue = 1; diceValue <= 6; diceValue++)
             {
-                amountOfDiceForValue.Add((diceValue,game.LastDiceResult.YatzyNumberScore(diceValue) / diceValue));
+                amountOfDiceForValue.Add((diceValue, game.LastDiceResult.YatzyNumberScore(diceValue) / diceValue));
             }
-            
+
             IRollResult result;
             // check for 3 fives or sixs
             var diceToCheck = amountOfDiceForValue.Where(f => f.diceValue > 4 && f.amountOfDice > 2).ToList();
             foreach (var (diceValue, _) in diceToCheck)
-            {   
-                result = player.GetResultForScore((Scores)diceValue);
+            {
+                result = player.GetResultForScore((Scores) diceValue);
                 if (result == null || result.HasValue) continue;
                 game.FixAllDice(diceValue, true);
                 return;
@@ -136,10 +138,11 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
                         if (!game.IsDiceFixed(diceValue))
                             game.FixDice(diceValue, true);
                     }
+
                     return;
                 }
             }
-            
+
             // check for full house
             diceToCheck = amountOfDiceForValue.Where(f => f.amountOfDice > 1).ToList();
             var valueTuples = diceToCheck.ToList();
@@ -158,13 +161,13 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             }
 
             // fix same if needs kniffel of a kind numerics or chance
-            foreach (var (diceValue, diceAmount) in amountOfDiceForValue.OrderByDescending(f=>f.amountOfDice))
+            foreach (var (diceValue, diceAmount) in amountOfDiceForValue.OrderByDescending(f => f.amountOfDice))
             {
                 if (diceAmount > 2 | player.AllNumericFilled)
                 {
-                    if (player.IsScoreFilled(Scores.Kniffel) 
-                        && player.IsScoreFilled(Scores.ThreeOfAKind) 
-                        && player.IsScoreFilled(Scores.FourOfAKind) 
+                    if (player.IsScoreFilled(Scores.Kniffel)
+                        && player.IsScoreFilled(Scores.ThreeOfAKind)
+                        && player.IsScoreFilled(Scores.FourOfAKind)
                         && player.IsScoreFilled((Scores) diceValue)) continue;
                     game.FixAllDice(diceValue, true);
                     return;
@@ -181,24 +184,22 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
                 game.FixAllDice(i, true);
             }
         }
-        
+
         public static void AiDecideFill(this IPlayer player, IGame game)
         {
-            //this has been converted from my old kniffel game
+            var amountOfDiceForValue = new List<(int diceValue, int amountOfDice)>();
 
-            var diceAmountOfValue = new int[7];
-
-            // how many dice of every value
+            // the amount of dice with every value 
             for (var diceValue = 1; diceValue <= 6; diceValue++)
             {
-                diceAmountOfValue[diceValue] = game.LastDiceResult.YatzyNumberScore(diceValue) / diceValue;
+                amountOfDiceForValue.Add((diceValue, game.LastDiceResult.YatzyNumberScore(diceValue) / diceValue));
             }
-            
+
             // check for kniffel
-            var result=player.GetResultForScore(Scores.Kniffel);
-            if (result!=null 
-                && !result.HasValue 
-                && result.PossibleValue == result.MaxValue 
+            var result = player.GetResultForScore(Scores.Kniffel);
+            if (result != null
+                && !result.HasValue
+                && result.PossibleValue == result.MaxValue
                 && result.PossibleValue > 0)
             {
                 game.ApplyScore(result);
@@ -207,27 +208,30 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
 
             // check full house
             result = player.GetResultForScore(Scores.FullHouse);
-            if (result != null 
-                && !result.HasValue 
+            if (result != null
+                && !result.HasValue
                 && result.PossibleValue == result.MaxValue
                 && result.PossibleValue > 0)
             {
                 game.ApplyScore(result);
                 return;
             }
-            
+
             // sixs if at least 4 of them and no value 
-            result = player.GetResultForScore(Scores.Sixs);
-            if (result != null && !result.HasValue && diceAmountOfValue[6] == 4 && player.Roll == 3)
+            if (amountOfDiceForValue.First(f => f.diceValue == 6).amountOfDice > 3)
             {
-                game.ApplyScore(result);
-                return;
+                result = player.GetResultForScore(Scores.Sixs);
+                if (result != null && !result.HasValue && player.Roll == 3)
+                {
+                    game.ApplyScore(result);
+                    return;
+                }
             }
 
             // check for LS
             result = player.GetResultForScore(Scores.LargeStraight);
-            if (result != null 
-                && !result.HasValue 
+            if (result != null
+                && !result.HasValue
                 && result.PossibleValue >= result.MinAllowableValue()
                 && result.PossibleValue > 0)
             {
@@ -238,41 +242,42 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             //checking  SS and FH
             for (var scoreIndex = 10; scoreIndex >= 9; scoreIndex += -1)
             {
-                result = player.GetResultForScore((Scores)scoreIndex);
+                result = player.GetResultForScore((Scores) scoreIndex);
                 if (result == null || result.HasValue || result.PossibleValue < result.MinAllowableValue() ||
                     result.PossibleValue <= 0 || scoreIndex - player.Roll >= 8) continue;
                 game.ApplyScore(result);
                 return;
             }
-            
+
             // 4 and 3 in a row
             for (var scoreIndex = 8; scoreIndex >= 7; scoreIndex += -1)
             {
-                result = player.GetResultForScore((Scores)scoreIndex);
+                result = player.GetResultForScore((Scores) scoreIndex);
                 if (result == null || result.HasValue || player.Roll != 3 ||
                     result.PossibleValue < result.MinAllowableValue() - (game.Round - 1) / 2 ||
                     result.PossibleValue <= 0) continue;
                 game.ApplyScore(result);
                 return;
             }
-            
+
             // numerics 
-            for (var diceAmount = 5; diceAmount >= 1; diceAmount += -1)
+            foreach (var (diceValue, _) in amountOfDiceForValue
+                .Where(f=>f.diceValue>0)
+                .OrderByDescending(f => f.amountOfDice))
             {
-                //Step -1
-                for (var scoreIndex = 1; scoreIndex <= 6; scoreIndex++)
-                {
-                    result = player.GetResultForScore((Scores)scoreIndex);
-                    if (result == null || result.HasValue || player.Roll != 3 || diceAmountOfValue[scoreIndex] < diceAmount) continue;
-                    game.ApplyScore(result);
-                    return;
-                }
+                result = player.GetResultForScore((Scores) diceValue);
+                if (result == null 
+                    || result.HasValue 
+                    || result.PossibleValue == 0
+                    || player.Roll != 3) continue;
+                game.ApplyScore(result);
+                return;
             }
-            
+
             // chance
             result = player.GetResultForScore(Scores.Chance);
-            if (result != null 
-                && !result.HasValue 
+            if (result != null
+                && !result.HasValue
                 && result.PossibleValue > 0
                 && player.Roll == 3
                 && result.PossibleValue >= result.MinAllowableValue() - (game.Round - 1) / 2)
@@ -280,20 +285,20 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
                 game.ApplyScore(result);
                 return;
             }
-            
+
             //once again 4 and 3 in row
             for (var scoreIndex = 8; scoreIndex >= 7; scoreIndex += -1)
             {
-                result = player.GetResultForScore((Scores)scoreIndex);
+                result = player.GetResultForScore((Scores) scoreIndex);
                 if (result == null || result.HasValue || result.PossibleValue <= 0 || player.Roll != 3) continue;
                 game.ApplyScore(result);
                 return;
             }
-            
+
             //if not filled - filling at least anything including 0
             for (var scoreIndex = 1; scoreIndex <= 13; scoreIndex++)
             {
-                result = player.GetResultForScore((Scores)scoreIndex);
+                result = player.GetResultForScore((Scores) scoreIndex);
                 if (result == null || result.HasValue) continue;
                 game.ApplyScore(result);
                 return;

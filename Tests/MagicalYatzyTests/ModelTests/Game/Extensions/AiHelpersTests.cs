@@ -419,6 +419,8 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
             botPlayer.Roll.Returns(3);
             var result = GetRollResultForScoreWithValue(score, diceResult.Total);
             botPlayer.GetResultForScore(score).Returns(result);
+            var resultsForOnes = GetRollResultForScoreWithValue(Scores.Ones, 4);
+            botPlayer.GetResultForScore(score).Returns(resultsForOnes);
 
             botPlayer.AiDecideFill(game);
             
@@ -470,6 +472,8 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
             botPlayer.Roll.Returns(3);
             var result = GetRollResultForScoreWithValue(score, diceResult.Total);
             botPlayer.GetResultForScore(score).Returns(result);
+            var resultsForOnes = GetRollResultForScoreWithValue(Scores.Ones, 4);
+            botPlayer.GetResultForScore(score).Returns(resultsForOnes);
 
             botPlayer.AiDecideFill(game);
             
@@ -615,7 +619,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
             const Scores score = Scores.ThreeOfAKind;
             game.LastDiceResult.Returns(diceResult);
             var botPlayer = Substitute.For<IPlayer>();
-            botPlayer.Roll.Returns(3);
+            botPlayer.Roll.Returns(2);
             var result = GetRollResultForScoreWithValue(score, diceResult.Total);
             botPlayer.GetResultForScore(score).Returns(result);
             SetValueForScore(botPlayer, Scores.Ones);
@@ -623,7 +627,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
 
             botPlayer.AiDecideFill(game);
             
-            game.Received().ApplyScore(result);
+            game.DidNotReceive().ApplyScore(result);
         }
         
         [Fact]
