@@ -391,6 +391,57 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
             game.DidNotReceive().ApplyScore(result);
         }
         
+        [Fact]
+        public void WhenBotGetsThreeOfKindWithReasonableValueItFillsItOnLastRoll()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){4,4,4,5,6}};
+            const Scores score = Scores.ThreeOfAKind;
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = Substitute.For<IPlayer>();
+            botPlayer.Roll.Returns(3);
+            var result = GetRollResultForScoreWithValue(score, diceResult.Total);
+            botPlayer.GetResultForScore(score).Returns(result);
+
+            botPlayer.AiDecideFill(game);
+            
+            game.Received().ApplyScore(result);
+        }
+        
+        [Fact]
+        public void WhenBotGetsThreeOfKindItDoesNotFillItOnLastRollIfValueIsLow()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){1,1,1,2,3}};
+            const Scores score = Scores.ThreeOfAKind;
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = Substitute.For<IPlayer>();
+            botPlayer.Roll.Returns(3);
+            var result = GetRollResultForScoreWithValue(score, diceResult.Total);
+            botPlayer.GetResultForScore(score).Returns(result);
+
+            botPlayer.AiDecideFill(game);
+            
+            game.DidNotReceive().ApplyScore(result);
+        }
+        
+        [Fact]
+        public void WhenBotGetsThreeOfKindWithReasonableValueItDoesNotFillItUntilLastRoll()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){4,4,4,5,6}};
+            const Scores score = Scores.ThreeOfAKind;
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = Substitute.For<IPlayer>();
+            botPlayer.Roll.Returns(2);
+            var result = GetRollResultForScoreWithValue(score, diceResult.Total);
+            botPlayer.GetResultForScore(score).Returns(result);
+
+            botPlayer.AiDecideFill(game);
+            
+            game.DidNotReceive().ApplyScore(result);
+        }
+        
         #endregion
 
         #region PrivateMethods

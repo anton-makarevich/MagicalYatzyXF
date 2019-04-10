@@ -239,7 +239,11 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             for (int i = 10; i >= 9; i += -1)
             {
                 result = player.GetResultForScore((Scores)i);
-                if (result != null && !result.HasValue && result.PossibleValue >= result.MinAllowableValue() && i-player.Roll<8) //last condition - fill SS only on third roll, and FH - not on first
+                if (result != null 
+                    && !result.HasValue 
+                    && result.PossibleValue >= result.MinAllowableValue() 
+                    && result.PossibleValue > 0
+                    && i-player.Roll < 8 ) //last condition - fill SS only on third roll, and FH - not on first
                 {
                     game.ApplyScore(result);
                     return;
@@ -250,7 +254,11 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             for (int i = 8; i >= 7; i += -1)
             {
                 result = player.GetResultForScore((Scores)i);
-                if (result != null && !result.HasValue && result.PossibleValue >= result.MinAllowableValue() - (game.Round - 1) / 2)
+                if (result != null 
+                    && !result.HasValue 
+                    && player.Roll == 3
+                    && result.PossibleValue >= result.MinAllowableValue() - (game.Round - 1) / 2
+                    && result.PossibleValue > 0)
                 {
                     game.ApplyScore(result);
                     return;
@@ -264,7 +272,10 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
                 for (int i = 1; i <= 6; i++)
                 {
                     result = player.GetResultForScore((Scores)i);
-                    if (result != null && !result.HasValue && n[i] >= j)
+                    if (result != null 
+                        && !result.HasValue 
+                        && player.Roll == 3
+                        && n[i] >= j)
                     {
                         game.ApplyScore(result);
                         return;
