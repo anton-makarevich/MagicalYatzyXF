@@ -442,6 +442,211 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
             game.DidNotReceive().ApplyScore(result);
         }
         
+        [Fact]
+        public void WhenBotGetsFourOfKindWithReasonableValueItFillsItOnLastRoll()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){4,4,4,4,6}};
+            const Scores score = Scores.FourOfAKind;
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = Substitute.For<IPlayer>();
+            botPlayer.Roll.Returns(3);
+            var result = GetRollResultForScoreWithValue(score, diceResult.Total);
+            botPlayer.GetResultForScore(score).Returns(result);
+
+            botPlayer.AiDecideFill(game);
+            
+            game.Received().ApplyScore(result);
+        }
+        
+        [Fact]
+        public void WhenBotGetsFourOfKindItDoesNotFillItOnLastRollIfValueIsLow()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){1,1,1,1,3}};
+            const Scores score = Scores.FourOfAKind;
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = Substitute.For<IPlayer>();
+            botPlayer.Roll.Returns(3);
+            var result = GetRollResultForScoreWithValue(score, diceResult.Total);
+            botPlayer.GetResultForScore(score).Returns(result);
+
+            botPlayer.AiDecideFill(game);
+            
+            game.DidNotReceive().ApplyScore(result);
+        }
+        
+        [Fact]
+        public void WhenBotGetsFourOfKindWithReasonableValueItDoesNotFillItUntilLastRoll()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){4,4,4,4,6}};
+            const Scores score = Scores.FourOfAKind;
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = Substitute.For<IPlayer>();
+            botPlayer.Roll.Returns(2);
+            var result = GetRollResultForScoreWithValue(score, diceResult.Total);
+            botPlayer.GetResultForScore(score).Returns(result);
+
+            botPlayer.AiDecideFill(game);
+            
+            game.DidNotReceive().ApplyScore(result);
+        }
+        
+        [Fact]
+        public void BotFillsTheNumericValueWithTheHighestNumberOfSameDiceOnLastRoll()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){2,2,4,1,6}};
+            const Scores score = Scores.Twos;
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = Substitute.For<IPlayer>();
+            botPlayer.Roll.Returns(3);
+            var result = GetRollResultForScoreWithValue(score, 4);
+            botPlayer.GetResultForScore(score).Returns(result);
+
+            botPlayer.AiDecideFill(game);
+            
+            game.Received().ApplyScore(result);
+        }
+        
+        [Fact]
+        public void BotFillsChanceIfValueIsGoodAndOtherHandsAreFilledOnLastRoll()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){6,5,4,5,6}};
+            const Scores score = Scores.Chance;
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = Substitute.For<IPlayer>();
+            botPlayer.Roll.Returns(3);
+            var result = GetRollResultForScoreWithValue(score, diceResult.Total);
+            botPlayer.GetResultForScore(score).Returns(result);
+            SetValueForScore(botPlayer, Scores.Fours);
+            SetValueForScore(botPlayer, Scores.Fives);
+            SetValueForScore(botPlayer, Scores.Sixs);
+
+            botPlayer.AiDecideFill(game);
+            
+            game.Received().ApplyScore(result);
+        }
+        
+        [Fact]
+        public void BotDoesNotFillChanceIfValueIsGoodAndOtherHandsAreFilledUntilLastRoll()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){6,5,4,5,6}};
+            const Scores score = Scores.Chance;
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = Substitute.For<IPlayer>();
+            botPlayer.Roll.Returns(2);
+            var result = GetRollResultForScoreWithValue(score, diceResult.Total);
+            botPlayer.GetResultForScore(score).Returns(result);
+            SetValueForScore(botPlayer, Scores.Fours);
+            SetValueForScore(botPlayer, Scores.Fives);
+            SetValueForScore(botPlayer, Scores.Sixs);
+
+            botPlayer.AiDecideFill(game);
+            
+            game.DidNotReceive().ApplyScore(result);
+        }
+        
+        [Fact]
+        public void BotFillsFourOfKindEvenIfValueIsLowAndValueIsSmallOnLastRoll()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){1,1,1,1,2}};
+            const Scores score = Scores.FourOfAKind;
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = Substitute.For<IPlayer>();
+            botPlayer.Roll.Returns(3);
+            var result = GetRollResultForScoreWithValue(score, diceResult.Total);
+            botPlayer.GetResultForScore(score).Returns(result);
+            SetValueForScore(botPlayer, Scores.Ones);
+            SetValueForScore(botPlayer, Scores.Twos);
+
+            botPlayer.AiDecideFill(game);
+            
+            game.Received().ApplyScore(result);
+        }
+        
+        [Fact]
+        public void BotFillsThreeOfKindEvenIfValueIsLowAndValueIsSmallOnLastRoll()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){1,1,1,2,2}};
+            const Scores score = Scores.ThreeOfAKind;
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = Substitute.For<IPlayer>();
+            botPlayer.Roll.Returns(3);
+            var result = GetRollResultForScoreWithValue(score, diceResult.Total);
+            botPlayer.GetResultForScore(score).Returns(result);
+            SetValueForScore(botPlayer, Scores.Ones);
+            SetValueForScore(botPlayer, Scores.Twos);
+
+            botPlayer.AiDecideFill(game);
+            
+            game.Received().ApplyScore(result);
+        }
+        
+        [Fact]
+        public void BotDoesNotFillFourOfKindIfValueIsLowAndValueIsSmallUntilLastRoll()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){1,1,1,1,2}};
+            const Scores score = Scores.FourOfAKind;
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = Substitute.For<IPlayer>();
+            botPlayer.Roll.Returns(2);
+            var result = GetRollResultForScoreWithValue(score, diceResult.Total);
+            botPlayer.GetResultForScore(score).Returns(result);
+            SetValueForScore(botPlayer, Scores.Ones);
+            SetValueForScore(botPlayer, Scores.Twos);
+
+            botPlayer.AiDecideFill(game);
+            
+            game.DidNotReceive().ApplyScore(result);
+        }
+        
+        [Fact]
+        public void BotDoesNotFillThreeOfKindIfValueIsLowAndValueIsSmallUntilLastRoll()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){1,1,1,2,2}};
+            const Scores score = Scores.ThreeOfAKind;
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = Substitute.For<IPlayer>();
+            botPlayer.Roll.Returns(3);
+            var result = GetRollResultForScoreWithValue(score, diceResult.Total);
+            botPlayer.GetResultForScore(score).Returns(result);
+            SetValueForScore(botPlayer, Scores.Ones);
+            SetValueForScore(botPlayer, Scores.Twos);
+
+            botPlayer.AiDecideFill(game);
+            
+            game.Received().ApplyScore(result);
+        }
+        
+        [Fact]
+        public void BotFillsAnyPossibleHandEvenIfValueIsZeroOnLastRoll()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() { DiceResults = new List<int>(){1,1,1,2,2}};
+            const Scores score = Scores.Threes;
+            game.LastDiceResult.Returns(diceResult);
+            var botPlayer = Substitute.For<IPlayer>();
+            botPlayer.Roll.Returns(3);
+            var result = GetRollResultForScoreWithValue(score, 0);
+            botPlayer.GetResultForScore(score).Returns(result);
+            foreach (var scoreToHaveValue in EnumUtils.GetValues<Scores>())
+            {
+                if (score == scoreToHaveValue) continue;
+                SetValueForScore(botPlayer, scoreToHaveValue);
+            }
+
+            botPlayer.AiDecideFill(game);
+            
+            game.Received().ApplyScore(result);
+        }
         #endregion
 
         #region PrivateMethods

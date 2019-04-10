@@ -186,12 +186,12 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
         {
             //this has been converted from my old kniffel game
 
-            int[] n = new int[7];
+            var diceAmountOfValue = new int[7];
 
             // how many dice of every value
-            for (int i = 1; i <= 6; i++)
+            for (var diceValue = 1; diceValue <= 6; diceValue++)
             {
-                n[i] = game.LastDiceResult.YatzyNumberScore(i) / i;
+                diceAmountOfValue[diceValue] = game.LastDiceResult.YatzyNumberScore(diceValue) / diceValue;
             }
             
             // check for kniffel
@@ -218,7 +218,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             
             // sixs if at least 4 of them and no value 
             result = player.GetResultForScore(Scores.Sixs);
-            if (result != null && !result.HasValue && n[6] == 4 && player.Roll == 3)
+            if (result != null && !result.HasValue && diceAmountOfValue[6] == 4 && player.Roll == 3)
             {
                 game.ApplyScore(result);
                 return;
@@ -236,81 +236,67 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             }
 
             //checking  SS and FH
-            for (int i = 10; i >= 9; i += -1)
+            for (var scoreIndex = 10; scoreIndex >= 9; scoreIndex += -1)
             {
-                result = player.GetResultForScore((Scores)i);
-                if (result != null 
-                    && !result.HasValue 
-                    && result.PossibleValue >= result.MinAllowableValue() 
-                    && result.PossibleValue > 0
-                    && i-player.Roll < 8 ) //last condition - fill SS only on third roll, and FH - not on first
-                {
-                    game.ApplyScore(result);
-                    return;
-                }
+                result = player.GetResultForScore((Scores)scoreIndex);
+                if (result == null || result.HasValue || result.PossibleValue < result.MinAllowableValue() ||
+                    result.PossibleValue <= 0 || scoreIndex - player.Roll >= 8) continue;
+                game.ApplyScore(result);
+                return;
             }
             
             // 4 and 3 in a row
-            for (int i = 8; i >= 7; i += -1)
+            for (var scoreIndex = 8; scoreIndex >= 7; scoreIndex += -1)
             {
-                result = player.GetResultForScore((Scores)i);
-                if (result != null 
-                    && !result.HasValue 
-                    && player.Roll == 3
-                    && result.PossibleValue >= result.MinAllowableValue() - (game.Round - 1) / 2
-                    && result.PossibleValue > 0)
+                result = player.GetResultForScore((Scores)scoreIndex);
+                if (result == null || result.HasValue || player.Roll != 3 ||
+                    result.PossibleValue < result.MinAllowableValue() - (game.Round - 1) / 2 ||
+                    result.PossibleValue <= 0) continue;
+                game.ApplyScore(result);
+                return;
+            }
+            
+            // numerics 
+            for (var diceAmount = 5; diceAmount >= 1; diceAmount += -1)
+            {
+                //Step -1
+                for (var scoreIndex = 1; scoreIndex <= 6; scoreIndex++)
                 {
+                    result = player.GetResultForScore((Scores)scoreIndex);
+                    if (result == null || result.HasValue || player.Roll != 3 || diceAmountOfValue[scoreIndex] < diceAmount) continue;
                     game.ApplyScore(result);
                     return;
                 }
             }
             
-            // numerics 
-            for (int j = 5; j >= 1; j += -1)
-            {
-                //Step -1
-                for (int i = 1; i <= 6; i++)
-                {
-                    result = player.GetResultForScore((Scores)i);
-                    if (result != null 
-                        && !result.HasValue 
-                        && player.Roll == 3
-                        && n[i] >= j)
-                    {
-                        game.ApplyScore(result);
-                        return;
-                    }
-                }
-            }
-            
-            //chance
+            // chance
             result = player.GetResultForScore(Scores.Chance);
-            if (result != null && !result.HasValue && result.PossibleValue >= result.MinAllowableValue() - (game.Round - 1) / 2)
+            if (result != null 
+                && !result.HasValue 
+                && result.PossibleValue > 0
+                && player.Roll == 3
+                && result.PossibleValue >= result.MinAllowableValue() - (game.Round - 1) / 2)
             {
                 game.ApplyScore(result);
                 return;
             }
             
             //once again 4 and 3 in row
-            for (int i = 8; i >= 7; i += -1)
+            for (var scoreIndex = 8; scoreIndex >= 7; scoreIndex += -1)
             {
-                result = player.GetResultForScore((Scores)i);
-                if (result != null && !result.HasValue && result.PossibleValue >  0)
-                {
-                    game.ApplyScore(result);
-                    return;
-                }
+                result = player.GetResultForScore((Scores)scoreIndex);
+                if (result == null || result.HasValue || result.PossibleValue <= 0 || player.Roll != 3) continue;
+                game.ApplyScore(result);
+                return;
             }
             
             //if not filled - filling at least anything including 0
-            for (int i = 1; i <= 13; i++)
+            for (var scoreIndex = 1; scoreIndex <= 13; scoreIndex++)
             {
-                result = player.GetResultForScore((Scores)i);
-                if (result != null && !result.HasValue)
-                {
-                    game.ApplyScore(result);
-                    return;
-                }
+                result = player.GetResultForScore((Scores)scoreIndex);
+                if (result == null || result.HasValue) continue;
+                game.ApplyScore(result);
+                return;
             }
         }
     }
