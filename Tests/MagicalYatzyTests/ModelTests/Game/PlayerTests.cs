@@ -364,11 +364,30 @@ namespace MagicalYatzyTests.ModelTests.Game
                         result.Value = result.MaxValue;
                 }
            
-                var expectedTotal = _sut.Results.Where(r => r.HasValue).Select(r => r.Value).Sum() + _sut.Results.Count(f=>f.HasBonus)*100;
+                var expectedTotal = _sut.Results
+                                        .Where(r => r.HasValue).Select(r => r.Value)
+                                        .Sum() + _sut.Results.Count(f=>f.HasBonus)*100;
                 
                 // Assert
                 Assert.Equal(expectedTotal,_sut.Total);
             }
+        }
+        
+        [Fact]
+        public void CanUseArtifactReturnsTrueIfArtifactIsAvailableAndNotUsed()
+        {
+            var artifact = new Artifact(Artifacts.ManualSet);
+
+            _sut.AvailableMagicalArtifacts = new List<Artifact> {artifact};
+            _sut.PrepareForGameStart(new Rule(Rules.krMagic));
+            
+            Assert.True(_sut.CanUseArtifact(Artifacts.ManualSet));
+            Assert.False(_sut.CanUseArtifact(Artifacts.MagicalRoll));
+            Assert.False(_sut.CanUseArtifact(Artifacts.RollReset));
+            
+            _sut.UseArtifact(Artifacts.ManualSet);
+            
+            Assert.False(_sut.CanUseArtifact(Artifacts.ManualSet));
         }
     }
 }

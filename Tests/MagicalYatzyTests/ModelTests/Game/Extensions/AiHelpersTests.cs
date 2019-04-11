@@ -4,6 +4,7 @@ using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.Extensions;
+using Sanet.MagicalYatzy.Models.Game.Magical;
 using Sanet.MagicalYatzy.Utils;
 using Xunit;
 
@@ -651,6 +652,133 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
             
             game.Received().ApplyScore(result);
         }
+        #endregion
+
+        #region DecideRollTypeLogic()
+
+        [Fact]
+        public void BotPerformsRegularRollIfRulesAreNotMagic()
+        {
+            var game = Substitute.For<IGame>();
+            var botPlayer = Substitute.For<IPlayer>();
+            foreach (var rule in EnumUtils.GetValues<Rules>())
+            {
+                if (rule == Rules.krMagic) continue;
+                game.Rules.Returns(new Rule(rule));
+
+                botPlayer.AiDecideRoll(game);
+                
+                game.Received().ReportRoll();
+            }
+        }
+
+        [Fact]
+        public void BotPerformsRegularRollIfRulesAreMagicButNoArtifactsAreAvailable()
+        {
+            var game = Substitute.For<IGame>();
+            var botPlayer = Substitute.For<IPlayer>();
+            const Rules rule = Rules.krMagic;
+            game.Rules.Returns(new Rule(rule));
+            botPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>());
+
+            botPlayer.AiDecideRoll(game);
+
+            game.Received().ReportRoll();
+        }
+
+        [Fact]
+        public void BotPerformsMagicalRollIfKniffelIsNotFilledAndAllNumbersAndOfKindAreFilledOnLastRoll()
+        {
+            var game = Substitute.For<IGame>();
+            var botPlayer = Substitute.For<IPlayer>();
+            var rule = new Rule(Rules.krMagic);
+            const Artifacts artifactType = Artifacts.MagicalRoll;
+            game.Rules.Returns(rule);
+            botPlayer.Roll.Returns(3);
+            botPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>(){ new Artifact(artifactType)});
+            botPlayer.CanUseArtifact(artifactType).Returns(true);
+            foreach (var score in rule.ScoresForRule)
+            {
+                if (score.IsNumeric()
+                    || score == Scores.ThreeOfAKind 
+                    || score == Scores.FourOfAKind)
+                    SetValueForScore(botPlayer,score);
+            }
+            
+            botPlayer.AiDecideRoll(game);
+
+            game.Received().ReportMagicRoll();
+        }
+        
+        [Fact]
+        public void BotDoesNotPerformMagicalRollIfKniffelIsNotFilledAndAllNumbersAndOfKindAreFilledUntilLastRoll()
+        {
+            var game = Substitute.For<IGame>();
+            var botPlayer = Substitute.For<IPlayer>();
+            var rule = new Rule(Rules.krMagic);
+            const Artifacts artifactType = Artifacts.MagicalRoll;
+            game.Rules.Returns(rule);
+            botPlayer.Roll.Returns(2);
+            botPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>(){ new Artifact(artifactType)});
+            botPlayer.CanUseArtifact(artifactType).Returns(true);
+            foreach (var score in rule.ScoresForRule)
+            {
+                if (score.IsNumeric()
+                    || score == Scores.ThreeOfAKind 
+                    || score == Scores.FourOfAKind)
+                    SetValueForScore(botPlayer,score);
+            }
+            
+            botPlayer.AiDecideRoll(game);
+
+            game.DidNotReceive().ReportMagicRoll();
+        }
+
+        [Fact]
+        public void BotPerformsMagicalRollEvenOnFirstRollIfItIsLastRoundAndOnePokerHandIsNotFilled()
+        {
+            var game = Substitute.For<IGame>();
+            var botPlayer = Substitute.For<IPlayer>();
+            var rule = new Rule(Rules.krMagic);
+            const Artifacts artifactType = Artifacts.MagicalRoll;
+            game.Rules.Returns(rule);
+            game.Round.Returns(rule.MaxRound);
+            botPlayer.Roll.Returns(1);
+            botPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>(){ new Artifact(artifactType)});
+            botPlayer.CanUseArtifact(artifactType).Returns(true);
+            foreach (var score in Rule.PokerHands)
+            {
+                if (score == Scores.Kniffel) continue;
+                SetValueForScore(botPlayer,score);
+            }
+            
+            botPlayer.AiDecideRoll(game);
+
+            game.Received().ReportMagicRoll();
+        }
+        
+        [Fact]
+        public void BotDoesNotPerformsMagicalRollOnFirstRollIfItIsLastRoundButAllPokerHandsAreFilled()
+        {
+            var game = Substitute.For<IGame>();
+            var botPlayer = Substitute.For<IPlayer>();
+            var rule = new Rule(Rules.krMagic);
+            const Artifacts artifactType = Artifacts.MagicalRoll;
+            game.Rules.Returns(rule);
+            game.Round.Returns(rule.MaxRound);
+            botPlayer.Roll.Returns(1);
+            botPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>(){ new Artifact(artifactType)});
+            botPlayer.CanUseArtifact(artifactType).Returns(true);
+            foreach (var score in Rule.PokerHands)
+            {
+                SetValueForScore(botPlayer,score);
+            }
+            
+            botPlayer.AiDecideRoll(game);
+
+            game.DidNotReceive().ReportMagicRoll();
+        }
+        
         #endregion
 
         #region PrivateMethods

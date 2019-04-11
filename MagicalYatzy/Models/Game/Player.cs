@@ -154,6 +154,12 @@ namespace Sanet.MagicalYatzy.Models.Game
                    InGameId == otherPlayer.InGameId ;
         }
 
+        public bool CanUseArtifact(Artifacts artifact)
+        {
+            var artifactToUse = MagicalArtifactsForGame.FirstOrDefault(f => f.Type == artifact);
+            return !artifactToUse?.IsUsed ?? false;
+        }
+
         public override int GetHashCode()
         {
             // ReSharper disable NonReadonlyMemberInGetHashCode

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using Sanet.MagicalYatzy.Models.Game.Magical;
+using Sanet.MagicalYatzy.Utils;
 
 namespace Sanet.MagicalYatzy.Models.Game.Extensions
 {
@@ -303,6 +305,43 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
                 game.ApplyScore(result);
                 return;
             }
+        }
+
+        public static void AiDecideRoll(this IPlayer player, IGame game)
+        {
+            if (game.Rules.CurrentRule == Rules.krMagic)
+            {
+                if (player.CanUseArtifact(Artifacts.MagicalRoll) && game.Round == game.Rules.MaxRound)
+                {
+                    var hasFreeHand = Rule.PokerHands.Any(score => !player.GetResultForScore(score).HasValue);
+                    if (hasFreeHand)
+                    {
+                        game.ReportMagicRoll();
+                        return;
+                    }
+                }
+                if (player.MagicalArtifactsForGame.Any() && player.Roll == 3)
+                {
+                    var numericHands = EnumUtils.GetValues<Scores>().Where(f => f.IsNumeric()).ToList();
+                    numericHands.Add(Scores.ThreeOfAKind);
+                    numericHands.Add(Scores.FourOfAKind);
+                    var areAllNumericFilled = true;
+                    foreach (var score in numericHands)
+                    {
+                        var result = player.GetResultForScore(score);
+                        if (result != null && result.HasValue) continue;
+                        areAllNumericFilled = false;
+                        break;
+                    }
+
+                    if (player.CanUseArtifact(Artifacts.MagicalRoll) && areAllNumericFilled)
+                    {
+                        game.ReportMagicRoll(); 
+                    }
+                    return;
+                }
+            }
+            game.ReportRoll();
         }
     }
 }

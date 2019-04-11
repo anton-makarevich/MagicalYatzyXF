@@ -58,5 +58,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         void UseArtifact(Artifacts artifact);
 
         bool IsScoreFilled(Scores score);
+
+        bool CanUseArtifact(Artifacts artifact);
     }
 }
