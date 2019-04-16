@@ -10,7 +10,7 @@ using static Sanet.MagicalYatzy.Models.Events.GameEvents;
 namespace Sanet.MagicalYatzy.Models.Game
 {
     /// <summary>
-    /// Dice Panel Control - where we are rolling dices
+    /// Dice Panel Control - where we are rolling dice
     /// </summary>
     public class DicePanel : IDicePanel
     {
@@ -229,6 +229,14 @@ namespace Sanet.MagicalYatzy.Models.Game
                 if (!Bounds.Contains(dice.Bounds) || dice.Bounds.Position.IsZero )
                     FindDiePosition(dice);
             }
+        }
+
+        public Point? GetDicePosition(int diceValue)
+        {
+            var dice = Dice.FirstOrDefault(f => f.Result == diceValue);
+            if (dice == null)
+            return null;
+            return new Point(dice.PosX,dice.PosY);
         }
         #endregion
 

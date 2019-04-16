@@ -41,5 +41,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         bool RollDice(List<int> aResults);
         void Resize(int width, int height);
         void ChangeDiceManually(int newValue);
+
+        Point? GetDicePosition(int diceValue);
     }
 }

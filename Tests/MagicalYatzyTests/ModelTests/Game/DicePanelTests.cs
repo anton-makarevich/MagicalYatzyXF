@@ -4,6 +4,7 @@ using NSubstitute;
 using Xunit;
 using System.Collections.Generic;
 using System.Linq;
+using Sanet.MagicalYatzy.Models.Common;
 
 namespace MagicalYatzyTests.ModelTests.Game
 {
@@ -287,7 +288,7 @@ namespace MagicalYatzyTests.ModelTests.Game
             var valueToSet = 3;
             var initialValue = 1;
 
-            bool chanedEventValidated = false;
+            var chanedEventValidated = false;
 
             _sut.ManualSetMode = true;
             _sut.Resize(width, height);
@@ -323,6 +324,20 @@ namespace MagicalYatzyTests.ModelTests.Game
 
             // Assert
             Assert.Equal(result, _sut.Result.Total);
+        }
+
+        [Fact]
+        public void ReturnsDiceCoordinatesByValue()
+        {
+            const int diceValueToLookFor = 4;
+            _sut.RollDelay = 0;
+            _sut.RollDice(_testResults);
+            var dice = _sut.Dice.First(f => f.Result == diceValueToLookFor);
+
+            var dicePosition = _sut.GetDicePosition(diceValueToLookFor);
+
+            Assert.NotNull(dicePosition);
+            Assert.Equal(new Point(dice.PosX,dice.PosY), dicePosition.Value);
         }
     }
 }

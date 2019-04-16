@@ -109,13 +109,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
 
         public static void AiFixDice(this IPlayer player, IGame game)
         {
-            var amountOfDiceForValue = new List<(int diceValue, int amountOfDice)>();
-
-            // the amount of dice with every value 
-            for (var diceValue = 1; diceValue <= 6; diceValue++)
-            {
-                amountOfDiceForValue.Add((diceValue, game.LastDiceResult.YatzyNumberScore(diceValue) / diceValue));
-            }
+            var amountOfDiceForValue = game.LastDiceResult.AiCalculatesDiceOccurrences();
 
             IRollResult result;
             // check for 3 fives or sixs
@@ -189,13 +183,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
 
         public static void AiDecideFill(this IPlayer player, IGame game)
         {
-            var amountOfDiceForValue = new List<(int diceValue, int amountOfDice)>();
-
-            // the amount of dice with every value 
-            for (var diceValue = 1; diceValue <= 6; diceValue++)
-            {
-                amountOfDiceForValue.Add((diceValue, game.LastDiceResult.YatzyNumberScore(diceValue) / diceValue));
-            }
+            var amountOfDiceForValue = game.LastDiceResult.AiCalculatesDiceOccurrences();
 
             // check for kniffel
             var result = player.GetResultForScore(Scores.Kniffel);
@@ -220,7 +208,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             }
 
             // sixs if at least 4 of them and no value 
-            if (amountOfDiceForValue.First(f => f.diceValue == 6).amountOfDice > 3)
+            if (amountOfDiceForValue.FirstOrDefault(f => f.diceValue == 6).amountOfDice > 3)
             {
                 result = player.GetResultForScore(Scores.Sixs);
                 if (result != null && !result.HasValue && player.Roll == 3)
@@ -307,41 +295,96 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             }
         }
 
-        public static void AiDecideRoll(this IPlayer player, IGame game)
+        public static void AiDecideRoll(this IPlayer player, IGame game, IDicePanel dicePanel)
         {
-            if (game.Rules.CurrentRule == Rules.krMagic)
+            if (game.Rules.CurrentRule == Rules.krMagic && player.MagicalArtifactsForGame.Any())
             {
-                if (player.CanUseArtifact(Artifacts.MagicalRoll) && game.Round == game.Rules.MaxRound)
+                var hasFreeHand = Rule.PokerHands.Any(score => !player.GetResultForScore(score).HasValue);
+                if (!hasFreeHand) return;
+                if (game.Round == game.Rules.MaxRound)
                 {
-                    var hasFreeHand = Rule.PokerHands.Any(score => !player.GetResultForScore(score).HasValue);
-                    if (hasFreeHand)
+                    if (player.CanUseArtifact(Artifacts.MagicalRoll))
                     {
                         game.ReportMagicRoll();
                         return;
                     }
+                    if (player.CanUseArtifact(Artifacts.RollReset))
+                    {
+                        game.ResetRolls();
+                        return;
+                    }
+
+                    if (player.Roll == 3)
+                    {
+                        if (player.CanUseArtifact(Artifacts.ManualSet))
+                        {
+                            var hasSmallStraight = player.GetResultForScore(Scores.SmallStraight).HasValue;
+                            var (_, countInRow) = game.LastDiceResult.XInRow();
+                            if (!hasSmallStraight && countInRow == 3)
+                            {
+                                var (oldValue, newValue) = game.LastDiceResult.AiDecideDiceChange();
+                                var position = dicePanel.GetDicePosition(oldValue);
+                                if (position != null)
+                                {
+                                    dicePanel.ManualSetMode = true;
+                                    dicePanel.DieClicked(position.Value);
+                                    dicePanel.ChangeDiceManually(newValue);
+                                    return;
+                                }
+                            }
+                        }
+                    }
                 }
-                if (player.MagicalArtifactsForGame.Any() && player.Roll == 3)
+                if (player.Roll == 3)
                 {
                     var numericHands = EnumUtils.GetValues<Scores>().Where(f => f.IsNumeric()).ToList();
                     numericHands.Add(Scores.ThreeOfAKind);
                     numericHands.Add(Scores.FourOfAKind);
-                    var areAllNumericFilled = true;
-                    foreach (var score in numericHands)
-                    {
-                        var result = player.GetResultForScore(score);
-                        if (result != null && result.HasValue) continue;
-                        areAllNumericFilled = false;
-                        break;
-                    }
+                    var areAllNumericFilled = numericHands.Count(score => player.GetResultForScore(score).HasValue) 
+                                              == numericHands.Count;
 
-                    if (player.CanUseArtifact(Artifacts.MagicalRoll) && areAllNumericFilled)
+                    if (!areAllNumericFilled) return;
+                    if (player.CanUseArtifact(Artifacts.MagicalRoll))
                     {
                         game.ReportMagicRoll(); 
                     }
+                    if (player.CanUseArtifact(Artifacts.RollReset))
+                    {
+                        game.ResetRolls();
+                    }
+
                     return;
                 }
             }
             game.ReportRoll();
+        }
+
+        public static (int oldValue, int newValue) AiDecideDiceChange(this DieResult diceResult)
+        {
+            int oldValue, newValue;
+            var diceOccurrences = diceResult.AiCalculatesDiceOccurrences();
+            var sortedResults = diceResult.DiceResults.OrderBy(d => d).ToList();
+            var (firstValue, countInRow) = diceResult.XInRow();
+            if (countInRow > 2)
+            {
+                oldValue = diceOccurrences.First(f => f.amountOfDice > 1).diceValue;
+                newValue = (firstValue < 3)
+                    ? firstValue + countInRow
+                    : firstValue - 1;
+                return (oldValue, newValue);
+            }
+
+            oldValue = sortedResults.First();
+            newValue = sortedResults.Last();
+            
+            return (oldValue, newValue);
+        }
+
+        public static List<(int diceValue, int amountOfDice)> AiCalculatesDiceOccurrences(this DieResult diceResult)
+        {
+            return diceResult.DiceResults.GroupBy(i => i)
+                .Select(grp => (grp.Key, grp.Count()))
+                .ToList();
         }
     }
 }

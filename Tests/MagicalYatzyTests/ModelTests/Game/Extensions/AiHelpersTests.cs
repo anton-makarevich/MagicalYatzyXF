@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
+using Sanet.MagicalYatzy.Models.Common;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.Extensions;
 using Sanet.MagicalYatzy.Models.Game.Magical;
@@ -556,7 +557,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
         }
         
         [Fact]
-        public void BotFillsFourOfKindEvenIfValueIsLowAndValueIsSmallOnLastRoll()
+        public void BotFillsFourOfKindEvenIfValueIsSmallOnLastRoll()
         {
             var game = Substitute.For<IGame>();
             var diceResult = new DieResult() { DiceResults = new List<int>(){1,1,1,1,2}};
@@ -666,7 +667,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
                 if (rule == Rules.krMagic) continue;
                 game.Rules.Returns(new Rule(rule));
 
-                botPlayer.AiDecideRoll(game);
+                botPlayer.AiDecideRoll(game, Substitute.For<IDicePanel>());
                 
                 game.Received().ReportRoll();
             }
@@ -681,7 +682,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
             game.Rules.Returns(new Rule(rule));
             botPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>());
 
-            botPlayer.AiDecideRoll(game);
+            botPlayer.AiDecideRoll(game, Substitute.For<IDicePanel>());
 
             game.Received().ReportRoll();
         }
@@ -705,7 +706,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
                     SetValueForScore(botPlayer,score);
             }
             
-            botPlayer.AiDecideRoll(game);
+            botPlayer.AiDecideRoll(game, Substitute.For<IDicePanel>());
 
             game.Received().ReportMagicRoll();
         }
@@ -729,7 +730,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
                     SetValueForScore(botPlayer,score);
             }
             
-            botPlayer.AiDecideRoll(game);
+            botPlayer.AiDecideRoll(game, Substitute.For<IDicePanel>());
 
             game.DidNotReceive().ReportMagicRoll();
         }
@@ -752,7 +753,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
                 SetValueForScore(botPlayer,score);
             }
             
-            botPlayer.AiDecideRoll(game);
+            botPlayer.AiDecideRoll(game, Substitute.For<IDicePanel>());
 
             game.Received().ReportMagicRoll();
         }
@@ -774,11 +775,225 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
                 SetValueForScore(botPlayer,score);
             }
             
-            botPlayer.AiDecideRoll(game);
+            botPlayer.AiDecideRoll(game, Substitute.For<IDicePanel>());
 
             game.DidNotReceive().ReportMagicRoll();
         }
         
+        [Fact]
+        public void BotPerformsRollResetIfKniffelIsNotFilledAndAllNumbersAndOfKindAreFilledOnLastRoll()
+        {
+            var game = Substitute.For<IGame>();
+            var botPlayer = Substitute.For<IPlayer>();
+            var rule = new Rule(Rules.krMagic);
+            const Artifacts artifactType = Artifacts.RollReset;
+            game.Rules.Returns(rule);
+            botPlayer.Roll.Returns(3);
+            botPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>(){ new Artifact(artifactType)});
+            botPlayer.CanUseArtifact(artifactType).Returns(true);
+            foreach (var score in rule.ScoresForRule)
+            {
+                if (score.IsNumeric()
+                    || score == Scores.ThreeOfAKind 
+                    || score == Scores.FourOfAKind)
+                    SetValueForScore(botPlayer,score);
+            }
+            
+            botPlayer.AiDecideRoll(game, Substitute.For<IDicePanel>());
+
+            game.Received().ResetRolls();
+        }
+        
+        [Fact]
+        public void BotDoesNotPerformRollResetIfKniffelIsNotFilledAndAllNumbersAndOfKindAreFilledUntilLastRoll()
+        {
+            var game = Substitute.For<IGame>();
+            var botPlayer = Substitute.For<IPlayer>();
+            var rule = new Rule(Rules.krMagic);
+            const Artifacts artifactType = Artifacts.RollReset;
+            game.Rules.Returns(rule);
+            botPlayer.Roll.Returns(2);
+            botPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>(){ new Artifact(artifactType)});
+            botPlayer.CanUseArtifact(artifactType).Returns(true);
+            foreach (var score in rule.ScoresForRule)
+            {
+                if (score.IsNumeric()
+                    || score == Scores.ThreeOfAKind 
+                    || score == Scores.FourOfAKind)
+                    SetValueForScore(botPlayer,score);
+            }
+            
+            botPlayer.AiDecideRoll(game, Substitute.For<IDicePanel>());
+
+            game.DidNotReceive().ResetRolls();
+        }
+
+        [Fact]
+        public void BotPerformsRollResetEvenOnFirstRollIfItIsLastRoundAndOnePokerHandIsNotFilled()
+        {
+            var game = Substitute.For<IGame>();
+            var botPlayer = Substitute.For<IPlayer>();
+            var rule = new Rule(Rules.krMagic);
+            const Artifacts artifactType = Artifacts.RollReset;
+            game.Rules.Returns(rule);
+            game.Round.Returns(rule.MaxRound);
+            botPlayer.Roll.Returns(1);
+            botPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>(){ new Artifact(artifactType)});
+            botPlayer.CanUseArtifact(artifactType).Returns(true);
+            foreach (var score in Rule.PokerHands)
+            {
+                if (score == Scores.Kniffel) continue;
+                SetValueForScore(botPlayer,score);
+            }
+            
+            botPlayer.AiDecideRoll(game, Substitute.For<IDicePanel>());
+
+            game.Received().ResetRolls();
+        }
+        
+        [Fact]
+        public void BotDoesNotPerformsRollResetOnFirstRollIfItIsLastRoundButAllPokerHandsAreFilled()
+        {
+            var game = Substitute.For<IGame>();
+            var botPlayer = Substitute.For<IPlayer>();
+            var rule = new Rule(Rules.krMagic);
+            const Artifacts artifactType = Artifacts.RollReset;
+            game.Rules.Returns(rule);
+            game.Round.Returns(rule.MaxRound);
+            botPlayer.Roll.Returns(1);
+            botPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>(){ new Artifact(artifactType)});
+            botPlayer.CanUseArtifact(artifactType).Returns(true);
+            foreach (var score in Rule.PokerHands)
+            {
+                SetValueForScore(botPlayer,score);
+            }
+            
+            botPlayer.AiDecideRoll(game, Substitute.For<IDicePanel>());
+
+            game.DidNotReceive().ResetRolls();
+        }
+
+        [Fact]
+        public void BotNeverPerformsMagicalRollWhenAllPokerHandsAreFilled()
+        {
+            var game = Substitute.For<IGame>();
+            var botPlayer = Substitute.For<IPlayer>();
+            var rule = new Rule(Rules.krMagic);
+            const Artifacts artifactType = Artifacts.MagicalRoll;
+            game.Rules.Returns(rule);
+            botPlayer.Roll.Returns(3);
+            botPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>(){ new Artifact(artifactType)});
+            botPlayer.CanUseArtifact(artifactType).Returns(true);
+            foreach (var score in rule.ScoresForRule)
+            {
+                if (score.IsNumeric()
+                    || score == Scores.ThreeOfAKind 
+                    || score == Scores.FourOfAKind)
+                    SetValueForScore(botPlayer,score);
+            }
+            foreach (var score in Rule.PokerHands)
+            {
+                SetValueForScore(botPlayer,score);
+            }
+            
+            botPlayer.AiDecideRoll(game, Substitute.For<IDicePanel>());
+
+            game.DidNotReceive().ReportMagicRoll();
+        }
+
+        [Fact]
+        public void BotPerformsManualSetOnLastRollOfLastRoundIfHasThreeInRowAndNeedsSmallStraight()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() {DiceResults = new List<int>() {5, 4, 3, 5, 5}};
+            game.LastDiceResult.Returns(diceResult);
+            var dicePanel = Substitute.For<IDicePanel>();
+            var point = new Point(30,40);
+            dicePanel.GetDicePosition(5).Returns(point);
+            var botPlayer = Substitute.For<IPlayer>();
+            var rule = new Rule(Rules.krMagic);
+            const Artifacts artifactType = Artifacts.ManualSet;
+            game.Rules.Returns(rule);
+            game.Round.Returns(rule.MaxRound);
+            botPlayer.Roll.Returns(3);
+            botPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>(){ new Artifact(artifactType)});
+            botPlayer.CanUseArtifact(artifactType).Returns(true);
+            
+            botPlayer.AiDecideRoll(game,dicePanel);
+
+            Assert.True(dicePanel.ManualSetMode);
+            
+            dicePanel.Received().DieClicked(point);
+            dicePanel.Received().ChangeDiceManually(2);
+        }
+        
+        #endregion
+
+        #region DiceChangeLogic
+
+        [Fact]
+        public void IfBotGetsThreeInRowStartingWithOneItWantsToChangeSomethingToFour()
+        {
+            var diceResult = new DieResult() {DiceResults = new List<int>() {1, 2, 3, 5, 5}};
+
+            var (oldValue, newValue) = diceResult.AiDecideDiceChange();
+            
+            Assert.Equal(5,oldValue);
+            Assert.Equal(4,newValue);
+        }
+        
+        [Fact]
+        public void IfBotGetsThreeInRowStartingWithTwoItWantsToChangeSomethingToFive()
+        {
+            var diceResult = new DieResult() {DiceResults = new List<int>() {6, 2, 3, 4, 6}};
+
+            var (oldValue, newValue) = diceResult.AiDecideDiceChange();
+            
+            Assert.Equal(6,oldValue);
+            Assert.Equal(5,newValue);
+        }
+        
+        [Fact]
+        public void IfBotGetsThreeInRowStartingWithThreeItWantsToChangeSomethingToTwo()
+        {
+            var diceResult = new DieResult() {DiceResults = new List<int>() {1, 1, 3, 4, 5}};
+
+            var (oldValue, newValue) = diceResult.AiDecideDiceChange();
+            
+            Assert.Equal(1,oldValue);
+            Assert.Equal(2,newValue);
+        }
+        
+        [Fact]
+        public void IfBotGetsThreeInRowItWantsToChangeRepeatedValue()
+        {
+            var diceResult = new DieResult() {DiceResults = new List<int>() {4, 4, 3, 4, 5}};
+
+            var (oldValue, newValue) = diceResult.AiDecideDiceChange();
+            
+            Assert.Equal(4,oldValue);
+            Assert.Equal(2,newValue);
+        }
+
+        [Fact]
+        public void CalculatesDiceOccurrencesInDiceResult()
+        {
+            var resultsToTest = new[]
+            {
+                new List<int>() {4, 4, 3, 4, 5},
+                new List<int>() {2, 4, 3, 4, 5},
+                new List<int>() {4, 4, 4, 4, 5},
+                new List<int>() {1, 5, 5, 5, 6},
+            };
+            foreach (var resultToTest in resultsToTest)
+            {
+                var diceResult = new DieResult() {DiceResults = resultToTest};
+                var occurrences = diceResult.AiCalculatesDiceOccurrences();
+                foreach (var (diceValue, amountOfDice) in occurrences)
+                    Assert.Equal(diceResult.DiceResults.Count(i=>i==diceValue),amountOfDice);
+            }
+        }
+
         #endregion
 
         #region PrivateMethods
