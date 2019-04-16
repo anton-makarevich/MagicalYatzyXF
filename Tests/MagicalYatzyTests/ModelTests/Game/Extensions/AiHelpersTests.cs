@@ -976,7 +976,62 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
         }
 
         [Fact]
-        public void CalculatesDiceOccurrencesInDiceResult()
+        public void IfBotGetsFourInRowStartingWithOneItWantsToChangeSomethingToFive()
+        {
+            var diceResult = new DieResult() {DiceResults = new List<int>() {1, 2, 3, 4, 6}};
+
+            var (oldValue, newValue) = diceResult.AiDecideDiceChange();
+            
+            Assert.Equal(6,oldValue);
+            Assert.Equal(5,newValue);
+        }
+        
+        [Fact]
+        public void IfBotGetsFourInRowStartingWithTwoItWantsToChangeSomethingToSix()
+        {
+            var diceResult = new DieResult() {DiceResults = new List<int>() {3, 2, 3, 4, 5}};
+
+            var (oldValue, newValue) = diceResult.AiDecideDiceChange();
+            
+            Assert.Equal(3,oldValue);
+            Assert.Equal(6,newValue);
+        }
+        
+        [Fact]
+        public void IfBotGetsFourInRowNotStartingWithThreeItWantsToChangeSomethingToTwo()
+        {
+            var diceResult = new DieResult() {DiceResults = new List<int>() {6, 1, 3, 4, 5}};
+
+            var (oldValue, newValue) = diceResult.AiDecideDiceChange();
+            
+            Assert.Equal(1,oldValue);
+            Assert.Equal(2,newValue);
+        }
+        
+        [Fact]
+        public void IfBotGetsTwoSameItWantsToChangeSmallestToSameValue()
+        {
+            var diceResult = new DieResult() {DiceResults = new List<int>() {6, 1, 3, 3, 5}};
+
+            var (oldValue, newValue) = diceResult.AiDecideDiceChange();
+            
+            Assert.Equal(1,oldValue);
+            Assert.Equal(3,newValue);
+        }
+        
+        [Fact]
+        public void IfBotGetsTwoSameItWantsToChangeSmallestNotSameToSameValue()
+        {
+            var diceResult = new DieResult() {DiceResults = new List<int>() {6, 1, 1, 3, 5}};
+
+            var (oldValue, newValue) = diceResult.AiDecideDiceChange();
+            
+            Assert.Equal(3,oldValue);
+            Assert.Equal(1,newValue);
+        }
+        
+        [Fact]
+        public void CorrectlyCalculatesDiceOccurrencesInDiceResult()
         {
             var resultsToTest = new[]
             {

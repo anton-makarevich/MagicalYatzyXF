@@ -367,15 +367,23 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             var (firstValue, countInRow) = diceResult.XInRow();
             if (countInRow > 2)
             {
-                oldValue = diceOccurrences.First(f => f.amountOfDice > 1).diceValue;
+                oldValue = diceOccurrences.FirstOrDefault(f => f.amountOfDice > 1).diceValue;
+                if (oldValue == 0)
+                    oldValue = sortedResults.First(i => i < firstValue || i > firstValue + countInRow);
                 newValue = (firstValue < 3)
                     ? firstValue + countInRow
                     : firstValue - 1;
                 return (oldValue, newValue);
             }
+            
+            newValue = diceOccurrences
+                .Where(f => f.amountOfDice > 1)
+                .OrderByDescending(f => f.diceValue)
+                .FirstOrDefault().diceValue;
+            if (newValue == 0)
+                newValue = sortedResults.Last();
 
-            oldValue = sortedResults.First();
-            newValue = sortedResults.Last();
+            oldValue = sortedResults.First(f=>f!=newValue);
             
             return (oldValue, newValue);
         }
