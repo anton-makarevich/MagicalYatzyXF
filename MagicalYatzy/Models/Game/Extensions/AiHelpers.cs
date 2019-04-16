@@ -319,18 +319,17 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
                         if (player.CanUseArtifact(Artifacts.ManualSet))
                         {
                             var hasSmallStraight = player.GetResultForScore(Scores.SmallStraight).HasValue;
-                            var (_, countInRow) = game.LastDiceResult.XInRow();
-                            if (!hasSmallStraight && countInRow == 3)
+                            var hasLargeStraight = player.GetResultForScore(Scores.LargeStraight).HasValue;
+                            
+                            var (oldValue, newValue) = game.LastDiceResult
+                                .AiDecideDiceChange(!hasSmallStraight, !hasLargeStraight);
+                            var position = dicePanel.GetDicePosition(oldValue);
+                            if (position != null)
                             {
-                                var (oldValue, newValue) = game.LastDiceResult.AiDecideDiceChange();
-                                var position = dicePanel.GetDicePosition(oldValue);
-                                if (position != null)
-                                {
-                                    dicePanel.ManualSetMode = true;
-                                    dicePanel.DieClicked(position.Value);
-                                    dicePanel.ChangeDiceManually(newValue);
-                                    return;
-                                }
+                                dicePanel.ManualSetMode = true;
+                                dicePanel.DieClicked(position.Value);
+                                dicePanel.ChangeDiceManually(newValue);
+                                return;
                             }
                         }
                     }
@@ -359,13 +358,16 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             game.ReportRoll();
         }
 
-        public static (int oldValue, int newValue) AiDecideDiceChange(this DieResult diceResult)
+        public static (int oldValue, int newValue) AiDecideDiceChange(
+            this DieResult diceResult, 
+            bool needsSmallStraight, 
+            bool needsLargeStraight)
         {
             int oldValue, newValue;
             var diceOccurrences = diceResult.AiCalculatesDiceOccurrences();
             var sortedResults = diceResult.DiceResults.OrderBy(d => d).ToList();
             var (firstValue, countInRow) = diceResult.XInRow();
-            if (countInRow > 2)
+            if (needsSmallStraight && countInRow == 3 || needsLargeStraight && countInRow == 4)
             {
                 oldValue = diceOccurrences.FirstOrDefault(f => f.amountOfDice > 1).diceValue;
                 if (oldValue == 0)

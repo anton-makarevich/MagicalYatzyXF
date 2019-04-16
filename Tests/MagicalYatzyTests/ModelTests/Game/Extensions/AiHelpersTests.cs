@@ -927,6 +927,32 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
             dicePanel.Received().ChangeDiceManually(2);
         }
         
+        [Fact]
+        public void BotPerformsManualSetOnLastRollOfLastRoundIfHasFourInRowAndNeedsLargeStraight()
+        {
+            var game = Substitute.For<IGame>();
+            var diceResult = new DieResult() {DiceResults = new List<int>() {5, 4, 3, 5, 6}};
+            game.LastDiceResult.Returns(diceResult);
+            var dicePanel = Substitute.For<IDicePanel>();
+            var point = new Point(30,40);
+            dicePanel.GetDicePosition(5).Returns(point);
+            var botPlayer = Substitute.For<IPlayer>();
+            var rule = new Rule(Rules.krMagic);
+            const Artifacts artifactType = Artifacts.ManualSet;
+            game.Rules.Returns(rule);
+            game.Round.Returns(rule.MaxRound);
+            botPlayer.Roll.Returns(3);
+            botPlayer.MagicalArtifactsForGame.Returns(new List<Artifact>(){ new Artifact(artifactType)});
+            botPlayer.CanUseArtifact(artifactType).Returns(true);
+            
+            botPlayer.AiDecideRoll(game,dicePanel);
+
+            Assert.True(dicePanel.ManualSetMode);
+            
+            dicePanel.Received().DieClicked(point);
+            dicePanel.Received().ChangeDiceManually(2);
+        }
+        
         #endregion
 
         #region DiceChangeLogic
@@ -936,7 +962,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
         {
             var diceResult = new DieResult() {DiceResults = new List<int>() {1, 2, 3, 5, 5}};
 
-            var (oldValue, newValue) = diceResult.AiDecideDiceChange();
+            var (oldValue, newValue) = diceResult.AiDecideDiceChange(true,false);
             
             Assert.Equal(5,oldValue);
             Assert.Equal(4,newValue);
@@ -947,7 +973,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
         {
             var diceResult = new DieResult() {DiceResults = new List<int>() {6, 2, 3, 4, 6}};
 
-            var (oldValue, newValue) = diceResult.AiDecideDiceChange();
+            var (oldValue, newValue) = diceResult.AiDecideDiceChange(true,false);
             
             Assert.Equal(6,oldValue);
             Assert.Equal(5,newValue);
@@ -958,7 +984,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
         {
             var diceResult = new DieResult() {DiceResults = new List<int>() {1, 1, 3, 4, 5}};
 
-            var (oldValue, newValue) = diceResult.AiDecideDiceChange();
+            var (oldValue, newValue) = diceResult.AiDecideDiceChange(true,false);
             
             Assert.Equal(1,oldValue);
             Assert.Equal(2,newValue);
@@ -969,7 +995,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
         {
             var diceResult = new DieResult() {DiceResults = new List<int>() {4, 4, 3, 4, 5}};
 
-            var (oldValue, newValue) = diceResult.AiDecideDiceChange();
+            var (oldValue, newValue) = diceResult.AiDecideDiceChange(true,false);
             
             Assert.Equal(4,oldValue);
             Assert.Equal(2,newValue);
@@ -980,7 +1006,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
         {
             var diceResult = new DieResult() {DiceResults = new List<int>() {1, 2, 3, 4, 6}};
 
-            var (oldValue, newValue) = diceResult.AiDecideDiceChange();
+            var (oldValue, newValue) = diceResult.AiDecideDiceChange(false,true);
             
             Assert.Equal(6,oldValue);
             Assert.Equal(5,newValue);
@@ -991,7 +1017,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
         {
             var diceResult = new DieResult() {DiceResults = new List<int>() {3, 2, 3, 4, 5}};
 
-            var (oldValue, newValue) = diceResult.AiDecideDiceChange();
+            var (oldValue, newValue) = diceResult.AiDecideDiceChange(false,true);
             
             Assert.Equal(3,oldValue);
             Assert.Equal(6,newValue);
@@ -1002,10 +1028,21 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
         {
             var diceResult = new DieResult() {DiceResults = new List<int>() {6, 1, 3, 4, 5}};
 
-            var (oldValue, newValue) = diceResult.AiDecideDiceChange();
+            var (oldValue, newValue) = diceResult.AiDecideDiceChange(false,true);
             
             Assert.Equal(1,oldValue);
             Assert.Equal(2,newValue);
+        }
+        
+        [Fact]
+        public void IfBotGetsFourInRowNotStartingWithThreeButDoesNotNeedLargeStraigntItWantsToChangeMinValueToMax()
+        {
+            var diceResult = new DieResult() {DiceResults = new List<int>() {6, 1, 3, 4, 5}};
+
+            var (oldValue, newValue) = diceResult.AiDecideDiceChange(false,false);
+            
+            Assert.Equal(1,oldValue);
+            Assert.Equal(6,newValue);
         }
         
         [Fact]
@@ -1013,7 +1050,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
         {
             var diceResult = new DieResult() {DiceResults = new List<int>() {6, 1, 3, 3, 5}};
 
-            var (oldValue, newValue) = diceResult.AiDecideDiceChange();
+            var (oldValue, newValue) = diceResult.AiDecideDiceChange(false,false);
             
             Assert.Equal(1,oldValue);
             Assert.Equal(3,newValue);
@@ -1024,7 +1061,7 @@ namespace MagicalYatzyTests.ModelTests.Game.Extensions
         {
             var diceResult = new DieResult() {DiceResults = new List<int>() {6, 1, 1, 3, 5}};
 
-            var (oldValue, newValue) = diceResult.AiDecideDiceChange();
+            var (oldValue, newValue) = diceResult.AiDecideDiceChange(false,false);
             
             Assert.Equal(3,oldValue);
             Assert.Equal(1,newValue);
