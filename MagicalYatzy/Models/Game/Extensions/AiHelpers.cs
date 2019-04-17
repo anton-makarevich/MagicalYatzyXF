@@ -112,52 +112,27 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
         {
             var amountOfDiceForValue = game.LastDiceResult.AiCalculatesDiceOccurrences();
 
-            IRollResult result;
             // check for 3 fives or sixs
-            var diceToCheck = amountOfDiceForValue.Where(f => f.diceValue > 4 && f.amountOfDice > 2).ToList();
-            foreach (var (diceValue, _) in diceToCheck)
-            {
-                result = player.GetResultForScore((Scores) diceValue);
-                if (result == null || result.HasValue) continue;
-                game.FixAllDice(diceValue, true);
-                return;
-            }
+            if (FixFivesOrSixs(player, game, amountOfDiceForValue)) return;
 
             // check if we need in row values (no large straight) 
-            result = player.GetResultForScore(Scores.LargeStraight);
-            if (result != null && !result.HasValue)
-            {
-                var (first, count) = game.LastDiceResult.XInRow();
-                if (first > 0)
-                {
-                    for (var diceValue = first; diceValue < first + count; diceValue++)
-                    {
-                        if (!game.IsDiceFixed(diceValue))
-                            game.FixDice(diceValue, true);
-                    }
-
-                    return;
-                }
-            }
+            if (FixForLargeStraight(player, game)) return;
 
             // check for full house
-            diceToCheck = amountOfDiceForValue.Where(f => f.amountOfDice > 1).ToList();
-            var valueTuples = diceToCheck.ToList();
-            if (valueTuples.Count() == 2)
-            {
-                result = player.GetResultForScore(Scores.FullHouse);
-                if (result != null && !result.HasValue)
-                {
-                    foreach (var (diceValue, _) in valueTuples)
-                    {
-                        game.FixAllDice(diceValue, true);
-                    }
-
-                    return;
-                }
-            }
+            if (FixForFullHouse(player, game, amountOfDiceForValue)) return;
 
             // fix same if needs kniffel of a kind numerics or chance
+            if (FixTheSame(player, game, amountOfDiceForValue)) return;
+
+            if (player.IsScoreFilled(Scores.Chance)) return;
+            for (var i = 6; i >= 4; i += -1)
+            {
+                game.FixAllDice(i, true);
+            }
+        }
+
+        private static bool FixTheSame(IPlayer player, IGame game, List<(int diceValue, int amountOfDice)> amountOfDiceForValue)
+        {
             foreach (var (diceValue, diceAmount) in amountOfDiceForValue.OrderByDescending(f => f.amountOfDice))
             {
                 if (diceAmount > 2 | player.AllNumericFilled)
@@ -167,19 +142,60 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
                         && player.IsScoreFilled(Scores.FourOfAKind)
                         && player.IsScoreFilled((Scores) diceValue)) continue;
                     game.FixAllDice(diceValue, true);
-                    return;
+                    return true;
                 }
 
                 if (player.IsScoreFilled((Scores) diceValue)) continue;
                 game.FixAllDice(diceValue, true);
-                return;
+                return true;
             }
 
-            if (player.IsScoreFilled(Scores.Chance)) return;
-            for (var i = 6; i >= 4; i += -1)
+            return false;
+        }
+
+        private static bool FixForFullHouse(IPlayer player, IGame game, List<(int diceValue, int amountOfDice)> amountOfDiceForValue)
+        {
+            var diceToCheck = amountOfDiceForValue.Where(f => f.amountOfDice > 1).ToList();
+            var valueTuples = diceToCheck.ToList();
+            if (valueTuples.Count() != 2) return false;
+            var result = player.GetResultForScore(Scores.FullHouse);
+            if (result == null || result.HasValue) return false;
+            foreach (var (diceValue, _) in valueTuples)
             {
-                game.FixAllDice(i, true);
+                game.FixAllDice(diceValue, true);
             }
+
+            return true;
+        }
+
+        private static bool FixForLargeStraight(IPlayer player, IGame game)
+        {
+            IRollResult result;
+            result = player.GetResultForScore(Scores.LargeStraight);
+            if (result == null || result.HasValue) return false;
+            var (first, count) = game.LastDiceResult.XInRow();
+            if (first <= 0) return false;
+            for (var diceValue = first; diceValue < first + count; diceValue++)
+            {
+                if (!game.IsDiceFixed(diceValue))
+                    game.FixDice(diceValue, true);
+            }
+
+            return true;
+        }
+
+        private static bool FixFivesOrSixs(IPlayer player, IGame game, List<(int diceValue, int amountOfDice)> amountOfDiceForValue)
+        {
+            var diceToCheck = amountOfDiceForValue.Where(f => f.diceValue > 4 && f.amountOfDice > 2).ToList();
+            foreach (var (diceValue, _) in diceToCheck)
+            {
+                var result = player.GetResultForScore((Scores) diceValue);
+                if (result == null || result.HasValue) continue;
+                game.FixAllDice(diceValue, true);
+                return true;
+            }
+
+            return false;
         }
 
         public static void AiDecideFill(this IPlayer player, IGame game)
@@ -187,7 +203,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             var amountOfDiceForValue = game.LastDiceResult.AiCalculatesDiceOccurrences();
 
             // check for kniffel
-            if (ApplyScoreConsideringConditions(
+            if (ApplyScoreConsideringCondition(
                 Scores.Kniffel,
                 player, 
                 game,
@@ -196,7 +212,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
                 return;
 
             // check full house
-            if (ApplyScoreConsideringConditions(
+            if (ApplyScoreConsideringCondition(
                 Scores.FullHouse,
                 player,
                 game,
@@ -209,7 +225,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
                 && ApplyScoreIfLastRound(Scores.Sixs, player, game)) return;
 
             // check for LS
-            if (ApplyScoreConsideringConditions(
+            if (ApplyScoreConsideringCondition(
                 Scores.LargeStraight, 
                 player, 
                 game,
@@ -221,7 +237,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             for (var scoreIndex = 10; scoreIndex >= 9; scoreIndex += -1)
             {
                 var index = scoreIndex;
-                if (ApplyScoreConsideringConditions(
+                if (ApplyScoreConsideringCondition(
                     (Scores) scoreIndex,
                     player,
                     game,
@@ -234,7 +250,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             // 4 and 3 in a row
             for (var scoreIndex = 8; scoreIndex >= 7; scoreIndex += -1)
             {
-                if (ApplyScoreConsideringConditions(
+                if (ApplyScoreConsideringCondition(
                     (Scores) scoreIndex,
                     player,
                     game,
@@ -253,7 +269,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             }
 
             // chance
-            if (ApplyScoreConsideringConditions(
+            if (ApplyScoreConsideringCondition(
                 Scores.Chance,
                 player,
                 game,
@@ -271,27 +287,27 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             //if not filled - filling at least anything including 0
             for (var scoreIndex = 1; scoreIndex <= 13; scoreIndex++)
             {
-                if (ApplyScoreConsideringConditions((Scores) scoreIndex, player, game)) return;
+                if (ApplyScoreConsideringCondition((Scores) scoreIndex, player, game)) return;
             }
         }
 
-        private static bool ApplyScoreConsideringConditions(
+        private static bool ApplyScoreConsideringCondition(
             Scores score, 
             IPlayer player, 
             IGame game, 
-            Func<IRollResult,bool> resultCondition = null)
+            Func<IRollResult,bool> additionalCondition = null)
         {
             var result = player.GetResultForScore(score);
             if (result == null 
                 || result.HasValue 
-                || resultCondition != null && !resultCondition(result)) return false;
+                || additionalCondition != null && !additionalCondition(result)) return false;
             game.ApplyScore(result);
             return true;
         }
 
         private static bool ApplyScoreIfLastRound(Scores score, IPlayer player, IGame game)
         {
-            return ApplyScoreConsideringConditions(
+            return ApplyScoreConsideringCondition(
                 score,
                 player,
                 game,
