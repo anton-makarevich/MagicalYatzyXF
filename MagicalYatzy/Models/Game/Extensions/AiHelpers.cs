@@ -301,61 +301,66 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             {
                 var hasFreeHand = Rule.PokerHands.Any(score => !player.GetResultForScore(score).HasValue);
                 if (!hasFreeHand) return;
-                if (game.Round == game.Rules.MaxRound)
-                {
-                    if (player.CanUseArtifact(Artifacts.MagicalRoll))
-                    {
-                        game.ReportMagicRoll();
-                        return;
-                    }
-                    if (player.CanUseArtifact(Artifacts.RollReset))
-                    {
-                        game.ResetRolls();
-                        return;
-                    }
-
-                    if (player.Roll == 3)
-                    {
-                        if (player.CanUseArtifact(Artifacts.ManualSet))
-                        {
-                            var hasSmallStraight = player.GetResultForScore(Scores.SmallStraight).HasValue;
-                            var hasLargeStraight = player.GetResultForScore(Scores.LargeStraight).HasValue;
-                            
-                            var (oldValue, newValue) = game.LastDiceResult
-                                .AiDecideDiceChange(!hasSmallStraight, !hasLargeStraight);
-                            var position = dicePanel.GetDicePosition(oldValue);
-                            if (position != null)
-                            {
-                                dicePanel.ManualSetMode = true;
-                                dicePanel.DieClicked(position.Value);
-                                dicePanel.ChangeDiceManually(newValue);
-                                return;
-                            }
-                        }
-                    }
-                }
-                if (player.Roll == 3)
-                {
-                    var numericHands = EnumUtils.GetValues<Scores>().Where(f => f.IsNumeric()).ToList();
-                    numericHands.Add(Scores.ThreeOfAKind);
-                    numericHands.Add(Scores.FourOfAKind);
-                    var areAllNumericFilled = numericHands.Count(score => player.GetResultForScore(score).HasValue) 
-                                              == numericHands.Count;
-
-                    if (!areAllNumericFilled) return;
-                    if (player.CanUseArtifact(Artifacts.MagicalRoll))
-                    {
-                        game.ReportMagicRoll(); 
-                    }
-                    if (player.CanUseArtifact(Artifacts.RollReset))
-                    {
-                        game.ResetRolls();
-                    }
-
-                    return;
-                }
+                if (DecideRollOnLastRound(player, game, dicePanel)) return;
+                if (DecideRollOnLastRollOfAnyRound(player, game)) return;
             }
             game.ReportRoll();
+        }
+
+        private static bool DecideRollOnLastRound(IPlayer player, IGame game, IDicePanel dicePanel)
+        {
+            if (game.Round != game.Rules.MaxRound) return false;
+            if (player.CanUseArtifact(Artifacts.MagicalRoll))
+            {
+                game.ReportMagicRoll();
+                return true;
+            }
+
+            if (!player.CanUseArtifact(Artifacts.RollReset))
+                return PerformManualChangeOnLastRollOfLastRound(player, game, dicePanel);
+            game.ResetRolls();
+            return true;
+        }
+
+        private static bool PerformManualChangeOnLastRollOfLastRound(IPlayer player, IGame game, IDicePanel dicePanel)
+        {
+            if (player.Roll != 3) return false;
+            if (!player.CanUseArtifact(Artifacts.ManualSet)) return false;
+            var hasSmallStraight = player.GetResultForScore(Scores.SmallStraight).HasValue;
+            var hasLargeStraight = player.GetResultForScore(Scores.LargeStraight).HasValue;
+
+            var (oldValue, newValue) = game.LastDiceResult
+                .AiDecideDiceChange(!hasSmallStraight, !hasLargeStraight);
+            var position = dicePanel.GetDicePosition(oldValue);
+            if (position == null) return false;
+            dicePanel.ManualSetMode = true;
+            dicePanel.DieClicked(position.Value);
+            dicePanel.ChangeDiceManually(newValue);
+            return true;
+        }
+
+        private static bool DecideRollOnLastRollOfAnyRound(IPlayer player, IGame game)
+        {
+            if (player.Roll != 3) return false;
+            var numericHands = EnumUtils.GetValues<Scores>().Where(f => f.IsNumeric()).ToList();
+            numericHands.Add(Scores.ThreeOfAKind);
+            numericHands.Add(Scores.FourOfAKind);
+            var areAllNumericFilled = numericHands.Count(score => player.GetResultForScore(score).HasValue)
+                                      == numericHands.Count;
+
+            if (!areAllNumericFilled) return true;
+            if (player.CanUseArtifact(Artifacts.MagicalRoll))
+            {
+                game.ReportMagicRoll();
+            }
+
+            if (player.CanUseArtifact(Artifacts.RollReset))
+            {
+                game.ResetRolls();
+            }
+
+            return true;
+
         }
 
         public static (int oldValue, int newValue) AiDecideDiceChange(
