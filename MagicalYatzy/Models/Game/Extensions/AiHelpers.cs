@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sanet.MagicalYatzy.Models.Game.Magical;
@@ -186,40 +187,61 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             var amountOfDiceForValue = game.LastDiceResult.AiCalculatesDiceOccurrences();
 
             // check for kniffel
-            if (ApplyScoreIfHasMaxValue(Scores.Kniffel, player, game)) return;
+            if (ApplyScoreConsideringConditions(
+                Scores.Kniffel,
+                player, 
+                game,
+                rollResult => rollResult.PossibleValue == rollResult.MaxValue 
+                              && rollResult.PossibleValue > 0))
+                return;
 
             // check full house
-            if (ApplyScoreIfHasMaxValue(Scores.FullHouse, player, game)) return;
+            if (ApplyScoreConsideringConditions(
+                Scores.FullHouse,
+                player,
+                game,
+                rollResult => rollResult.PossibleValue == rollResult.MaxValue 
+                              && rollResult.PossibleValue > 0)) 
+                return;
 
-            IRollResult result;
             // sixs if at least 4 of them and no value 
-            if (amountOfDiceForValue.FirstOrDefault(f => f.diceValue == 6).amountOfDice > 3)
-            {
-                if (ApplyScoreIfLastRound(Scores.Sixs, player, game)) return;
-            }
+            if (amountOfDiceForValue.FirstOrDefault(f => f.diceValue == 6).amountOfDice > 3
+                && ApplyScoreIfLastRound(Scores.Sixs, player, game)) return;
 
             // check for LS
-            if (ApplyScoreIfHasAllowableValue(Scores.LargeStraight, player, game)) return;
+            if (ApplyScoreConsideringConditions(
+                Scores.LargeStraight, 
+                player, 
+                game,
+             rollResult => rollResult.PossibleValue >= rollResult.MinAllowableValue() 
+                           && rollResult.PossibleValue > 0)) 
+                return;
 
             //checking  SS and FH
             for (var scoreIndex = 10; scoreIndex >= 9; scoreIndex += -1)
             {
-                result = player.GetResultForScore((Scores) scoreIndex);
-                if (result == null || result.HasValue || result.PossibleValue < result.MinAllowableValue() ||
-                    result.PossibleValue <= 0 || scoreIndex - player.Roll >= 8) continue;
-                game.ApplyScore(result);
-                return;
+                var index = scoreIndex;
+                if (ApplyScoreConsideringConditions(
+                    (Scores) scoreIndex,
+                    player,
+                    game,
+                    rollResult => rollResult.PossibleValue >= rollResult.MinAllowableValue() 
+                                        && rollResult.PossibleValue > 0 
+                                        && index - player.Roll < 8))
+                    return;
             }
 
             // 4 and 3 in a row
             for (var scoreIndex = 8; scoreIndex >= 7; scoreIndex += -1)
             {
-                result = player.GetResultForScore((Scores) scoreIndex);
-                if (result == null || result.HasValue || player.Roll != 3 ||
-                    result.PossibleValue < result.MinAllowableValue() - (game.Round - 1) / 2 ||
-                    result.PossibleValue <= 0) continue;
-                game.ApplyScore(result);
-                return;
+                if (ApplyScoreConsideringConditions(
+                    (Scores) scoreIndex,
+                    player,
+                    game,
+                    rollResult => player.Roll == 3
+                                  && rollResult.PossibleValue >= rollResult.MinAllowableValue() - (game.Round - 1) / 2
+                                  && rollResult.PossibleValue > 0))
+                    return;
             }
 
             // numerics 
@@ -231,16 +253,14 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             }
 
             // chance
-            result = player.GetResultForScore(Scores.Chance);
-            if (result != null
-                && !result.HasValue
-                && result.PossibleValue > 0
-                && player.Roll == 3
-                && result.PossibleValue >= result.MinAllowableValue() - (game.Round - 1) / 2)
-            {
-                game.ApplyScore(result);
+            if (ApplyScoreConsideringConditions(
+                Scores.Chance,
+                player,
+                game,
+                rollResult => rollResult.PossibleValue > 0
+                              && player.Roll == 3
+                              && rollResult.PossibleValue >= rollResult.MinAllowableValue() - (game.Round - 1) / 2))
                 return;
-            }
 
             //once again 4 and 3 in row
             for (var scoreIndex = 8; scoreIndex >= 7; scoreIndex += -1)
@@ -251,42 +271,31 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
             //if not filled - filling at least anything including 0
             for (var scoreIndex = 1; scoreIndex <= 13; scoreIndex++)
             {
-                if (ApplyScoreWithAnyValue((Scores) scoreIndex, player, game)) return;
+                if (ApplyScoreConsideringConditions((Scores) scoreIndex, player, game)) return;
             }
         }
 
-        private static bool ApplyScoreWithAnyValue(Scores score, IPlayer player, IGame game)
+        private static bool ApplyScoreConsideringConditions(
+            Scores score, 
+            IPlayer player, 
+            IGame game, 
+            Func<IRollResult,bool> resultCondition = null)
         {
             var result = player.GetResultForScore(score);
-            if (result == null || result.HasValue) return false;
+            if (result == null 
+                || result.HasValue 
+                || resultCondition != null && !resultCondition(result)) return false;
             game.ApplyScore(result);
             return true;
         }
 
         private static bool ApplyScoreIfLastRound(Scores score, IPlayer player, IGame game)
         {
-            var result = player.GetResultForScore(score);
-            if (result == null || result.HasValue || result.PossibleValue <= 0 || player.Roll != 3) return false;
-            game.ApplyScore(result);
-            return true;
-        }
-
-        private static bool ApplyScoreIfHasAllowableValue(Scores score, IPlayer player, IGame game)
-        {
-            var result = player.GetResultForScore(score);
-            if (result == null || result.HasValue || result.PossibleValue < result.MinAllowableValue() ||
-                result.PossibleValue <= 0) return false;
-            game.ApplyScore(result);
-            return true;
-        }
-
-        private static bool ApplyScoreIfHasMaxValue(Scores score, IPlayer player, IGame game)
-        {
-            var result = player.GetResultForScore(score);
-            if (result == null || result.HasValue || result.PossibleValue != result.MaxValue ||
-                result.PossibleValue <= 0) return false;
-            game.ApplyScore(result);
-            return true;
+            return ApplyScoreConsideringConditions(
+                score,
+                player,
+                game,
+                rollResult => rollResult.PossibleValue > 0 && player.Roll == 3);
         }
 
         public static void AiDecideRoll(this IPlayer player, IGame game, IDicePanel dicePanel)
