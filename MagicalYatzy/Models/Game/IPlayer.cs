@@ -7,7 +7,7 @@ namespace Sanet.MagicalYatzy.Models.Game
     {
         bool AllNumericFilled { get; }
 
-        IReadOnlyList<RollResult> Results { get; }
+        IReadOnlyList<IRollResult> Results { get; }
 
         IReadOnlyList<Artifact> MagicalArtifactsForGame { get; }
         
@@ -52,9 +52,13 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         void PrepareForGameStart(Rule rule);
         
-        RollResult GetResultForScore(Scores score);
+        IRollResult GetResultForScore(Scores score);
 
         void CheckRollResults(DieResult lastDiceResult, Rule rule);
         void UseArtifact(Artifacts artifact);
+
+        bool IsScoreFilled(Scores score);
+
+        bool CanUseArtifact(Artifacts artifact);
     }
 }

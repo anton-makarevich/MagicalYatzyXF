@@ -54,7 +54,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             ? 0 
             : Results.Where(r => r.HasValue).Select(r => r.Value).Sum() + Results.Count(f=>f.HasBonus)*100;
 
-        public IReadOnlyList<RollResult> Results { get; private set; }
+        public IReadOnlyList<IRollResult> Results { get; private set; }
         
         public IReadOnlyList<Artifact> MagicalArtifactsForGame { get; private set; }
         
@@ -68,7 +68,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         #region Methods
         
-        public RollResult GetResultForScore(Scores score)=> Results?.FirstOrDefault(f => f.ScoreType == score);
+        public IRollResult GetResultForScore(Scores score)=> Results?.FirstOrDefault(f => f.ScoreType == score);
 
         public void PrepareForGameStart(Rule rule)
         {
@@ -127,7 +127,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             MagicalArtifactsForGame.FirstOrDefault(f => f.Type == artifact)?.Use();
         }
 
-        private bool CheckYatzyJoker(DieResult lastDiceResult, Rule rule, RollResult result, int value)
+        private bool CheckYatzyJoker(DieResult lastDiceResult, Rule rule, IRollResult result, int value)
         {
             if (!IsScoreFilled(Scores.Kniffel) || !rule.HasExtendedBonuses ||
                 lastDiceResult.YatzyFiveOfAKindScore() != 50) return false;
@@ -152,6 +152,12 @@ namespace Sanet.MagicalYatzy.Models.Game
             return Name == otherPlayer.Name && 
                    Password.Decrypt(33) == otherPlayer.Password.Decrypt(33) &&
                    InGameId == otherPlayer.InGameId ;
+        }
+
+        public bool CanUseArtifact(Artifacts artifact)
+        {
+            var artifactToUse = MagicalArtifactsForGame.FirstOrDefault(f => f.Type == artifact);
+            return !artifactToUse?.IsUsed ?? false;
         }
 
         public override int GetHashCode()
