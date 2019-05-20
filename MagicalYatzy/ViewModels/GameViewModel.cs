@@ -6,6 +6,7 @@ using System.Windows.Input;
 using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
+using Sanet.MagicalYatzy.Models.Game.Extensions;
 using Sanet.MagicalYatzy.Models.Game.Magical;
 using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Services;
@@ -118,10 +119,28 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         private void DicePanelOnRollEnded(object sender, EventArgs e)
         {
-            if (!HasCurrentPlayer || !CurrentPlayer.Player.IsHuman)
+            if (!HasCurrentPlayer)
                 return;
 
-            SetRollResults();
+            if (CurrentPlayer.Player.IsHuman)
+            {
+                SetRollResults();
+            }
+            
+            //if bot
+            if (CurrentPlayer.Player.IsBot)
+            {
+                if (CurrentPlayer.Player.Roll == 3 || !CurrentPlayer.Player.AiNeedsToRollAgain())
+                    CurrentPlayer.Player.AiDecideFill(Game);
+                else
+                {
+                    CurrentPlayer.Player.AiFixDice(Game);
+                    if (Game.NumberOfFixedDice == 5)
+                        CurrentPlayer.Player.AiDecideFill(Game);
+                    else
+                        CurrentPlayer.Player.AiDecideRoll(Game, DicePanel);
+                }
+            }
 
             RefreshGameStatus();
         }
