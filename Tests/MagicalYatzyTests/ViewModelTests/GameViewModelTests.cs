@@ -87,7 +87,7 @@ namespace MagicalYatzyTests.ViewModelTests
         [Fact]
         public void RefreshesGameStatusOnPageActivation()
         {
-            CheckIfGameStatusHasBeenRefreshed(()=>{},1);
+            CheckIfGameStatusHasBeenRefreshed(()=>{_sut.AttachHandlers();},1);
         }
 
         [Fact]
@@ -1099,6 +1099,18 @@ namespace MagicalYatzyTests.ViewModelTests
         }
         
         [Fact]
+        public void DicePanelOnRollEndedDoesNotRefreshGameStatusIfThereIsNoCurrentPlayer()
+        {
+            var testAction = new Action(() =>
+            {
+                _dicePanel.RollEnded +=
+                    Raise.Event();
+            });
+            
+            CheckIfGameStatusHasBeenRefreshed(testAction, 0);
+        }
+        
+        [Fact]
         public void DicePanelOnRollEndedPopulatesRollResults()
         {
             _humanPlayer.IsHuman.Returns(true);
@@ -1173,7 +1185,7 @@ namespace MagicalYatzyTests.ViewModelTests
         #region Private methods
 
         // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
-        private void CheckIfGameStatusHasBeenRefreshed(Action testAction, int expectedTimesExecuted = 2)
+        private void CheckIfGameStatusHasBeenRefreshed(Action testAction, int expectedTimesExecuted = 1)
         {
             var currentPlayerUpdated = 0;
             var rollLabelUpdatedTimes = 0;
@@ -1184,6 +1196,8 @@ namespace MagicalYatzyTests.ViewModelTests
             var magicRollVisibilityCheckedTimes = 0;
             var fourthRollVisibilityCheckedTimes = 0;
             var manualSetRollVisibilityCheckedTimes = 0;
+            
+            _sut.AttachHandlers();
             
             _sut.PropertyChanged += (sender, args) =>
             {
@@ -1212,7 +1226,6 @@ namespace MagicalYatzyTests.ViewModelTests
                         break;
                 }
             };
-            _sut.AttachHandlers();
             
             foreach (var playerViewModel in _sut.Players)
             {
@@ -1235,6 +1248,9 @@ namespace MagicalYatzyTests.ViewModelTests
             Assert.Equal(expectedTimesExecuted, rollLabelUpdatedTimes);
             Assert.Equal(expectedTimesExecuted,canRollUpdatedTimes);
             Assert.Equal(expectedTimesExecuted, titleUpdatedTimes);
+            
+            if (expectedTimesExecuted == 0)
+                return;
             
             if (_sut.HasCurrentPlayer)
                 Assert.Equal(_sut.Players.Count, playerResultsRefreshedTimes);
