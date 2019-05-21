@@ -100,7 +100,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Ai.Extensions
             var diceOccurrences = diceResult.AiCalculatesDiceOccurrences();
             var sortedResults = diceResult.DiceResults.OrderBy(d => d).ToList();
             var (firstValue, countInRow) = diceResult.XInRow();
-            if (needsSmallStraight && countInRow == 3 || needsLargeStraight && countInRow == 4)
+            if ((needsSmallStraight && countInRow == 3) || (needsLargeStraight && countInRow == 4))
             {
                 oldValue = diceOccurrences.FirstOrDefault(f => f.amountOfDice > 1).diceValue;
                 if (oldValue == 0)

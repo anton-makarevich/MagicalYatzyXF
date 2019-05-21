@@ -48,7 +48,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         public string Name { get; set; }
         public string Password { get; set; }
         public string ProfileImage { get; set; }
-        public int Roll { get ; set ; }
+        public int Roll { get; set; }
 
         public int SeatNo { get; set; }
 
@@ -155,7 +155,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
             return Name == otherPlayer.Name && 
                    Password.Decrypt(33) == otherPlayer.Password.Decrypt(33) &&
-                   InGameId == otherPlayer.InGameId ;
+                   InGameId == otherPlayer.InGameId;
         }
 
         public bool CanUseArtifact(Artifacts artifact)
