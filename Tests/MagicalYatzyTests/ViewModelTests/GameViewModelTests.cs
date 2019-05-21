@@ -4,6 +4,7 @@ using System.Linq;
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
+using Sanet.MagicalYatzy.Models.Game.Ai;
 using Sanet.MagicalYatzy.Models.Game.Magical;
 using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Services;
@@ -87,7 +88,7 @@ namespace MagicalYatzyTests.ViewModelTests
         [Fact]
         public void RefreshesGameStatusOnPageActivation()
         {
-            CheckIfGameStatusHasBeenRefreshed(()=>{_sut.AttachHandlers();},1);
+            CheckIfGameStatusHasBeenRefreshed(()=>{_sut.AttachHandlers();});
         }
 
         [Fact]
@@ -1108,6 +1109,24 @@ namespace MagicalYatzyTests.ViewModelTests
             });
             
             CheckIfGameStatusHasBeenRefreshed(testAction, 0);
+        }
+        
+        [Fact]
+        public void DicePanelOnRollEndedForcesBotPlayerToDecideFillOnTheLastRoll()
+        {
+            var decisionMaker = Substitute.For<IGameDecisionMaker>();
+            _botPlayer.DecisionMaker.Returns(decisionMaker);
+            _botPlayer.IsBot.Returns(true);
+            _botPlayer.IsHuman.Returns(false);
+            _botPlayer.Roll = 3;
+            _botPlayer.Results.Returns(new List<RollResult>() {new RollResult(Scores.Ones, Rules.krSimple)});
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_botPlayer);
+            _sut.AttachHandlers();
+            
+            _dicePanel.RollEnded +=
+                Raise.Event();
+            
+            decisionMaker.Received().DecideFill(_gameService.CurrentLocalGame);
         }
         
         [Fact]

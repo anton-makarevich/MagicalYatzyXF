@@ -6,7 +6,7 @@ using System.Windows.Input;
 using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
-using Sanet.MagicalYatzy.Models.Game.Extensions;
+using Sanet.MagicalYatzy.Models.Game.Ai;
 using Sanet.MagicalYatzy.Models.Game.Magical;
 using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Services;
@@ -130,15 +130,15 @@ namespace Sanet.MagicalYatzy.ViewModels
             //if bot
             if (CurrentPlayer.Player.IsBot)
             {
-                if (CurrentPlayer.Player.Roll == 3 || !CurrentPlayer.Player.AiNeedsToRollAgain())
-                    CurrentPlayer.Player.AiDecideFill(Game);
+                if (CurrentPlayer.Player.Roll == 3 || !CurrentPlayer.Player.DecisionMaker.NeedsToRollAgain())
+                    CurrentPlayer.Player.DecisionMaker.DecideFill(Game);
                 else
                 {
-                    CurrentPlayer.Player.AiFixDice(Game);
+                    CurrentPlayer.Player.DecisionMaker.FixDice(Game);
                     if (Game.NumberOfFixedDice == 5)
-                        CurrentPlayer.Player.AiDecideFill(Game);
+                        CurrentPlayer.Player.DecisionMaker.DecideFill(Game);
                     else
-                        CurrentPlayer.Player.AiDecideRoll(Game, DicePanel);
+                        CurrentPlayer.Player.DecisionMaker.DecideRoll(Game, DicePanel);
                 }
             }
 

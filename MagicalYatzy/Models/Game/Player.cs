@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Sanet.MagicalYatzy.Extensions;
+using Sanet.MagicalYatzy.Models.Game.Ai;
 using Sanet.MagicalYatzy.Models.Game.Extensions;
 using Sanet.MagicalYatzy.Models.Game.Magical;
 using Sanet.MagicalYatzy.Resources;
@@ -17,7 +18,8 @@ namespace Sanet.MagicalYatzy.Models.Game
         public Player(PlayerType type, IEnumerable<string> playersInGame = null)
         {
             Type = type;
-
+            if (type == PlayerType.AI)
+                DecisionMaker = new BotDecisionMaker(this);
             Name = GetUniqueInGameName(playersInGame?.ToList() ?? new List<string>());
             ProfileImage = (IsBot) ? "BotPlayer.png" : "SanetDice.png";
         }
@@ -69,6 +71,8 @@ namespace Sanet.MagicalYatzy.Models.Game
         #region Methods
         
         public IRollResult GetResultForScore(Scores score)=> Results?.FirstOrDefault(f => f.ScoreType == score);
+
+        public IGameDecisionMaker DecisionMaker { get; }
 
         public void PrepareForGameStart(Rule rule)
         {
