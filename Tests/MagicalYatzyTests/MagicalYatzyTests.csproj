@@ -22,12 +22,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ServiceTests\" />
-    <Folder Include="ViewModelTests\" />
-    <Folder Include="UtilTests\" />
-    <Folder Include="ModelTests\" />
-    <Folder Include="ModelTests\Game\" />
-    <Folder Include="ModelTests\Common\" />
+    <Folder Include="Services\" />
+    <Folder Include="ViewModels\" />
+    <Folder Include="Utils\" />
+    <Folder Include="Models\" />
+    <Folder Include="Models\Game\" />
+    <Folder Include="Models\Common\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MagicalYatzy\MagicalYatzy.csproj" />
