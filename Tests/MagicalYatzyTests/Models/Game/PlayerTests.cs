@@ -389,5 +389,13 @@ namespace MagicalYatzyTests.Models.Game
             
             Assert.False(_sut.CanUseArtifact(Artifacts.ManualSet));
         }
+
+        [Fact]
+        public void BotPlayerHasDecisionMaker()
+        {
+            var sut = new Player(PlayerType.AI);
+            
+            Assert.NotNull(sut.DecisionMaker);
+        }
     }
 }

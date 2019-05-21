@@ -1119,6 +1119,7 @@ namespace MagicalYatzyTests.ViewModels
             _botPlayer.IsBot.Returns(true);
             _botPlayer.IsHuman.Returns(false);
             _botPlayer.Roll = 3;
+            decisionMaker.NeedsToRollAgain().Returns(true);
             _botPlayer.Results.Returns(new List<RollResult>() {new RollResult(Scores.Ones, Rules.krSimple)});
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_botPlayer);
             _sut.AttachHandlers();
@@ -1127,6 +1128,83 @@ namespace MagicalYatzyTests.ViewModels
                 Raise.Event();
             
             decisionMaker.Received().DecideFill(_gameService.CurrentLocalGame);
+        }
+        
+        [Fact]
+        public void DicePanelOnRollEndedForcesBotPlayerToDecideFillIfHeDoesNotHaveToRollAgain()
+        {
+            var decisionMaker = Substitute.For<IGameDecisionMaker>();
+            _botPlayer.DecisionMaker.Returns(decisionMaker);
+            _botPlayer.IsBot.Returns(true);
+            _botPlayer.IsHuman.Returns(false);
+            decisionMaker.NeedsToRollAgain().Returns(false);
+            _botPlayer.Results.Returns(new List<RollResult>() {new RollResult(Scores.Ones, Rules.krSimple)});
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_botPlayer);
+            _sut.AttachHandlers();
+            
+            _dicePanel.RollEnded +=
+                Raise.Event();
+            
+            decisionMaker.Received().DecideFill(_gameService.CurrentLocalGame);
+        }
+        
+        [Fact]
+        public void DicePanelOnRollEndedForcesBotToTryAndFixDiceIfNotLastRoll()
+        {
+            var decisionMaker = Substitute.For<IGameDecisionMaker>();
+            _botPlayer.DecisionMaker.Returns(decisionMaker);
+            _botPlayer.IsBot.Returns(true);
+            _botPlayer.IsHuman.Returns(false);
+            _botPlayer.Roll = 2;
+            decisionMaker.NeedsToRollAgain().Returns(true);
+            _botPlayer.Results.Returns(new List<RollResult>() {new RollResult(Scores.Ones, Rules.krSimple)});
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_botPlayer);
+            _sut.AttachHandlers();
+            
+            _dicePanel.RollEnded +=
+                Raise.Event();
+            
+            decisionMaker.Received().FixDice(_gameService.CurrentLocalGame);
+        }
+        
+        [Fact]
+        public void DicePanelOnRollEndedForcesBotToFillIfNotLastRollAndAllDiceAreFixed()
+        {
+            var decisionMaker = Substitute.For<IGameDecisionMaker>();
+            _botPlayer.DecisionMaker.Returns(decisionMaker);
+            _botPlayer.IsBot.Returns(true);
+            _botPlayer.IsHuman.Returns(false);
+            _botPlayer.Roll = 2;
+            decisionMaker.NeedsToRollAgain().Returns(true);
+            _botPlayer.Results.Returns(new List<RollResult>() {new RollResult(Scores.Ones, Rules.krSimple)});
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_botPlayer);
+            _gameService.CurrentLocalGame.NumberOfFixedDice.Returns(5);
+            _sut.AttachHandlers();
+            
+            _dicePanel.RollEnded +=
+                Raise.Event();
+            
+            decisionMaker.Received().DecideFill(_gameService.CurrentLocalGame);
+        }
+        
+        [Fact]
+        public void DicePanelOnRollEndedForcesBotToDecideNextRollIfNotLastRollAndNotAllDiceAreFixed()
+        {
+            var decisionMaker = Substitute.For<IGameDecisionMaker>();
+            _botPlayer.DecisionMaker.Returns(decisionMaker);
+            _botPlayer.IsBot.Returns(true);
+            _botPlayer.IsHuman.Returns(false);
+            _botPlayer.Roll = 2;
+            decisionMaker.NeedsToRollAgain().Returns(true);
+            _botPlayer.Results.Returns(new List<RollResult>() {new RollResult(Scores.Ones, Rules.krSimple)});
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_botPlayer);
+            _gameService.CurrentLocalGame.NumberOfFixedDice.Returns(3);
+            _sut.AttachHandlers();
+            
+            _dicePanel.RollEnded +=
+                Raise.Event();
+            
+            decisionMaker.Received().DecideRoll(_gameService.CurrentLocalGame, _dicePanel);
         }
         
         [Fact]
