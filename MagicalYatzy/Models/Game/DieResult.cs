@@ -35,6 +35,9 @@ namespace Sanet.MagicalYatzy.Models.Game
         
         public (int firstValue, int numberOfValuesInRow) CalculateInRowDice()
         {
+            if (!DiceResults.Any())
+                return (0, 0);
+            
             var sortedResults = DiceResults.OrderBy(f => f).Distinct().ToList();
 
             var firstValue = sortedResults.First();

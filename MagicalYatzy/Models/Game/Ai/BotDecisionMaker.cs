@@ -202,7 +202,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Ai
             var result = _player.GetResultForScore(Scores.LargeStraight);
             if (result == null || result.HasValue) return false;
             var (first, count) = game.LastDiceResult.CalculateInRowDice();
-            if (first <= 0) return false;
+            if (count <= 2) return false;
             for (var diceValue = first; diceValue < first + count; diceValue++)
             {
                 if (!game.IsDiceFixed(diceValue))

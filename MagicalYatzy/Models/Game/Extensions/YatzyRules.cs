@@ -35,9 +35,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
         {
             const int score = 30;
 
-            return result.DiceResults.Distinct().Count() >= 4 
-                   && result.DiceResults.Contains(3) 
-                   && result.DiceResults.Contains(4)
+            return result.CalculateInRowDice().numberOfValuesInRow >= 4
                 ? score 
                 : 0;
         }
@@ -46,9 +44,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
         {
             const int score = 40;
             
-            return result.DiceResults.Distinct().Count() == 5 
-                   && result.DiceResults.Contains(3) 
-                   && result.DiceResults.Contains(4)
+            return result.CalculateInRowDice().numberOfValuesInRow == 5
                 ? score 
                 : 0;
         }
