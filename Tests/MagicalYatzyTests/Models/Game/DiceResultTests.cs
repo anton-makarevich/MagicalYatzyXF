@@ -8,7 +8,7 @@ namespace MagicalYatzyTests.Models.Game
     public class DiceResultTests
     {
         [Fact]
-        public void XInRowReturnsFirstValueAndAmountOfValuesInRow()
+        public void CorrectlyCalculatesAmountOfValuesInRowAndFirstValueOfSequence()
         {
             var sut = new DieResult {DiceResults = new List<int> {3, 2, 4, 2, 4}};
             var (firstValue, numberOfValuesInRow) = sut.CalculateInRowDice();
@@ -24,6 +24,21 @@ namespace MagicalYatzyTests.Models.Game
             (firstValue, numberOfValuesInRow) = sut.CalculateInRowDice();
             Assert.Equal(2,firstValue);
             Assert.Equal(5,numberOfValuesInRow);
+            
+            sut = new DieResult {DiceResults = new List<int> {3, 1, 4, 6, 6}};
+            (firstValue, numberOfValuesInRow) = sut.CalculateInRowDice();
+            Assert.Equal(3,firstValue);
+            Assert.Equal(2,numberOfValuesInRow);
+            
+            sut = new DieResult {DiceResults = new List<int> {1, 2, 4, 5, 6}};
+            (firstValue, numberOfValuesInRow) = sut.CalculateInRowDice();
+            Assert.Equal(4,firstValue);
+            Assert.Equal(3,numberOfValuesInRow);
+            
+            sut = new DieResult {DiceResults = new List<int> {1, 2, 3, 5, 6}};
+            (firstValue, numberOfValuesInRow) = sut.CalculateInRowDice();
+            Assert.Equal(1,firstValue);
+            Assert.Equal(3,numberOfValuesInRow);
         }
         
         [Fact]
@@ -38,10 +53,10 @@ namespace MagicalYatzyTests.Models.Game
             };
             foreach (var resultToTest in resultsToTest)
             {
-                var diceResult = new DieResult() {DiceResults = resultToTest};
-                var occurrences = diceResult.CalculateDiceOccurrences();
+                var sut = new DieResult() {DiceResults = resultToTest};
+                var occurrences = sut.CalculateDiceOccurrences();
                 foreach (var (diceValue, amountOfDice) in occurrences)
-                    Assert.Equal(diceResult.DiceResults.Count(i=>i==diceValue),amountOfDice);
+                    Assert.Equal(sut.DiceResults.Count(i=>i==diceValue),amountOfDice);
             }
         }
     }

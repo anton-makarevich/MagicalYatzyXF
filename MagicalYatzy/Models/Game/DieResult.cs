@@ -35,25 +35,29 @@ namespace Sanet.MagicalYatzy.Models.Game
         
         public (int firstValue, int numberOfValuesInRow) CalculateInRowDice()
         {
-            var occurrences = new int[7];
-            var count = 3;
-            foreach (var res in DiceResults)
+            var sortedResults = DiceResults.OrderBy(f => f).Distinct().ToList();
+
+            var firstValue = sortedResults.First();
+            var amountOfValuesInRow = 1;
+            
+            var stints = new List<(int,int)>();
+            
+            for (var resultIndex = 0; resultIndex < sortedResults.Count-1; resultIndex++)
             {
-                occurrences[res] += 1;
-            }
-
-            for (var i = 1; i < 5; i++)
-                if (occurrences[i] >= 1 & occurrences[i + 1] >= 1 & occurrences[i + 2] >= 1)
+                if (sortedResults[resultIndex + 1] - sortedResults[resultIndex] == 1)
                 {
-                    if (i >= 4 || occurrences[i + 3] < 1) return (i, count);
-                    count = 4;
-                    if (i < 3 && occurrences[i + 4] >= 1)
-                        count = 5;
-
-                    return (i, count);
+                    amountOfValuesInRow++;
                 }
-
-            return (0, 0);
+                else
+                {
+                    stints.Add((firstValue,amountOfValuesInRow));
+                    firstValue = sortedResults[resultIndex + 1];
+                    amountOfValuesInRow = 1;
+                }
+            }
+            stints.Add((firstValue,amountOfValuesInRow));
+            
+            return stints.OrderBy(f=>f.Item2).Last();
         }
         
         public List<(int diceValue, int amountOfDice)> CalculateDiceOccurrences()

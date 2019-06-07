@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.Ai.Extensions;
 using Xunit;
