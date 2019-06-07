@@ -75,16 +75,17 @@ namespace MagicalYatzyTests.ViewModels
         }
         
         [Fact]
-        public void HumanPlayersGetReadyAutomaticallyForLocalGame()
+        public void HumanAndBotPlayersGetReadyAutomaticallyForLocalGame()
         {
             _humanPlayer.IsHuman.Returns(true);
+            _botPlayer.IsBot.Returns(true);
             
             _sut.AttachHandlers();
             
             _gameService.CurrentLocalGame.Received().SetPlayerReady(_humanPlayer,true);
-            _gameService.CurrentLocalGame.DidNotReceive().SetPlayerReady(_botPlayer,true);
+            _gameService.CurrentLocalGame.Received().SetPlayerReady(_botPlayer,true);
         }
-        
+
         [Fact]
         public void RefreshesGameStatusOnPageActivation()
         {

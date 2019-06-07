@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Sanet.MagicalYatzy.Models.Game.Ai.Extensions
@@ -25,30 +24,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Ai.Extensions
 
             return numberOfPairs;
         }
-
-        public static (int firstValue, int numberOfValuesInRow) XInRow(this DieResult result)
-        {
-            var occurrences = new int[7];
-            var count = 3;
-            foreach (var res in result.DiceResults)
-            {
-                occurrences[res] += 1;
-            }
-
-            for (var i = 1; i < 5; i++)
-                if (occurrences[i] >= 1 & occurrences[i + 1] >= 1 & occurrences[i + 2] >= 1)
-                {
-                    if (i >= 4 || occurrences[i + 3] < 1) return (i, count);
-                    count = 4;
-                    if (i < 3 && occurrences[i + 4] >= 1)
-                        count = 5;
-
-                    return (i, count);
-                }
-
-            return (0, 0);
-        }
-
+        
         public static int MinAllowableValue(this IRollResult result)
         {
             switch (result.ScoreType)
@@ -83,13 +59,6 @@ namespace Sanet.MagicalYatzy.Models.Game.Ai.Extensions
 
             return 0;
         }
-
-        public static List<(int diceValue, int amountOfDice)> AiCalculatesDiceOccurrences(this DieResult diceResult)
-        {
-            return diceResult.DiceResults.GroupBy(i => i)
-                .Select(grp => (grp.Key, grp.Count()))
-                .ToList();
-        }
         
         public static (int oldValue, int newValue) AiDecideDiceChange(
             this DieResult diceResult, 
@@ -97,9 +66,9 @@ namespace Sanet.MagicalYatzy.Models.Game.Ai.Extensions
             bool needsLargeStraight)
         {
             int oldValue, newValue;
-            var diceOccurrences = diceResult.AiCalculatesDiceOccurrences();
+            var diceOccurrences = diceResult.CalculateDiceOccurrences();
             var sortedResults = diceResult.DiceResults.OrderBy(d => d).ToList();
-            var (firstValue, countInRow) = diceResult.XInRow();
+            var (firstValue, countInRow) = diceResult.CalculateInRowDice();
             if ((needsSmallStraight && countInRow == 3) || (needsLargeStraight && countInRow == 4))
             {
                 oldValue = diceOccurrences.FirstOrDefault(f => f.amountOfDice > 1).diceValue;

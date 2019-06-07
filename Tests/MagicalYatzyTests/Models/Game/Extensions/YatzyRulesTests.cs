@@ -84,9 +84,18 @@ namespace MagicalYatzyTests.Models.Game.Extensions
         [Fact]
         public void SmallStraightReturnsZeroIfThereAreLessThanFourValuesInRow()
         {
-            var sut = new DieResult {DiceResults = new List<int> {1, 5, 2, 3, 2}};
-            var result = sut.YatzySmallStraightScore();
-            Assert.Equal(0,result);
+            var wrongDiceResults = new[]
+            {
+                new List<int> {1, 5, 2, 3, 2},
+                new List<int> { 1, 6, 3, 4, 6 }
+            };
+            foreach (var diceResult in wrongDiceResults)
+            {
+                var sut = new DieResult {DiceResults = diceResult};
+
+                var result = sut.YatzySmallStraightScore();
+                Assert.Equal(0, result);
+            }
         }
         
         [Fact]
@@ -96,13 +105,21 @@ namespace MagicalYatzyTests.Models.Game.Extensions
             var result = sut.YatzyLargeStraightScore();
             Assert.Equal(40,result);
         }
-        
+
         [Fact]
         public void LargeStraightReturnsZeroIfThereAreLessThanFiveValuesInRow()
         {
-            var sut = new DieResult {DiceResults = new List<int> {1, 2, 3, 5, 6}};
-            var result = sut.YatzyLargeStraightScore();
-            Assert.Equal(0,result);
+            var wrongDiceResults = new[]
+            {
+                new List<int> { 1, 2, 3, 5, 6 },
+                new List<int> { 1, 2, 3, 4, 6 }
+            };
+            foreach (var diceResult in wrongDiceResults)
+            {
+                var sut = new DieResult { DiceResults = diceResult };
+                var result = sut.YatzyLargeStraightScore();
+                Assert.Equal(0, result);
+            }
         }
         
         [Fact]

@@ -87,7 +87,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             
             foreach (var player in Game.Players)
             {
-                if (player.IsHuman && !player.IsReady)
+                if ((player.IsHuman || player.IsBot) && !player.IsReady)
                     Game.SetPlayerReady(player,true);
                 Players.Add(new PlayerViewModel(player, _localizationService));
             }

@@ -40,7 +40,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Ai
 
         public void FixDice(IGame game)
         {
-            var amountOfDiceForValue = game.LastDiceResult.AiCalculatesDiceOccurrences();
+            var amountOfDiceForValue = game.LastDiceResult.CalculateDiceOccurrences();
 
             // check for 3 fives or sixs
             if (FixFivesOrSixs(game, amountOfDiceForValue)) return;
@@ -63,7 +63,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Ai
 
         public void DecideFill(IGame game)
         {
-            var amountOfDiceForValue = game.LastDiceResult.AiCalculatesDiceOccurrences();
+            var amountOfDiceForValue = game.LastDiceResult.CalculateDiceOccurrences();
 
             // check for kniffel
             if (ApplyScoreConsideringCondition(
@@ -201,7 +201,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Ai
         {
             var result = _player.GetResultForScore(Scores.LargeStraight);
             if (result == null || result.HasValue) return false;
-            var (first, count) = game.LastDiceResult.XInRow();
+            var (first, count) = game.LastDiceResult.CalculateInRowDice();
             if (first <= 0) return false;
             for (var diceValue = first; diceValue < first + count; diceValue++)
             {
