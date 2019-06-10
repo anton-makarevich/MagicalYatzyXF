@@ -1,9 +1,9 @@
-﻿using Sanet.MagicalYatzy.Extensions;
-using Sanet.MagicalYatzy.Models.Common;
+﻿using Sanet.MagicalYatzy.Models.Common;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using System;
 using System.Diagnostics;
+using Sanet.MagicalYatzy.Models.Game.Extensions;
 
 namespace Sanet.MagicalYatzy.Models.Game
 {

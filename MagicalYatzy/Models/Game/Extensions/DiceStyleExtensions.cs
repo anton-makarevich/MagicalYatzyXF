@@ -1,9 +1,8 @@
-﻿using Sanet.MagicalYatzy.Models.Game;
-
-namespace Sanet.MagicalYatzy.Extensions
+namespace Sanet.MagicalYatzy.Models.Game.Extensions
 {
-    public static class GameExtensions
+    public static class DiceStyleExtensions
     {
+
         public static string ToPathComponent(this DiceStyle style)
         {
             switch (style)
@@ -13,6 +12,7 @@ namespace Sanet.MagicalYatzy.Extensions
                 case DiceStyle.Blue:
                     return "_2.";
             }
+
             return "_0.";
         }
     }
