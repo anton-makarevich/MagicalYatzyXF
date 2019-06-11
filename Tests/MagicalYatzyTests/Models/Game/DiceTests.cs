@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using System;
+using NSubstitute;
 using Sanet.MagicalYatzy.Models.Common;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
@@ -190,6 +191,24 @@ namespace MagicalYatzyTests.Models.Game
                     Assert.EndsWith($"{expectedFrame}.png", _sut.ImagePath);
                 }
             }
+        }
+
+        [Fact]
+        public void ThrowsExceptionWhenResultIsNotValid()
+        {
+            var exception = Assert.Throws<Exception>(() => { _sut.Result = 8; });
+            Assert.StartsWith("Unexpected value", exception.Message);
+        }
+
+        [Fact]
+        public void InitializePositionReturnsZeroIfPanelIsOfZeroSize()
+        {
+            _dicePanelMock.Bounds.Returns(new Rectangle(0,0,0,0));
+            
+            _sut.InitializeLocation();
+            
+            Assert.Equal(0,_sut.PosX);
+            Assert.Equal(0,_sut.PosY);
         }
     }
 }
