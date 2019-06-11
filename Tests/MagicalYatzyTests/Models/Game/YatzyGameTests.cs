@@ -1081,5 +1081,30 @@ namespace MagicalYatzyTests.Models.Game
             player2.Roll = 3;
             Assert.Equal(1, _sut.Roll);
         }
+
+        [Fact]
+        public void PassingNullPlayerToChangeStyleDoesNotInvokeStyleChangedEvent()
+        {
+            var styleChangedTimes = 0;
+            _sut.StyleChanged += (sender, args) => { styleChangedTimes++;};
+            
+            _sut.ChangeStyle(null, DiceStyle.Red);
+            
+            Assert.Equal(0,styleChangedTimes);
+        }
+
+        [Fact]
+        public void NextTurnOnLastRoundInvokesGameFinishedEvent()
+        {
+            var gameFinishedTimes = 0;
+            _sut.GameFinished += (sender, args) => { gameFinishedTimes++;};
+            var player = new Player();
+            _sut.JoinGame(player);
+
+            
+            _sut.NextTurn();
+            
+            Assert.Equal(1,gameFinishedTimes);
+        }
     }
 }

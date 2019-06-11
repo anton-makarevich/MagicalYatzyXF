@@ -265,9 +265,6 @@ namespace Sanet.MagicalYatzy.Models.Game
         {
             lock (_syncRoot)
             {
-                if (Players == null)
-                    Players = new List<IPlayer>();
-
                 var seat = 0;
                 if (Players.Count(f => f.IsReady) == 0)
                 {
