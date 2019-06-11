@@ -210,5 +210,43 @@ namespace MagicalYatzyTests.Models.Game
             Assert.Equal(0,_sut.PosX);
             Assert.Equal(0,_sut.PosY);
         }
+
+        [Fact]
+        public void DicePositionIsAlwaysWithinDicePanelBounds()
+        {
+            _dicePanelMock.Bounds.Returns(_dicePanelBounds);
+            
+            _sut.PosX = -3;
+            _sut.PosY = -3;
+            
+            Assert.Equal(0,_sut.PosX);
+            Assert.Equal(0,_sut.PosY);
+            
+            _sut.PosX = 190;
+            _sut.PosY = 190;
+            
+            Assert.Equal(_dicePanelBounds.Width-_sut.Bounds.Width,_sut.PosX);
+            Assert.Equal(_dicePanelBounds.Height-_sut.Bounds.Height,_sut.PosY);
+        }
+
+        [Fact]
+        public void InitializeRollHandlesInvalidVales()
+        {
+            _sut.InitializeRoll(-3);
+            
+            Assert.True(_sut.Result>0 && _sut.Result<7);
+        }
+
+        [Fact]
+        public void InitializeRollOnFixedDiceSetsItsStatusToStoppedAndDoesntChangeValue()
+        {
+            _sut.Result = 4;
+            _sut.IsFixed = true;
+            
+            _sut.InitializeRoll(3);
+
+            Assert.Equal(DieStatus.Stopped, _sut.Status);
+            Assert.Equal(4,_sut.Result);
+        }
     }
 }
