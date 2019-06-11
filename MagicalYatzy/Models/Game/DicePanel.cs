@@ -39,9 +39,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         #endregion
 
         #region Properties
-
-        public bool TreeDScale { get; set; }
-        public double TreeDScaleFactor { get; set; }
+        
         public bool PlaySound { get; set; }
         public DiceStyle PanelStyle { get; } = DiceStyle.Classic;
         public List<Die> Dice { get; set; } = new List<Die>();
@@ -235,7 +233,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         {
             var dice = Dice.FirstOrDefault(f => f.Result == diceValue);
             if (dice == null)
-            return null;
+                return null;
             return new Point(dice.PosX,dice.PosY);
         }
         #endregion
