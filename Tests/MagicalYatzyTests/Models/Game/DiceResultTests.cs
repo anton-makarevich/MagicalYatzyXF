@@ -59,5 +59,21 @@ namespace MagicalYatzyTests.Models.Game
                     Assert.Equal(sut.DiceResults.Count(i=>i==diceValue),amountOfDice);
             }
         }
+
+        [Fact]
+        public void TotalIsEqualToZeroIfResultsAreNotDefines()
+        {
+            var sut = new DieResult();
+            
+            Assert.Equal(0,sut.Total);
+        }
+        
+        [Fact]
+        public void NumberOfDiceIsEqualToZeroIfResultsAreNotDefines()
+        {
+            var sut = new DieResult();
+            
+            Assert.Equal(0,sut.NumDice);
+        }
     }
 }
