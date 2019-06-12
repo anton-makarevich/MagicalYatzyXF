@@ -8,10 +8,6 @@ namespace Sanet.MagicalYatzy.Services.Api
 {
     public class LegacyWcfClient:IApiClient
     {
-        public LegacyWcfClient()
-        {
-            
-        }
         public async Task<IPlayer> LoginUserAsync(string username, string password)
         {
             var address = new EndpointAddress("http://sanet.by/KniffelService.asmx");

@@ -113,8 +113,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
                 if (_posY < 0)
                     _posY = 0;
-
-
+                
                 if (_dicePanel.Bounds.Height > Height && _dicePanel.Bounds.Height < _posY + Height)
                     _posY = (int) (_dicePanel.Bounds.Height) - Height;
 
@@ -164,7 +163,6 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public void InitializeLocation()
         {
-
             var width = (int) _dicePanel.Bounds.Width;
             var height = (int) _dicePanel.Bounds.Height;
             if (width > 0 && height > 0)

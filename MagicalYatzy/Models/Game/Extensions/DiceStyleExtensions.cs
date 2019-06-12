@@ -2,7 +2,6 @@ namespace Sanet.MagicalYatzy.Models.Game.Extensions
 {
     public static class DiceStyleExtensions
     {
-
         public static string ToPathComponent(this DiceStyle style)
         {
             switch (style)

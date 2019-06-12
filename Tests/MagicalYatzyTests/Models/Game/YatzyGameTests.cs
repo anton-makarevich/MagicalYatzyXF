@@ -1001,7 +1001,7 @@ namespace MagicalYatzyTests.Models.Game
         }
         
         [Fact]
-        public void ReportRollInvolesDiceRolledEvent()
+        public void ReportRollInvolvesDiceRolledEvent()
         {
             var player1 = new Player();
             var diceRolledInvokedTimes = 0;
@@ -1105,6 +1105,66 @@ namespace MagicalYatzyTests.Models.Game
             _sut.NextTurn();
             
             Assert.Equal(1,gameFinishedTimes);
+        }
+
+        [Fact]
+        public void ReportRollPreservesFixedValues()
+        {
+            var player = new Player();
+            _sut.JoinGame(player);
+            _sut.SetPlayerReady(player,true);
+            _sut.ReportRoll();
+            var diceToFix = _sut.LastDiceResult.DiceResults.Take(3).ToList();
+            foreach (var dice in diceToFix)
+            {
+                _sut.FixDice(dice,true);
+            }
+            
+            _sut.ReportRoll();
+
+            for (var index = 0; index < 3; index++)
+            {
+                Assert.Equal(diceToFix[index],_sut.LastDiceResult.DiceResults[index]);
+            }
+        }
+
+        [Fact]
+        public void ReRollModeProducesTheSameValuesAsPreviousRoll()
+        {
+            var player = new Player();
+            _sut = new YatzyGame(Rules.krMagic, new RandomDiceGenerator());
+            _sut.JoinGame(player);
+            _sut.SetPlayerReady(player,true);
+            _sut.ReportRoll();
+            var lastResults = _sut.LastDiceResult.DiceResults;
+            _sut.ReRollMode = true;
+            
+            _sut.ReportRoll();
+
+            for (var index = 0; index < lastResults.Count; index++)
+            {
+                Assert.Equal(lastResults[index],_sut.LastDiceResult.DiceResults[index]);
+            }
+        }
+        
+        [Fact]
+        public void ReRollModeProducesTheSameValuesAsPreviousRollNotTheFirstRoll()
+        {
+            var player = new Player();
+            _sut = new YatzyGame(Rules.krMagic, new RandomDiceGenerator());
+            _sut.JoinGame(player);
+            _sut.SetPlayerReady(player,true);
+            _sut.ReportRoll();
+            _sut.ReportRoll();
+            var lastResults = _sut.LastDiceResult.DiceResults;
+            _sut.ReRollMode = true;
+            
+            _sut.ReportRoll();
+
+            for (var index = 0; index < lastResults.Count; index++)
+            {
+                Assert.Equal(lastResults[index],_sut.LastDiceResult.DiceResults[index]);
+            }
         }
     }
 }

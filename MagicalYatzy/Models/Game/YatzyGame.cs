@@ -104,6 +104,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             set
             {
                 _reRollMode = value;
+                
                 if (!value)
                     _thisTurnValues = new Queue<int>();
                 else
@@ -354,10 +355,9 @@ namespace Sanet.MagicalYatzy.Models.Game
                     _lastRollResults = freeHands[_randomizer.Next(freeHands.Count)].GetMagicResults();
 
                     MagicRollUsed?.Invoke(this, new PlayerEventArgs(CurrentPlayer));
-                    //CurrentPlayer.OnMagicRollUsed();
+                    
                     foreach (var result in _lastRollResults)
                         _thisTurnValues.Enqueue(result);
-                    //roll report
                     DiceRolled?.Invoke(this, new RollEventArgs(CurrentPlayer, _lastRollResults));
                 }
             }
@@ -377,6 +377,9 @@ namespace Sanet.MagicalYatzy.Models.Game
                     _lastRollResults[diceCounter] = _fixedRollResults[diceCounter];
                 }
                 diceIndexToSet = _fixedRollResults.Count;
+
+                if (!ReRollMode)
+                    _thisTurnValues = new Queue<int>();
 
                 for (var diceCounter = diceIndexToSet; diceCounter <= 4; diceCounter++)
                 {
