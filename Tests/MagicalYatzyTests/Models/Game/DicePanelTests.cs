@@ -339,5 +339,144 @@ namespace MagicalYatzyTests.Models.Game
             Assert.NotNull(dicePosition);
             Assert.Equal(new Point(dice.PosX,dice.PosY), dicePosition.Value);
         }
+
+        [Fact]
+        public void DefaultValueForPlaySoundIsFalse()
+        {
+            Assert.False(_sut.PlaySound);
+        }
+
+        [Fact]
+        public void ChangeDiceDoesNotWorkIfValueIsInvalid()
+        {
+            // Arrange
+            _sut.RollDelay = 0;
+
+            // Act
+            _sut.RollDice(_testResults);
+            _sut.ChangeDice(1, 2);
+            _sut.ChangeDice(1, 6);
+
+            // Assert
+            Assert.DoesNotContain(6, _sut.Result.DiceResults);
+        }
+        
+        [Fact]
+        public void ManualSetModeIsSwitchedOffOnRollDice()
+        {
+            // Arrange
+            _sut.RollDelay = 0;
+            _sut.ManualSetMode = true;
+
+            // Act
+            _sut.RollDice(_testResults);
+            
+            // Assert
+            Assert.False(_sut.ManualSetMode);
+        }
+
+        [Fact]
+        public void RollStartedIsNotInvokedIfAllDiceAreFixed()
+        {
+            // Arrange
+            var rollStartedTimes = 0;
+            _sut.RollDelay = 0;
+            _sut.RollStarted += (sender, args) =>
+            {
+                rollStartedTimes++;
+            };
+            _sut.RollDice(_testResults);
+            foreach (var result in _sut.Result.DiceResults)  
+            {
+                _sut.FixDice(result,true);
+            }
+            
+            // Act
+            _sut.RollDice(null);
+            
+            // Assert
+            Assert.Equal(1, rollStartedTimes);
+        }
+        
+        [Fact]
+        public void FixedDiceValueIsNotOverridenOnNextRoll()
+        {
+            // Arrange
+            _sut.RollDelay = 0;
+            _sut.RollDice(_testResults);
+            _sut.FixDice(1,true);
+            var newResults = new List<int> { 2, 4, 3, 3, 6, 5 };
+            
+            // Act
+            _sut.RollDice(newResults);
+            
+            // Assert
+            Assert.Contains(1, _sut.Result.DiceResults);
+        }
+        
+        [Fact]
+        public void ClickOnDiceDoesNotFixItIfLocationIsMissed()
+        {
+            // Arrange
+            const int width = 300;
+            const int height = 200;
+            _sut.DiceCount = 1;
+            _sut.ClickToFix = true;
+            _sut.Resize(width, height);
+            var diceToSelect = _sut.Dice.First();
+            var pointInDice = new Point( diceToSelect.Bounds.Center.X+72, diceToSelect.Bounds.Center.Y+72);
+
+            // Act
+            _sut.DieClicked(pointInDice);
+
+            // Assert
+            Assert.Equal(0, _sut.FixedDiceCount);
+        }
+        
+        [Fact]
+        public void ResizeDoesNotRearrangeDicePositionsIfNewSizeIsTheSame()
+        {
+            // Arrange
+            const int width = 300;
+            const int height = 200;
+            _sut.DiceCount = 1;
+            _sut.Resize(width, height);
+            var dicePositionX = _sut.Dice.First().PosX;
+            var dicePositionY = _sut.Dice.First().PosY;
+           
+            // Act
+            _sut.Resize(width, height);
+
+            // Assert
+            Assert.Equal(dicePositionX, _sut.Dice.First().PosX);
+            Assert.Equal(dicePositionY, _sut.Dice.First().PosY);
+        }
+        
+        [Fact]
+        public void GetDicePositionReturnsNullIfWrongValueIsPassedAsArgument()
+        {
+            // Arrange
+            _sut.RollDelay = 0;
+            _sut.RollDice(_testResults);
+
+            // Act
+            var position = _sut.GetDicePosition(6);
+            
+            // Assert
+            Assert.Null(position);
+        }
+        
+        [Fact]
+        public void HandleCollisionsDoesNotCrashIfThereIsOneDice()
+        {
+            // Arrange
+            const int width = 300;
+            const int height = 200;
+            _sut.DiceCount = 1;
+            _sut.Resize(width, height);
+
+            // Act
+            _sut.RollDice(null);
+        }
     }
 }

@@ -316,18 +316,13 @@ namespace Sanet.MagicalYatzy.Models.Game
         private void HandleCollisions()
         {
             int i;
-
-            if (DiceCount == 1)
-                return;
-
+            
             //can't use foreach loops here, want to start j loop index AFTER first loop
             for (i = 0; i <= Dice.Count - 2; i++)
             {
                 int j;
                 for (j = i + 1; j <= Dice.Count - 1; j++)
                 {
-                    if (i == j)
-                        continue;
                     var di = Dice[i];
                     var dj = Dice[j];
                     di.HandleCollision(dj);
