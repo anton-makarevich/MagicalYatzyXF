@@ -86,5 +86,14 @@ namespace MagicalYatzyTests.ViewModels
         {
             Assert.Equal("close.png", _sut.CloseImage);
         }
+
+        [Fact]
+        public void DoesNotCreatePlayersCollectionIfThereIsNoPlayersInGame()
+        {
+            _game.Players.Returns(new List<IPlayer>());
+            _sut.AttachHandlers();
+            
+            Assert.Null(_sut.Players);
+        }
     }
 }
