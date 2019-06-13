@@ -179,7 +179,7 @@ namespace MagicalYatzyTests.Models.Game
         }
         
         [Fact]
-        public void CorrectlyCalculatesMaxreminingNumericScore()
+        public void CorrectlyCalculatesMaxRemainingNumericScore()
         {
             // Arrange
             var rule = new Rule(Rules.krBaby);
@@ -396,6 +396,16 @@ namespace MagicalYatzyTests.Models.Game
             var sut = new Player(PlayerType.AI);
             
             Assert.NotNull(sut.DecisionMaker);
+        }
+
+        [Fact]
+        public void PlayerIsNotEqualToNotPlayer()
+        {
+            var notPlayer = new object();
+
+            var isEqual = _sut.Equals(notPlayer);
+            
+            Assert.False(isEqual);
         }
     }
 }

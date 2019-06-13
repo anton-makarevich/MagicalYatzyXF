@@ -15,7 +15,7 @@ namespace Sanet.MagicalYatzy.ViewModels
 {
     public class LobbyViewModel: DicePanelViewModel
     {
-        private const int MaxPlayers = 4;
+        public const int MaxPlayers = 4;
         
         private readonly IPlayerService _playerService;
         private bool _canAddBot = true;

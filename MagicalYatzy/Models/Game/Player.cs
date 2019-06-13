@@ -175,15 +175,18 @@ namespace Sanet.MagicalYatzy.Models.Game
         {
             var numberOfPlayers = 1;
             var defaultName = (IsBot) ? Strings.BotNameDefault : Strings.PlayerNameDefault;
-            do
+            if (names != null && names.Any())
             {
-                var name = $"{defaultName} {numberOfPlayers}";
-                if (!names.Contains(name))
-                    return name;
-                numberOfPlayers++;
-            } while (numberOfPlayers < 10000);
+                do
+                {
+                    var name = $"{defaultName} {numberOfPlayers}";
+                    if (!names.Contains(name))
+                        return name;
+                    numberOfPlayers++;
+                } while (numberOfPlayers < 10000);
+            }
 
-            return defaultName;
+            return $"{defaultName} 1";
         }
     }
 }

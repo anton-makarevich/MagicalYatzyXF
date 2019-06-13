@@ -486,5 +486,16 @@ namespace MagicalYatzyTests.ViewModels
             
             Assert.True(_sut.CanStartGame);
         }
+
+        [Fact]
+        public void DoesNotAddMorePlayerWhenMaxAmountIsReached()
+        {
+            for (var index = 0; index <= LobbyViewModel.MaxPlayers; index++)
+            {
+                _sut.AddBotCommand.Execute(null);
+            }
+            
+            Assert.Equal(LobbyViewModel.MaxPlayers, _sut.Players.Count);
+        }
     }
 }
