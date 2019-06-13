@@ -490,9 +490,11 @@ namespace MagicalYatzyTests.ViewModels
         [Fact]
         public void DoesNotAddMorePlayerWhenMaxAmountIsReached()
         {
-            for (var index = 0; index <= LobbyViewModel.MaxPlayers; index++)
+            for (var index = 0; index <= LobbyViewModel.MaxPlayers+2; index++)
             {
-                _sut.AddBotCommand.Execute(null);
+                _sut.AddPlayer(new PlayerViewModel(
+                    Substitute.For<IPlayer>(),
+                    Substitute.For<ILocalizationService>()));
             }
             
             Assert.Equal(LobbyViewModel.MaxPlayers, _sut.Players.Count);
