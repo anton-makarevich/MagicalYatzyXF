@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
+using Sanet.MagicalYatzy.Services.StorageService;
 using Xunit;
 
 namespace MagicalYatzyTests.Services
@@ -26,6 +27,15 @@ namespace MagicalYatzyTests.Services
 
             //Assert
             Assert.Equal(playersToSave, loadedPlayers);
+        }
+
+        [Fact]
+        public async Task LoadPlayersReturnsNullIfFileDoesNotExist()
+        {
+            var sut = new LocalJsonStorageService();
+            var result = await sut.LoadPlayersAsync("some.path");
+            
+            Assert.Null(result);
         }
     }
 }

@@ -1,24 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Sanet.MagicalYatzy.Models.Game;
-using Newtonsoft.Json;
 using System.IO;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Sanet.MagicalYatzy.Extensions;
+using Sanet.MagicalYatzy.Models.Game;
 
-namespace Sanet.MagicalYatzy.Services
+namespace Sanet.MagicalYatzy.Services.StorageService
 {
     public class LocalJsonStorageService : IStorageService
     {
-        public Task<List<Player>> LoadPlayersAsync()
+        public Task<List<Player>> LoadPlayersAsync(string dataFile = null)
         {
-            if (!File.Exists(DataFile))
+            if (dataFile == null)
+                dataFile = DataFile;
+            if (!File.Exists(dataFile))
                 return Task.FromResult<List<Player>>(null);
             return Task<List<Player>>.Factory.StartNew(() =>
             {
                 try
                 {
-                    var stringData = File.ReadAllText(DataFile).Decrypt(32);
+                    var stringData = File.ReadAllText(dataFile).Decrypt(32);
                     return JsonConvert.DeserializeObject<List<Player>>(stringData);
                 }
                 catch
