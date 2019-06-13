@@ -183,7 +183,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                     if (!names.Contains(name))
                         return name;
                     numberOfPlayers++;
-                } while (numberOfPlayers < 10000);
+                } while (numberOfPlayers < 10);
             }
 
             return $"{defaultName} 1";
