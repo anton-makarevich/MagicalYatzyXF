@@ -8,6 +8,7 @@ using Sanet.MagicalYatzy.XF.Services;
 using Sanet.MagicalYatzy.XF.Services.Media;
 using SimpleInjector;
 using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
+using Sanet.MagicalYatzy.Services.StorageService;
 
 namespace Sanet.MagicalYatzy.XF
 {

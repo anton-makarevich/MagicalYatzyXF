@@ -1,13 +1,12 @@
-﻿using Sanet.MagicalYatzy.Extensions;
-using Sanet.MagicalYatzy.Models.Common;
+﻿using Sanet.MagicalYatzy.Models.Common;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using System;
-using System.Diagnostics;
+using Sanet.MagicalYatzy.Models.Game.Extensions;
 
 namespace Sanet.MagicalYatzy.Models.Game
 {
-    public class Die: BindableBase
+    public class Die : BindableBase
     {
         private static readonly Random ValueGenerator = new Random();
 
@@ -18,14 +17,17 @@ namespace Sanet.MagicalYatzy.Models.Game
         private readonly IDicePanel _dicePanel;
 
         #region Constructor
+
         public Die(IDicePanel dicePanel, IGameSettingsService gameSettingsService)
         {
             _dicePanel = dicePanel;
             _gameSettingsService = gameSettingsService;
         }
+
         #endregion
 
         #region Fields
+
         private int _rollLoop;
 
         //dimensions
@@ -54,6 +56,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         #endregion
 
         #region Properties
+
         public string StyleString => $"{_gameSettingsService.DieStyle.ToPathComponent()}";
 
         private int Frame
@@ -91,15 +94,12 @@ namespace Sanet.MagicalYatzy.Models.Game
             {
                 _posX = value;
 
-                if (_posX < 0 )
-                {
+                if (_posX < 0)
                     _posX = 0;
-                    BounceX();
-                }
-                var mw =  _dicePanel.Bounds.Width;
 
-                if (!(_posX > (mw) - Width)) return;
-                _posX = (int)(mw) - Width;
+                if (_dicePanel.Bounds.Width > Width && _dicePanel.Bounds.Width < _posX + Width)
+                    _posX = (int) (_dicePanel.Bounds.Width) - Width;
+
                 BounceX();
             }
         }
@@ -112,14 +112,11 @@ namespace Sanet.MagicalYatzy.Models.Game
                 _posY = value;
 
                 if (_posY < 0)
-                {
                     _posY = 0;
-                    BounceY();
-                }
-                var mh = _dicePanel.Bounds.Height;
+                
+                if (_dicePanel.Bounds.Height > Height && _dicePanel.Bounds.Height < _posY + Height)
+                    _posY = (int) (_dicePanel.Bounds.Height) - Height;
 
-                if (!(_posY > mh - Height)) return;
-                _posY = (int)(mh) - Height;
                 BounceY();
             }
         }
@@ -139,7 +136,8 @@ namespace Sanet.MagicalYatzy.Models.Game
         }
 
         public float Opacity
-        { get => _opacity;
+        {
+            get => _opacity;
             private set => SetProperty(ref _opacity, value);
         }
 
@@ -149,7 +147,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             private set => SetProperty(ref _imagePath, value);
         }
 
-        public bool IsNotRolling => Status == DieStatus.Stopped; 
+        public bool IsNotRolling => Status == DieStatus.Stopped;
 
         public bool IsRolling => Status == DieStatus.Rolling;
 
@@ -160,47 +158,30 @@ namespace Sanet.MagicalYatzy.Models.Game
         #endregion
 
         #region Methods
-        private string GetFramePicPath()
-        {
-            try
-            {
-                return StyleString + _rotationString + Frame + ".png";
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-                return null;
-            }
-        }
+
+        private string GetFramePicPath() => StyleString + _rotationString + Frame + ".png";
 
         public void InitializeLocation()
         {
-            try
+            var width = (int) _dicePanel.Bounds.Width;
+            var height = (int) _dicePanel.Bounds.Height;
+            if (width > 0 && height > 0)
             {
-                var width = (int)_dicePanel.Bounds.Width;
-                var height = (int)_dicePanel.Bounds.Height;
-                if (width > 0 && height > 0)
-                {
-                    var mw = width - Width;
-                    PosX = ValueGenerator.Next(1, mw);
-                    mw = height - Height;
-                    PosY = ValueGenerator.Next(1, mw);
-                }
-                else
-                {
-                    PosX = 0;
-                    PosY = 0;
-                }
-                if (PosX < 0) PosX = 0;
-                if (PosY < 0) PosY = 0;
+                var mw = width - Width;
+                PosX = ValueGenerator.Next(1, mw);
+                mw = height - Height;
+                PosY = ValueGenerator.Next(1, mw);
             }
-            catch
+            else
             {
                 PosX = 0;
                 PosY = 0;
             }
-        }
 
+            if (PosX < 0) PosX = 0;
+            if (PosY < 0) PosY = 0;
+        }
+        
         public void UpdateDiePosition()
         {
             switch (Status)

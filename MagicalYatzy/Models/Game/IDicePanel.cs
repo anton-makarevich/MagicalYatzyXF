@@ -18,8 +18,6 @@ namespace Sanet.MagicalYatzy.Models.Game
         bool PlaySound { get; set; }
         DieResult Result { get; }
         int RollDelay { get; set; }
-        bool TreeDScale { get; set; }
-        double TreeDScaleFactor { get; set; }
         bool WithSound { get; set; }
         Rectangle Bounds { get; }
         int FixedDiceCount { get; }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Sanet.MagicalYatzy.Models.Game.Ai;
 using Sanet.MagicalYatzy.Models.Game.Magical;
 
 namespace Sanet.MagicalYatzy.Models.Game
@@ -49,6 +50,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         PlayerType Type { get; }
         string InGameId { get; }
         DiceStyle SelectedStyle { get; set; }
+        IGameDecisionMaker DecisionMaker { get; }
 
         void PrepareForGameStart(Rule rule);
         

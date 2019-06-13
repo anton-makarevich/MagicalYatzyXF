@@ -87,7 +87,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             
             foreach (var player in Game.Players)
             {
-                if (player.IsHuman && !player.IsReady)
+                if ((player.IsHuman || player.IsBot) && !player.IsReady)
                     Game.SetPlayerReady(player,true);
                 Players.Add(new PlayerViewModel(player, _localizationService));
             }
@@ -118,10 +118,28 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         private void DicePanelOnRollEnded(object sender, EventArgs e)
         {
-            if (!HasCurrentPlayer || !CurrentPlayer.Player.IsHuman)
+            if (!HasCurrentPlayer)
                 return;
 
-            SetRollResults();
+            if (CurrentPlayer.Player.IsHuman)
+            {
+                SetRollResults();
+            }
+            
+            //if bot
+            if (CurrentPlayer.Player.IsBot)
+            {
+                if (CurrentPlayer.Player.Roll == 3 || !CurrentPlayer.Player.DecisionMaker.NeedsToRollAgain())
+                    CurrentPlayer.Player.DecisionMaker.DecideFill(Game);
+                else
+                {
+                    CurrentPlayer.Player.DecisionMaker.FixDice(Game);
+                    if (Game.NumberOfFixedDice == 5)
+                        CurrentPlayer.Player.DecisionMaker.DecideFill(Game);
+                    else
+                        CurrentPlayer.Player.DecisionMaker.DecideRoll(Game, DicePanel);
+                }
+            }
 
             RefreshGameStatus();
         }

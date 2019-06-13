@@ -30,10 +30,6 @@ namespace Sanet.MagicalYatzy.Services.Api
                     };
                 }
             }
-            catch 
-            { 
-                return null; 
-            }
             finally
             {
                 client.CloseAsync();

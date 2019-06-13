@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Sanet.MagicalYatzy.Models;
-using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using Sanet.MagicalYatzy.Resources;
@@ -15,12 +14,12 @@ namespace Sanet.MagicalYatzy.ViewModels
 {
     public class LobbyViewModel: DicePanelViewModel
     {
-        private const int MaxPlayers = 4;
+        public const int MaxPlayers = 4;
         
         private readonly IPlayerService _playerService;
         private bool _canAddBot = true;
         private bool _canAddHuman = true;
-        private IRulesService _rulesService;
+        private readonly IRulesService _rulesService;
         private readonly IGameService _gameService;
         private readonly ILocalizationService _localizationService;
 

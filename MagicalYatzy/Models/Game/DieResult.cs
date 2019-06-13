@@ -32,5 +32,42 @@ namespace Sanet.MagicalYatzy.Models.Game
         {
             return DiceResults.Count(f => f == value);
         }
+        
+        public (int firstValue, int numberOfValuesInRow) CalculateInRowDice()
+        {
+            if (!DiceResults.Any())
+                return (0, 0);
+            
+            var sortedResults = DiceResults.OrderBy(f => f).Distinct().ToList();
+
+            var firstValue = sortedResults.First();
+            var amountOfValuesInRow = 1;
+            
+            var stints = new List<(int,int)>();
+            
+            for (var resultIndex = 0; resultIndex < sortedResults.Count-1; resultIndex++)
+            {
+                if (sortedResults[resultIndex + 1] - sortedResults[resultIndex] == 1)
+                {
+                    amountOfValuesInRow++;
+                }
+                else
+                {
+                    stints.Add((firstValue,amountOfValuesInRow));
+                    firstValue = sortedResults[resultIndex + 1];
+                    amountOfValuesInRow = 1;
+                }
+            }
+            stints.Add((firstValue,amountOfValuesInRow));
+            
+            return stints.OrderBy(f=>f.Item2).Last();
+        }
+        
+        public List<(int diceValue, int amountOfDice)> CalculateDiceOccurrences()
+        {
+            return DiceResults.GroupBy(i => i)
+                .Select(grp => (grp.Key, grp.Count()))
+                .ToList();
+        }
     }
 }

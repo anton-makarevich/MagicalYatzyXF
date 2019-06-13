@@ -4,6 +4,7 @@ namespace Sanet.MagicalYatzy.Models.Game
     {
         bool HasBonus { get; set; }
         bool HasValue { get; }
+        bool IsMaxPossibleValue { get; }
         bool IsNumeric { get; }
         bool IsZeroValue { get; }
         int MaxValue { get; }
