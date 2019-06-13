@@ -1166,5 +1166,54 @@ namespace MagicalYatzyTests.Models.Game
                 Assert.Equal(lastResults[index],_sut.LastDiceResult.DiceResults[index]);
             }
         }
+
+        [Fact]
+        public void LeavePlayerDoesNotInvokeCorrespondingEventIfPlayerArgumentIsNotInTheGame()
+        {
+            var playerLeftTimes = 0;
+            _sut.PlayerLeft += (sender, args) => { playerLeftTimes++;};
+            var player = new Player();
+            _sut.JoinGame(player);
+            
+            _sut.LeaveGame(new Player());
+            
+            Assert.Equal(0,playerLeftTimes);
+        }
+        
+        [Fact]
+        public void SetPlayerReadyDoesNotSetPlayerReadyIfGameIsAlreadyRunning()
+        {
+            var playerReadyTimes = 0;
+            var gameUpdatedTimes = 0;
+            _sut.PlayerReady += (sender, args) => { playerReadyTimes++;};
+            var player = new Player();
+            _sut.JoinGame(player);
+            _sut.SetPlayerReady(player,true);
+            _sut.NextTurn();
+            _sut.GameUpdated += (sender, args) => { gameUpdatedTimes++; };
+            var player2 = new Player();
+            _sut.JoinGame(player2);
+            _sut.SetPlayerReady(player2,true);
+            
+            Assert.Equal(2,playerReadyTimes);
+            Assert.Equal(0,gameUpdatedTimes);
+        }
+
+        [Fact]
+        public void GameContinuesIfCurrentPlayerLeftButThereAreStillPlayers()
+        {
+            var player1 = new Player();
+            var player2 = new Player();
+            _sut.JoinGame(player1);
+            _sut.JoinGame(player2);
+            _sut.SetPlayerReady(player1,true);
+            _sut.SetPlayerReady(player2,true);
+            var turnChangedTimes = 0;
+            _sut.TurnChanged += (sender, args) => { turnChangedTimes++;};
+            
+            _sut.LeaveGame(player1);
+            
+            Assert.Equal(1,turnChangedTimes);
+        }
     }
 }
