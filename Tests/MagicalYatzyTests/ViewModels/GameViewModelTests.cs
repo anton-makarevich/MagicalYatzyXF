@@ -309,6 +309,22 @@ namespace MagicalYatzyTests.ViewModels
             
             CheckIfGameStatusHasBeenRefreshed(testAction);
         }
+        
+        [Fact]
+        public void GameOnDiceChangedDoesNotRefreshGameStatusIfThereIsNoCurrentPlayer()
+        {
+            var testAction = new Action(() =>
+            {
+                var results = new[] {2, 4, 6, 2, 1};
+                if (!_sut.Players.Any())
+                    _sut.AttachHandlers();
+
+                _gameService.CurrentLocalGame.DiceChanged +=
+                    Raise.EventWith(null, new RollEventArgs(_humanPlayer, results));
+            });
+            
+            CheckIfGameStatusHasBeenRefreshed(testAction,0);
+        }
 
         [Fact]
         public void GameOnPlayerReadyUpdatePlayerIsReadyStatus()
@@ -670,6 +686,19 @@ namespace MagicalYatzyTests.ViewModels
             
             Assert.Equal(remotePlayer.SelectedStyle, _humanPlayer.SelectedStyle);
         }
+        
+        [Fact]
+        public void GameOnStyleChangedDoesNotChangeCurrentPlayerSelectedStyleIfThereIsNoCurrentPlayer()
+        {
+            _sut.AttachHandlers();
+
+            var remotePlayer = new Player(PlayerType.Network){ SelectedStyle = DiceStyle.Blue};
+            
+            _gameService.CurrentLocalGame.StyleChanged +=
+                Raise.EventWith(null, new PlayerEventArgs(remotePlayer));
+            
+            Assert.NotEqual(remotePlayer.SelectedStyle, _humanPlayer.SelectedStyle);
+        }
             
         [Fact]
         public void GameOnStyleChangedDoesNotChangeCurrentPlayerSelectedStyleIfViewIsNotActive()
@@ -750,6 +779,21 @@ namespace MagicalYatzyTests.ViewModels
             });
             
             CheckIfGameStatusHasBeenRefreshed(testAction);
+        }
+        
+        [Fact]
+        public void GameOnResultAplliedDoesNotRefreshGameStatusIfThereIsNoCurrentPlayer()
+        {
+            var testAction = new Action(() =>
+            {
+                if (!_sut.Players.Any())
+                    _sut.AttachHandlers();
+            
+                _gameService.CurrentLocalGame.ResultApplied +=
+                    Raise.EventWith(null, new RollResultEventArgs(_humanPlayer, 40, Scores.LargeStraight, false));
+            });
+            
+            CheckIfGameStatusHasBeenRefreshed(testAction,0);
         }
 
         [Fact]
@@ -844,6 +888,21 @@ namespace MagicalYatzyTests.ViewModels
         }
         
         [Fact]
+        public void GameOnRerolledDoesNotRefreshGameStatusIfThereIsNoCurrentPlayer()
+        {
+            var testAction = new Action(() =>
+            {
+                if (!_sut.Players.Any())
+                    _sut.AttachHandlers();
+            
+                _gameService.CurrentLocalGame.PlayerRerolled +=
+                    Raise.EventWith(null, new PlayerEventArgs(_humanPlayer));
+            });
+            
+            CheckIfGameStatusHasBeenRefreshed(testAction,0);
+        }
+        
+        [Fact]
         public void GameOnRerolledDoesNotPlayMagicSoundIfViewIsNotActive()
         {
             _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
@@ -894,6 +953,21 @@ namespace MagicalYatzyTests.ViewModels
             });
             
             CheckIfGameStatusHasBeenRefreshed(testAction);
+        }
+        
+        [Fact]
+        public void GameOnMagicRollDoesNotRefreshGameStatusIfThereIsNoCurrentPlayer()
+        {
+            var testAction = new Action(() =>
+            {
+                if (!_sut.Players.Any())
+                    _sut.AttachHandlers();
+            
+                _gameService.CurrentLocalGame.MagicRollUsed +=
+                    Raise.EventWith(null, new PlayerEventArgs(_humanPlayer));
+            });
+            
+            CheckIfGameStatusHasBeenRefreshed(testAction,0);
         }
         
         [Fact]
