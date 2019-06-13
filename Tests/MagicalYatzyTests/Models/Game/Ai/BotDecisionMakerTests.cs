@@ -993,6 +993,7 @@ namespace MagicalYatzyTests.Models.Game.Ai
             result.HasValue.Returns(false);
             result.PossibleValue.Returns(maxValue);
             result.MaxValue.Returns(maxValue);
+            result.IsMaxPossibleValue.Returns(true);
             return result;
         }
         

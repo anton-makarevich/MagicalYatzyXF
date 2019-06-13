@@ -181,10 +181,43 @@ namespace MagicalYatzyTests.Models.Game
         [Fact]
         public void StatusIsBonusWhenThereIsBonus()
         {
-            var sut = new RollResult(Scores.Ones, Rules.krExtended);
-            sut.Value = 5;
-            sut.HasBonus = true;
+            var sut = new RollResult(Scores.Ones, Rules.krExtended)
+            {
+                Value = 5,
+                HasBonus = true
+            };
             Assert.Equal(ScoreStatus.Bonus, sut.Status);
+        }
+
+        [Fact]
+        public void IsMaxPossibleValueIsTrueWhenThereIsNoAplliedValueAndPossibleValueIsEqualToMaxValue()
+        {
+            var sut = new RollResult(Scores.Kniffel, Rules.krExtended)
+            {
+                PossibleValue = 50
+            };
+            Assert.True(sut.IsMaxPossibleValue);
+        }
+        
+        [Fact]
+        public void IsMaxPossibleValueIsFalseWhenValueIsApplied()
+        {
+            var sut = new RollResult(Scores.Kniffel, Rules.krExtended)
+            {
+                Value = 0,
+                PossibleValue = 50
+            };
+            Assert.False(sut.IsMaxPossibleValue);
+        }
+        
+        [Fact]
+        public void IsMaxPossibleValueIsFalseWhenPossibleValueIsZero()
+        {
+            var sut = new RollResult(Scores.Kniffel, Rules.krExtended)
+            {
+                PossibleValue = 0
+            };
+            Assert.False(sut.IsMaxPossibleValue);
         }
     }
 }

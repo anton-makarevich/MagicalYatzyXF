@@ -20,22 +20,19 @@ namespace Sanet.MagicalYatzy.Models.Game.Ai
         public bool NeedsToRollAgain()
         {
             var result = _player.GetResultForScore(Scores.Kniffel);
-            if (result != null && !result.HasValue && result.PossibleValue == result.MaxValue)
+            if (result != null && result.IsMaxPossibleValue)
                 return false;
 
             result = _player.GetResultForScore(Scores.FullHouse);
-            if (result != null && !result.HasValue && result.PossibleValue == result.MaxValue)
+            if (result != null && result.IsMaxPossibleValue)
                 return false;
 
             result = _player.GetResultForScore(Scores.LargeStraight);
-            if (result != null && !result.HasValue)
-            {
-                if (result.PossibleValue == result.MaxValue)
-                    return false;
-            }
+            if (result != null && result.IsMaxPossibleValue)
+                return false;
 
             result = _player.GetResultForScore(Scores.SmallStraight);
-            return result == null || result.HasValue || result.PossibleValue != result.MaxValue;
+            return result == null || !result.IsMaxPossibleValue;
         }
 
         public void FixDice(IGame game)

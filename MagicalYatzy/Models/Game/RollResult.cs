@@ -30,6 +30,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         }
 
         public bool HasValue { get; private set; }
+        public bool IsMaxPossibleValue => !HasValue && PossibleValue == MaxValue && PossibleValue != 0;
 
         public ScoreStatus Status =>
             (HasBonus) 
