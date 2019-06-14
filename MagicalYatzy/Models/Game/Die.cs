@@ -99,8 +99,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                     _posX = 0;
                     BounceX();
                 }
-
-
+                
                 if (_dicePanel.Bounds.Width > Width && _dicePanel.Bounds.Width < _posX + Width)
                 {
                     _posX = (int) (_dicePanel.Bounds.Width) - Width;
