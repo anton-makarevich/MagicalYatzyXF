@@ -95,12 +95,17 @@ namespace Sanet.MagicalYatzy.Models.Game
                 _posX = value;
 
                 if (_posX < 0)
+                {
                     _posX = 0;
+                    BounceX();
+                }
+
 
                 if (_dicePanel.Bounds.Width > Width && _dicePanel.Bounds.Width < _posX + Width)
+                {
                     _posX = (int) (_dicePanel.Bounds.Width) - Width;
-
-                BounceX();
+                    BounceX();
+                }
             }
         }
 
@@ -112,12 +117,16 @@ namespace Sanet.MagicalYatzy.Models.Game
                 _posY = value;
 
                 if (_posY < 0)
+                {
                     _posY = 0;
-                
-                if (_dicePanel.Bounds.Height > Height && _dicePanel.Bounds.Height < _posY + Height)
-                    _posY = (int) (_dicePanel.Bounds.Height) - Height;
+                    BounceY();
+                }
 
-                BounceY();
+                if (_dicePanel.Bounds.Height > Height && _dicePanel.Bounds.Height < _posY + Height)
+                {
+                    _posY = (int) (_dicePanel.Bounds.Height) - Height;
+                    BounceY();
+                }
             }
         }
 

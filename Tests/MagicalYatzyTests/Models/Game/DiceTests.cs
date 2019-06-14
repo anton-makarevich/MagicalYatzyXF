@@ -248,5 +248,19 @@ namespace MagicalYatzyTests.Models.Game
             Assert.Equal(DieStatus.Stopped, _sut.Status);
             Assert.Equal(4,_sut.Result);
         }
+
+        [Fact]
+        public void RegularMovementDoesNotChangeDiceDirection()
+        {
+            _sut.InitializeLocation();
+            _sut.Status = DieStatus.Rolling;
+            _sut.DirectionX = 5;
+            _sut.DirectionY = 5;
+            
+            _sut.UpdateDiePosition();
+            
+            Assert.Equal(5,_sut.DirectionX);
+            Assert.Equal(5,_sut.DirectionY);
+        }
     }
 }
