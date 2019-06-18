@@ -1,15 +1,13 @@
-﻿using Newtonsoft.Json;
-using Plugin.Connectivity;
-using Sanet.MagicalYatzy.Services;
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Sanet.MagicalYatzy.Services.Api;
 
-namespace Sanet.MagicalYatzy.XF.Services
+namespace Sanet.MagicalYatzy.Common.Services
 {
     public class WebService : IWebService
     {
@@ -73,11 +71,6 @@ namespace Sanet.MagicalYatzy.XF.Services
         {
             try
             {
-                if (!CrossConnectivity.Current.IsConnected)
-                {
-                    throw new Exception($"Request: {url}");
-                }
-
                 var request = new HttpRequestMessage(method, url);
 
                 if (content != null)

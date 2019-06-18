@@ -1,4 +1,5 @@
 ﻿using Sanet.MagicalYatzy;
+using Sanet.MagicalYatzy.Common;
 using Xunit;
 
 namespace MagicalYatzyTests.Utils

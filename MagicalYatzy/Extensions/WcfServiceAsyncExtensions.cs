@@ -5,15 +5,12 @@ using System.Threading.Tasks;
 namespace Sanet.MagicalYatzy.Extensions
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    /// <summary>
-    /// Need this extensions as for some reason wp doesn't generate task based methods for service references
-    /// </summary>
-    public static class ServiceAsyncExtensions
+    public static class WcfServiceAsyncExtensions
     {
         /// <summary>
-        /// Task wrapper for GetLastWeekChempionAsync() method
+        /// Task wrapper for GetLastWeekChampionAsync() method
         /// </summary>
-        public static Task<IEnumerable<string>> GetLastWeekChempionTaskAsync(this KniffelServiceSoapClient client, string rules)
+        public static Task<IEnumerable<string>> GetLastWeekChampionTaskAsync(this KniffelServiceSoapClient client, string rules)
         {
             var tcs = new TaskCompletionSource<IEnumerable<string>>();
             client.GetLastWeekChempionCompleted+= (s, e) =>
@@ -30,7 +27,7 @@ namespace Sanet.MagicalYatzy.Extensions
         /// <summary>
         /// Task wrapper for GetLastWeekChempionAsync() method
         /// </summary>
-        public static Task<IEnumerable<string>> GetLastDayChempionTaskAsync(this KniffelServiceSoapClient client, string rules)
+        public static Task<IEnumerable<string>> GetLastDayChampionTaskAsync(this KniffelServiceSoapClient client, string rules)
         {
             var tcs = new TaskCompletionSource<IEnumerable<string>>();
             client.GetLastDayChempionCompleted += (s, e) =>
