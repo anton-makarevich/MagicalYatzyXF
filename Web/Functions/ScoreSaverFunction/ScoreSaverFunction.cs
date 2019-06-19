@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Sanet.MagicalYatzy.Dto.Services;
 
-namespace Sanet.MagicalYatzy.Web.Functions
+namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver
 {
     public class ScoreSaverFunction
     {

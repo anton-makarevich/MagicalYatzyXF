@@ -7,6 +7,7 @@ using Sanet.MagicalYatzy.Dto.Models;
 using Sanet.MagicalYatzy.Dto.Services;
 using Xunit;
 using Sanet.MagicalYatzy.Web.Functions;
+using Sanet.MagicalYatzy.Web.Functions.ScoreSaver;
 
 namespace ScoreSaverTests
 {
