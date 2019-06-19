@@ -1,6 +1,6 @@
 ﻿using Sanet.MagicalYatzy.Services;
 
-namespace Sanet.MagicalYatzy.XF.Helpers
+namespace Sanet.MagicalYatzy.Xf.Helpers
 {
     public static class StringsHelper //TODO check where we use it?
     {

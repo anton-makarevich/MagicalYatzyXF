@@ -1,6 +1,6 @@
 ﻿using Xamarin.Forms;
 
-namespace Sanet.MagicalYatzy.XF.Helpers
+namespace Sanet.MagicalYatzy.Xf.Helpers
 {
     public static class ImageHelper
     {

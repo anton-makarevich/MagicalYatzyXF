@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using NSubstitute;
+using Sanet.MagicalYatzy.Common.Services;
 using Sanet.MagicalYatzy.Services.Api;
 using Xunit;
 

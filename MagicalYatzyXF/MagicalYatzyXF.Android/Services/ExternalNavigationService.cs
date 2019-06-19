@@ -1,7 +1,8 @@
 ﻿using System;
 using Sanet.MagicalYatzy.Services;
+using Sanet.MagicalYatzy.Services.Navigation;
 
-namespace Sanet.MagicalYatzy.XF.Droid.Services
+namespace Sanet.MagicalYatzy.Xf.Droid.Services
 {
     public class ExternalNavigationService : IExternalNavigationService
     {

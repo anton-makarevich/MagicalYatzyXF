@@ -1,8 +1,8 @@
-﻿using Sanet.MagicalYatzy.XF.Helpers;
+﻿using Sanet.MagicalYatzy.Xf.Helpers;
 using System;
 using Xamarin.Forms;
 
-namespace Sanet.MagicalYatzy.XF.Converters
+namespace Sanet.MagicalYatzy.Xf.Converters
 {
     public class ImageNameConverter : IValueConverter
     {

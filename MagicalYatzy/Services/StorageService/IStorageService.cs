@@ -1,8 +1,8 @@
-﻿using Sanet.MagicalYatzy.Models.Game;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Sanet.MagicalYatzy.Models.Game;
 
-namespace Sanet.MagicalYatzy.Services
+namespace Sanet.MagicalYatzy.Services.StorageService
 {
     public interface IStorageService
     {

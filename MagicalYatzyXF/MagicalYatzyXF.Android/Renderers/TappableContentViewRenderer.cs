@@ -1,14 +1,14 @@
 ﻿using Xamarin.Forms;
-using Sanet.MagicalYatzy.XF.Droid.Renderers;
+using Sanet.MagicalYatzy.Xf.Droid.Renderers;
 using Xamarin.Forms.Platform.Android;
 using Android.Views;
 using System;
 using System.Collections.Generic;
 using Android.Content;
-using Sanet.MagicalYatzy.XF.Views.Controls;
+using Sanet.MagicalYatzy.Xf.Views.Controls;
 
 [assembly: ExportRenderer(typeof(TappableContentView), typeof(TappableContentViewRenderer))]
-namespace Sanet.MagicalYatzy.XF.Droid.Renderers
+namespace Sanet.MagicalYatzy.Xf.Droid.Renderers
 {
     public class TappableContentViewRenderer : VisualElementRenderer<TappableContentView>
 	{

@@ -7,11 +7,11 @@ using Sanet.MagicalYatzy.Services.Navigation;
 using Sanet.MagicalYatzy.Utils;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using Sanet.MagicalYatzy.Views;
-using Sanet.MagicalYatzy.XF.Models;
-using Sanet.MagicalYatzy.XF.Views.Base;
+using Sanet.MagicalYatzy.Xf.Models;
+using Sanet.MagicalYatzy.Xf.Views.Base;
 using Xamarin.Forms;
 
-namespace Sanet.MagicalYatzy.XF.Services
+namespace Sanet.MagicalYatzy.Xf.Services
 {
     public class XamarinFormsNavigationService: INavigationService
     {

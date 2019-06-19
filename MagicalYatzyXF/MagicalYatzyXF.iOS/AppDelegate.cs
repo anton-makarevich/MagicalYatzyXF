@@ -2,7 +2,7 @@
 using SimpleInjector;
 using UIKit;
 
-namespace Sanet.MagicalYatzy.XF.iOS
+namespace Sanet.MagicalYatzy.Xf.iOS
 {
     // The UIApplicationDelegate for the application. This class is responsible for launching the 
     // User Interface of the application, as well as listening (and optionally responding) to 

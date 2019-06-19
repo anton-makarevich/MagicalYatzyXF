@@ -1,4 +1,4 @@
-﻿namespace Sanet.MagicalYatzy.XF.Views.Cells
+﻿namespace Sanet.MagicalYatzy.Xf.Views.Cells
 {
     public partial class RollResultCell
     {

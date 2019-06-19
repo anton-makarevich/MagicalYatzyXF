@@ -9,6 +9,7 @@ using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Models.Events;
 using System.Windows.Input;
 using System.Threading.Tasks;
+using Sanet.MagicalYatzy.Services.Navigation;
 
 namespace Sanet.MagicalYatzy.ViewModels
 {

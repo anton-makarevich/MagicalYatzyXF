@@ -1,7 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 
-namespace Sanet.MagicalYatzy.XF.Views.Controls.TabControl
+namespace Sanet.MagicalYatzy.Xf.Views.Controls.TabControl
 {
     public class TabBarButton : TappableContentView
     {

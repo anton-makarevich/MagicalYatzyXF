@@ -2,10 +2,10 @@
 <Grid 
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-    xmlns:cells="clr-namespace:Sanet.MagicalYatzy.XF.Views.Cells"
-    xmlns:loc="clr-namespace:Sanet.MagicalYatzy.XF.MarkupExtensions"
-    xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls;assembly=MagicalYatzyXF"
-    x:Class="Sanet.MagicalYatzy.XF.Views.Fragments.PlayersFragment"
+    xmlns:cells="clr-namespace:Sanet.MagicalYatzy.Xf.Views.Cells"
+    xmlns:loc="clr-namespace:Sanet.MagicalYatzy.Xf.MarkupExtensions"
+    xmlns:controls="clr-namespace:Sanet.MagicalYatzy.Xf.Views.Controls;assembly=MagicalYatzyXF"
+    x:Class="Sanet.MagicalYatzy.Xf.Views.Fragments.PlayersFragment"
     Margin="5,10"
     HorizontalOptions="Fill">
     <Grid.RowDefinitions>

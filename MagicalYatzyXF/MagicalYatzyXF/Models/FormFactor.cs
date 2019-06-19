@@ -1,4 +1,4 @@
-﻿namespace Sanet.MagicalYatzy.XF.Models
+﻿namespace Sanet.MagicalYatzy.Xf.Models
 {
     public enum FormFactor
     {

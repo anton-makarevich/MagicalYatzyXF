@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ViewCell xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Sanet.MagicalYatzy.XF.Views.Cells.RollResultCell">
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Sanet.MagicalYatzy.Xf.Views.Cells.RollResultCell">
     <Grid
         HeightRequest="60"
         WidthRequest="60">

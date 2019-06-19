@@ -3,7 +3,7 @@ using Sanet.MagicalYatzy.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
-namespace Sanet.MagicalYatzy.XF.Views.Base
+namespace Sanet.MagicalYatzy.Xf.Views.Base
 {
     public abstract class BaseView<TViewModel> : ContentPage, IBaseView<TViewModel> where TViewModel : BaseViewModel
     {

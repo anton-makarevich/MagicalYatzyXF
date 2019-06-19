@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Sanet.MagicalYatzy.XF</RootNamespace>
+    <RootNamespace>Sanet.MagicalYatzy.Xf</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

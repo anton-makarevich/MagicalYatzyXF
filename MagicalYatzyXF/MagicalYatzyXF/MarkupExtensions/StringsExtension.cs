@@ -1,9 +1,9 @@
-﻿using Sanet.MagicalYatzy.XF.Helpers;
+﻿using Sanet.MagicalYatzy.Xf.Helpers;
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Sanet.MagicalYatzy.XF.MarkupExtensions
+namespace Sanet.MagicalYatzy.Xf.MarkupExtensions
 {
     [ContentProperty("Text")]
     public class StringsExtension : IMarkupExtension

@@ -3,7 +3,7 @@ using Android.Content.PM;
 using Android.OS;
 using SimpleInjector;
 
-namespace Sanet.MagicalYatzy.XF.Droid
+namespace Sanet.MagicalYatzy.Xf.Droid
 {
     [Activity(Label = "MagicalYatzyXF", Icon = "@drawable/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity

@@ -5,13 +5,13 @@ using Sanet.MagicalYatzy.Services.Api;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Services.Media;
 using Sanet.MagicalYatzy.ViewModels;
-using Sanet.MagicalYatzy.XF.Services;
-using Sanet.MagicalYatzy.XF.Services.Media;
+using Sanet.MagicalYatzy.Xf.Services;
+using Sanet.MagicalYatzy.Xf.Services.Media;
 using SimpleInjector;
 using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
 using Sanet.MagicalYatzy.Services.StorageService;
 
-namespace Sanet.MagicalYatzy.XF
+namespace Sanet.MagicalYatzy.Xf
 {
     public static class ContainerExtensions
     {

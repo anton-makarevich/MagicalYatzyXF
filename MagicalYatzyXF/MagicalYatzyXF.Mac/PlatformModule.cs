@@ -1,18 +1,20 @@
-﻿using Sanet.MagicalYatzy.Services.Navigation;
-using Sanet.MagicalYatzy.Xf.Ios.Services;
+using Sanet.MagicalYatzy.Services.Navigation;
+using Sanet.MagicalYatzy.Xf;
+using Sanet.MagicalYatzy.Xf.Mac.Services;
 using SimpleInjector;
 
-namespace Sanet.MagicalYatzy.Xf.iOS
+namespace Sanet.MagicalYatzy.Xf.Mac
 {
+
     public static class ContainerExtensions
     {
         public static void RegisterModules(this Container container)
         {
-            container.RegisterIosModule();
+            container.RegisterMacModule();
             container.RegisterMainModule();
         }
 
-        public static void RegisterIosModule(this Container container)
+        public static void RegisterMacModule(this Container container)
         {
             container.RegisterSingleton<IExternalNavigationService, ExternalNavigationService>();
         }

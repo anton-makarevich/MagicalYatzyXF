@@ -1,8 +1,9 @@
-using Sanet.MagicalYatzy.XF.Droid.Services;
+using Sanet.MagicalYatzy.Xf.Droid.Services;
 using SimpleInjector;
 using Sanet.MagicalYatzy.Services;
+using Sanet.MagicalYatzy.Services.Navigation;
 
-namespace Sanet.MagicalYatzy.XF.Droid
+namespace Sanet.MagicalYatzy.Xf.Droid
 {
     public static class ContainerExtensions
     {

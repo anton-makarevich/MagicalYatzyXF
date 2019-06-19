@@ -1,6 +1,7 @@
 ﻿using System.ServiceModel;
 using System.Threading.Tasks;
-using MagicalYatzy.LegacyWcfService;
+using Sanet.MagicalYatzy.Common.Connected_Services.LegacyScoreService;
+using Sanet.MagicalYatzy.Common.Extensions;
 using Sanet.MagicalYatzy.Extensions;
 using Sanet.MagicalYatzy.Models.Game;
 

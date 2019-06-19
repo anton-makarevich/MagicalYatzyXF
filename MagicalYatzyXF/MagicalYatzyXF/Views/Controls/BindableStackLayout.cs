@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using Xamarin.Forms;
 
-namespace Sanet.MagicalYatzy.XF.Views.Controls
+namespace Sanet.MagicalYatzy.Xf.Views.Controls
 {
     public class BindableStackLayout: StackLayout
     {

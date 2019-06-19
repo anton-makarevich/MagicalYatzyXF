@@ -8,7 +8,7 @@
     <ProjectGuid>{CD473CB9-2C0F-41DB-B3C4-DD6FE850896C}</ProjectGuid>
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Sanet.MagicalYatzy.XF.iOS</RootNamespace>
+    <RootNamespace>Sanet.MagicalYatzy.Xf.Ios</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>MagicalYatzyXF.iOS</AssemblyName>
     <NuGetPackageImportStamp>

@@ -2,10 +2,10 @@
 using System.Collections;
 using System.Collections.Specialized;
 using System.Linq;
-using Sanet.MagicalYatzy.XF.Extensions;
+using Sanet.MagicalYatzy.Xf.Extensions;
 using Xamarin.Forms;
 
-namespace Sanet.MagicalYatzy.XF.Views.Controls
+namespace Sanet.MagicalYatzy.Xf.Views.Controls
 {
     public class HorizontalListView : ScrollView
     {

@@ -7,7 +7,7 @@
     <ProjectGuid>{97F21E37-6797-4BE3-A7C6-113BBF83DDC2}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sanet.MagicalYatzy.XF.UWP</RootNamespace>
+    <RootNamespace>Sanet.MagicalYatzy.Xf.UWP</RootNamespace>
     <AssemblyName>MagicalYatzyXF.UWP</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
