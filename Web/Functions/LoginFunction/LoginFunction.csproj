@@ -5,6 +5,7 @@
         <RootNamespace>Sanet.MagicalYatzy.Web.Functions.Login</RootNamespace>
     </PropertyGroup>
     <ItemGroup>
+        <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.0.0" />
         <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.28" />
     </ItemGroup>
     <ItemGroup>
