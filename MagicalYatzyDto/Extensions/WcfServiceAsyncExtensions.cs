@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Sanet.MagicalYatzy.Common.Connected_Services.LegacyScoreService;
+using Sanet.MagicalYatzy.Dto.ConnectedServices.LegacyScoreService;
 
-namespace Sanet.MagicalYatzy.Common.Extensions
+namespace Sanet.MagicalYatzy.Dto.Extensions
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     public static class WcfServiceAsyncExtensions

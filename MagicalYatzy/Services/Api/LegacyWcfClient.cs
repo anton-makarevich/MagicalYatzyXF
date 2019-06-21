@@ -1,7 +1,7 @@
 ﻿using System.ServiceModel;
 using System.Threading.Tasks;
-using Sanet.MagicalYatzy.Common.Connected_Services.LegacyScoreService;
-using Sanet.MagicalYatzy.Common.Extensions;
+using Sanet.MagicalYatzy.Dto.ConnectedServices.LegacyScoreService;
+using Sanet.MagicalYatzy.Dto.Extensions;
 using Sanet.MagicalYatzy.Extensions;
 using Sanet.MagicalYatzy.Models.Game;
 

@@ -361,9 +361,9 @@
     <Folder Include="Services\Game\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MagicalYatzyDto\MagicalYatzyDto.csproj" />
     <Reference Include="SanetLegacyEncryption">
       <HintPath>..\libs\SanetLegacyEncryption\netstandard2.0\SanetLegacyEncryption.dll</HintPath>
     </Reference>
-    <ProjectReference Include="..\MagicalYatzyCommon\MagicalYatzyCommon.csproj" />
   </ItemGroup>
 </Project>

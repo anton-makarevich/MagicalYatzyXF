@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Sanet.MagicalYatzy.Common.Services
+namespace Sanet.MagicalYatzy.Dto.Services
 {
     public interface IWebService
     {

@@ -14,7 +14,7 @@
 
 using System.Runtime.Serialization;
 
-namespace Sanet.MagicalYatzy.Common.Connected_Services.LegacyScoreService {
+namespace Sanet.MagicalYatzy.Dto.ConnectedServices.LegacyScoreService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [DataContract(Name="KniffelScore", Namespace="http://www.sanet.com/")]

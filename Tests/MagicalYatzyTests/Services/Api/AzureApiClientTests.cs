@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using NSubstitute;
-using Sanet.MagicalYatzy.Common.Services;
 using Sanet.MagicalYatzy.Dto.Requests;
 using Sanet.MagicalYatzy.Dto.Responses;
+using Sanet.MagicalYatzy.Dto.Services;
 using Sanet.MagicalYatzy.Services.Api;
 using Xunit;
 
@@ -11,7 +11,7 @@ namespace MagicalYatzyTests.Services.Api
     public class AzureApiClientTests
     {
         private readonly IWebService _webServiceMock = Substitute.For<IWebService>();
-        private AzureApiClient _sut;
+        private readonly AzureApiClient _sut;
 
         public AzureApiClientTests()
         {

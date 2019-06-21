@@ -1,4 +1,4 @@
-﻿using Sanet.MagicalYatzy.Common.Services;
+﻿using Sanet.MagicalYatzy.Dto.Services;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Api;
