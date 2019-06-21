@@ -47,7 +47,7 @@ namespace Sanet.MagicalYatzy.Common.Services
             }
         }
 
-        public async Task<T> PostAsync<T>(string url)
+        public async Task<T> PostAsync<T>(object model, string url)
         {
             try
             {

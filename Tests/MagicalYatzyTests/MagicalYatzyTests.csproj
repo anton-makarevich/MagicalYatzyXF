@@ -30,6 +30,7 @@
     <Folder Include="Models\Common\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MagicalYatzyDto\MagicalYatzyDto.csproj" />
     <ProjectReference Include="..\..\MagicalYatzy\MagicalYatzy.csproj" />
   </ItemGroup>
   <ItemGroup>

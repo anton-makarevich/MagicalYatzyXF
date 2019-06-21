@@ -17,7 +17,7 @@ namespace Sanet.MagicalYatzy.Web.Functions.Login
         
         [FunctionName("LoginFunction")]
         public IActionResult Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "player")]
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "players")]
             HttpRequest req, ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
