@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using NSubstitute;
+using Sanet.MagicalYatzy.Dto.Models;
 using Sanet.MagicalYatzy.Dto.Requests;
 using Sanet.MagicalYatzy.Dto.Responses;
 using Sanet.MagicalYatzy.Dto.Services;
@@ -24,6 +25,18 @@ namespace MagicalYatzyTests.Services.Api
             await _sut.LoginUserAsync("SomeName", "SomePassword");
 
             await _webServiceMock.Received().PostAsync<LoginResponse>(Arg.Any<LoginRequest>(), Arg.Any<string>());
+        }
+
+        [Fact]
+        public async Task LoginAsyncReturnsPlayerReturnedByWebService()
+        {
+            const string playerName = "SomeName";
+            var responseSub = new LoginResponse() { Player = new LoginModel(){ PlayerName = playerName}};
+            _webServiceMock.PostAsync<LoginResponse>(null, "")
+                .ReturnsForAnyArgs(Task.FromResult<LoginResponse>(responseSub));
+            
+            var player = await _sut.LoginUserAsync(playerName, "SomePassword");
+            Assert.Equal(playerName, player.Name);
         }
     }
 }
