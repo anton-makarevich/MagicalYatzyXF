@@ -5,7 +5,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '/Web/Functions/MagicalYatzyFunctions.sln'
+  solution: 'Web\Functions\MagicalYatzyFunctions.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
