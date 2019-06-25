@@ -6,7 +6,7 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver.Services
 {
     public class AzureLeaderBoardService:ILeaderBoardService
     {
-        public Task SaveScoreAsync(PlayerScore score)
+        public Task<string> SaveScoreAsync(PlayerScore score)
         {
             throw new System.NotImplementedException();
         }

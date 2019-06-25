@@ -19,7 +19,6 @@
         </None>
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\..\..\MagicalYatzyCommon\MagicalYatzyCommon.csproj" />
       <ProjectReference Include="..\..\..\MagicalYatzyDto\MagicalYatzyDto.csproj" />
     </ItemGroup>
 </Project>

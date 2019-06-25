@@ -5,6 +5,6 @@ namespace Sanet.MagicalYatzy.Dto.Services
 {
     public interface ILeaderBoardService
     {
-        Task SaveScoreAsync(PlayerScore score);
+        Task<string> SaveScoreAsync(PlayerScore score);
     }
 }

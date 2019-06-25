@@ -1,4 +1,5 @@
 using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,8 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Sanet.MagicalYatzy.Dto.Requests;
+using Sanet.MagicalYatzy.Dto.Responses;
 using Sanet.MagicalYatzy.Dto.Services;
 
 namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver
@@ -20,20 +23,25 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver
         }
         [FunctionName("ScoreSaverFunction")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest request,
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "scores")] HttpRequest request,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            var responseObject = new SaveScoreResponse();
+            var requestData = await new StreamReader(request.Body).ReadToEndAsync();
+            var requestObject = JsonConvert.DeserializeObject<SaveScoreRequest>(requestData);
 
-            string name = request.Query["name"];
-
-            var requestBody = await new StreamReader(request.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
-
-            return name != null
-                ? (ActionResult)new OkObjectResult($"Hello, {name}")
-                : new BadRequestObjectResult("Please pass a name on the query string or in the request body");
+            if (requestObject?.Score == null)
+            {
+                responseObject.ErrorCode = (int)HttpStatusCode.BadRequest;
+                responseObject.Message = "Invalid request data";
+            }
+            else
+            {
+                var id = await _leaderBoardService.SaveScoreAsync(requestObject.Score);
+                requestObject.Score.ScoreId = id;
+                responseObject.Score = requestObject.Score;
+            }
+            return new JsonResult(responseObject);
         }
     }
 }
