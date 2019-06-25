@@ -8,7 +8,6 @@ namespace Sanet.MagicalYatzy.Web.Functions.Login
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            
         }
     }
 }
