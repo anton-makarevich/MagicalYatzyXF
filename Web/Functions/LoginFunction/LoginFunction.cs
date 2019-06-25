@@ -8,13 +8,6 @@ namespace Sanet.MagicalYatzy.Web.Functions.Login
 {
     public class LoginFunction
     {
-        private readonly IGetHello _getHello;
-
-        public LoginFunction(IGetHello getHello)
-        {
-            _getHello = getHello;
-        }
-        
         [FunctionName("LoginFunction")]
         public IActionResult Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "players")]
@@ -25,9 +18,8 @@ namespace Sanet.MagicalYatzy.Web.Functions.Login
             string name = req.Query["name"];
 
             return name != null
-                ? (ActionResult)new OkObjectResult(_getHello.GetHello(name))
+                ? (ActionResult)new OkObjectResult($"Hi, {name}")
                 : new BadRequestObjectResult("Please pass a name on the query string or in the request body");
-
         }
     }
 }

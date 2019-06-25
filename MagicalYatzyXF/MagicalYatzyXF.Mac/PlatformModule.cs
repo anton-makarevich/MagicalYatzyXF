@@ -5,7 +5,6 @@ using SimpleInjector;
 
 namespace Sanet.MagicalYatzy.Xf.Mac
 {
-
     public static class ContainerExtensions
     {
         public static void RegisterModules(this Container container)
