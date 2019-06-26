@@ -35,6 +35,12 @@ steps:
   inputs:
     command: 'build'
     projects: 'Web\Functions\LoginFunction\LoginFunction.csproj'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    
 # - task: VSBuild@1
 #   inputs:
 #     solution: '$(solution)'
