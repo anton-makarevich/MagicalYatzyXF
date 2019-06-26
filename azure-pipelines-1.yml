@@ -13,22 +13,22 @@ steps:
 - script: dotnet restore $(solution)
   displayName: 'Restore nuget packages'
 
-- script: dotnet test Tests\Functiona\LoginTests\LoginTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute=GeneratedCodeAttribute /p:Include=[MagicalYatzy]*
+- script: dotnet test Tests\Functions\LoginTests\LoginTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute=GeneratedCodeAttribute /p:Include=[MagicalYatzy]*
   displayName: 'Run Login tests'
 
 - bash: |
     curl -s https://codecov.io/bash > codecov
     chmod +x codecov
-    ./codecov -f "Tests\Functiona\LoginTests\coverage.opencover.xml" -t $(codecov.token)
+    ./codecov -f "Tests\Functions\LoginTests\coverage.opencover.xml" -t $(codecov.token)
   displayName: 'Upload Login tests results'
 
-- script: dotnet test Tests\Functiona\ScoreSaverTests\ScoreSaverTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute=GeneratedCodeAttribute /p:Include=[MagicalYatzy]*
+- script: dotnet test Tests\Functions\ScoreSaverTests\ScoreSaverTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute=GeneratedCodeAttribute /p:Include=[MagicalYatzy]*
   displayName: 'Run ScoreSaver tests'
 
 - bash: |
     curl -s https://codecov.io/bash > codecov
     chmod +x codecov
-    ./codecov -f "Tests\Functiona\ScoreSaverTests\coverage.opencover.xml" -t $(codecov.token)
+    ./codecov -f "Tests\Functions\ScoreSaverTests\coverage.opencover.xml" -t $(codecov.token)
   displayName: 'Upload ScoreSaver tests results'
 
 # - task: VSBuild@1
