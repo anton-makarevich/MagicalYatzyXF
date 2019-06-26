@@ -31,6 +31,10 @@ steps:
     ./codecov -f "Tests\Functions\ScoreSaverTests\coverage.opencover.xml" -t $(codecov.token)
   displayName: 'Upload ScoreSaver tests results'
 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: 'Web\Functions\LoginFunction\LoginFunction.csproj'
 # - task: VSBuild@1
 #   inputs:
 #     solution: '$(solution)'
