@@ -47,10 +47,11 @@ steps:
     archiveFile: 'Web\Functions\LoginFunction\bin\Release\netcoreapp2.1\publish\LoginFunction.zip'
     replaceExistingArchive: true
     verbose: true
-    
-# - task: VSBuild@1
-#   inputs:
-#     solution: '$(solution)'
-#     msbuildArgs: '/p:SkipInvalidConfigurations=true'
-#     platform: '$(buildPlatform)'
-#     configuration: '$(buildConfiguration)'
+
+- task: AzureFunctionApp@1
+  inputs:
+    azureSubscription: 'BizSpark(6d9a1353-48c4-43d7-85e0-141803e550b5)'
+    appType: 'functionApp'
+    appName: 'magical-yatzy-dev'
+    package: 'Web\Functions\LoginFunction\bin\Release\netcoreapp2.1\publish\LoginFunction.zip'
+    deploymentMethod: 'auto'
