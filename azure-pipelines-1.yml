@@ -36,8 +36,17 @@ steps:
     command: 'build'
     projects: 'Web\Functions\LoginFunction\LoginFunction.csproj'
 
-- script: dotnet publish Web\Functions\LoginFunction\LoginFunction.csproj -c $(buildConfiguration) -v diag
+- script: dotnet publish Web\Functions\LoginFunction\LoginFunction.csproj -c $(buildConfiguration) -v d
   displayName: 'Publish login function'
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: 'Web\Functions\LoginFunction\bin\Release\netcoreapp2.1\publish\bin\'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: 'Web\Functions\LoginFunction\bin\Release\netcoreapp2.1\publish\LoginFunction.zip'
+    replaceExistingArchive: true
+    verbose: true
     
 # - task: VSBuild@1
 #   inputs:
