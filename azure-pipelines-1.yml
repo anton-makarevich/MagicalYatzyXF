@@ -36,10 +36,8 @@ steps:
     command: 'build'
     projects: 'Web\Functions\LoginFunction\LoginFunction.csproj'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'publish'
-    publishWebProjects: true
+- script: dotnet test Web\Functions\LoginFunction\LoginFunction.csproj -c $(buildConfiguration)
+  displayName: 'Run Login tests'
     
 # - task: VSBuild@1
 #   inputs:
