@@ -36,8 +36,8 @@ steps:
     command: 'build'
     projects: 'Web\Functions\LoginFunction\LoginFunction.csproj'
 
-- script: dotnet test Web\Functions\LoginFunction\LoginFunction.csproj -c $(buildConfiguration)
-  displayName: 'Run Login tests'
+- script: dotnet publish Web\Functions\LoginFunction\LoginFunction.csproj -c $(buildConfiguration) -v diag
+  displayName: 'Publish login function'
     
 # - task: VSBuild@1
 #   inputs:
