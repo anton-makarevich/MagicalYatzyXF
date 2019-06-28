@@ -41,10 +41,10 @@ steps:
 
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: 'Web\Functions\LoginFunction\bin\Release\netcoreapp2.1\publish\'
+    rootFolderOrFile: 'Web\Functions\LoginFunction\bin\Release\'
     includeRootFolder: true
     archiveType: 'zip'
-    archiveFile: 'Web\Functions\LoginFunction\bin\Release\netcoreapp2.1\publish\LoginFunction.zip'
+    archiveFile: 'Web\Functions\LoginFunction\bin\Release\LoginFunction.zip'
     replaceExistingArchive: true
     verbose: true
 
@@ -53,5 +53,5 @@ steps:
     azureSubscription: 'BizSpark(6d9a1353-48c4-43d7-85e0-141803e550b5)'
     appType: 'functionApp'
     appName: 'magical-yatzy-dev'
-    package: 'Web\Functions\LoginFunction\bin\Release\netcoreapp2.1\publish\LoginFunction.zip'
+    package: 'Web\Functions\LoginFunction\bin\Release\LoginFunction.zip'
     deploymentMethod: 'auto'
