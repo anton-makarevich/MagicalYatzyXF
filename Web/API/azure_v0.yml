@@ -1,0 +1,28 @@
+swagger: '2.0'
+info:
+  title: magical-yatzy-dev
+  version: v0
+  description: Import from "magical-yatzy-dev" Function App
+host: your_apim_service_name.azure-api.net
+basePath: v0
+schemes:
+  - https
+securityDefinitions:
+  apiKeyHeader:
+    type: apiKey
+    name: Ocp-Apim-Subscription-Key
+    in: header
+  apiKeyQuery:
+    type: apiKey
+    name: subscription-key
+    in: query
+security:
+  - apiKeyHeader: []
+  - apiKeyQuery: []
+paths:
+  /players:
+    get:
+      operationId: get-loginfunction
+      summary: LoginFunction
+      responses: {}
+tags: []

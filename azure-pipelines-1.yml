@@ -10,9 +10,6 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- script: dotnet restore $(solution)
-  displayName: 'Restore nuget packages'
-
 - script: dotnet test Tests\Functions\LoginTests\LoginTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute=GeneratedCodeAttribute /p:Include=[MagicalYatzy]*
   displayName: 'Run Login tests'
 
@@ -31,13 +28,8 @@ steps:
     ./codecov -f "Tests\Functions\ScoreSaverTests\coverage.opencover.xml" -t $(codecov.token)
   displayName: 'Upload ScoreSaver tests results'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: 'Web\Functions\LoginFunction\LoginFunction.csproj'
-
 - script: dotnet build Web\Functions\LoginFunction\LoginFunction.csproj -c $(buildConfiguration) -v d
-  displayName: 'Build login function'
+  displayName: 'Build Login function'
 
 - task: ArchiveFiles@2
   inputs:
@@ -47,6 +39,7 @@ steps:
     archiveFile: 'Web\Functions\LoginFunction\bin\Release\LoginFunction.zip'
     replaceExistingArchive: true
     verbose: true
+  displayName: 'Archive Login function'
 
 - task: AzureFunctionApp@1
   inputs:
@@ -55,3 +48,4 @@ steps:
     appName: 'magical-yatzy-dev'
     package: 'Web\Functions\LoginFunction\bin\Release\LoginFunction.zip'
     deploymentMethod: 'auto'
+  displayName: 'Publish Login function'
