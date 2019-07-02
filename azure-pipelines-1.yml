@@ -42,7 +42,7 @@ steps:
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: 'Web\Functions\LoginFunction\bin\Release\netcoreapp2.1\'
-    includeRootFolder: true
+    includeRootFolder: false
     archiveType: 'zip'
     archiveFile: 'Web\Functions\LoginFunction\bin\Release\LoginFunction.zip'
     replaceExistingArchive: true
