@@ -49,3 +49,25 @@ steps:
     package: 'Web\Functions\LoginFunction\bin\Release\LoginFunction.zip'
     deploymentMethod: 'auto'
   displayName: 'Publish Login function'
+
+- script: dotnet build Web\Functions\ScoreSaverFunction\ScoreSaverFunction.csproj -c $(buildConfiguration) -v d
+  displayName: 'Build ScoreSaver function'
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: 'Web\Functions\ScoreSaverFunction\bin\Release\netcoreapp2.1\'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: 'Web\Functions\ScoreSaverFunction\bin\Release\ScoreSaverFunction.zip'
+    replaceExistingArchive: true
+    verbose: true
+  displayName: 'Archive ScoreSaverFunction function'
+
+- task: AzureFunctionApp@1
+  inputs:
+    azureSubscription: 'BizSpark(6d9a1353-48c4-43d7-85e0-141803e550b5)'
+    appType: 'functionApp'
+    appName: 'magical-yatzy-dev'
+    package: 'Web\Functions\ScoreSaverFunction\bin\Release\ScoreSaverFunction.zip'
+    deploymentMethod: 'auto'
+  displayName: 'Publish ScoreSaverFunction function'
