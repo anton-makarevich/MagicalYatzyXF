@@ -48,7 +48,7 @@ namespace Sanet.MagicalYatzy.Web.Functions.Login
                 }
                 catch (Exception e)
                 {
-                    log.LogError("Trying to make wcf call",e);
+                    log.LogError("Trying to make wcf call",e,$"Message: {e.Message}", $"Trace: {e.StackTrace}");
                     responseObject.ErrorCode = (int)HttpStatusCode.BadRequest;
                     responseObject.Message = "Invalid request data";
                 }
