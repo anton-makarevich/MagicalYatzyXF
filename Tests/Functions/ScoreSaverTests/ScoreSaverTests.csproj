@@ -16,6 +16,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\Web\Functions\ScoreSaverFunction\ScoreSaverFunction.csproj" />
+      <ProjectReference Include="..\FunctionTestUtils\FunctionTestUtils.csproj" />
     </ItemGroup>
 
 </Project>

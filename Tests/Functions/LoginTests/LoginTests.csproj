@@ -14,4 +14,9 @@
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Web\Functions\LoginFunction\LoginFunction.csproj" />
+      <ProjectReference Include="..\FunctionTestUtils\FunctionTestUtils.csproj" />
+    </ItemGroup>
+
 </Project>

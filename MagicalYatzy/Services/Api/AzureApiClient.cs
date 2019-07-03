@@ -4,7 +4,6 @@ using Sanet.MagicalYatzy.Dto.Requests;
 using Sanet.MagicalYatzy.Dto.Responses;
 using Sanet.MagicalYatzy.Dto.Services;
 using Sanet.MagicalYatzy.Models.Game;
-using Sanet.MagicalYatzy.ViewModels;
 
 namespace Sanet.MagicalYatzy.Services.Api
 {

@@ -1,11 +1,8 @@
-using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
+using FunctionTestUtils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using NSubstitute;
 using Sanet.MagicalYatzy.Dto.Models;
 using Sanet.MagicalYatzy.Dto.Requests;
@@ -18,8 +15,8 @@ namespace ScoreSaverTests
 {
     public class ScoreSaverFunctionTests
     {
-        private ScoreSaverFunction _sut;
-        private ILeaderBoardService _leaderBoardServiceMock;
+        private readonly ScoreSaverFunction _sut;
+        private readonly ILeaderBoardService _leaderBoardServiceMock;
 
         public ScoreSaverFunctionTests()
         {
@@ -32,7 +29,7 @@ namespace ScoreSaverTests
         {
             var score = new PlayerScore();
 
-            await _sut.Run(CreateMockRequest(
+            await _sut.Run(Utils.CreateMockRequest(
                     new SaveScoreRequest(){Score = score}),
                 Substitute.For<ILogger>());
 
@@ -42,7 +39,7 @@ namespace ScoreSaverTests
         [Fact]
         public async Task RunningFunctionWithoutProperRequestReturnsBadRequestErrorCode()
         {
-            var actionResult = await _sut.Run(CreateMockRequest(
+            var actionResult = await _sut.Run(Utils.CreateMockRequest(
                     new SaveScoreRequest(){Score = null}),
                 Substitute.For<ILogger>()) as JsonResult;
             
@@ -61,7 +58,7 @@ namespace ScoreSaverTests
             var score = new PlayerScore();
             _leaderBoardServiceMock.SaveScoreAsync(score).ReturnsForAnyArgs(Task.FromResult(scoreId));
             
-            var actionResult = await _sut.Run(CreateMockRequest(
+            var actionResult = await _sut.Run(Utils.CreateMockRequest(
                     new SaveScoreRequest(){Score = score}),
                 Substitute.For<ILogger>())as JsonResult;
             
@@ -70,26 +67,6 @@ namespace ScoreSaverTests
             
             Assert.NotNull(response?.Score);
             Assert.Equal(scoreId,response.Score.ScoreId);
-        }
-        
-        private static HttpRequest CreateMockRequest(object body)
-        {            
-            var ms = new MemoryStream();
-            var sw = new StreamWriter(ms);
- 
-            var json = JsonConvert.SerializeObject(body);
- 
-            sw.Write(json);
-            sw.Flush();
- 
-            ms.Position = 0;
-
-            var mockRequest = new DefaultHttpRequest(new DefaultHttpContext())
-            {
-                Body = ms
-            };
- 
-            return mockRequest;
         }
     }
 }

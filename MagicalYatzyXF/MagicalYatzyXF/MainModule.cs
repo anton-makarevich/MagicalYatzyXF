@@ -5,7 +5,6 @@ using Sanet.MagicalYatzy.Services.Api;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Services.Media;
 using Sanet.MagicalYatzy.ViewModels;
-using Sanet.MagicalYatzy.Xf.Services;
 using Sanet.MagicalYatzy.Xf.Services.Media;
 using SimpleInjector;
 using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
@@ -25,7 +24,7 @@ namespace Sanet.MagicalYatzy.Xf
             container.RegisterSingleton<IGameSettingsService, GameSettingsService>();
             container.RegisterSingleton<ILocalizationService, LocalizationService>();
             container.RegisterSingleton<IWebService, WebService>();
-            container.RegisterSingleton<IApiClient, LegacyWcfClient>();
+            container.RegisterSingleton<IApiClient, AzureApiClient>();
             container.RegisterSingleton<IStorageService, LocalJsonStorageService>();
             container.RegisterSingleton<IGameService, GameService>();
             container.RegisterSingleton<IPlayerService, PlayerService>();
