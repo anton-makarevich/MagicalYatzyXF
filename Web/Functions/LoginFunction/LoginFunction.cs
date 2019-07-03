@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -40,8 +41,18 @@ namespace Sanet.MagicalYatzy.Web.Functions.Login
             }
             else
             {
-                await _loginService.LoginAsync(requestObject.Player);
-                responseObject.Player = requestObject.Player;
+                try
+                {
+                    await _loginService.LoginAsync(requestObject.Player);
+                    responseObject.Player = requestObject.Player;
+                }
+                catch (Exception e)
+                {
+                    log.LogError("Trying to make wcf call",e);
+                    responseObject.ErrorCode = (int)HttpStatusCode.BadRequest;
+                    responseObject.Message = "Invalid request data";
+                }
+                
             }
             return new JsonResult(responseObject);
         }
