@@ -30,4 +30,12 @@
         <HintPath>..\..\..\libs\SanetLegacyEncryption\netstandard2.0\SanetLegacyEncryption.dll</HintPath>
       </Reference>
     </ItemGroup>
+    <ItemGroup>
+        <None Update="System.Private.ServiceModel.dll">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+    <Target Name="CopySPSM" BeforeTargets="Build">
+        <Copy SourceFiles="System.Private.ServiceModel.dll" DestinationFolder="$(OutputPath)\bin" />
+    </Target>
 </Project>
