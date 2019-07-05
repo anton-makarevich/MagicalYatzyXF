@@ -16,7 +16,7 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver.Services
 
         public AzureLeaderBoardService()
         {
-            _storageAccount = CloudStorageAccount.Parse(_connectionString)); 
+            _storageAccount = CloudStorageAccount.Parse(_connectionString); 
         }
         
         public Task<string> SaveScoreAsync(PlayerScore score)
