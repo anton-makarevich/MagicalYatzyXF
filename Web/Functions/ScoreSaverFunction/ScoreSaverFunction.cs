@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -29,18 +30,21 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver
             var responseObject = new SaveScoreResponse();
             var requestData = await new StreamReader(request.Body).ReadToEndAsync();
             var requestObject = JsonConvert.DeserializeObject<SaveScoreRequest>(requestData);
-
-            if (requestObject?.Score == null)
-            {
-                responseObject.ErrorCode = (int)HttpStatusCode.BadRequest;
-                responseObject.Message = "Invalid request data";
-            }
-            else
-            {
-                var id = await _leaderBoardService.SaveScoreAsync(requestObject.Score);
-                requestObject.Score.ScoreId = id;
-                responseObject.Score = requestObject.Score;
-            }
+            
+//            if (requestObject?.Score == null)
+//            {
+//                responseObject.ErrorCode = (int)HttpStatusCode.BadRequest;
+//                responseObject.Message = "Invalid request data";
+//            }
+//            else
+//            {
+//                var id = await _leaderBoardService.SaveScoreAsync(requestObject.Score);
+//                requestObject.Score.ScoreId = id;
+//                responseObject.Score = requestObject.Score;
+//            }
+        var connectionString = Environment.GetEnvironmentVariable("TableConnectionString");
+        log.LogDebug($"ConnectionString is: {connectionString}");
+            
             return new JsonResult(responseObject);
         }
     }

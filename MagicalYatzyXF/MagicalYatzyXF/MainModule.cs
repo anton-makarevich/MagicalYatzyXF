@@ -1,4 +1,5 @@
-﻿using Sanet.MagicalYatzy.Dto.Services;
+﻿using Sanet.MagicalYatzy.Dto.ApiConfigs;
+using Sanet.MagicalYatzy.Dto.Services;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Api;
@@ -24,6 +25,7 @@ namespace Sanet.MagicalYatzy.Xf
             container.RegisterSingleton<IGameSettingsService, GameSettingsService>();
             container.RegisterSingleton<ILocalizationService, LocalizationService>();
             container.RegisterSingleton<IWebService, WebService>();
+            container.RegisterSingleton<IApiConfig, AzureDevConfig>();
             container.RegisterSingleton<IApiClient, AzureApiClient>();
             container.RegisterSingleton<IStorageService, LocalJsonStorageService>();
             container.RegisterSingleton<IGameService, GameService>();
