@@ -1,6 +1,4 @@
-using System;
 using System.Threading.Tasks;
-using Microsoft.Azure.Cosmos.Table;
 using Sanet.MagicalYatzy.Dto.Models;
 using Sanet.MagicalYatzy.Dto.Services;
 
