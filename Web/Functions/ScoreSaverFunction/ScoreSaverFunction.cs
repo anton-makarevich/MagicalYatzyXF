@@ -27,24 +27,25 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = "scores")] HttpRequest request,
             ILogger log)
         {
+            var connectionString = Environment.GetEnvironmentVariable("TableConnectionString");
+            log.LogDebug($"ConnectionString is: {connectionString}");
+            
             var responseObject = new SaveScoreResponse();
             var requestData = await new StreamReader(request.Body).ReadToEndAsync();
             var requestObject = JsonConvert.DeserializeObject<SaveScoreRequest>(requestData);
             
-//            if (requestObject?.Score == null)
-//            {
-//                responseObject.ErrorCode = (int)HttpStatusCode.BadRequest;
-//                responseObject.Message = "Invalid request data";
-//            }
-//            else
-//            {
-//                var id = await _leaderBoardService.SaveScoreAsync(requestObject.Score);
-//                requestObject.Score.ScoreId = id;
-//                responseObject.Score = requestObject.Score;
-//            }
-        var connectionString = Environment.GetEnvironmentVariable("TableConnectionString");
-        log.LogDebug($"ConnectionString is: {connectionString}");
-            
+            if (requestObject?.Score == null)
+            {
+                responseObject.ErrorCode = (int)HttpStatusCode.BadRequest;
+                responseObject.Message = "Invalid request data";
+            }
+            else
+            {
+                var id = await _leaderBoardService.SaveScoreAsync(requestObject.Score);
+                requestObject.Score.ScoreId = id;
+                responseObject.Score = requestObject.Score;
+            }
+
             return new JsonResult(responseObject);
         }
     }
