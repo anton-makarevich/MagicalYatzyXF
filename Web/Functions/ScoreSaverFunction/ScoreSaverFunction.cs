@@ -11,14 +11,15 @@ using Newtonsoft.Json;
 using Sanet.MagicalYatzy.Dto.Requests;
 using Sanet.MagicalYatzy.Dto.Responses;
 using Sanet.MagicalYatzy.Dto.Services;
+using Sanet.MagicalYatzy.Web.Functions.ScoreSaver.Services;
 
 namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver
 {
     public class ScoreSaverFunction
     {
-        private readonly ILeaderBoardService _leaderBoardService;
+        private ILeaderBoardService _leaderBoardService = null;
 
-        public ScoreSaverFunction(ILeaderBoardService leaderBoardService)
+        public void SetService(ILeaderBoardService leaderBoardService)
         {
             _leaderBoardService = leaderBoardService;
         }
@@ -27,6 +28,9 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = "scores")] HttpRequest request,
             ILogger log)
         {
+            if (_leaderBoardService == null)
+                SetService(new AzureLeaderBoardService());
+            
             var connectionString = Environment.GetEnvironmentVariable("TableConnectionString");
             log.LogDebug($"ConnectionString is: {connectionString}");
             
