@@ -21,7 +21,8 @@ namespace ScoreSaverTests
         public ScoreSaverFunctionTests()
         {
             _leaderBoardServiceMock = Substitute.For<ILeaderBoardService>();
-            _sut = new ScoreSaverFunction(_leaderBoardServiceMock);
+            _sut = new ScoreSaverFunction();
+            _sut.SetService(_leaderBoardServiceMock);
         }
 
         [Fact]
