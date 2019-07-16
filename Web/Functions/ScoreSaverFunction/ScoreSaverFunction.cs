@@ -32,7 +32,7 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver
                 SetService(new AzureLeaderBoardService());
             
             var connectionString = Environment.GetEnvironmentVariable("TableConnectionString");
-            log.LogDebug($"ConnectionString is: {connectionString}");
+            log.LogInformation($"ConnectionString is: {connectionString}");
             
             var responseObject = new SaveScoreResponse();
             var requestData = await new StreamReader(request.Body).ReadToEndAsync();
