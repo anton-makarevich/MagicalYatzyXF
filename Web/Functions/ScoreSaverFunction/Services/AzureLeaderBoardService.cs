@@ -20,7 +20,7 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver.Services
         public Task<string> SaveScoreAsync(PlayerScore score)
         {
             //throw new System.NotImplementedException();
-            return null;
+            return Task.FromResult("TestId");
         }
     }
 }
