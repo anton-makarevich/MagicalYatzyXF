@@ -42,6 +42,7 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver
             }
             else
             {
+                log.LogInformation($"Score.Rule is {requestObject?.Score.Rule}");
                 var id = await _leaderBoardService.SaveScoreAsync(requestObject.Score);
                 requestObject.Score.ScoreId = id;
                 responseObject.Score = requestObject.Score;
