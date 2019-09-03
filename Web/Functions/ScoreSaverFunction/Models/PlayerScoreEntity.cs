@@ -18,10 +18,10 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver.Models
             RowKey = scoreId;
 
             Score = playerScore.Score;
-            PlayerId = playerScore.PlayerId;
+            PlayerName = playerScore.PlayerName;
         }
 
-        public string PlayerId { get; set; }
+        public string PlayerName { get; set; }
 
         public int Score { get; set; }
     }
