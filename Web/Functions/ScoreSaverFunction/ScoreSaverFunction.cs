@@ -29,7 +29,7 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver
             ILogger log)
         {
             if (_leaderBoardService == null)
-                SetService(new AzureLeaderBoardService());
+                SetService(new AzureLeaderBoardService(log));
 
             var responseObject = new SaveScoreResponse();
             var requestData = await new StreamReader(request.Body).ReadToEndAsync();

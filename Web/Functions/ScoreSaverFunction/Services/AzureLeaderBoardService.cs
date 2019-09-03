@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using Sanet.MagicalYatzy.Dto.Models;
@@ -10,12 +11,14 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver.Services
 {
     public class AzureLeaderBoardService:ILeaderBoardService
     {
+        private readonly ILogger _log;
         private const string TableName = "ScoresTable";
 
         private readonly CloudTable _scoresTable;
 
-        public AzureLeaderBoardService()
+        public AzureLeaderBoardService(ILogger log)
         {
+            _log = log;
             var connectionString = Environment.GetEnvironmentVariable("TableConnectionString");
             var storageAccount = CloudStorageAccount.Parse(connectionString);
             var tableClient = storageAccount.CreateCloudTableClient();
@@ -24,12 +27,21 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver.Services
         
         public async Task<string> SaveScoreAsync(PlayerScore score)
         {
-            var entity = new PlayerScoreEntity(score);
-            var insertOperation = TableOperation.InsertOrMerge(entity);
-            var result = await _scoresTable.ExecuteAsync(insertOperation);
-            var insertedEntity = result.Result as PlayerScoreEntity;
+            try
+            {
+                await _scoresTable.CreateIfNotExistsAsync();
+                var entity = new PlayerScoreEntity(score);
+                var insertOperation = TableOperation.InsertOrMerge(entity);
+                var result = await _scoresTable.ExecuteAsync(insertOperation);
+                var insertedEntity = result.Result as PlayerScoreEntity;
 
-            return insertedEntity?.ScoreId;
+                return insertedEntity?.ScoreId;
+            }
+            catch(Exception exception)
+            {
+                _log.LogError(exception,exception.Message);
+                return null;
+            }
         }
     }
 }
