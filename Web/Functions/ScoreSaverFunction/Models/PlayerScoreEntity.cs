@@ -13,16 +13,13 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver.Models
 
         public PlayerScoreEntity(PlayerScore playerScore)
         {
-            ScoreId= Guid.NewGuid().ToString("N");
+            var scoreId= Guid.NewGuid().ToString("N");
             
-            PartitionKey = playerScore.Rule;
-            RowKey = ScoreId;
+            PartitionKey = $"{playerScore.SeasonId}{playerScore.Rule}";
+            RowKey = scoreId;
 
-            Rule = playerScore.Rule;
             Score = playerScore.Score;
             PlayerId = playerScore.PlayerId;
-            
-            SeasonId = playerScore.SeasonId;
         }
 
         public string SeasonId { get; set; }
@@ -30,9 +27,5 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver.Models
         public string PlayerId { get; set; }
 
         public int Score { get; set; }
-
-        public string ScoreId { get; set; }
-
-        public string Rule { get; set; }
     }
 }
