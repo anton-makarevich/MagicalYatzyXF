@@ -42,10 +42,18 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver
             }
             else
             {
-                log.LogInformation($"Score.Rule is {requestObject?.Score.Rule}");
                 var id = await _leaderBoardService.SaveScoreAsync(requestObject.Score);
-                requestObject.Score.ScoreId = id;
-                responseObject.Score = requestObject.Score;
+                if (string.IsNullOrEmpty(id))
+                {
+                    responseObject.ErrorCode = (int)HttpStatusCode.InternalServerError;
+                    responseObject.Message = "Unable to save score";
+                }
+                else
+                {
+                    requestObject.Score.ScoreId = id;
+                    responseObject.ErrorCode = (int)HttpStatusCode.OK;
+                    responseObject.Score = requestObject.Score;
+                }
             }
 
             return new JsonResult(responseObject);

@@ -67,7 +67,25 @@ namespace ScoreSaverTests
             var response = actionResult.Value as SaveScoreResponse;
             
             Assert.NotNull(response?.Score);
+            Assert.Equal(200,response.ErrorCode);
             Assert.Equal(scoreId,response.Score.ScoreId);
+        }
+        
+        [Fact]
+        public async Task RunFunctionReturnsInternalServerErrorIfServiceDoesNotProvideScoreId()
+        {
+            var score = new PlayerScore();
+            _leaderBoardServiceMock.SaveScoreAsync(score).ReturnsForAnyArgs(Task.FromResult<string>(null));
+            
+            var actionResult = await _sut.Run(Utils.CreateMockRequest(
+                    new SaveScoreRequest(){Score = score}),
+                Substitute.For<ILogger>())as JsonResult;
+            
+            Assert.NotNull(actionResult);
+            var response = actionResult.Value as SaveScoreResponse;
+            
+            Assert.Null(response?.Score);
+            Assert.Equal(500,response?.ErrorCode);
         }
     }
 }
