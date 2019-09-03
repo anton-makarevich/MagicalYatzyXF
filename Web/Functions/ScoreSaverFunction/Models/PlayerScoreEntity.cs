@@ -8,7 +8,6 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver.Models
     {
         public PlayerScoreEntity()
         {
-            
         }
 
         public PlayerScoreEntity(PlayerScore playerScore)
@@ -21,8 +20,6 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver.Models
             Score = playerScore.Score;
             PlayerId = playerScore.PlayerId;
         }
-
-        public string SeasonId { get; set; }
 
         public string PlayerId { get; set; }
 

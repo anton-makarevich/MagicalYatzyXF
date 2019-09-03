@@ -35,7 +35,7 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver.Services
                 var result = await _scoresTable.ExecuteAsync(insertOperation);
                 var insertedEntity = result.Result as PlayerScoreEntity;
 
-                return insertedEntity?.ScoreId;
+                return insertedEntity?.RowKey;
             }
             catch(Exception exception)
             {
