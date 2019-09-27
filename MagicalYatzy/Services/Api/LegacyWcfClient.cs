@@ -38,5 +38,10 @@ namespace Sanet.MagicalYatzy.Services.Api
 
             return null;
         }
+
+        public Task SaveScoreAsync(string playerName, int score, Rules rule)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

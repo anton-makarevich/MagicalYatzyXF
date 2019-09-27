@@ -30,5 +30,20 @@ namespace Sanet.MagicalYatzy.Services.Api
 
             return null;
         }
+
+        public async Task SaveScoreAsync(string playerName, int score, Rules rule)
+        {
+            var saveScoreModel = new PlayerScore()
+            {
+                PlayerName = playerName,
+                Score = score,
+                Rule = rule.ToString()
+            };
+
+            await _webService.PostAsync<SaveScoreResponse>(new SaveScoreRequest()
+            {
+                Score = saveScoreModel
+            }, "scores");
+        }
     }
 }
