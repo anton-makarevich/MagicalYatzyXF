@@ -17,7 +17,7 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver
 {
     public class ScoreSaverFunction
     {
-        private ILeaderBoardService _leaderBoardService = null;
+        private ILeaderBoardService _leaderBoardService;
 
         public void SetService(ILeaderBoardService leaderBoardService)
         {
@@ -42,6 +42,8 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver
             }
             else
             {
+                if (string.IsNullOrEmpty(requestObject.Score.SeasonId))
+                    requestObject.Score.SeasonId = DateTime.UtcNow.Year.ToString();
                 var id = await _leaderBoardService.SaveScoreAsync(requestObject.Score);
                 if (string.IsNullOrEmpty(id))
                 {

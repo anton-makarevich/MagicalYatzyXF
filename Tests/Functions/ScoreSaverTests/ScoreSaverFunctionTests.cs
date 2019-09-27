@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using FunctionTestUtils;
@@ -86,6 +87,25 @@ namespace ScoreSaverTests
             
             Assert.Null(response?.Score);
             Assert.Equal(500,response?.ErrorCode);
+        }
+        
+        [Fact]
+        public async Task IfScoreDoesNotContainsSeasonItSavedAsCurrentYearAsSeason()
+        {
+            var season = DateTime.UtcNow.Year.ToString();
+            var score = new PlayerScore();
+            _leaderBoardServiceMock.SaveScoreAsync(score).ReturnsForAnyArgs(Task.FromResult("123"));
+            
+            var actionResult = await _sut.Run(Utils.CreateMockRequest(
+                    new SaveScoreRequest(){Score = score}),
+                Substitute.For<ILogger>())as JsonResult;
+            
+            Assert.NotNull(actionResult);
+            var response = actionResult.Value as SaveScoreResponse;
+            
+            Assert.NotNull(response?.Score);
+            Assert.Equal(200,response.ErrorCode);
+            Assert.Equal(season,response.Score.SeasonId);
         }
     }
 }
