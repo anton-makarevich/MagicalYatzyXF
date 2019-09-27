@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
+using Sanet.MagicalYatzy.Services.Api;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Services.Navigation;
 using Sanet.MagicalYatzy.ViewModels;
@@ -15,6 +17,7 @@ namespace MagicalYatzyTests.ViewModels
         private readonly IGameService _gameService = Substitute.For<IGameService>();
         private readonly ILocalizationService _localizationService = Substitute.For<ILocalizationService>();
         private readonly INavigationService _navigationService = Substitute.For<INavigationService>();
+        private readonly IApiClient _apiClient = Substitute.For<IApiClient>();
         private readonly IPlayer _humanPlayer;
         private readonly IGame _game = Substitute.For<IGame>();
         
@@ -34,7 +37,7 @@ namespace MagicalYatzyTests.ViewModels
             });
             
             Substitute.For<ILocalizationService>();
-            _sut = new GameResultsViewModel(_gameService, _localizationService);
+            _sut = new GameResultsViewModel(_gameService, _localizationService, _apiClient);
             _sut.SetNavigationService(_navigationService);
         }
         
@@ -94,6 +97,23 @@ namespace MagicalYatzyTests.ViewModels
             _sut.AttachHandlers();
             
             Assert.Null(_sut.Players);
+        }
+
+        [Fact]
+        public async Task SavesScoreForEveryPlayerOnAppear()
+        {
+            var players = new List<IPlayer>()
+            {
+                Substitute.For<IPlayer>(),
+                Substitute.For<IPlayer>()
+            };
+            _game.Players.Returns(players);
+            _sut.AttachHandlers();
+            await Task.Delay(50);
+
+            Assert.Equal(
+                players.Count, 
+                _apiClient.ReceivedCalls().Count());
         }
     }
 }

@@ -1,8 +1,10 @@
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Services;
+using Sanet.MagicalYatzy.Services.Api;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
@@ -13,14 +15,17 @@ namespace Sanet.MagicalYatzy.ViewModels
     {
         private readonly IGameService _gameService;
         private readonly ILocalizationService _localizationService;
+        private readonly IApiClient _apiClient;
         private ObservableCollection<PlayerViewModel> _players;
 
         public GameResultsViewModel(
             IGameService gameService,
-            ILocalizationService localizationService)
+            ILocalizationService localizationService,
+            IApiClient apiClient)
         {
             _gameService = gameService;
             _localizationService = localizationService;
+            _apiClient = apiClient;
         }
 
         public ObservableCollection<PlayerViewModel> Players
@@ -58,6 +63,20 @@ namespace Sanet.MagicalYatzy.ViewModels
             }
             
             Players = new ObservableCollection<PlayerViewModel>(_gameService.CurrentLocalGame.Players.Select(p=>new PlayerViewModel(p, _localizationService)));
+#pragma warning disable 4014
+            SaveScoreAsync();
+#pragma warning restore 4014
+        }
+
+        private async Task SaveScoreAsync()
+        {
+            foreach (var player in Players)
+            {
+                await _apiClient.SaveScoreAsync(
+                    player.Name,
+                    player.Total,
+                    _gameService.CurrentLocalGame.Rules.CurrentRule);
+            }
         }
     }
 }
