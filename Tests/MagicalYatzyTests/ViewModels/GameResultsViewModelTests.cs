@@ -100,19 +100,36 @@ namespace MagicalYatzyTests.ViewModels
         }
 
         [Fact]
-        public async Task SavesScoreForEveryPlayerOnAppear()
+        public async Task SavesScoreForEveryHumanPlayerOnAppear()
         {
-            var players = new List<IPlayer>()
+            const int botsCount = 2;
+            const int humanPlayersCount = 4;
+            
+            var botPlayers = new List<IPlayer>();
+            for (var i = 0; i < botsCount; i++)
             {
-                Substitute.For<IPlayer>(),
-                Substitute.For<IPlayer>()
-            };
+                var botPlayer = Substitute.For<IPlayer>();
+                botPlayer.IsBot.Returns(true);
+                botPlayer.IsHuman.Returns(false);
+                botPlayers.Add(botPlayer);
+            }
+            
+            var humanPlayers = new List<IPlayer>();
+            for (var i = 0; i < humanPlayersCount; i++)
+            {
+                var humanPlayer = Substitute.For<IPlayer>();
+                humanPlayer.IsBot.Returns(false);
+                humanPlayer.IsHuman.Returns(true);
+                humanPlayers.Add(humanPlayer);
+            }
+
+            var players = botPlayers.Concat(humanPlayers).ToList();
             _game.Players.Returns(players);
             _sut.AttachHandlers();
             await Task.Delay(50);
 
             Assert.Equal(
-                players.Count, 
+                humanPlayersCount, 
                 _apiClient.ReceivedCalls().Count());
         }
     }

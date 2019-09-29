@@ -70,7 +70,7 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         private async Task SaveScoreAsync()
         {
-            foreach (var player in Players)
+            foreach (var player in Players.Where(p => p.Player.IsHuman))
             {
                 await _apiClient.SaveScoreAsync(
                     player.Name,

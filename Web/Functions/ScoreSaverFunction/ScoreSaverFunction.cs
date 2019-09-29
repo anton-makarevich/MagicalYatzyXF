@@ -23,6 +23,7 @@ namespace Sanet.MagicalYatzy.Web.Functions.ScoreSaver
         {
             _leaderBoardService = leaderBoardService;
         }
+        
         [FunctionName("ScoreSaverFunction")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = "scores")] HttpRequest request,
