@@ -1,6 +1,6 @@
 using Xamarin.Forms;
 
-namespace Sanet.MagicalYatzy.XF.Views.Controls
+namespace Sanet.MagicalYatzy.Xf.Views.Controls
 {
     public partial class ToolBarButton
     {

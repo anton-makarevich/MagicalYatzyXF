@@ -1,9 +1,9 @@
 using Sanet.MagicalYatzy.ViewModels;
-using Sanet.MagicalYatzy.XF.Views.Base;
-using Sanet.MagicalYatzy.XF.Views.Controls.Game;
+using Sanet.MagicalYatzy.Xf.Views.Base;
+using Sanet.MagicalYatzy.Xf.Views.Controls.Game;
 using Xamarin.Forms;
 
-namespace Sanet.MagicalYatzy.XF.Views.Game
+namespace Sanet.MagicalYatzy.Xf.Views.Game
 {
     public abstract class GameView: BaseView<GameViewModel>
     {

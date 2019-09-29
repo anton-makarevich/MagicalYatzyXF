@@ -1,9 +1,9 @@
 ﻿using System;
 using Sanet.MagicalYatzy.ViewModels.Base;
-using Sanet.MagicalYatzy.XF.Views.Controls.Game;
+using Sanet.MagicalYatzy.Xf.Views.Controls.Game;
 using Xamarin.Forms;
 
-namespace Sanet.MagicalYatzy.XF.Views.Base
+namespace Sanet.MagicalYatzy.Xf.Views.Base
 {
     public class DicePanelView<TViewModel> : BaseView<TViewModel> where TViewModel : DicePanelViewModel
     {

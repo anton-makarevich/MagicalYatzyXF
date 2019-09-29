@@ -7,6 +7,7 @@ using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Api;
 using Sanet.MagicalYatzy.Services.Game;
+using Sanet.MagicalYatzy.Services.StorageService;
 using Xunit;
 
 namespace MagicalYatzyTests.Services.Game

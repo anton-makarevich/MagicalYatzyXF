@@ -2,12 +2,12 @@
 <base:NavigationBackView 
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:base="clr-namespace:Sanet.MagicalYatzy.XF.Views.Base"
+    xmlns:base="clr-namespace:Sanet.MagicalYatzy.Xf.Views.Base"
     xmlns:vm="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
-    xmlns:tabControl="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls.TabControl;assembly=MagicalYatzyXF"
-    xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls;assembly=MagicalYatzyXF"
-    xmlns:loc="clr-namespace:Sanet.MagicalYatzy.XF.MarkupExtensions;assembly=MagicalYatzyXF"
-    x:Class="Sanet.MagicalYatzy.XF.Views.Lobby.LobbyViewNarrow"
+    xmlns:tabControl="clr-namespace:Sanet.MagicalYatzy.Xf.Views.Controls.TabControl;assembly=MagicalYatzyXF"
+    xmlns:controls="clr-namespace:Sanet.MagicalYatzy.Xf.Views.Controls;assembly=MagicalYatzyXF"
+    xmlns:loc="clr-namespace:Sanet.MagicalYatzy.Xf.MarkupExtensions;assembly=MagicalYatzyXF"
+    x:Class="Sanet.MagicalYatzy.Xf.Views.Lobby.LobbyViewNarrow"
     x:TypeArguments="vm:LobbyViewModel">
     <Grid
         Margin="0,0,0,5">

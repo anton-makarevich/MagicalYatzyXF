@@ -1,6 +1,6 @@
 ﻿using UIKit;
 
-namespace Sanet.MagicalYatzy.XF.iOS
+namespace Sanet.MagicalYatzy.Xf.iOS
 {
     public class Application
     {

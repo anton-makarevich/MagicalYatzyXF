@@ -2,7 +2,7 @@ using System;
 using Sanet.MagicalYatzy.Models.Game;
 using Xamarin.Forms;
 
-namespace Sanet.MagicalYatzy.XF.Converters
+namespace Sanet.MagicalYatzy.Xf.Converters
 {
     public class ScoreStatusToColorConverter: IValueConverter
     {

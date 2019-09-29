@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-namespace Sanet.MagicalYatzy.XF.Helpers
+namespace Sanet.MagicalYatzy.Xf.Helpers
 {
     public static class DiceLoaderHelper
     {

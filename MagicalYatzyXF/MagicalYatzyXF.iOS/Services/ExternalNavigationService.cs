@@ -1,6 +1,10 @@
-﻿using Sanet.MagicalYatzy.Services;
+﻿using Sanet.MagicalYatzy.Services.Navigation;
 
-namespace Sanet.MagicalYatzy.XF.iOS.Services
+#if __IOS__
+namespace Sanet.MagicalYatzy.Xf.Ios.Services
+#elif __MACOS__
+namespace Sanet.MagicalYatzy.Xf.Mac.Services
+#endif
 {
     public class ExternalNavigationService : IExternalNavigationService
     {

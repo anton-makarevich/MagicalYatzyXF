@@ -1,9 +1,9 @@
 ﻿using Sanet.MagicalYatzy.ViewModels.Base;
 using Xamarin.Forms;
-using Sanet.MagicalYatzy.XF.Helpers;
-using Sanet.MagicalYatzy.XF.Views.Controls;
+using Sanet.MagicalYatzy.Xf.Helpers;
+using Sanet.MagicalYatzy.Xf.Views.Controls;
 
-namespace Sanet.MagicalYatzy.XF.Views.Base
+namespace Sanet.MagicalYatzy.Xf.Views.Base
 {
     public class NavigationBackView<TViewModel> : DicePanelView<TViewModel> where TViewModel : DicePanelViewModel
     {

@@ -1,9 +1,9 @@
 ﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using Sanet.MagicalYatzy.XF.Views.Controls;
+using Sanet.MagicalYatzy.Xf.Views.Controls;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 
-namespace Sanet.MagicalYatzy.XF.Views.Game
+namespace Sanet.MagicalYatzy.Xf.Views.Game
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class GameViewWide 

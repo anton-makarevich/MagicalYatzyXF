@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:converters="clr-namespace:Sanet.MagicalYatzy.XF.Converters"
-             x:Class="Sanet.MagicalYatzy.XF.App">
+             xmlns:converters="clr-namespace:Sanet.MagicalYatzy.Xf.Converters"
+             x:Class="Sanet.MagicalYatzy.Xf.App">
     <Application.Resources>
 
     <!-- Styles -->

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <base:DicePanelView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Sanet.MagicalYatzy.XF.Views.MainMenuView"
-             xmlns:base="clr-namespace:Sanet.MagicalYatzy.XF.Views.Base"
+             x:Class="Sanet.MagicalYatzy.Xf.Views.MainMenuView"
+             xmlns:base="clr-namespace:Sanet.MagicalYatzy.Xf.Views.Base"
              xmlns:vm="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
-             xmlns:cells="clr-namespace:Sanet.MagicalYatzy.XF.Views.Cells"
-             xmlns:controls="clr-namespace:Sanet.MagicalYatzy.XF.Views.Controls"
+             xmlns:cells="clr-namespace:Sanet.MagicalYatzy.Xf.Views.Cells"
+             xmlns:controls="clr-namespace:Sanet.MagicalYatzy.Xf.Views.Controls"
              x:TypeArguments="vm:MainMenuViewModel">
     <Grid>
         <Grid.RowDefinitions>

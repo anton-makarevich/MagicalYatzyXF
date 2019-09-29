@@ -1,12 +1,11 @@
 ﻿using AppKit;
 using Foundation;
-using Sanet.MagicalYatzy.XF;
-using Sanet.MagicalYatzy.XF.iOS;
+using Sanet.MagicalYatzy.Xf;
+using SimpleInjector;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.MacOS;
-using SimpleInjector;
 
-namespace MagicalYatzyXF.Mac
+namespace Sanet.MagicalYatzy.Xf.Mac
 {
     [Register("AppDelegate")]
 	public class AppDelegate : FormsApplicationDelegate

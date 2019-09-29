@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
+using Sanet.MagicalYatzy.Services.Api;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Services.Navigation;
 using Sanet.MagicalYatzy.ViewModels;
@@ -15,6 +17,7 @@ namespace MagicalYatzyTests.ViewModels
         private readonly IGameService _gameService = Substitute.For<IGameService>();
         private readonly ILocalizationService _localizationService = Substitute.For<ILocalizationService>();
         private readonly INavigationService _navigationService = Substitute.For<INavigationService>();
+        private readonly IApiClient _apiClient = Substitute.For<IApiClient>();
         private readonly IPlayer _humanPlayer;
         private readonly IGame _game = Substitute.For<IGame>();
         
@@ -34,7 +37,7 @@ namespace MagicalYatzyTests.ViewModels
             });
             
             Substitute.For<ILocalizationService>();
-            _sut = new GameResultsViewModel(_gameService, _localizationService);
+            _sut = new GameResultsViewModel(_gameService, _localizationService, _apiClient);
             _sut.SetNavigationService(_navigationService);
         }
         
@@ -94,6 +97,40 @@ namespace MagicalYatzyTests.ViewModels
             _sut.AttachHandlers();
             
             Assert.Null(_sut.Players);
+        }
+
+        [Fact]
+        public async Task SavesScoreForEveryHumanPlayerOnAppear()
+        {
+            const int botsCount = 2;
+            const int humanPlayersCount = 4;
+            
+            var botPlayers = new List<IPlayer>();
+            for (var i = 0; i < botsCount; i++)
+            {
+                var botPlayer = Substitute.For<IPlayer>();
+                botPlayer.IsBot.Returns(true);
+                botPlayer.IsHuman.Returns(false);
+                botPlayers.Add(botPlayer);
+            }
+            
+            var humanPlayers = new List<IPlayer>();
+            for (var i = 0; i < humanPlayersCount; i++)
+            {
+                var humanPlayer = Substitute.For<IPlayer>();
+                humanPlayer.IsBot.Returns(false);
+                humanPlayer.IsHuman.Returns(true);
+                humanPlayers.Add(humanPlayer);
+            }
+
+            var players = botPlayers.Concat(humanPlayers).ToList();
+            _game.Players.Returns(players);
+            _sut.AttachHandlers();
+            await Task.Delay(50);
+
+            Assert.Equal(
+                humanPlayersCount, 
+                _apiClient.ReceivedCalls().Count());
         }
     }
 }

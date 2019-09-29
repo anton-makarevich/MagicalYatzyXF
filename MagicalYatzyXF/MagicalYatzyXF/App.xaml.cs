@@ -1,12 +1,12 @@
 ﻿using Sanet.MagicalYatzy.ViewModels;
-using Sanet.MagicalYatzy.XF.Helpers;
-using Sanet.MagicalYatzy.XF.Services;
-using Sanet.MagicalYatzy.XF.Views;
+using Sanet.MagicalYatzy.Xf.Helpers;
+using Sanet.MagicalYatzy.Xf.Services;
+using Sanet.MagicalYatzy.Xf.Views;
 using SimpleInjector;
 using Xamarin.Forms;
-using Sanet.MagicalYatzy.XF.Models;
+using Sanet.MagicalYatzy.Xf.Models;
 
-namespace Sanet.MagicalYatzy.XF
+namespace Sanet.MagicalYatzy.Xf
 {
     public partial class App : Application
     {

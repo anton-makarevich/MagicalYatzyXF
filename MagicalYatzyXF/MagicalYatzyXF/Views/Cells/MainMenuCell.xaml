@@ -2,7 +2,7 @@
 <ViewCell
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="Sanet.MagicalYatzy.XF.Views.Cells.MainMenuCell">
+    x:Class="Sanet.MagicalYatzy.Xf.Views.Cells.MainMenuCell">
     <Grid Padding="10,15,0,0" BackgroundColor="Transparent">
         <Grid.GestureRecognizers>
             <TapGestureRecognizer Command="{Binding MenuAction}"/>

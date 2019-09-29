@@ -1,8 +1,8 @@
-﻿using Sanet.MagicalYatzy.XF.iOS.Services;
-using Sanet.MagicalYatzy.Services;
+﻿using Sanet.MagicalYatzy.Services.Navigation;
+using Sanet.MagicalYatzy.Xf.Ios.Services;
 using SimpleInjector;
 
-namespace Sanet.MagicalYatzy.XF.iOS
+namespace Sanet.MagicalYatzy.Xf.iOS
 {
     public static class ContainerExtensions
     {

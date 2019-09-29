@@ -1,26 +1,25 @@
-﻿using Newtonsoft.Json;
-using Plugin.Connectivity;
-using Sanet.MagicalYatzy.Services;
-using System;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Sanet.MagicalYatzy.Services.Api;
+using Newtonsoft.Json;
+using Sanet.MagicalYatzy.Dto.ApiConfigs;
 
-namespace Sanet.MagicalYatzy.XF.Services
+namespace Sanet.MagicalYatzy.Dto.Services
 {
     public class WebService : IWebService
     {
         private const string JsonContentType = "application/json";
         private readonly HttpClient _httpClient;
 
-        public WebService()
+        public WebService(IApiConfig config)
         {
             _httpClient = new HttpClient
             {
-                BaseAddress = new Uri(Constants.ApiEndpoint),
+                BaseAddress = new Uri(Path.Combine(config.BaseUrl,config.VersionSuffix)),
                 DefaultRequestHeaders =
                 {
                     Accept =
@@ -50,17 +49,17 @@ namespace Sanet.MagicalYatzy.XF.Services
             }
         }
 
-        public async Task<T> PostAsync<T>(string url)
+        public async Task<T> PostAsync<T>(object requestModel, string url)
         {
             try
             {
-                var response = await SendRequest(HttpMethod.Post, url);
+                var response = await SendRequest(HttpMethod.Post, url, requestModel);
                 if (response.IsSuccessStatusCode)
                 {
                     return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(),
                         new JsonSerializerSettings() { NullValueHandling = 0 });
                 }
-
+                
                 return default(T);
             }
             catch
@@ -73,11 +72,6 @@ namespace Sanet.MagicalYatzy.XF.Services
         {
             try
             {
-                if (!CrossConnectivity.Current.IsConnected)
-                {
-                    throw new Exception($"Request: {url}");
-                }
-
                 var request = new HttpRequestMessage(method, url);
 
                 if (content != null)

@@ -1,11 +1,11 @@
 ﻿using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
-using Sanet.MagicalYatzy.XF.Views.Controls.TabControl;
-using Sanet.MagicalYatzy.XF.Views.Fragments;
+using Sanet.MagicalYatzy.Xf.Views.Controls.TabControl;
+using Sanet.MagicalYatzy.Xf.Views.Fragments;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using System.Linq;
 
-namespace Sanet.MagicalYatzy.XF.Views.Game
+namespace Sanet.MagicalYatzy.Xf.Views.Game
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class GameViewNarrow

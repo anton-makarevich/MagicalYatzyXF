@@ -1,7 +1,4 @@
-﻿using Sanet.MagicalYatzy.Models;
-using System;
-
-namespace Sanet.MagicalYatzy.Services
+﻿namespace Sanet.MagicalYatzy.Services.Navigation
 {
     public interface IExternalNavigationService
     {

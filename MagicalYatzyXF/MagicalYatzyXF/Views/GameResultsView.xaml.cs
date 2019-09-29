@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Xamarin.Forms;
 
-namespace Sanet.MagicalYatzy.XF.Views
+namespace Sanet.MagicalYatzy.Xf.Views
 {
     public partial class GameResultsView
     {

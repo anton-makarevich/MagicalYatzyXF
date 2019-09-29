@@ -1,6 +1,6 @@
 ﻿using Xamarin.Forms;
 
-namespace Sanet.MagicalYatzy.XF.Extensions
+namespace Sanet.MagicalYatzy.Xf.Extensions
 {
     public static class AnimationExtensions
     {

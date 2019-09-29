@@ -6,7 +6,7 @@
     <ProjectGuid>{46B34E8C-D309-4012-9A35-DDAF339D4E6A}</ProjectGuid>
     <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
-    <RootNamespace>MagicalYatzyXF.Mac</RootNamespace>
+    <RootNamespace>Sanet.MagicalYatzy.Xf.Mac</RootNamespace>
     <AssemblyName>MagicalYatzyMac</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
@@ -91,12 +91,10 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="PlatformModule.cs" />
     <Compile Include="ViewController.cs" />
     <Compile Include="ViewController.designer.cs">
       <DependentUpon>ViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="..\MagicalYatzyXF.iOS\PlatformModule.cs">
-      <Link>PlatformModule.cs</Link>
     </Compile>
     <Compile Include="..\MagicalYatzyXF.iOS\Services\ExternalNavigationService.cs">
       <Link>Services\ExternalNavigationService.cs</Link>
@@ -159,7 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.Platforms">
-      <Version>2.2.1</Version>
+      <Version>3.0.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Win32.Primitives">
       <Version>4.3.0</Version>
@@ -171,7 +169,7 @@
       <Version>12.0.2</Version>
     </PackageReference>
     <PackageReference Include="SimpleInjector">
-      <Version>4.6.0</Version>
+      <Version>4.7.1</Version>
     </PackageReference>
     <PackageReference Include="SkiaSharp">
       <Version>1.68.0</Version>

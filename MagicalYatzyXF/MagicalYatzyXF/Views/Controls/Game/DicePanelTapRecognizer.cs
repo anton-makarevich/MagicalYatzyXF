@@ -1,7 +1,7 @@
 using System;
 using Xamarin.Forms;
 
-namespace Sanet.MagicalYatzy.XF.Views.Controls.Game
+namespace Sanet.MagicalYatzy.Xf.Views.Controls.Game
 {
     public class DicePanelTapRecognizer:TappableContentView
     {

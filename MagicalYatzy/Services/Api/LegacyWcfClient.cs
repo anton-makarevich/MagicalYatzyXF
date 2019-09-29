@@ -1,6 +1,7 @@
 ﻿using System.ServiceModel;
 using System.Threading.Tasks;
-using MagicalYatzy.LegacyWcfService;
+using Sanet.MagicalYatzy.Dto.ConnectedServices.LegacyScoreService;
+using Sanet.MagicalYatzy.Dto.Extensions;
 using Sanet.MagicalYatzy.Extensions;
 using Sanet.MagicalYatzy.Models.Game;
 
@@ -36,6 +37,11 @@ namespace Sanet.MagicalYatzy.Services.Api
             }
 
             return null;
+        }
+
+        public Task SaveScoreAsync(string playerName, int score, Rules rule)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -1,8 +1,6 @@
-﻿using Xamarin.Forms;
-
-namespace Sanet.MagicalYatzy.XF.Views.Cells
+﻿namespace Sanet.MagicalYatzy.Xf.Views.Cells
 {
-    public partial class PlayerScoresCell : ViewCell
+    public partial class PlayerScoresCell
     {
         public PlayerScoresCell()
         {
