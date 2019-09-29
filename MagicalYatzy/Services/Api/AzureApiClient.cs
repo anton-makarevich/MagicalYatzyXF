@@ -37,6 +37,9 @@ namespace Sanet.MagicalYatzy.Services.Api
             {
                 PlayerName = playerName,
                 Score = score,
+                #if DEBUG
+                SeasonId = "Debug",
+                #endif
                 Rule = rule.ToString()
             };
 
