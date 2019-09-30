@@ -91,9 +91,9 @@
     <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.8" />
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.9" />
     <PackageReference Include="SimpleInjector">
-      <Version>4.6.0</Version>
+      <Version>4.7.1</Version>
     </PackageReference>
     <PackageReference Include="SkiaSharp.Views.Forms">
       <Version>1.68.0</Version>
@@ -102,7 +102,7 @@
       <Version>3.2.0</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>3.6.0.293080</Version>
+      <Version>4.2.0.815419</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +187,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MagicalYatzyDto\MagicalYatzyDto.csproj">
+      <Project>{c1e6e7d2-dcbf-4ed6-ae8f-1aa55acc0aeb}</Project>
+      <Name>MagicalYatzyDto</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MagicalYatzy\MagicalYatzy.csproj">
       <Project>{cf5d56a6-688c-45bf-bec3-171d8197910a}</Project>
       <Name>MagicalYatzy</Name>
