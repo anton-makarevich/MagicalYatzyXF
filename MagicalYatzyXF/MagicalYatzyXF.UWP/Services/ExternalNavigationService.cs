@@ -1,4 +1,4 @@
-﻿using Sanet.MagicalYatzy.Services;
+﻿using Sanet.MagicalYatzy.Services.Navigation;
 using System;
 
 namespace Sanet.MagicalYatzy.XF.UWP.Services

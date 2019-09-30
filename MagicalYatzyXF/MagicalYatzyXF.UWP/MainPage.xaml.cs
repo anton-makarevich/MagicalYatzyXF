@@ -10,8 +10,8 @@ namespace Sanet.MagicalYatzy.XF.UWP
             this.InitializeComponent();
             _container = new Container();
             _container.RegisterModules();
-            Sanet.MagicalYatzy.XF.App.Container = _container;
-            LoadApplication(new Sanet.MagicalYatzy.XF.App());
+            Sanet.MagicalYatzy.Xf.App.Container = _container;
+            LoadApplication(new Sanet.MagicalYatzy.Xf.App());
         }
     }
 }

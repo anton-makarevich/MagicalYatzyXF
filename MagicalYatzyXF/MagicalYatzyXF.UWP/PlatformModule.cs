@@ -1,4 +1,5 @@
-﻿using Sanet.MagicalYatzy.Services;
+﻿using Sanet.MagicalYatzy.Services.Navigation;
+using Sanet.MagicalYatzy.Xf;
 using Sanet.MagicalYatzy.XF.UWP.Services;
 using SimpleInjector;
 
