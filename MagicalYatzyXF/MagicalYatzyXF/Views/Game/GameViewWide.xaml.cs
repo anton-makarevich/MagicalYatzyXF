@@ -16,9 +16,9 @@ namespace Sanet.MagicalYatzy.Xf.Views.Game
         protected override void InitDicePanel()
         {
             base.InitDicePanel();
-            DicePanel.SetValue(Grid.RowProperty, 1);
-            DicePanel.SetValue(Grid.ColumnProperty, 1);
-            PageGrid.Children.Insert(0, DicePanel);
+            DicePanelView.SetValue(Grid.RowProperty, 1);
+            DicePanelView.SetValue(Grid.ColumnProperty, 1);
+            PageGrid.Children.Insert(0, DicePanelView);
         }
 
         public void RollResultSelected(object sender, SelectEventArgs e)

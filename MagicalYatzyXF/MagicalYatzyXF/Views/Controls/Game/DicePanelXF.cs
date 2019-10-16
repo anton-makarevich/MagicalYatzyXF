@@ -1,10 +1,11 @@
 ﻿using Sanet.MagicalYatzy.Models.Game;
+using Sanet.MagicalYatzy.Views;
 using Sanet.MagicalYatzy.Xf.Extensions;
 using Xamarin.Forms;
 
 namespace Sanet.MagicalYatzy.Xf.Views.Controls.Game
 {
-    public class DicePanelXf: AbsoluteLayout
+    public class DicePanelXf: AbsoluteLayout, IDicePanelView
     {
         private IDicePanel _dicePanelModel;
         private readonly DicePanelTapRecognizer _tapRecognizer;

@@ -161,6 +161,19 @@ namespace MagicalYatzyTests.Models.Game
             // Assert
             Assert.True(_sut.Opacity < 1);
         }
+        
+        [Fact]
+        public void RollingDiceIsOpaque()
+        {
+            // Arrange
+            _sut.Status = DieStatus.Rolling;
+
+            // Act
+            _sut.DrawDie();
+
+            // Assert
+            Assert.Equal(1,_sut.Opacity);
+        }
 
         [Fact]
         public void ImagePathPointsToPngImage()
