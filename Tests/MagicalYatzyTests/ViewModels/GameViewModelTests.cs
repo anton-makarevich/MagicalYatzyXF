@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NSubstitute;
+using NSubstitute.ReceivedExtensions;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.Ai;
@@ -1352,6 +1353,18 @@ namespace MagicalYatzyTests.ViewModels
                 Raise.EventWith(null, new DiceFixedEventArgs(isFixed,diceValue));
 
             _gameService.CurrentLocalGame.DidNotReceive().FixDice(diceValue,isFixed);
+        }
+
+        [Fact]
+        public void BotStartsTheGameIfItIsTheFirstPlayer()
+        {
+            _humanPlayer.IsHuman.Returns(true);
+            _botPlayer.IsBot.Returns(true);
+            _gameService.CurrentLocalGame.CurrentPlayer.Returns(_botPlayer);
+            
+            _sut.AttachHandlers();
+            
+           _gameService.CurrentLocalGame.Received().ReportRoll();
         }
         
         #region Private methods

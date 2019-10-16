@@ -263,6 +263,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         {
             if (Status == DieStatus.Rolling)
             {
+                Opacity = 1;
                 if ((DirectionX * DirectionY) > 0)
                 {
                     _rotationString = "yrot.";

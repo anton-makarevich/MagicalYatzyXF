@@ -108,6 +108,11 @@ namespace Sanet.MagicalYatzy.ViewModels
             DicePanel.RollEnded += DicePanelOnRollEnded;
             DicePanel.DieFixed += DicePanelOnDieFixed;
             
+            if (CurrentPlayer.Player.IsBot)
+            {
+                Game.ReportRoll();
+            }
+            
             RefreshGameStatus();
         }
 

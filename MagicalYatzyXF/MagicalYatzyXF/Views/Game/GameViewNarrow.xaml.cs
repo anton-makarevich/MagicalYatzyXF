@@ -19,7 +19,7 @@ namespace Sanet.MagicalYatzy.Xf.Views.Game
         protected override void InitDicePanel()
         {
             base.InitDicePanel();
-            _diceGrid.Children.Add(DicePanel);
+            _diceGrid.Children.Add(DicePanelView);
         }
 
         protected override void OnViewModelSet()
@@ -40,6 +40,8 @@ namespace Sanet.MagicalYatzy.Xf.Views.Game
             base.OnAppearing();
             ViewModel.Game.ResultApplied += Game_ResultApplied;
             ViewModel.DicePanel.RollStarted += DicePanelOnRollStarted;
+            if (ViewModel.DicePanel.IsRolling)
+                DicePanelOnRollStarted(this, null);
         }
 
         void Game_ResultApplied(object sender, MagicalYatzy.Models.Events.RollResultEventArgs e)

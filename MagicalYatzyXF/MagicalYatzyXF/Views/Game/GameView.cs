@@ -7,7 +7,7 @@ namespace Sanet.MagicalYatzy.Xf.Views.Game
 {
     public abstract class GameView: BaseView<GameViewModel>
     {
-        protected DicePanelXf DicePanel;
+        protected DicePanelXf DicePanelView;
         protected override void OnAppearing()
         {
             InitDicePanel();
@@ -16,10 +16,10 @@ namespace Sanet.MagicalYatzy.Xf.Views.Game
 
         protected virtual void InitDicePanel()
         {
-            if (DicePanel != null)
+            if (DicePanelView != null)
                 return;
 
-            DicePanel = new DicePanelXf(true)
+            DicePanelView = new DicePanelXf(true)
             {
                 InputTransparent = Device.RuntimePlatform == Device.macOS, 
                 DicePanel = ViewModel.DicePanel
