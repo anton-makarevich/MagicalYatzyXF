@@ -5,6 +5,6 @@ namespace Sanet.MagicalYatzy.Dto.Responses
 {
     public class LoginResponse:ResponseBase
     {
-        public LoginModel Player { get; set; }
+        public LoginModel? Player { get; set; }
     }
 }
