@@ -5,6 +5,12 @@ pool:
   vmImage: 'macOS-10.14'
 
 steps:
+- task: UseDotNet@2
+  displayName: 'Use dotnet sdk 3.x'
+  inputs:
+    version: 3.x
+    includePreviewVersions: false
+
 - script: dotnet restore MagicalYatzyXF.sln
   displayName: 'Restore nuget packages'
 
