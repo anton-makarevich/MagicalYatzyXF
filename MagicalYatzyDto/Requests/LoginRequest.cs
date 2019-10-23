@@ -4,6 +4,6 @@ namespace Sanet.MagicalYatzy.Dto.Requests
 {
     public class LoginRequest
     {
-        public LoginModel Player { get; set; }
+        public LoginModel? Player { get; set; }
     }
 }

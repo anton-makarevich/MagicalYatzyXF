@@ -4,6 +4,6 @@ namespace Sanet.MagicalYatzy.Dto.Requests
 {
     public class SaveScoreRequest
     {
-        public PlayerScore Score { get; set; }
+        public PlayerScore? Score { get; set; }
     }
 }

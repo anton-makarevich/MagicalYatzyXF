@@ -5,6 +5,6 @@ namespace Sanet.MagicalYatzy.Dto.Responses
 {
     public class SaveScoreResponse:ResponseBase
     {
-        public PlayerScore Score { get; set; }
+        public PlayerScore? Score { get; set; }
     }
 }

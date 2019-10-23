@@ -40,13 +40,14 @@ namespace Sanet.MagicalYatzy.Dto.Services
                     return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(),
                         new JsonSerializerSettings() { NullValueHandling = 0 });
                 }
-
-                return default(T);
+#nullable disable
+                return default;
             }
             catch
             {
-                return default(T);
+                return default;
             }
+#nullable enable
         }
 
         public async Task<T> PostAsync<T>(object requestModel, string url)
@@ -59,16 +60,17 @@ namespace Sanet.MagicalYatzy.Dto.Services
                     return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(),
                         new JsonSerializerSettings() { NullValueHandling = 0 });
                 }
-                
-                return default(T);
+#nullable disable
+                return default;
             }
             catch
             {
-                return default(T);
+                return default;
             }
+#nullable enable
         }
 
-        private async Task<HttpResponseMessage> SendRequest(HttpMethod method, string url, object content = null)
+        private async Task<HttpResponseMessage> SendRequest(HttpMethod method, string url, object? content = null)
         {
             try
             {
