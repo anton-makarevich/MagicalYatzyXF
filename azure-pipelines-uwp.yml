@@ -11,6 +11,7 @@ pool:
 
 variables:
   solution: 'MagicalYatzyXF.sln'
+  project: 'MagicalYatzyXF/MagicalYatzyXF.UWP/MagicalYatzyXF.UWP.csproj'
   buildPlatform: 'x64'
   buildConfiguration: 'Debug'
   appxPackageDir: '$(build.artifactStagingDirectory)\AppxPackages\\'
@@ -33,6 +34,6 @@ steps:
 - task: VSBuild@1
   inputs:
     platform: '$(buildPlatform)'
-    solution: '$(solution)'
+    solution: '$(project)'
     configuration: '$(buildConfiguration)'
     msbuildArgs: '/p:AppxBundlePlatforms="$(buildPlatform)" /p:AppxPackageDir="$(appxPackageDir)" /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload'
