@@ -47,7 +47,7 @@ jobs:
         script: |
           Write-Host "Start adding the PFX file to the certificate store."
 
-          $pfxpath = '$(secureCert.secureFilePath)'
+          $pfxpath = '$(secureCert.filePath)'
           $password = '$(signingCert.password)'
           
           Add-Type -AssemblyName System.Security
