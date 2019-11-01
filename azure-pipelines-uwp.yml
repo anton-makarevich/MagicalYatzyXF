@@ -38,7 +38,7 @@ jobs:
       name: secureCert
       displayName: 'Get the certificate file'
       inputs:
-        secureFile: '$(signingCert.filePath)'
+        secureFile: '$(signingCert.secureFilePath)'
 
     - task: PowerShell@2
       displayName: 'Install the certificate'
@@ -47,7 +47,7 @@ jobs:
         script: |
           Write-Host "Start adding the PFX file to the certificate store."
 
-          $pfxpath = '$(secureCert.filePath)'
+          $pfxpath = '$(secureCert.secureFilePath)'
           $password = '$(signingCert.password)'
           
           Add-Type -AssemblyName System.Security
