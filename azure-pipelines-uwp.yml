@@ -38,7 +38,7 @@ jobs:
       name: secureCert
       displayName: 'Get the certificate file'
       inputs:
-        secureFile: '$(signingCert.secureFilePath)'
+        secureFile: 'my-uwp-2019.pfx'
 
     - task: PowerShell@2
       displayName: 'Install the certificate'
