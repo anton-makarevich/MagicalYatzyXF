@@ -6,6 +6,9 @@
 trigger:
 - chore/azure-pipelines-uwp
 
+jobs:
+  - job: run_build
+
 pool:
   vmImage: 'windows-latest'
 
