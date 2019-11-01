@@ -10,11 +10,17 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: 'MagicalYatzyXF.sln'
-  project: 'MagicalYatzyXF/MagicalYatzyXF.UWP/MagicalYatzyXF.UWP.csproj'
-  buildPlatform: 'x64'
-  buildConfiguration: 'Debug'
-  appxPackageDir: '$(build.artifactStagingDirectory)\AppxPackages\\'
+  - group: my-uwp
+  - name: solution
+    value: 'MagicalYatzyXF.sln'
+  - name: project
+    value: 'MagicalYatzyXF/MagicalYatzyXF.UWP/MagicalYatzyXF.UWP.csproj'
+  - name: buildPlatform
+    value: 'x64'
+  - name: buildConfiguration
+    value: 'Debug'
+  - name: appxPackageDir
+    value: '$(build.artifactStagingDirectory)\AppxPackages\\'
 
 steps:
 - task: NuGetToolInstaller@1
@@ -25,6 +31,30 @@ steps:
   inputs:
     version: 3.x
     includePreviewVersions: false
+
+- task: DownloadSecureFile@1
+  name: secureCert
+  displayName: 'Get the certificate file'
+  inputs:
+    secureFile: '$(signingCert.filePath)'
+
+- task: PowerShell@2
+  displayName: 'Install the certificate'
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "Start adding the PFX file to the certificate store."
+
+      $pfxpath = '$(secureCert.secureFilePath)'
+      $password = '$(signingCert.password)'
+      
+      Add-Type -AssemblyName System.Security
+      $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2
+      $cert.Import($pfxpath, $password, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]"PersistKeySet")
+      $store = new-object system.security.cryptography.X509Certificates.X509Store -argumentlist "MY", CurrentUser
+      $store.Open([System.Security.Cryptography.X509Certificates.OpenFlags]"ReadWrite")
+      $store.Add($cert)
+      $store.Close()
 
 - task: NuGetCommand@2
   displayName: 'Restore nuget packages'
