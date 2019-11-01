@@ -7,15 +7,15 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="cc6864dc-b75a-48d7-aa32-069c5e22445d"
-    Publisher="CN=anton"
-    Version="1.0.0.0" />
+    Name="43862AntonMakarevich.SanetDicePoker"
+    Publisher="CN=DC1EF1A2-04E8-4269-B8EE-BF7A3DBF913C"
+    Version="2.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="cc6864dc-b75a-48d7-aa32-069c5e22445d" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="50a99f1f-ad18-45fc-ae22-50a283d99540" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>MagicalYatzyXF.UWP</DisplayName>
-    <PublisherDisplayName>anton</PublisherDisplayName>
+    <DisplayName>Magical Yatzy</DisplayName>
+    <PublisherDisplayName>Anton Makarevich</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -32,7 +32,7 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="MagicalYatzyXF.UWP.App">
       <uap:VisualElements
-        DisplayName="MagicalYatzyXF.UWP"
+        DisplayName="Magical Yatzy"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
         Description="MagicalYatzyXF.UWP"

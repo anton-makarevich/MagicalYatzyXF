@@ -18,8 +18,10 @@
     <FileAlignment>512</FileAlignment>
     <AppxSymbolPackageEnabled>false</AppxSymbolPackageEnabled>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>MagicalYatzyXF.UWP_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>my-uwp-2019.pfx</PackageCertificateKeyFile>
     <AppxSymbolPackageEnabled>true</AppxSymbolPackageEnabled>
+    <PackageCertificateThumbprint>54CD5B7FBC0F163CF51C3EDED12FB71CE6B4ECA6</PackageCertificateThumbprint>
+    <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -139,6 +141,7 @@
     <Content Include="Assets\Share.png" />
     <Content Include="Assets\Start.png" />
     <Content Include="Assets\Victory.png" />
+    <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-100.png" />
     <Content Include="Assets\LockScreenLogo.scale-125.png" />
