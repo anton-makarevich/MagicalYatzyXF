@@ -18,16 +18,12 @@ steps:
   displayName: 'Run DTO tests'
 
 - bash: |
-    curl -s https://codecov.io/bash > codecov
-    chmod +x codecov
-    ./codecov -f "Tests/MagicalYatzyDtoTests/coverage.opencover.xml" -t $(codecov.token)
+    bash <(curl -s https://codecov.io/bash) -f "Tests/MagicalYatzyDtoTests/coverage.opencover.xml" -t $(codecov.token)
   displayName: 'Upload DTO tests results'
 
 - script: dotnet test Tests/MagicalYatzyTests/MagicalYatzyTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute=GeneratedCodeAttribute /p:Include=[MagicalYatzy]*
   displayName: 'Run Core tests'
 
 - bash: |
-    curl -s https://codecov.io/bash > codecov
-    chmod +x codecov
-    ./codecov -f "Tests/MagicalYatzyTests/coverage.opencover.xml" -t $(codecov.token)
+    bash <(curl -s https://codecov.io/bash) -f "Tests/MagicalYatzyTests/coverage.opencover.xml" -t $(codecov.token)
   displayName: 'Upload Core tests results'
