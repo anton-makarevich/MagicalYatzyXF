@@ -25,5 +25,5 @@ steps:
   displayName: 'Run Core tests'
 
 - bash: |
-    bash <(curl -s https://codecov.io/bash) -f -f "Tests/MagicalYatzyTests/coverage.opencover.xml" -t $(codecov.token)
+    bash <(curl -s https://codecov.io/bash) -f "Tests/MagicalYatzyTests/coverage.opencover.xml" -t $(codecov.token)
   displayName: 'Upload Core tests results'
