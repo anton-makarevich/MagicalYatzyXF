@@ -16,18 +16,14 @@ variables:
 
 steps:
 
-- task: NuGetToolInstaller@1
-
 - task: UseDotNet@2
   displayName: 'Use dotnet sdk 3.x'
   inputs:
     version: 3.x
     includePreviewVersions: false
 
-- task: NuGetCommand@2
+- script: dotnet restore $(solution)
   displayName: 'Restore nuget packages'
-  inputs:
-    restoreSolution: '$(solution)'
 
 - task: MSBuild@1
   displayName: 'Build Mac project'
