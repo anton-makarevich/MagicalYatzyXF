@@ -1,5 +1,5 @@
 trigger:
-- chore/azure-pipelines-mac
+- develop
 
 pool:
   vmImage: 'macos-latest'
@@ -8,9 +8,9 @@ variables:
   - name: solution
     value: 'MagicalYatzyXF.sln'
   - name: project
-    value: 'MagicalYatzyXF/MagicalYatzyXF.UWP/MagicalYatzyXF.Mac.csproj'
+    value: 'MagicalYatzyXF/MagicalYatzyXF.Mac/MagicalYatzyXF.Mac.csproj'
   - name: buildPlatform
-    value: 'x86'
+    value: 'Any CPU'
   - name: buildConfiguration
     value: 'Debug'
 
