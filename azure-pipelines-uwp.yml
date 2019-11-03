@@ -4,7 +4,7 @@
 # https://aka.ms/yaml
 
 trigger:
-- chore/azure-pipelines-uwp
+- develop
 
 jobs:
   - job: run_build
@@ -64,6 +64,7 @@ jobs:
         restoreSolution: '$(solution)'
 
     - task: VSBuild@1
+      displayName: 'Build UWP app'
       inputs:
         platform: '$(buildPlatform)'
         solution: '$(project)'
