@@ -36,16 +36,8 @@ steps:
       echo "##vso[task.setvariable variable=PKG_CONFIG_PATH;]$MONOPREFIX/lib/pkgconfig:$MONOPREFIX/share/pkgconfig:$PKG_CONFIG_PATH"
       echo "##vso[task.setvariable variable=PATH;]$MONOPREFIX/bin:$PATH"
 
-# - task: MSBuild@1
-#   displayName: 'Build Mac project'
-#   inputs:
-#     msbuildVersion: '16.0'
-#     platform: '$(buildPlatform)'
-#     solution: '$(solution)'
-#     configuration: '$(buildConfiguration)'
-#     msbuildArguments: '/t:$(project)'
-
 - task: XamariniOS@2
+  displayName: 'Build Mac App'
   inputs:
     solutionFile: '$(project)'
     configuration: '$(buildConfiguration)'
