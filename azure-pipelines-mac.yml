@@ -8,7 +8,7 @@ variables:
   - name: solution
     value: 'MagicalYatzyXF.sln'
   - name: project
-    value: 'MagicalYatzyXF\MagicalYatzyXF_Mac\MagicalYatzyXF_Mac'
+    value: 'MagicalYatzyXF/MagicalYatzyXF.Mac/MagicalYatzyXF.Mac.csproj'
   - name: buildPlatform
     value: 'iPhoneSimulator'
   - name: buildConfiguration
@@ -25,12 +25,20 @@ steps:
 - script: dotnet restore $(solution)
   displayName: 'Restore nuget packages'
 
-- task: MSBuild@1
-  displayName: 'Build Mac project'
+# - task: MSBuild@1
+#   displayName: 'Build Mac project'
+#   inputs:
+#     msbuildVersion: '16.0'
+#     platform: '$(buildPlatform)'
+#     solution: '$(solution)'
+#     configuration: '$(buildConfiguration)'
+#     msbuildArguments: '/t:$(project)'
+
+- task: XamariniOS@2
   inputs:
-    msbuildVersion: '16.0'
-    platform: '$(buildPlatform)'
-    solution: '$(solution)'
+    solutionFile: '$(project)'
     configuration: '$(buildConfiguration)'
-    msbuildArguments: '/t:$(project)'
+    packageApp: false
+    buildForSimulator: true
+    runNugetRestore: false
 
