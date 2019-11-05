@@ -28,6 +28,7 @@ steps:
 - task: MSBuild@1
   displayName: 'Build Mac project'
   inputs:
+    msbuildVersion: '16.0'
     platform: '$(buildPlatform)'
     solution: '$(project)'
     configuration: '$(buildConfiguration)'
