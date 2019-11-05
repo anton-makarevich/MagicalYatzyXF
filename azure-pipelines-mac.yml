@@ -10,7 +10,7 @@ variables:
   - name: project
     value: 'MagicalYatzyXF/MagicalYatzyXF.Mac/MagicalYatzyXF.Mac.csproj'
   - name: buildPlatform
-    value: 'x86'
+    value: 'iPhoneSimulator'
   - name: buildConfiguration
     value: 'Debug'
 
