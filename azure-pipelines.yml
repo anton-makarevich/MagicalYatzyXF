@@ -2,7 +2,7 @@ trigger:
 - develop
 
 pool:
-  vmImage: 'macOS-10.14'
+  vmImage: 'macos-latest'
 
 steps:
 - task: UseDotNet@2
