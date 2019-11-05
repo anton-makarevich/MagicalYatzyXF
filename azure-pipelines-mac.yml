@@ -25,7 +25,7 @@ steps:
 - script: dotnet restore $(solution)
   displayName: 'Restore nuget packages'
 
-- task: MSBuild@1
+- task: VSBuild@1
   displayName: 'Build Mac project'
   inputs:
     platform: '$(buildPlatform)'
