@@ -1,5 +1,5 @@
 ﻿using System;
-using Sanet.MagicalYatzy.XF;
+using Sanet.MagicalYatzy.Xf;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.GTK;
 using Application = Gtk.Application;
