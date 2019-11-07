@@ -14,7 +14,6 @@ namespace Sanet.MagicalYatzy.Xf.Gtk.Renderers
         
         protected override void OnElementChanged(ElementChangedEventArgs<TappableContentView> e)
         {
-
             if (e.NewElement != null)
             {
                 if (Control == null)
@@ -26,7 +25,6 @@ namespace Sanet.MagicalYatzy.Xf.Gtk.Renderers
 
                     SetNativeControl(_fixed);
                 }
-                
             }
 
             base.OnElementChanged(e);
