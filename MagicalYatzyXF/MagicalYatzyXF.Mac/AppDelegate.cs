@@ -1,6 +1,5 @@
 ﻿using AppKit;
 using Foundation;
-using Sanet.MagicalYatzy.Xf;
 using SimpleInjector;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.MacOS;
@@ -24,10 +23,7 @@ namespace Sanet.MagicalYatzy.Xf.Mac
             };
         }
 
-		public override NSWindow MainWindow
-        {
-            get { return _window; }
-        }
+		public override NSWindow MainWindow => _window;
 
         public override void DidFinishLaunching(NSNotification notification)
         {

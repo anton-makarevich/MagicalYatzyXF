@@ -1,7 +1,10 @@
 
-public partial class MainWindow
+namespace Sanet.MagicalYatzy.Xf.Gtk
 {
-	private void Build()
+	public partial class MainWindow
 	{
+		private void Build()
+		{
+		}
 	}
 }
