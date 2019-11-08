@@ -1,6 +1,4 @@
 using System;
-using System.ComponentModel;
-
 using SKFormsView = SkiaSharp.Views.Forms.SKCanvasView;
 
 using Xamarin.Forms.Platform.GTK;
@@ -13,17 +11,6 @@ namespace SkiaSharp.Views.Forms
 		where TFormsView : SKFormsView
 		where TNativeView : SKNativeView
 	{
-		
-		protected SKCanvasViewRendererBase()
-		{
-			Initialize();
-		}
-
-		private void Initialize()
-		{
-			
-		}
-
 		protected override void OnElementChanged(ElementChangedEventArgs<TFormsView> e)
 		{
 			if (e.OldElement != null)
@@ -85,7 +72,6 @@ namespace SkiaSharp.Views.Forms
 
 		private SKPoint GetScaledCoord(double x, double y)
 		{
-
 			return new SKPoint((float)x, (float)y);
 		}
 
@@ -99,7 +85,6 @@ namespace SkiaSharp.Views.Forms
 
 		private void OnSurfaceInvalidated(object sender, EventArgs eventArgs)
 		{
-			
 		}
 
 		// the user asked for the size
