@@ -22,8 +22,13 @@ steps:
     version: 3.x
     includePreviewVersions: false
 
-- script: dotnet restore $(solution)
+- task: NuGetToolInstaller@1
+  displayName: 'Install nuget'
+
+- task: NuGetCommand@2
   displayName: 'Restore nuget packages'
+  inputs:
+    restoreSolution: '$(solution)'
 
 - task: Bash@3
   displayName: 'Update Mono version'
