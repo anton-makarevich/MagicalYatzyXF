@@ -10,7 +10,7 @@ variables:
   - name: project
     value: 'MagicalYatzyXF/MagicalYatzyXF.GTK/MagicalYatzyXF.GTK.csproj'
   - name: buildPlatform
-    value: 'x86'
+    value: 'AnyCPU'
   - name: buildConfiguration
     value: 'Debug'
 
