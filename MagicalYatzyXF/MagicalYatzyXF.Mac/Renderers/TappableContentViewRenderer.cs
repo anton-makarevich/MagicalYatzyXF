@@ -1,13 +1,13 @@
 ﻿using System;
 using AppKit;
 using Foundation;
-using MagicalYatzyXF.Mac.Renderers;
+using Sanet.MagicalYatzy.Xf.Mac.Renderers;
 using Sanet.MagicalYatzy.Xf.Views.Controls;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.MacOS;
 
 [assembly: ExportRenderer(typeof(TappableContentView), typeof(TappableContentViewRenderer))]
-namespace MagicalYatzyXF.Mac.Renderers
+namespace Sanet.MagicalYatzy.Xf.Mac.Renderers
 {
     [Preserve(AllMembers = true)]
 	public class TappableContentViewRenderer : VisualElementRenderer<TappableContentView>
