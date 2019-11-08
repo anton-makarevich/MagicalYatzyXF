@@ -34,7 +34,6 @@ namespace SkiaSharp.Views.Forms
 					SetNativeControl(view);
 				}
 				
-
 				// subscribe to events from the user
 				newController.SurfaceInvalidated += OnSurfaceInvalidated;
 				newController.GetCanvasSize += OnGetCanvasSize;
