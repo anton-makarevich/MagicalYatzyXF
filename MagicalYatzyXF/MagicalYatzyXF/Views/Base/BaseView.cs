@@ -11,7 +11,7 @@ namespace Sanet.MagicalYatzy.Xf.Views.Base
 
         private TViewModel _viewModel;
 
-        protected BaseView() : base()
+        protected BaseView()
         {
             Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, false);
             BackgroundColor = Color.Black;
@@ -35,11 +35,8 @@ namespace Sanet.MagicalYatzy.Xf.Views.Base
 
         object IBaseView.ViewModel
         {
-            get { return _viewModel; }
-            set
-            {
-                ViewModel = (TViewModel)value;
-            }
+            get => _viewModel;
+            set => ViewModel = (TViewModel)value;
         }
 
         protected override void OnAppearing()

@@ -9,13 +9,11 @@ namespace Sanet.MagicalYatzy.Models.Events
     /// </summary>
     public class PlayerEventArgs : EventArgs
     {
-        //Current player
-        private IPlayer _player;
-        public IPlayer Player { get { return _player; } }
+        public IPlayer Player { get; }
 
         public PlayerEventArgs(IPlayer player)
         {
-            _player = player;
+            Player = player;
         }
     }
     
