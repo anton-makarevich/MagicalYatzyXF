@@ -1,4 +1,5 @@
 ﻿using Sanet.MagicalYatzy.Models.Game;
+using Sanet.MVVM.Core.ViewModels;
 
 namespace Sanet.MagicalYatzy.ViewModels.Base
 {

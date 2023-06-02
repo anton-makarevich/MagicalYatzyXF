@@ -1,6 +1,6 @@
 using Sanet.MagicalYatzy.Models.Game;
-using Sanet.MagicalYatzy.ViewModels.Base;
 using Sanet.MagicalYatzy.Services;
+using Sanet.MVVM.Core.ViewModels;
 
 namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
 {
