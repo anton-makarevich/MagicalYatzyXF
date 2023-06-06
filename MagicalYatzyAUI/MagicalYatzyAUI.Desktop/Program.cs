@@ -1,5 +1,7 @@
 ﻿using System;
 using Avalonia;
+using MagicalYatzyAUI.Desktop.DependencyInjection;
+using Sanet.MVVM.DI.Avalonia.Extensions;
 
 namespace MagicalYatzyAUI.Desktop;
 
@@ -16,6 +18,7 @@ class Program
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
+            .UseDependencyInjection(services=>services.RegisterDesktopServices())
             .WithInterFont()
             .LogToTrace();
 }

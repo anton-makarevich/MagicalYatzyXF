@@ -18,10 +18,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia.Android" Version="$(AvaloniaVersion)"/>
+        <PackageReference Include="Avalonia.Android" Version="$(AvaloniaVersion)" />
+        <PackageReference Include="Sanet.MVVM.DI.Avalonia" Version="0.2.1-11rc1.1" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\MagicalYatzyAUI\MagicalYatzyAUI.csproj"/>
+        <ProjectReference Include="..\MagicalYatzyAUI\MagicalYatzyAUI.csproj" />
     </ItemGroup>
 </Project>
