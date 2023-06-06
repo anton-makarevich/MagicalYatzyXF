@@ -1,6 +1,5 @@
-﻿using Sanet.MagicalYatzy.ViewModels.Base;
-using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
+using Sanet.MVVM.Core.ViewModels;
 
 namespace Sanet.MagicalYatzy.Models
 {

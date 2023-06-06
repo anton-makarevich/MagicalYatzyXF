@@ -6,8 +6,8 @@ using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Api;
 using Sanet.MagicalYatzy.Services.Game;
-using Sanet.MagicalYatzy.Services.Navigation;
 using Sanet.MagicalYatzy.ViewModels;
+using Sanet.MVVM.Core.Services;
 using Xunit;
 
 namespace MagicalYatzyTests.ViewModels

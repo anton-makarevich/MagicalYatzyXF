@@ -6,9 +6,9 @@ using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
 using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Game;
-using Sanet.MagicalYatzy.Services.Navigation;
 using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
+using Sanet.MVVM.Core.Services;
 using Xunit;
 
 namespace MagicalYatzyTests.ViewModels

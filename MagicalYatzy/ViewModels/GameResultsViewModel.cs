@@ -6,8 +6,8 @@ using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Api;
 using Sanet.MagicalYatzy.Services.Game;
-using Sanet.MagicalYatzy.ViewModels.Base;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
+using Sanet.MVVM.Core.ViewModels;
 
 namespace Sanet.MagicalYatzy.ViewModels
 {

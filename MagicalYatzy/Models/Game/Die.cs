@@ -1,14 +1,14 @@
 ﻿using Sanet.MagicalYatzy.Models.Common;
 using Sanet.MagicalYatzy.Services;
-using Sanet.MagicalYatzy.ViewModels.Base;
 using System;
 using Sanet.MagicalYatzy.Models.Game.Extensions;
+using Sanet.MVVM.Core.ViewModels;
 
 namespace Sanet.MagicalYatzy.Models.Game
 {
     public class Die : BindableBase
     {
-        private static readonly Random ValueGenerator = new Random();
+        private static readonly Random ValueGenerator = new();
 
         private const int MaxMove = 5;
         private const int MinDiceValue = 1;
