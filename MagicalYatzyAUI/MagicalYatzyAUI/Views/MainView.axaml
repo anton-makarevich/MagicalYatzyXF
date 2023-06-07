@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="MagicalYatzyAUI.Views.MainView"
+             x:Class="Sanet.MagicalYatzy.Avalonia.Views.MainView"
              x:DataType="viewModels:MainMenuViewModel">
   <Design.DataContext>
     <!-- This only sets the DataContext for the previewer in an IDE,

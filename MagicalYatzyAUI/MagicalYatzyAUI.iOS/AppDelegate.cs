@@ -1,6 +1,7 @@
 using Foundation;
 using Avalonia;
 using Avalonia.iOS;
+using Sanet.MagicalYatzy.Avalonia;
 
 namespace MagicalYatzyAUI.iOS;
 

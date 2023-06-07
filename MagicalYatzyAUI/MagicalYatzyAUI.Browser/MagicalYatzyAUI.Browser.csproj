@@ -4,6 +4,7 @@
         <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
         <WasmMainJSPath>AppBundle\main.js</WasmMainJSPath>
         <OutputType>Exe</OutputType>
+        <RootNamespace>Sanet.MagicalYatzy.Avalonia.Browser</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

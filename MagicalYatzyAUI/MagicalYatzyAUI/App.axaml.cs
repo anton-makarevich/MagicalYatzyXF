@@ -1,11 +1,12 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using MagicalYatzyAUI.DependencyInjection;
-using MagicalYatzyAUI.Views;
 using Microsoft.Extensions.DependencyInjection;
+using Sanet.MagicalYatzy.Avalonia.DependencyInjection;
+using MainView = Sanet.MagicalYatzy.Avalonia.Views.MainView;
+using MainWindow = Sanet.MagicalYatzy.Avalonia.Views.MainWindow;
 
-namespace MagicalYatzyAUI;
+namespace Sanet.MagicalYatzy.Avalonia;
 
 public partial class App : Application
 {

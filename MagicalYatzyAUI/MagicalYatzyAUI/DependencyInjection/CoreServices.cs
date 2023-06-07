@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace MagicalYatzyAUI.DependencyInjection;
+namespace Sanet.MagicalYatzy.Avalonia.DependencyInjection;
 
 public static class CoreServices
 {
