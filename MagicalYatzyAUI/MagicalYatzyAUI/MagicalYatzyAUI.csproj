@@ -20,6 +20,7 @@
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
         <PackageReference Include="Sanet.MVVM.DI.Avalonia" Version="0.2.1-11rc1.1" />
+        <PackageReference Include="Sanet.MVVM.Views.Avalonia" Version="0.2.1-preview8" />
     </ItemGroup>
 
     <ItemGroup>
