@@ -4,7 +4,7 @@ using Sanet.MagicalYatzy.Models.Common;
 
 namespace Sanet.MagicalYatzy.Avalonia.Controls.Interactions
 {
-    public class DicePanelTapRecognizer:TappableContentView
+    public class TapRecognizer:TappableContentView
     {
         public event EventHandler<Point> Tapped;
 

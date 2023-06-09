@@ -11,10 +11,4 @@
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
     <viewModels:MainMenuViewModel />
   </Design.DataContext>
-  <Grid RowDefinitions="*,*,*" ColumnDefinitions="*,*,*">
-      <Canvas Grid.Row="1" Grid.Column="1" >
-          <Rectangle Fill="Blue" x:Name="Rectangle1"/>
-      </Canvas>
-      
-  </Grid>
 </UserControl>

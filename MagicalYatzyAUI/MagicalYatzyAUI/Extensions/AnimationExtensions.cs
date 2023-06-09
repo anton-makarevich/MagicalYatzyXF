@@ -38,8 +38,8 @@ public static class AnimationExtensions
             var currentSize = from+ (to - from) * easing.Ease(progress);
      
             // Calculate the new position of the top-left corner based on the center position
-            var newX = control.Bounds.X + (control.Bounds.Width - currentSize.Width) / 2.0;
-            var newY = control.Bounds.Y + (control.Bounds.Height - currentSize.Height) / 2.0;
+            var newX = control.Bounds.X + (control.Width - currentSize.Width) / 2.0;
+            var newY = control.Bounds.Y + (control.Height - currentSize.Height) / 2.0;
 
             // Update the width, height, and position of the control
             control.Width = currentSize.Width;
