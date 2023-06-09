@@ -2,9 +2,10 @@
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Browser;
-using MagicalYatzyAUI;
 
 [assembly: SupportedOSPlatform("browser")]
+
+namespace Sanet.MagicalYatzy.Avalonia.Browser;
 
 internal partial class Program
 {

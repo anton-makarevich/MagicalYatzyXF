@@ -3,7 +3,7 @@ using Avalonia;
 using MagicalYatzyAUI.Desktop.DependencyInjection;
 using Sanet.MVVM.DI.Avalonia.Extensions;
 
-namespace MagicalYatzyAUI.Desktop;
+namespace Sanet.MagicalYatzy.Avalonia.Desktop;
 
 class Program
 {

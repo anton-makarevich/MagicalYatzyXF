@@ -1,11 +1,11 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.OS;
-using Application = Android.App.Application;
 using Avalonia;
 using Avalonia.Android;
+using Application = Android.App.Application;
 
-namespace MagicalYatzyAUI.Android;
+namespace Sanet.MagicalYatzy.Avalonia.Android;
 
 [Activity(Theme = "@style/MyTheme.Splash", MainLauncher = true, NoHistory = true)]
 public class SplashActivity : AvaloniaSplashActivity<App>

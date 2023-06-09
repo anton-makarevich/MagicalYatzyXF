@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace MagicalYatzyAUI.Views;
+namespace Sanet.MagicalYatzy.Avalonia.Views;
 
 public partial class MainWindow : Window
 {

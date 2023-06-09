@@ -17,7 +17,7 @@ namespace MagicalYatzyTests.Services.Api
             _sut = new LegacyWcfClient();
         }
 
-        [Fact]
+        [Fact(Skip = "Legacy")]
         public async Task LoginCallReturnsUserForValidCreds()
         {
             var player = await _sut.LoginUserAsync(PlayerServiceTests.TestUserName, PlayerServiceTests.TestUserPassword);
@@ -28,7 +28,7 @@ namespace MagicalYatzyTests.Services.Api
             Assert.Equal(PlayerServiceTests.TestUserPassword, player.Password?.Decrypt(33));
         }
 
-        [Fact]
+        [Fact(Skip = "Legacy")]
         public async Task FailingLoginCallReturnsNullForWrongPassword()
         {
             var player = await _sut.LoginUserAsync(PlayerServiceTests.TestUserName, "wrongpassword");
