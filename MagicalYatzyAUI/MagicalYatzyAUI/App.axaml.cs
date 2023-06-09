@@ -1,11 +1,13 @@
 using System;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using Sanet.MagicalYatzy.Avalonia.DependencyInjection;
 using Sanet.MagicalYatzy.Avalonia.Views;
 using Sanet.MagicalYatzy.ViewModels;
+using Sanet.MVVM.Core.Services;
 using Sanet.MVVM.Navigation.Avalonia.Services;
 using MainWindow = Sanet.MagicalYatzy.Avalonia.Views.MainWindow;
 
@@ -29,32 +31,41 @@ public partial class App : Application
         }
         var serviceProvider = services.BuildServiceProvider();
        
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        INavigationService navigationService;
+
+        MainMenuViewModel? viewModel;
+        switch (ApplicationLifetime)
         {
-            var navigationService = new NavigationService(desktop, serviceProvider);
-            RegisterViews(navigationService);
-            var vm = navigationService.GetViewModel<MainMenuViewModel>();
-            desktop.MainWindow = new MainWindow
+            case IClassicDesktopStyleApplicationLifetime desktop:
             {
-                Content = new MainMenuView()
+                navigationService = new NavigationService(desktop, serviceProvider);
+                RegisterViews(navigationService);
+                viewModel = navigationService.GetViewModel<MainMenuViewModel>();
+                desktop.MainWindow = new MainWindow
                 {
-                    ViewModel = vm
-                }
-            };
-        }
-        else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
-        {
-            singleViewPlatform.MainView = new MainMenuView
-            {
-                //DataContext = new MainViewModel()
-            };
+                    Content = new MainMenuView()
+                    {
+                        ViewModel = viewModel
+                    }
+                };
+                break;
+            }
+            case ISingleViewApplicationLifetime singleViewPlatform:
+                var mainViewWrapper = new ContentControl();
+                navigationService = new SingleViewNavigationService(singleViewPlatform, mainViewWrapper, serviceProvider);
+                viewModel = navigationService.GetViewModel<MainMenuViewModel>(); 
+                mainViewWrapper.Content = new MainMenuView
+                {
+                    ViewModel = viewModel
+                };
+                break;
         }
 
         base.OnFrameworkInitializationCompleted();
     }
 
-    private void RegisterViews(NavigationService navigationService)
+    private void RegisterViews(INavigationService navigationService)
     {
-        navigationService.RegisterViewModels(typeof(MainMenuViewModel), typeof(MainMenuView));
+        navigationService.RegisterViews(typeof(MainMenuView), typeof(MainMenuViewModel));
     }
 }
