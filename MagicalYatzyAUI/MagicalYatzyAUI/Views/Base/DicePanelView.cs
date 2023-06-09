@@ -32,9 +32,7 @@ namespace Sanet.MagicalYatzy.Avalonia.Views.Base
             ViewModel.DicePanel.RollEnded += Roll;
             Roll(null,null);
         }
-
         
-
         void Roll(object sender, EventArgs e)
         {
             ViewModel.DicePanel.RollDice(null);

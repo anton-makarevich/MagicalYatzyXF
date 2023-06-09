@@ -33,7 +33,6 @@ public static class AnimationExtensions
         var totalTicks = duration.TotalMilliseconds / framerate.TotalMilliseconds;
         for (var currentTick = 0;currentTick<totalTicks; currentTick++)
         {
-
             var progress = currentTick / totalTicks;
             var currentSize = from+ (to - from) * easing.Ease(progress);
      

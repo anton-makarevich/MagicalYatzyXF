@@ -25,7 +25,6 @@ public static class CoreServices
         services.AddSingleton<IWebService, WebService>();
         services.AddSingleton<IApiConfig, AzureDevConfig>();
         services.AddSingleton<IStorageService, LocalJsonStorageService>();
-
     }
     public static void RegisterViewModels(this IServiceCollection services)
     {
