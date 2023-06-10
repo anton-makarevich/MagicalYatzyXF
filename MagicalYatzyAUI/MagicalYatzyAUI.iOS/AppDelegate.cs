@@ -2,6 +2,8 @@ using Foundation;
 using Avalonia;
 using Avalonia.iOS;
 using Sanet.MagicalYatzy.Avalonia;
+using Sanet.MagicalYatzy.Avalonia.iOS.DependencyInjection;
+using Sanet.MVVM.DI.Avalonia.Extensions;
 
 namespace MagicalYatzyAUI.iOS;
 
@@ -14,6 +16,7 @@ public partial class AppDelegate : AvaloniaAppDelegate<App>
     protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
     {
         return base.CustomizeAppBuilder(builder)
+            .UseDependencyInjection(services=>services.RegisterIosServices())
             .WithInterFont();
     }
 }
