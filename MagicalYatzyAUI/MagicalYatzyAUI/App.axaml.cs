@@ -22,13 +22,14 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        var services = Resources[MVVM.DI.Avalonia.Extensions.AppBuilderExtensions.ServiceCollectionResourceKey] as IServiceCollection;
-        services?.RegisterServices();
-        services?.RegisterViewModels();
-        if (services == null)
+        if (Resources[MVVM.DI.Avalonia.Extensions.AppBuilderExtensions.ServiceCollectionResourceKey] is not IServiceCollection services)
         {
-            throw new Exception("Services are not initialized");
+            throw new Exception("Game services are not initialized");
         }
+
+        services.RegisterServices();
+        services.RegisterViewModels();
+        
         var serviceProvider = services.BuildServiceProvider();
        
         INavigationService navigationService;
