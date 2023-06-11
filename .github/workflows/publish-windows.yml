@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-
   pull_request:
   workflow_dispatch:
 
@@ -32,15 +31,11 @@ jobs:
         id: branch_name
         run: echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
 
-      - name: Replace slashes with underscores
-        id: sanitized_branch_name
-        run: echo "::set-output name=branch::${{ steps.branch_name.outputs.branch//\//_ }}"
-
       - name: Archive to ZIP
         uses: thedoctor0/zip-release@0.7.1
         with:
           type: 'zip'
-          filename: 'mg-win_${{ steps.sanitized_branch_name.outputs.branch }}.zip'
+          filename: 'mg-win_${{ steps.branch_name.outputs.branch.replace('/', '_') }}.zip'
         
       - name: Publish artifact
         uses: actions/upload-artifact@v3
