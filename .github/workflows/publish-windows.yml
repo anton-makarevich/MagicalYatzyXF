@@ -29,12 +29,13 @@ jobs:
 
       - name: Get branch name
         id: branch_name
-        run: echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
+        run: |
+          echo "branch_name=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
 
       - name: Replace slashes with underscores
         run: |
-          echo "sanitized_branch_name=$(echo "${{ steps.branch_name.outputs.branch }}" | tr '/' '_')"
-          echo "::set-output name=sanitized_branch_name::$sanitized_branch_name"
+          sanitized_branch_name=$(echo "${{ env.branch_name }}" | tr '/' '_')
+          echo "sanitized_branch_name=$sanitized_branch_name" >> $GITHUB_ENV
 
       - name: Archive to ZIP
         uses: thedoctor0/zip-release@0.7.1
