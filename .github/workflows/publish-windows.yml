@@ -1,0 +1,44 @@
+﻿name: Publish Windows App
+
+on:
+  push:
+    branches:
+      - main
+  
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.x'
+
+      - name: Restore dependencies
+        run: |
+          dotnet restore MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzyAUI.Desktop.csproj
+
+      - name: Build and publish
+        run: dotnet publish MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzyAUI.Desktop.csproj -c Release -o ./publish
+
+      - name: Get branch name
+        id: branch_name
+        run: echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
+
+      - name: Archive to ZIP
+        run: |
+          cd ./publish
+          Compress-Archive -Path . -DestinationPath ../mg-win_${{ steps.branch_name.outputs.branch }}_$(Get-Date -Format "yyyyMMddHHmmss").zip
+        
+      - name: Publish artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: magical-yatzy_windows
+          path: mg-win_*.zip
