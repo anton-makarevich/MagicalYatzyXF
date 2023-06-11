@@ -35,7 +35,7 @@ jobs:
         uses: thedoctor0/zip-release@0.7.1
         with:
           type: 'zip'
-          filename: 'mg-win_${{ steps.branch_name.outputs.branch.replace('/', '_') }}.zip'
+          filename: 'mg-win_${{ steps.branch_name.outputs.branch.replace("/", "_") }}.zip'
         
       - name: Publish artifact
         uses: actions/upload-artifact@v3
