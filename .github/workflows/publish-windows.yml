@@ -31,11 +31,17 @@ jobs:
         id: branch_name
         run: echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
 
+      - name: Replace slashes with underscores
+        run: |
+          echo "sanitized_branch_name=$(echo "${{ steps.branch_name.outputs.branch }}" | tr '/' '_')"
+          echo "::set-output name=sanitized_branch_name::$sanitized_branch_name"
+
       - name: Archive to ZIP
         uses: thedoctor0/zip-release@0.7.1
         with:
           type: 'zip'
-          filename: 'mg-win_${{ steps.branch_name.outputs.branch.replace("/", "_") }}.zip'
+          filename: 'mg-win_${{ steps.sanitized_branch_name.outputs.sanitized_branch_name }}.zip'
+
         
       - name: Publish artifact
         uses: actions/upload-artifact@v3
