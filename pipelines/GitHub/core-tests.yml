@@ -1,0 +1,34 @@
+name: Build and Test
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 7.x
+
+      - name: Restore dependencies
+        run: 
+          dotnet restore MagicalYatzy/MagicalYatzy.csproj
+          dotnet restore MagicalYatzyDto/MagicalYatzyDto.csproj
+
+      - name: Run DTO tests
+        run: dotnet test Tests/MagicalYatzyDtoTests/MagicalYatzyDtoTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute=GeneratedCodeAttribute /p:Include=[MagicalYatzy]*
+
+      - name: Upload DTO tests results
+        run: bash <(curl -s https://codecov.io/bash) -f "Tests/MagicalYatzyDtoTests/coverage.opencover.xml" -t ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Run Core tests
+        run: dotnet test Tests/MagicalYatzyTests/MagicalYatzyTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute=GeneratedCodeAttribute /p:Include=[MagicalYatzy]*
+
+      - name: Upload Core tests results
+        run: bash <(curl -s https://codecov.io/bash) -f "Tests/MagicalYatzyTests/coverage.opencover.xml" -t ${{ secrets.CODECOV_TOKEN }}
