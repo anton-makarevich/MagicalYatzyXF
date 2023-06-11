@@ -11,13 +11,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup .NET 
+      - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 7.x
 
       - name: Restore dependencies
-        run: | 
+        run: |
           dotnet restore MagicalYatzy/MagicalYatzy.csproj
           dotnet restore MagicalYatzyDto/MagicalYatzyDto.csproj
 
