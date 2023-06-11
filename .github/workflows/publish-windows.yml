@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  
+
   pull_request:
   workflow_dispatch:
 
@@ -33,9 +33,10 @@ jobs:
         run: echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
 
       - name: Archive to ZIP
-        run: |
-          cd ./publish
-          Compress-Archive -Path . -DestinationPath ../mg-win_${{ steps.branch_name.outputs.branch }}_$(Get-Date -Format "yyyyMMddHHmmss").zip
+        uses: thedoctor0/zip-release@0.7.1
+        with:
+          type: 'zip'
+          filename: 'mg-win_${{ steps.branch_name.outputs.branch }}.zip'
         
       - name: Publish artifact
         uses: actions/upload-artifact@v3
