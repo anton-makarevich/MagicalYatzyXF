@@ -17,7 +17,7 @@ jobs:
           dotnet-version: 7.x
 
       - name: Restore dependencies
-        run: 
+        run: | 
           dotnet restore MagicalYatzy/MagicalYatzy.csproj
           dotnet restore MagicalYatzyDto/MagicalYatzyDto.csproj
 
