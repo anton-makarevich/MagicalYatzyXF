@@ -36,15 +36,16 @@ jobs:
         run: |
           sanitized_branch_name=$(echo "${{ env.branch_name }}" | tr '/' '_')
           echo "sanitized_branch_name=$sanitized_branch_name" >> $GITHUB_ENV
-          
+
       - name: Archive to ZIP
         uses: thedoctor0/zip-release@0.7.1
         with:
           type: 'zip'
+          path: './publish'
           filename: 'mg-mac_${{ steps.sanitized_branch_name.outputs.sanitized_branch_name }}.zip'
- 
+
       - name: Publish artifact
         uses: actions/upload-artifact@v3
         with:
-          name: magical-yatzy_windows
+          name: magical-yatzy_macos
           path: mg-mac_*.zip

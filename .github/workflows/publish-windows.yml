@@ -34,13 +34,15 @@ jobs:
 
       - name: Replace slashes with underscores
         run: |
-          sanitized_branch_name=$(echo "${{ env.branch_name }}" | tr '/' '_')
+          $branch_name="${{ env.branch_name }}"
+          $sanitized_branch_name=$branch_name.Replace("/", "_")
           echo "sanitized_branch_name=$sanitized_branch_name" >> $GITHUB_ENV
 
       - name: Archive to ZIP
         uses: thedoctor0/zip-release@0.7.1
         with:
           type: 'zip'
+          path: './publish'  
           filename: 'mg-win_${{ steps.sanitized_branch_name.outputs.sanitized_branch_name }}.zip'
         
       - name: Publish artifact
