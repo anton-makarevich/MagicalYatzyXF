@@ -36,7 +36,7 @@ jobs:
         with:
           type: 'zip'
           path: './publish'
-          filename: 'mg-mac_$CI_REF_NAME_SLUG.zip'
+          filename: 'mg-mac_${{ env.CI_REF_NAME_SLUG }}.zip'
 
       - name: Publish artifact
         uses: actions/upload-artifact@v3
