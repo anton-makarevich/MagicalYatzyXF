@@ -25,18 +25,13 @@ jobs:
           dotnet restore MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzyAUI.Desktop.csproj
 
       - name: Build and publish
-        run: dotnet publish MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzyAUI.Desktop.csproj -c Release -o ./publish
-
-      - name: Get branch name
-        id: branch_name
         run: |
-          echo "branch_name=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
-
-      - name: Replace slashes with underscores
-        run: |
-          $branch_name="${{ env.branch_name }}"
+          dotnet publish MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzyAUI.Desktop.csproj -c Release -o ./publish
+          $branch_name="$(echo ${GITHUB_REF#refs/heads/})"
           $sanitized_branch_name=$branch_name.Replace("/", "_")
           echo "sanitized_branch_name=$sanitized_branch_name" >> $GITHUB_ENV
+          ECHO "${{ env.sanitized_branch_name }}"
+          ECHO $sanitized_branch_nam
 
       - name: Archive to ZIP
         uses: thedoctor0/zip-release@0.7.1
