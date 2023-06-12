@@ -1,4 +1,4 @@
-﻿name: Publish Windows App
+﻿name: Publish Mac App
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: macos-latest
 
     steps:
       - name: Checkout repository
@@ -25,7 +25,7 @@ jobs:
           dotnet restore MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzyAUI.Desktop.csproj
 
       - name: Build and publish
-        run: dotnet publish MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzyAUI.Desktop.csproj -c Release -o ./publish
+        run: dotnet publish MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzyAUI.Desktop.csproj -p:UseAppHost=true -c Release -o ./publish
 
       - name: Get branch name
         id: branch_name
@@ -36,15 +36,15 @@ jobs:
         run: |
           sanitized_branch_name=$(echo "${{ env.branch_name }}" | tr '/' '_')
           echo "sanitized_branch_name=$sanitized_branch_name" >> $GITHUB_ENV
-
+          
       - name: Archive to ZIP
         uses: thedoctor0/zip-release@0.7.1
         with:
           type: 'zip'
-          filename: 'mg-win_${{ steps.sanitized_branch_name.outputs.sanitized_branch_name }}.zip'
-        
+          filename: 'mg-mac_${{ steps.sanitized_branch_name.outputs.sanitized_branch_name }}.zip'
+ 
       - name: Publish artifact
         uses: actions/upload-artifact@v3
         with:
           name: magical-yatzy_windows
-          path: mg-win_*.zip
+          path: mg-mac_*.zip
