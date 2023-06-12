@@ -12,6 +12,9 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      - name: Inject extra env vars
+        uses: FranzDiebold/github-env-vars-action@v2
+        
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -27,18 +30,13 @@ jobs:
       - name: Build and publish
         run: |
           dotnet publish MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzyAUI.Desktop.csproj -c Release -o ./publish
-          $branch_name="$(echo ${GITHUB_REF#refs/heads/})"
-          $sanitized_branch_name=$branch_name.Replace("/", "_")
-          echo "sanitized_branch_name=$sanitized_branch_name" >> $GITHUB_ENV
-          ECHO "${{ env.sanitized_branch_name }}"
-          ECHO $sanitized_branch_nam
 
       - name: Archive to ZIP
         uses: thedoctor0/zip-release@0.7.1
         with:
           type: 'zip'
           path: './publish'  
-          filename: 'mg-win_${{ steps.sanitized_branch_name.outputs.sanitized_branch_name }}.zip'
+          filename: 'mg-win_$CI_REF_NAME_SLUG.zip'
         
       - name: Publish artifact
         uses: actions/upload-artifact@v3
