@@ -36,7 +36,7 @@ jobs:
         uses: thedoctor0/zip-release@0.7.1
         with:
           type: 'zip'
-          path: './bin/app'
+          path: 'MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/app'
           filename: 'mg-mac_${{ env.CI_REF_NAME_SLUG }}.zip'
 
       - name: Publish artifact

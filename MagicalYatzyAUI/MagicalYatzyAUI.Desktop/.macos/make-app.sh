@@ -8,7 +8,7 @@ ICON_FILE=".macos/icon.icns"
 # build the app
 dotnet publish -r osx-x64 -c Release -p:UseAppHost=true --self-contained -o $PUBLISH_OUTPUT_DIRECTORY
 # compile icon
-iconutil -c icns icon.iconset
+iconutil -c icns .macos/icon.iconset
 
 # build the bundle structure
 if [ -d "$APP_NAME" ]
