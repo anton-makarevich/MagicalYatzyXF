@@ -23,4 +23,15 @@
     <ItemGroup>
         <ProjectReference Include="..\MagicalYatzyAUI\MagicalYatzyAUI.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Content Include=".macos\Entitlements.plist" />
+      <Content Include=".macos\icon.iconset\icon_128x128.png" />
+      <Content Include=".macos\icon.iconset\icon_16x16.png" />
+      <Content Include=".macos\icon.iconset\icon_256x256.png" />
+      <Content Include=".macos\icon.iconset\ucon_32x32.png" />
+      <Content Include=".macos\icon.iconset\icon_512x512.png" />
+      <Content Include=".macos\Info.plist" />
+      <Content Include=".macos\make-app.sh" />
+    </ItemGroup>
 </Project>

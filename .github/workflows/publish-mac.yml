@@ -29,13 +29,13 @@ jobs:
 
       - name: Build and publish
         run: |
-          dotnet publish MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzyAUI.Desktop.csproj -r osx-x64 -p:UseAppHost=true -c Release -o ./publish
+          sh .macos/make-app.sh 
 
       - name: Archive to ZIP
         uses: thedoctor0/zip-release@0.7.1
         with:
           type: 'zip'
-          path: './publish'
+          path: './bin/app'
           filename: 'mg-mac_${{ env.CI_REF_NAME_SLUG }}.zip'
 
       - name: Publish artifact
