@@ -28,8 +28,9 @@ jobs:
           dotnet restore MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzyAUI.Desktop.csproj
 
       - name: Build and publish
-        run:
-          sh ./.macos/make-app.sh 
+        run: |
+          cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop
+          sh .macos/make-app.sh 
 
       - name: Archive to ZIP
         uses: thedoctor0/zip-release@0.7.1
