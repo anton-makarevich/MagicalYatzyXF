@@ -53,11 +53,9 @@ jobs:
 
       - name: Upload to App Center
         uses: Coxxs/AppCenter-Github-Action@v1
-        env:
-          APP_CENTER_TOKEN: ${{ secrets.APP_CENTER_TOKEN }}
         with:
           appName: anton.makarevich/Magical-Yatzy-Mac
-          token: $APP_CENTER_TOKEN
+          token: ${{ secrets.APP_CENTER_TOKEN }}
           group: Alpha
           file: MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/app/MagicalYatzy.app
           notifyTesters: true
