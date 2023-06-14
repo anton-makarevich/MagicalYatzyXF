@@ -49,10 +49,10 @@ jobs:
           cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop
           ditto -c -k --sequesterRsrc --keepParent "bin/app/MagicalYatzy.app" "MagicalYatzy.zip"
           xcrun notarytool submit "MagicalYatzy.zip" --wait --keychain-profile "AC_PASSWORD"
-          xcrun stapler staple "MagicalYatzy.zip"
+          xcrun stapler staple "bin/app/MagicalYatzy.app"
 
       - name: Publish artifact
         uses: actions/upload-artifact@v3
         with:
           name: magical-yatzy_macos
-          path: MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzy.zip
+          path: MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/app/MagicalYatzy.app
