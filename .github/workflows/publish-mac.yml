@@ -59,6 +59,6 @@ jobs:
           appName: anton.makarevich/apps/Magical-Yatzy-Mac
           token: $APP_CENTER_TOKEN
           group: Alpha
-          file: bin/app/MagicalYatzy.app
+          file: MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/app/MagicalYatzy.app
           notifyTesters: true
           debug: true
