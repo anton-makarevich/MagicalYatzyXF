@@ -25,6 +25,12 @@ jobs:
           dotnet-version: '7.x'
 
       - name: Setup Keychain
+        env:
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD}}
+          DEV_ID_CERT: ${{ secrets.DEV_ID_CERT }}
+          CERT_PASSWORD: ${{ secrets.CERT_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          NOTARY_TOOL_PASSWORD: ${{ secrets.NOTARY_TOOL_PASSWORD }}
         run:
           sh MagicalYatzyAUI/MagicalYatzyAUI.Desktop/.macos/prepare_ci_cert.sh 
 
