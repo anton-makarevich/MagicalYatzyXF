@@ -15,6 +15,7 @@ security import certificate.p12 -k build.keychain -P "$CERT_PASSWORD" -T /usr/bi
 security import certificate_inst.p12 -k build.keychain -P "$CERT_PASSWORD" -T /usr/bin/codesign
 
 # Allow codesign to access keychain
-security set-key-partition-list -S apple-tool:,apple:,codesign:,pkgbuild: -s -k "$KEYCHAIN_PASSWORD" build.keychain
+security set-key-partition-list -S apple-tool:,apple:,codesign:,pkgbuild:,productsign: -s -k "$KEYCHAIN_PASSWORD" build.keychain
+security list-keychain -d user -s build.keychain
 
 xcrun notarytool store-credentials "AC_PASSWORD" --apple-id "$APPLE_ID" --team-id "$TEAM_ID" --password "$NOTARY_TOOL_PASSWORD"
