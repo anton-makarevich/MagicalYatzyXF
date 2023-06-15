@@ -49,15 +49,14 @@ jobs:
         env:
           INSTALLER_PLIST: '.macos/Installer.plist'
           PACKAGE_ROOT: 'bin/app'
-          SIGNING_ID: 'Developer ID Installer: Anton Makarevich (Z8GJWJ4Q4E)'
         run: |
           cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop
           cp $INSTALLER_PLIST $PACKAGE_ROOT/Installer.plist
           cd $PACKAGE_ROOT
           ls
           cat Installer.plist
-          pkgbuild --root . --component-plist Installer.plist --install-location /Applications --sign $SIGNING_ID MagicalYatzy.pkg
-
+          pkgbuild --root . --component-plist Installer.plist --install-location /Applications --sign "Developer ID Installer: Anton Makarevich (Z8GJWJ4Q4E)" MagicalYatzy.pkg
+          
       - name: Notarise app
         run: |
           cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/app
