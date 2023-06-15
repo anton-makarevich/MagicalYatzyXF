@@ -28,6 +28,7 @@ jobs:
         env:
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD}}
           DEV_ID_CERT: ${{ secrets.DEV_ID_CERT }}
+          DEV_ID_INSTALLER_CERT: ${{ secrets.DEV_ID_INSTALLER_CERT }}
           CERT_PASSWORD: ${{ secrets.CERT_PASSWORD }}
           APPLE_ID: ${{ secrets.APPLE_ID }}
           NOTARY_TOOL_PASSWORD: ${{ secrets.NOTARY_TOOL_PASSWORD }}
@@ -43,17 +44,26 @@ jobs:
         run: |
           cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop
           sh .macos/sign-app.sh 
+          
+      - name: Package
+        env:
+          INSTALLER_PLIST: '.macos/Installer.plist'
+          PACKAGE_ROOT: `bin/app`
+          SIGNING_ID: "Developer ID Installer: Anton Makarevich (Z8GJWJ4Q4E)"
+        run: |
+          cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop
+          cp $INSTALLER_PLIST $PACKAGE_ROOT/Installer.plist"
+          pkgbuild --root $PACKAGE_ROOT --component-plist $PACKAGE_ROOT/Installer.plist --install-location /Applications MagicalYatzy.pkg --sign
 
       - name: Notarise app
         run: |
           cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop
-          ditto -c -k --sequesterRsrc --keepParent "bin/app/MagicalYatzy.app" "MagicalYatzy.zip"
-          xcrun notarytool submit "MagicalYatzy.zip" --wait --keychain-profile "AC_PASSWORD"
-          xcrun stapler staple "bin/app/MagicalYatzy.app"
+          xcrun notarytool submit "MagicalYatzy.pkg" --wait --keychain-profile "AC_PASSWORD"
+          xcrun stapler staple "MagicalYatzy.pkg"
 
       - name: Upload to App Center
         env:
           APPCENTER_ACCESS_TOKEN: ${{ secrets.APP_CENTER_TOKEN }}
         run: |
           npm install -g appcenter-cli
-          appcenter distribute groups publish -f MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzy.zip -g Alpha --app anton.makarevich/Magical-Yatzy-Mac --build-version ${{ github.run_number }}
+          appcenter distribute groups publish -f MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzy.pkg -g Alpha --app anton.makarevich/Magical-Yatzy-Mac --build-version ${{ github.run_number }}
