@@ -52,11 +52,8 @@ jobs:
           xcrun stapler staple "bin/app/MagicalYatzy.app"
 
       - name: Upload to App Center
-        uses: Coxxs/AppCenter-Github-Action@v1
-        with:
-          appName: anton.makarevich/Magical-Yatzy-Mac
-          token: ${{ secrets.APP_CENTER_TOKEN }}
-          group: Alpha
-          file: MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/app/MagicalYatzy.app
-          notifyTesters: true
-          debug: true
+        env:
+          APPCENTER_ACCESS_TOKEN: ${{ secrets.APP_CENTER_TOKEN }}
+        run: |
+          npm install -g appcenter-cli
+          appcenter distribute groups publish -f MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/app/MagicalYatzy.app -g Alpha --app anton.makarevich/Magical-Yatzy-Mac --build-version ${{ github.run_number }}
