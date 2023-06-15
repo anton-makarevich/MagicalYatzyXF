@@ -9,7 +9,7 @@ security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
 
 # Decode certificate to file
 echo "$DEV_ID_CERT" | base64 --decode > certificate.p12
-echo "DEV_ID_INSTALLER_CERT" | base64 --decode > certificate_inst.p12
+echo "$DEV_ID_INSTALLER_CERT" | base64 --decode > certificate_inst.p12
 # Import into keychain
 security import certificate.p12 -k build.keychain -P "$CERT_PASSWORD" -T /usr/bin/codesign
 security import certificate_inst.p12 -k build.keychain -P "$CERT_PASSWORD" -T /usr/bin/codesign
