@@ -13,8 +13,8 @@ security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
 echo "$DEV_ID_CERT" | base64 --decode > certificate.p12
 echo "$DEV_ID_INSTALLER_CERT" | base64 --decode > certificate_inst.p12
 # Import into keychain
-security import certificate.p12 -k build.keychain -P "$CERT_PASSWORD" -T /usr/bin/codesign
-security import certificate_inst.p12 -k build.keychain -P "$CERT_PASSWORD" -T /usr/bin/codesign
+security import certificate.p12 -k build.keychain -P "$CERT_PASSWORD" -T /usr/bin/codesign 
+security import certificate_inst.p12 -k build.keychain -P "$CERT_PASSWORD" -T /usr/bin/productsign
 
 # Allow codesign to access keychain
 security set-key-partition-list -S apple-tool:,apple:,codesign:,pkgbuild:,productsign:, -s -k "$KEYCHAIN_PASSWORD" build.keychain
