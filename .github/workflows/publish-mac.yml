@@ -26,7 +26,7 @@ jobs:
 
       - name: Setup Keychain
         env:
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD}}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
           DEV_ID_CERT: ${{ secrets.DEV_ID_CERT }}
           DEV_ID_INSTALLER_CERT: ${{ secrets.DEV_ID_INSTALLER_CERT }}
           CERT_PASSWORD: ${{ secrets.CERT_PASSWORD }}
@@ -49,16 +49,17 @@ jobs:
         env:
           INSTALLER_PLIST: '.macos/Installer.plist'
           PACKAGE_ROOT: 'bin/app'
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
         run: |
           cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop
           cp $INSTALLER_PLIST $PACKAGE_ROOT/Installer.plist
           cd $PACKAGE_ROOT
           echo "Packaging.."
           pkgbuild --root . --component-plist Installer.plist --install-location /Applications MagicalYatzy_ns.pkg
-          echo "Keychain"
+          echo "Keychain unlock"
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
-          security set-key-partition-list -S apple-tool:,apple:,codesign:,pkgbuild:,productsign: -s -k "$KEYCHAIN_PASSWORD" build.keychain
-          security list-keychain -d user -s build.keychain
+          echo "Keychain set key"
+          security set-key-partition-list -S apple-tool:,apple:, -s -k $KEYCHAIN_PASSWORD -D "Developer ID Installer: Anton Makarevich (Z8GJWJ4Q4E)" -t private build.keychain
           echo "Signing..."
           productsign --sign "Developer ID Installer: Anton Makarevich (Z8GJWJ4Q4E)" MagicalYatzy_ns.pkg MagicalYatzy.pkg
           
