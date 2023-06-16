@@ -29,6 +29,8 @@ jobs:
         run: |
           cd MagicalYatzyAUI/MagicalYatzyAUI.Browser
           dotnet workload restore
+          dotnet workload repair
+          dotnet publish -c Release
       
       - name: Build And Deploy
         id: builddeploy
