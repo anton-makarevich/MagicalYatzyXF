@@ -27,7 +27,7 @@ jobs:
 
       - name: Restore workloads
         run: |
-          MagicalYatzyAUI/MagicalYatzyAUI.Browser
+          cd MagicalYatzyAUI/MagicalYatzyAUI.Browser
           dotnet workload restore
       
       - name: Build And Deploy
