@@ -25,7 +25,7 @@ jobs:
         with:
           dotnet-version: '7.x'
 
-      - name: Restore workloads
+      - name: Build
         run: |
           cd MagicalYatzyAUI/MagicalYatzyAUI.Browser
           dotnet workload restore
@@ -33,7 +33,7 @@ jobs:
           dotnet publish -c Release
 
       - name: Deploy the website
-        uses: tibor19/static-website-deploy@v2
+        uses: tibor19/static-website-deploy@v3
         with:
           enabled-static-website: 'true'
           folder: 'MagicalYatzyAUI/MagicalYatzyAUI.Browser/bin/Release/net7.0/browser-wasm/AppBundle'
