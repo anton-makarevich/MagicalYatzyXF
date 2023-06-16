@@ -59,7 +59,7 @@ jobs:
           echo "Keychain unlock"
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
           echo "Keychain set key"
-          security set-key-partition-list -S apple-tool:,apple:, -s -k $KEYCHAIN_PASSWORD -D "Developer ID Installer: Anton Makarevich (Z8GJWJ4Q4E)" -t private build.keychain
+          security set-key-partition-list -S apple-tool:,apple:,codesign:,pkgbuild:,productsign:, -s -k $KEYCHAIN_PASSWORD -D "Developer ID Installer: Anton Makarevich (Z8GJWJ4Q4E)" -t private build.keychain
           echo "Signing..."
           productsign --sign "Developer ID Installer: Anton Makarevich (Z8GJWJ4Q4E)" MagicalYatzy_ns.pkg MagicalYatzy.pkg
           
