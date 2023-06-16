@@ -26,7 +26,8 @@ jobs:
           dotnet-version: '7.x'
 
       - name: Restore workloads
-        run:
+        run: |
+          MagicalYatzyAUI/MagicalYatzyAUI.Browser
           dotnet workload restore
       
       - name: Build And Deploy
