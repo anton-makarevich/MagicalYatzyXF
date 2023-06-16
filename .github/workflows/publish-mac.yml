@@ -53,7 +53,13 @@ jobs:
           cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop
           cp $INSTALLER_PLIST $PACKAGE_ROOT/Installer.plist
           cd $PACKAGE_ROOT
+          echo "Packaging.."
           pkgbuild --root . --component-plist Installer.plist --install-location /Applications MagicalYatzy_ns.pkg
+          echo "Keychain"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+          security set-key-partition-list -S apple-tool:,apple:,codesign:,pkgbuild:,productsign: -s -k "$KEYCHAIN_PASSWORD" build.keychain
+          security list-keychain -d user -s build.keychain
+          echo "Signing..."
           productsign --sign "Developer ID Installer: Anton Makarevich (Z8GJWJ4Q4E)" MagicalYatzy_ns.pkg MagicalYatzy.pkg
           
       - name: Notarise app
