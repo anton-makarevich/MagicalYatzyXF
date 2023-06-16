@@ -4,6 +4,8 @@
 security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
 # Set it as the default keychain
 security default-keychain -s build.keychain
+# Modify keychain settings to keep it unlocked longer
+security set-keychain-settings -lut 21600 build.keychain
 # Unlock the keychain so it can be used without an authorisation prompt
 security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
 
