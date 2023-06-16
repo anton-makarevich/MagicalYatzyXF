@@ -1,0 +1,74 @@
+﻿name: Publish Mac App
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    env:
+      TEAM_ID: 'Z8GJWJ4Q4E'
+    steps:
+      - name: Inject extra env vars
+        uses: FranzDiebold/github-env-vars-action@v2
+        
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.x'
+
+      - name: Setup Keychain
+        env:
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          DEV_ID_CERT: ${{ secrets.DEV_ID_CERT }}
+          DEV_ID_INSTALLER_CERT: ${{ secrets.DEV_ID_INSTALLER_CERT }}
+          CERT_PASSWORD: ${{ secrets.CERT_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          NOTARY_TOOL_PASSWORD: ${{ secrets.NOTARY_TOOL_PASSWORD }}
+        run:
+          sh MagicalYatzyAUI/MagicalYatzyAUI.Desktop/.macos/prepare_ci_cert.sh 
+
+      - name: Build and publish
+        run: |
+          cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop
+          sh .macos/make-app.sh 
+      
+      - name: Sign
+        run: |
+          cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop
+          sh .macos/sign-app.sh 
+          
+      - name: Package
+        env:
+          INSTALLER_PLIST: '.macos/Installer.plist'
+          PACKAGE_ROOT: 'bin/app'
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop
+          cp $INSTALLER_PLIST $PACKAGE_ROOT/Installer.plist
+          cd $PACKAGE_ROOT
+          pkgbuild --root . \
+                   --component-plist Installer.plist \
+                   --sign "Developer ID Installer: Anton Makarevich (Z8GJWJ4Q4E)" \
+                   --filter .DS_Store \
+                   --filter *.pkg \
+                   --install-location /Applications MagicalYatzy.pkg 
+          
+      - name: Notarise app
+        run: |
+          cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/app
+          xcrun notarytool submit "MagicalYatzy.pkg" --wait --keychain-profile "AC_PASSWORD"
+          xcrun stapler staple "MagicalYatzy.pkg"
+
+      - name: Upload to App Center
+        env:
+          APPCENTER_ACCESS_TOKEN: ${{ secrets.APP_CENTER_TOKEN }}
+        run: |
+          npm install -g appcenter-cli
+          appcenter distribute groups publish -f MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/app/MagicalYatzy.pkg -g Alpha --app anton.makarevich/Magical-Yatzy-Mac --build-version 0.1 --build-number ${{ github.run_number }}

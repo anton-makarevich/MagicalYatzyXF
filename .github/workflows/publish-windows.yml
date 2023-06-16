@@ -3,14 +3,17 @@
 on:
   push:
     branches:
-      - main
+      - develop
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
+      - name: Inject extra env vars
+        uses: FranzDiebold/github-env-vars-action@v2
+        
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -24,24 +27,15 @@ jobs:
           dotnet restore MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzyAUI.Desktop.csproj
 
       - name: Build and publish
-        run: dotnet publish MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzyAUI.Desktop.csproj -c Release -o ./publish
-
-      - name: Get branch name
-        id: branch_name
         run: |
-          echo "branch_name=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
-
-      - name: Replace slashes with underscores
-        run: |
-          sanitized_branch_name=$(echo "${{ env.branch_name }}" | tr '/' '_')
-          echo "sanitized_branch_name=$sanitized_branch_name" >> $GITHUB_ENV
+          dotnet publish MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzyAUI.Desktop.csproj -c Release -o ./publish
 
       - name: Archive to ZIP
         uses: thedoctor0/zip-release@0.7.1
         with:
           type: 'zip'
-          filename: 'mg-win_${{ steps.sanitized_branch_name.outputs.sanitized_branch_name }}.zip'
-
+          path: './publish'  
+          filename: 'mg-win_${{ env.CI_REF_NAME_SLUG }}.zip'
         
       - name: Publish artifact
         uses: actions/upload-artifact@v3
