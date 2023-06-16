@@ -68,4 +68,4 @@ jobs:
           APPCENTER_ACCESS_TOKEN: ${{ secrets.APP_CENTER_TOKEN }}
         run: |
           npm install -g appcenter-cli
-          appcenter distribute groups publish -f MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/app/MagicalYatzy.pkg -g Alpha --app anton.makarevich/Magical-Yatzy-Mac --build-version ${{ github.run_number }}
+          appcenter distribute groups publish -f MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/app/MagicalYatzy.pkg -g Alpha --app anton.makarevich/Magical-Yatzy-Mac --build-version 0.1 --build-number ${{ github.run_number }}
