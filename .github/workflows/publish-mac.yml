@@ -54,7 +54,12 @@ jobs:
           cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop
           cp $INSTALLER_PLIST $PACKAGE_ROOT/Installer.plist
           cd $PACKAGE_ROOT
-          pkgbuild --root . --component-plist Installer.plist --install-location /Applications MagicalYatzy.pkg --sign "Developer ID Installer: Anton Makarevich (Z8GJWJ4Q4E)"
+          pkgbuild --root . \
+                   --component-plist Installer.plist \
+                   --sign "Developer ID Installer: Anton Makarevich (Z8GJWJ4Q4E)" \
+                   --filter .DS_Store \
+                   --filter *.pkg \
+                   --install-location /Applications MagicalYatzy.pkg 
           
       - name: Notarise app
         run: |
