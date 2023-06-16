@@ -55,11 +55,11 @@ jobs:
           cp $INSTALLER_PLIST $PACKAGE_ROOT/Installer.plist
           cd $PACKAGE_ROOT
           pkgbuild --root . --component-plist Installer.plist --install-location /Applications MagicalYatzy.pkg
-          productsign --sign "Developer ID Installer: Anton Makarevich (Z8GJWJ4Q4E)" MagicalYatzy.pkg MagicalYatzy.pkg
+          productsign --sign "Developer ID Installer: Anton Makarevich (Z8GJWJ4Q4E)" MagicalYatzy.pkg signed/MagicalYatzy.pkg
           
       - name: Notarise app
         run: |
-          cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/app
+          cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/app/signed
           xcrun notarytool submit "MagicalYatzy.pkg" --wait --keychain-profile "AC_PASSWORD"
           xcrun stapler staple "MagicalYatzy.pkg"
 
@@ -68,4 +68,4 @@ jobs:
           APPCENTER_ACCESS_TOKEN: ${{ secrets.APP_CENTER_TOKEN }}
         run: |
           npm install -g appcenter-cli
-          appcenter distribute groups publish -f MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/app/MagicalYatzy.pkg -g Alpha --app anton.makarevich/Magical-Yatzy-Mac --build-version 0.1 --build-number ${{ github.run_number }}
+          appcenter distribute groups publish -f MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/app/signed/MagicalYatzy.pkg -g Alpha --app anton.makarevich/Magical-Yatzy-Mac --build-version 0.1 --build-number ${{ github.run_number }}
