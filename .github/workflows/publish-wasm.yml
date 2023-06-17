@@ -1,4 +1,4 @@
-name: Build SPA
+name: Publish WASM app
 
 on:
   push:

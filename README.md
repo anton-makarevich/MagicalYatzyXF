@@ -1,29 +1,34 @@
 # Magical Yatzy #
 
-Xamarin.Forms version. I use it as a playground for anything I would like to try with XF
+Remake of old WindowsPhone/UWP game. Was supposed to be done with Xamarin.Forms, but never happened and it was abandoned.
 
-**Code Quality**
+Now, I use it as a playground for anything I would like to try with AvaloniaUI.
 
 [![CodeFactor](https://www.codefactor.io/repository/github/anton-makarevich/magicalyatzyxf/badge)](https://www.codefactor.io/repository/github/anton-makarevich/magicalyatzyxf)
 
-**Tests coverage (Core)**
+## Core APP
+
+Logic, ViewModels, .NET7
 
 [![codecov](https://codecov.io/gh/anton-makarevich/MagicalYatzyXF/branch/develop/graph/badge.svg)](https://codecov.io/gh/anton-makarevich/MagicalYatzyXF)
 
-## Build status ##
-
-**BE (Azure functions)**
+## BE (Azure functions)
 
 [![Build Status](https://dev.azure.com/antonmakarevich/Magical%20Yatzy%20XF/_apis/build/status/MagicalYatzy.Azure.Functions?branchName=develop)](https://dev.azure.com/antonmakarevich/Magical%20Yatzy%20XF/_build/latest?definitionId=2&branchName=develop)
 
-**Core**
+## Clients (AvaloniaUI)
 
-[![Build Status](https://dev.azure.com/antonmakarevich/Magical%20Yatzy%20XF/_apis/build/status/MagicalYatzy.Core.Tests?branchName=develop)](https://dev.azure.com/antonmakarevich/Magical%20Yatzy%20XF/_build/latest?definitionId=1&branchName=develop)
+### WASM
+[![Build SPA](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-wasm.yml/badge.svg)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-wasm.yml)
 
-**Client (Xamarin Forms)**
+[Try it here](https://magicalyatzystoragedev.z6.web.core.windows.net/)
 
-|Android   |iOS   |UWP   |Mac   |GTK
-|:-:|:-:|:-:|:-:|:-:|
-|![Build Status](https://build.appcenter.ms/v0.1/apps/f3ea501e-6034-41bc-9bcf-a09f902a2485/branches/develop/badge)   |![Build status](https://build.appcenter.ms/v0.1/apps/b932b5bb-bcd4-4e03-be0b-db4b42878a8a/branches/develop/badge)   |[![Build Status](https://dev.azure.com/antonmakarevich/Magical%20Yatzy%20XF/_apis/build/status/MagicalYatzy.XF.UWP?branchName=develop)](https://dev.azure.com/antonmakarevich/Magical%20Yatzy%20XF/_build/latest?definitionId=4&branchName=develop)   |[![Build Status](https://dev.azure.com/antonmakarevich/Magical%20Yatzy%20XF/_apis/build/status/MagicalYatzy.XF.Mac?branchName=develop)](https://dev.azure.com/antonmakarevich/Magical%20Yatzy%20XF/_build/latest?definitionId=5&branchName=develop)   |[![Build Status](https://dev.azure.com/antonmakarevich/Magical%20Yatzy%20XF/_apis/build/status/MagicalYatzy.XF.GTK?branchName=develop)](https://dev.azure.com/antonmakarevich/Magical%20Yatzy%20XF/_build/latest?definitionId=6&branchName=develop)
+### Android
+### iOS
+### Windows     
+[![Publish Windows App](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-windows.yml/badge.svg)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-windows.yml)
+### Mac   
+[![Publish Mac App](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-mac.yml/badge.svg?branch=develop)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-mac.yml)
+### Linux 
 
 
