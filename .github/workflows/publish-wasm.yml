@@ -1,0 +1,39 @@
+name: Build SPA
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+jobs:
+  build_and_deploy_job:
+    runs-on: ubuntu-latest
+    name: Build and Deploy Job
+    steps:
+      - name: Inject extra env vars
+        uses: FranzDiebold/github-env-vars-action@v2
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.x'
+
+      - name: Build
+        run: |
+          cd MagicalYatzyAUI/MagicalYatzyAUI.Browser
+          dotnet workload restore
+          dotnet workload repair
+          dotnet publish -c Release
+
+      - name: Deploy the website
+        uses: tibor19/static-website-deploy@v3
+        with:
+          enabled-static-website: 'true'
+          folder: 'MagicalYatzyAUI/MagicalYatzyAUI.Browser/bin/Release/net7.0/browser-wasm/AppBundle'
+          connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION }}
