@@ -6,13 +6,15 @@ Now, I use it as a playground for anything I would like to try with AvaloniaUI.
 
 [![CodeFactor](https://www.codefactor.io/repository/github/anton-makarevich/magicalyatzyxf/badge)](https://www.codefactor.io/repository/github/anton-makarevich/magicalyatzyxf)
 
-## Core APP
+## Core
 
 Logic, ViewModels, .NET7
 
+[![Build and Test](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/test.yml/badge.svg)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/anton-makarevich/MagicalYatzyXF/branch/develop/graph/badge.svg)](https://codecov.io/gh/anton-makarevich/MagicalYatzyXF)
 
-## BE (Azure functions)
+## BE 
+Azure functions
 
 [![Build Status](https://dev.azure.com/antonmakarevich/Magical%20Yatzy%20XF/_apis/build/status/MagicalYatzy.Azure.Functions?branchName=develop)](https://dev.azure.com/antonmakarevich/Magical%20Yatzy%20XF/_build/latest?definitionId=2&branchName=develop)
 
