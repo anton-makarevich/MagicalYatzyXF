@@ -22,10 +22,6 @@ jobs:
         with:
           dotnet-version: '7.x'
 
-      - name: Restore dependencies
-        run: |
-          dotnet restore MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzyAUI.Desktop.csproj
-
       - name: Build and publish
         run: |
           dotnet publish MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzyAUI.Desktop.csproj -c Release  -r win-x64 -o bin\Release\publish
