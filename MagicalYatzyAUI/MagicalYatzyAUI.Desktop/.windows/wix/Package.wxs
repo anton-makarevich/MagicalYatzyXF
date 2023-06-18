@@ -1,0 +1,14 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package 
+    Name="Magical Yatzy"
+    Manufacturer="Anton Makarevich" 
+    Version="0.0.1" UpgradeCode="971e8a24-0e16-4c38-8e6b-98046b5ece31">
+    <MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
+
+    <MediaTemplate EmbedCab="yes" />
+
+    <Feature Id="Main">
+      <ComponentGroupRef Id="MagicalYatzyComponents" />
+    </Feature>
+  </Package>
+</Wix>

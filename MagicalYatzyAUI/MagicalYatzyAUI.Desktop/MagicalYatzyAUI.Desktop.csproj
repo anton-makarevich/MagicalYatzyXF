@@ -8,9 +8,13 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <RootNamespace>Sanet.MagicalYatzy.Avalonia.Desktop</RootNamespace>
     </PropertyGroup>
+    
+    <PropertyGroup>
+        <PublishSingleFile>true</PublishSingleFile>
+    </PropertyGroup>
 
     <PropertyGroup>
-        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <ApplicationManifest>.windows/app.manifest</ApplicationManifest>
     </PropertyGroup>
 
     <ItemGroup>
@@ -22,6 +26,10 @@
 
     <ItemGroup>
         <ProjectReference Include="..\MagicalYatzyAUI\MagicalYatzyAUI.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include=".windows\app.manifest" />
     </ItemGroup>
     
 </Project>
