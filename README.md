@@ -23,14 +23,20 @@ Azure functions
 ### WASM
 [![Build SPA](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-wasm.yml/badge.svg)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-wasm.yml)
 
-[Try it here](https://magicalyatzystoragedev.z6.web.core.windows.net/)
+[Try it here in the browser](https://magicalyatzystoragedev.z6.web.core.windows.net/)
 
 ### Android
 ### iOS
 ### Windows     
 [![Publish Windows App](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-windows.yml/badge.svg)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-windows.yml)
+
+[Download installer](https://install.appcenter.ms/users/anton.makarevich/apps/magical-yatzy-win/distribution_groups/alpha)
+
 ### Mac   
 [![Publish Mac App](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-mac.yml/badge.svg?branch=develop)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-mac.yml)
+
+[Download installer](https://install.appcenter.ms/users/anton.makarevich/apps/magical-yatzy-mac/distribution_groups/alpha)
+
 ### Linux 
 
 
