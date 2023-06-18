@@ -34,8 +34,9 @@ jobs:
         run: |
           dotnet tool install wix --global
           dotnet tool install Sanet.Tools.Wix.ComponentsUpdater --global
+          cd MagicalYatzyAUI\MagicalYatzyAUI.Desktop\.windows\wix
           sanet-wix-tools MagicalYatzyComponents ..\..\bin\Release\net7.0\win-x64\publish
-          wix build .\Package.wxs .\MagicalYatzyComponents.wxs .\Folders.wxs .\Package.en-us.wxl -o bin/MagialYatzySetup    
+          wix build .\Package.wxs .\MagicalYatzyComponents.wxs .\Folders.wxs .\Package.en-us.wxl -o bin/MagialYatzySetup
 
       - name: Upload to App Center
         env:
@@ -43,4 +44,3 @@ jobs:
         run: |
           npm install -g appcenter-cli
           appcenter distribute groups publish -f MagicalYatzyAUI\MagicalYatzyAUI.Desktop\.windows\wix\bin\MagicalYatzySetup.msi -g Alpha --app anton.makarevich/Magical-Yatzy-Win --build-version 0.1 --build-number ${{ github.run_number }}
-
