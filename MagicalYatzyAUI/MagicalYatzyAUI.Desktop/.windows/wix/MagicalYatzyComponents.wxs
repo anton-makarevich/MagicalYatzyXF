@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Fragment>
+    <ComponentGroup Id="MagicalYatzyComponents" Directory="INSTALLFOLDER">
+      <Component>
+        <File Source="..\..\bin\Release\publish\MagicalYatzyAUI.Desktop.exe">
+          <Shortcut Directory="DesktopFolder" Name="Magical Yatzy" WorkingDirectory="INSTALLFOLDER" />
+        </File>
+      </Component>
+      <Component>
+        <File Source="..\..\bin\Release\publish\av_libglesv2.dll" />
+      </Component>
+      <Component>
+        <File Source="..\..\bin\Release\publish\libHarfBuzzSharp.dll" />
+      </Component>
+      <Component>
+        <File Source="..\..\bin\Release\publish\libSkiaSharp.dll" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>
