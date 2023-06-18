@@ -32,7 +32,9 @@ jobs:
           dotnet tool install Sanet.Tools.Wix.ComponentsUpdater --global
           cd MagicalYatzyAUI\MagicalYatzyAUI.Desktop\.windows\wix
           sanet-wix-tools MagicalYatzyComponents ..\..\bin\Release\publish
-          wix build .\Package.wxs .\MagicalYatzyComponents.wxs .\Folders.wxs .\Package.en-us.wxl -o bin/MagialYatzySetup
+          wix build .\Package.wxs .\MagicalYatzyComponents.wxs .\Folders.wxs .\Package.en-us.wxl -o bin/MagicalYatzySetup
+          cd bin
+          ls
 
       - name: Upload to App Center
         env:
