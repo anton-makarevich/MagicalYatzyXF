@@ -31,7 +31,7 @@ jobs:
           dotnet tool install wix --global
           dotnet tool install Sanet.Tools.Wix.ComponentsUpdater --global
           cd MagicalYatzyAUI\MagicalYatzyAUI.Desktop\.windows\wix
-          sanet-wix-tools MagicalYatzyComponents ..\..\bin\Release\net7.0\win-x64\publish
+          sanet-wix-tools MagicalYatzyComponents ..\..\bin\Release\publish
           wix build .\Package.wxs .\MagicalYatzyComponents.wxs .\Folders.wxs .\Package.en-us.wxl -o bin/MagialYatzySetup
 
       - name: Upload to App Center
