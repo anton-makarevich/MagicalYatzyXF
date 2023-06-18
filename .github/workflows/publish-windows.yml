@@ -24,7 +24,7 @@ jobs:
 
       - name: Build and publish
         run: |
-          dotnet publish MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzyAUI.Desktop.csproj -c Release  -r win-x64 -o bin\Release\publish
+          dotnet publish MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzyAUI.Desktop.csproj -c Release  -r win-x64 -o MagicalYatzyAUI\MagicalYatzyAUI.Desktop\bin\Release\publish
           
       - name: Create installer
         run: |
