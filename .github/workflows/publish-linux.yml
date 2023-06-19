@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - develop
-  pull_request: 
   workflow_dispatch:
 
 jobs:
@@ -26,12 +25,12 @@ jobs:
       - name: Build and publish
         run: |
           dotnet publish MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzyAUI.Desktop.csproj -c Release  -r linux-x64 -o MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/Release/ubuntu/publish --self-contained
-          chmod 777 MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/Release/ubuntu/publish/MagicalYatzyAUI.Desktop
       
       - name: Archive
         run: |
           cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/Release/ubuntu/publish
           rm *.pdb
+          chmod 777 MagicalYatzyAUI.Desktop
           zip -r MagicalYatzy.zip .
 
       - name: Upload to App Center
