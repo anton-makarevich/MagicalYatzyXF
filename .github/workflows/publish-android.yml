@@ -28,7 +28,7 @@ jobs:
           cd MagicalYatzyAUI/MagicalYatzyAUI.Android
           dotnet workload restore
           dotnet publish -c Release -o bin/Release/android/publish
-          cd MagicalYatzyAUI/MagicalYatzyAUI.Android/bin/Release/android/publish
+          cd bin/Release/android/publish
           ls
 
       - name: Upload to App Center
