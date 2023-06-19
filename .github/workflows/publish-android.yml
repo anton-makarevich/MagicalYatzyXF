@@ -25,6 +25,8 @@ jobs:
 
       - name: Build and publish
         run: |
+          cd MagicalYatzyAUI/MagicalYatzyAUI.Android
+          dotnet workload restore
           dotnet publish MagicalYatzyAUI/MagicalYatzyAUI.Android/MagicalYatzyAUI.Android.csproj -c Release -o MagicalYatzyAUI/MagicalYatzyAUI.Android/bin/Release/android/publish
           cd MagicalYatzyAUI/MagicalYatzyAUI.Android/bin/Release/android/publish
           ls
