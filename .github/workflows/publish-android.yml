@@ -1,0 +1,37 @@
+﻿name: Publish Android App
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request: 
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Inject extra env vars
+        uses: FranzDiebold/github-env-vars-action@v2
+        
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.x'
+
+      - name: Build and publish
+        run: |
+          dotnet publish MagicalYatzyAUI/MagicalYatzyAUI.Android/MagicalYatzyAUI.Android.csproj -c Release -o MagicalYatzyAUI/MagicalYatzyAUI.Android/bin/Release/android/publish
+          cd MagicalYatzyAUI/MagicalYatzyAUI.Android/bin/Release/android/publish
+          ls
+
+      - name: Upload to App Center
+        env:
+          APPCENTER_ACCESS_TOKEN: ${{ secrets.APP_CENTER_TOKEN }}
+        run: |
+          npm install -g appcenter-cli
+          appcenter distribute groups publish -f MagicalYatzyAUI/MagicalYatzyAUI.Android/bin/Release/android/publish/nl.sanetby.magicalyatzy.apk -g Alpha --app anton.makarevich/Magical-Yatzy-Android --build-version 0.1 --build-number ${{ github.run_number }}
