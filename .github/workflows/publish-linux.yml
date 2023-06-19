@@ -31,7 +31,7 @@ jobs:
       - name: Archive
         run: |
           cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/Release/ubuntu/publish
-          rm rm *.pdb
+          rm *.pdb
           zip -r MagicalYatzy.zip .
 
       - name: Upload to App Center
