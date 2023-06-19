@@ -1,0 +1,40 @@
+﻿name: Publish Linux App
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request: 
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Inject extra env vars
+        uses: FranzDiebold/github-env-vars-action@v2
+        
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.x'
+
+      - name: Build and publish
+        run: |
+          dotnet publish MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzyAUI.Desktop.csproj -c Release  -r linux-x64 -o MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/Release/ubuntu/publish --self-contained
+          chmod 777 MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/Release/ubuntu/publish/MagicalYatzyAUI.Desktop
+      
+      - name: Archive
+        run: |
+          zip MagicalYatzy.zip MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/Release/ubuntu/publish
+
+      - name: Upload to App Center
+        env:
+          APPCENTER_ACCESS_TOKEN: ${{ secrets.APP_CENTER_TOKEN }}
+        run: |
+          npm install -g appcenter-cli
+          appcenter distribute groups publish -f MagicalYatzy.zip -g Alpha --app anton.makarevich/Magical-Yatzy-Linux --build-version 0.1 --build-number ${{ github.run_number }}
