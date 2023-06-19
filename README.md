@@ -37,6 +37,8 @@ Azure functions
 
 [Download installer](https://install.appcenter.ms/users/anton.makarevich/apps/magical-yatzy-mac/distribution_groups/alpha)
 
-### Linux 
+### Linux
 
+[![Publish Linux App](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-linux.yml/badge.svg?branch=develop)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-linux.yml)
 
+[Download archive](https://install.appcenter.ms/users/anton.makarevich/apps/magical-yatzy-linux/distribution_groups/alpha)
