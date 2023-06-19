@@ -31,7 +31,8 @@ jobs:
       - name: Archive
         run: |
           cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/Release/ubuntu/publish
-          zip MagicalYatzy.zip .
+          ls
+          zip -r MagicalYatzy.zip .
 
       - name: Upload to App Center
         env:
