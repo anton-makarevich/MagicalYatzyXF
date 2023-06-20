@@ -31,6 +31,12 @@ Azure functions
 [Download APK](https://install.appcenter.ms/users/anton.makarevich/apps/magical-yatzy-android/distribution_groups/alpha)
 
 ### iOS
+
+[![Publish iOS App](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-ios.yml/badge.svg?branch=develop)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-ios.yml)
+
+[Download IPA](https://install.appcenter.ms/users/anton.makarevich/apps/magical-yatzy-ios/distribution_groups/alpha)
+(Contact me if you want to be added to the profile)
+
 ### Windows     
 [![Publish Windows App](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-windows.yml/badge.svg)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-windows.yml)
 
