@@ -30,8 +30,4 @@
     <ItemGroup>
         <ProjectReference Include="..\MagicalYatzyAUI\MagicalYatzyAUI.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Content Include=".ci-scripts\prepare_ci_cert.sh" />
-    </ItemGroup>
 </Project>
