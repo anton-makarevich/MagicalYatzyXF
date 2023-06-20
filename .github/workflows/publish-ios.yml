@@ -70,4 +70,4 @@ jobs:
           APPCENTER_ACCESS_TOKEN: ${{ secrets.APP_CENTER_TOKEN }}
         run: |
           npm install -g appcenter-cli
-          appcenter distribute groups publish -f MagicalYatzyAUI/MagicalYatzyAUI.iOS/bin/Release/iOS/publish/MagicalYatzyAUI.iOS.ipa -g Alpha --app anton.makarevich/Magical-Yatzy-iOS --build-version 0.1 --build-number 1
+          appcenter distribute groups publish -f MagicalYatzyAUI/MagicalYatzyAUI.iOS/bin/Release/iOS/publish/MagicalYatzyAUI.iOS.ipa -g Alpha --app anton.makarevich/Magical-Yatzy-iOS --build-version 0.1 --build-number 0.1
