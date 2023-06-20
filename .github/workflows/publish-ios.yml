@@ -47,7 +47,7 @@ jobs:
           
           echo "--DECODE PP--"       
           # Decode provisioning profile to file
-          echo "$MY_PP_ADHOC" | base64 --decode >
+          echo "$MY_PP_ADHOC" | base64 --decode > MagicalYatzy_AdHoc.mobileprovision
           ls
           cat MagicalYatzy_AdHoc.mobileprovision
           echo "--IMPORT CERT--"
