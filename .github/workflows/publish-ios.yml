@@ -37,7 +37,7 @@ jobs:
         run: |
           cd MagicalYatzyAUI/MagicalYatzyAUI.iOS
           dotnet workload restore
-          dotnet publish -c Release -r ios-arm64 -o bin/Release/iOS/publish
+          dotnet publish -c Release -r ios-arm64 --self-contained -o bin/Release/iOS/publish
           cd bin/Release/iOS/publish
           ls
 
