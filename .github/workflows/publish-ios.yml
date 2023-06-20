@@ -23,6 +23,16 @@ jobs:
         with:
           dotnet-version: '7.x'
 
+      - name: Setup Keychain
+        env:
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          APPLE_DISTRIBUTION_CERT: ${{ secrets.APPLE_DISTRIBUTION_CERT }}
+          MY_PP_ADHOC: ${{ secrets.MY_PP_ADHOC }}
+          CERT_PASSWORD: ${{ secrets.CERT_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+        run:
+          sh MagicalYatzyAUI/MagicalYatzyAUI.iOS/.ci-scripts/prepare_ci_cert.sh
+      
       - name: Build and publish
         run: |
           cd MagicalYatzyAUI/MagicalYatzyAUI.iOS
