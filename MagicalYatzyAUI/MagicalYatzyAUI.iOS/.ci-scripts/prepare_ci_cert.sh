@@ -22,4 +22,4 @@ security list-keychain -d user -s build.keychain
 
           # apply provisioning profile
 mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-cp mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles
+cp pp.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles
