@@ -34,4 +34,4 @@ jobs:
           APPCENTER_ACCESS_TOKEN: ${{ secrets.APP_CENTER_TOKEN }}
         run: |
           npm install -g appcenter-cli
-          appcenter distribute groups publish -f MagicalYatzyAUI/MagicalYatzyAUI.Android/bin/Release/android/publish/nl.sanetby.magicalyatzy.apk -g Alpha --app anton.makarevich/Magical-Yatzy-Android --build-version 0.1 --build-number 1
+          appcenter distribute groups publish -f MagicalYatzyAUI/MagicalYatzyAUI.Android/bin/Release/android/publish/nl.sanetby.magicalyatzy-Signed.apk -g Alpha --app anton.makarevich/Magical-Yatzy-Android --build-version 0.1 --build-number 1
