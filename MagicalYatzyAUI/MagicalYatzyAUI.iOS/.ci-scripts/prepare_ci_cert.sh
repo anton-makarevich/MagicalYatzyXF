@@ -12,7 +12,8 @@ security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
 # Decode certificate to file
 echo "$APPLE_DISTRIBUTION_CERT" | base64 --decode > certificate.p12
 # Decode provisioning profile to file
-echo "$MY_PP_ADHOC" | base64 --decode > MagicalYatzy_AdHoc.mobileprovision
+echo "$MY_PP_ADHOC" | base64 --decode > 
+cat MagicalYatzy_AdHoc.mobileprovision
 # Import into keychain
 security import certificate.p12 -k build.keychain -P "$CERT_PASSWORD" -A 
 
