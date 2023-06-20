@@ -4,9 +4,9 @@
         <TargetFramework>net7.0-android</TargetFramework>
         <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
         <Nullable>enable</Nullable>
-        <ApplicationId>com.CompanyName.MagicalYatzyAUI</ApplicationId>
+        <ApplicationId>nl.sanetby.magicalyatzy</ApplicationId>
         <ApplicationVersion>1</ApplicationVersion>
-        <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+        <ApplicationDisplayVersion>0.1</ApplicationDisplayVersion>
         <AndroidPackageFormat>apk</AndroidPackageFormat>
         <AndroidEnableProfiledAot>False</AndroidEnableProfiledAot>
         <RootNamespace>Sanet.MagicalYatzy.Avalonia.Android</RootNamespace>
