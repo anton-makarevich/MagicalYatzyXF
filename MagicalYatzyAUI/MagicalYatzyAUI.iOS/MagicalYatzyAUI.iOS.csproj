@@ -19,6 +19,7 @@
       <MtouchLink>Full</MtouchLink>
       <CodesignKey>Apple Distribution: Anton Makarevich (Z8GJWJ4Q4E)</CodesignKey>
       <OutputPath>bin\Release/net7.0-ios/ios/</OutputPath>
+      <CodesignProvision>MagicalYatzy_AdHoc</CodesignProvision>
     </PropertyGroup>
 
     <ItemGroup>
