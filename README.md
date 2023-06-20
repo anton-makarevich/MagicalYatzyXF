@@ -26,6 +26,10 @@ Azure functions
 [Try it here in the browser](https://magicalyatzystoragedev.z6.web.core.windows.net/)
 
 ### Android
+[![Publish Android App](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-android.yml/badge.svg?branch=develop)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-android.yml)
+
+[Download APK](https://install.appcenter.ms/users/anton.makarevich/apps/magical-yatzy-android/distribution_groups/alpha)
+
 ### iOS
 ### Windows     
 [![Publish Windows App](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-windows.yml/badge.svg)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-windows.yml)
