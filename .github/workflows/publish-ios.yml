@@ -30,8 +30,37 @@ jobs:
           MY_PP_ADHOC: ${{ secrets.MY_PP_ADHOC }}
           CERT_PASSWORD: ${{ secrets.CERT_PASSWORD }}
           APPLE_ID: ${{ secrets.APPLE_ID }}
-        run:
-          sh MagicalYatzyAUI/MagicalYatzyAUI.iOS/.ci-scripts/prepare_ci_cert.sh
+        run: |
+          echo "--CREATING KEYCHAIN--"
+          # Create a new keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+          # Set it as the default keychain
+          security default-keychain -s build.keychain
+          # Modify keychain settings to keep it unlocked longer
+          security set-keychain-settings -lut 21600 build.keychain
+          # Unlock the keychain so it can be used without an authorisation prompt
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+
+          echo "--DECODE CERT--"
+          # Decode certificate to file
+          echo "$APPLE_DISTRIBUTION_CERT" | base64 --decode > certificate.p12
+          
+          echo "--DECODE PP--"       
+          # Decode provisioning profile to file
+          echo "$MY_PP_ADHOC" | base64 --decode >
+          ls
+          cat MagicalYatzy_AdHoc.mobileprovision
+          echo "--IMPORT CERT--"
+          # Import into keychain
+          security import certificate.p12 -k build.keychain -P "$CERT_PASSWORD" -A
+          
+          # Allow codesign to access keychain
+          security set-key-partition-list -S apple-tool:,apple:,codesign:,pkgbuild:,productsign:, -s -k "$KEYCHAIN_PASSWORD" build.keychain
+          security list-keychain -d user -s build.keychain
+          
+          # apply provisioning profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp MagicalYatzy_AdHoc.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles
       
       - name: Build and publish
         run: |
