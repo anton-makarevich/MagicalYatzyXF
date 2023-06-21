@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
+             xmlns:cells="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.Cells"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.MainMenuView"
              x:DataType="viewModels:MainMenuViewModel"
@@ -12,5 +13,20 @@
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
     <viewModels:MainMenuViewModel />
   </Design.DataContext>
-    <Grid/>
+    <Grid RowDefinitions="70,1*,17*,2*" ColumnDefinitions="1*,10*,1*">
+        <ListBox
+            x:Name="MainMenuList"
+            ItemsSource="{Binding MenuActions}"
+            Grid.Row="2"
+            Grid.Column="1"
+            SelectedItem="MainMenuItemSelected"
+            VerticalAlignment = "Top"
+            Background = "Transparent" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <cells:MainMenuCell />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
 </UserControl>
