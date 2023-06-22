@@ -1,6 +1,6 @@
 # Magical Yatzy #
 
-Remake of old WindowsPhone/UWP game. Was supposed to be done with Xamarin.Forms, but never happened and it was abandoned.
+Remake of old [WindowsPhone/UWP game](https://github.com/anton-makarevich/MagicalYatzyLegacy). It was supposed to be done with Xamarin.Forms, but never happened and was abandoned.
 
 Now, I use it as a playground for anything I would like to try with AvaloniaUI.
 
