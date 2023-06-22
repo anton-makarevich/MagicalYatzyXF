@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" >
+    
+    <Color x:Key = "SanetBlueColor">#009CD6</Color>
+            
+    <x:Int16 x:Key = "ToolButtonSize">32</x:Int16>
+    <x:Int16 x:Key = "ProfilePicSize">50</x:Int16>
+            
+    <GridLength x:Key = "ToolBarHeight">50</GridLength>
+    <GridLength x:Key = "ToolButtonGridSize">32</GridLength>
+</ResourceDictionary>

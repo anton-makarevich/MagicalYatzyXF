@@ -3,54 +3,19 @@
              xmlns:converter="clr-namespace:Sanet.MagicalYatzy.Avalonia.Converter"
              x:Class="Sanet.MagicalYatzy.Avalonia.App"
              RequestedThemeVariant="Dark">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.Styles>
         <FluentTheme />
+        
+        <StyleInclude Source="Styles/AppStyles.axaml"/>
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>
             <converter:ImageNameConverter x:Key="ImageNameConverter"/>
-            <converter:StringUppercasedConverter x:Key="StringUppercasedConverter"/>
-
-            <Color x:Key = "SanetBlueColor">#009CD6</Color>
-            
-            <x:Int16 x:Key = "ToolButtonSize">32</x:Int16>
-            <x:Int16 x:Key = "ProfilePicSize">50</x:Int16>
-            
-            <GridLength x:Key = "ToolBarHeight">50</GridLength>
-            <GridLength x:Key = "ToolButtonGridSize">32</GridLength>
-
-            <Style x:Key="CaptionLabelStyle" Selector="Label.caption">
-                <Setter Property="Foreground" Value="{StaticResource SanetBlueColor}" />
-                <Setter Property="FontSize" Value="20"/>
-            </Style>
-            <Style x:Key="DescriptionLabelStyle" Selector="Label.description">
-                <Setter Property="Foreground" Value="{StaticResource SanetBlueColor}" />
-                <Setter Property="FontSize" Value="11"/>
-                <Setter Property="VerticalAlignment" Value="Top"/>
-                <Setter Property="VerticalContentAlignment" Value="Top"/>
-            </Style>
-
-            <Style x:Key="DefaultTextBoxStyle" Selector="TextBox">
-                <Setter Property="Background" Value="{StaticResource SanetBlueColor}"/>
-                <Setter Property="Foreground" Value="White" />
-            </Style>
-            <Style x:Key="DefaultButtonStyle" Selector="Button">
-                <Setter Property="Background" Value="{StaticResource SanetBlueColor}"/>
-                <Setter Property="Foreground" Value="White" />
-            </Style>
-            <Style x:Key="ToolButtonImageStyle" Selector="Image">
-                <Setter Property="Height" Value="{StaticResource ToolButtonSize}"/>
-                <Setter Property="Width" Value="{StaticResource ToolButtonSize}"/>
-            </Style>
-                    
-            <Style x:Key="ProfileImageStyle" Selector="Image">
-                <Setter Property="Height" Value="{StaticResource ProfilePicSize}"/>
-                <Setter Property="Width" Value="{StaticResource ProfilePicSize}"/>
-                <Setter Property="HorizontalAlignment" Value="Center"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
-            </Style>
+            <converter:StringUppercasedConverter x:Key="StringUppercasedConverter"/>    
+            <ResourceDictionary.MergedDictionaries>
+            <ResourceInclude Source="Resources/AppResources.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
