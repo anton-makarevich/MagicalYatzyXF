@@ -21,25 +21,25 @@
             <GridLength x:Key = "ToolBarHeight">50</GridLength>
             <GridLength x:Key = "ToolButtonGridSize">32</GridLength>
 
-            <Style x:Key="CaptionLabelStyle" Selector="Label">
+            <Style x:Key="CaptionLabelStyle" Selector="Label.caption">
                 <Setter Property="Foreground" Value="{StaticResource SanetBlueColor}" />
                 <Setter Property="FontSize" Value="20"/>
             </Style>
-            <Style x:Key="DescriptionLabelStyle" Selector="Label">
+            <Style x:Key="DescriptionLabelStyle" Selector="Label.description">
                 <Setter Property="Foreground" Value="{StaticResource SanetBlueColor}" />
                 <Setter Property="FontSize" Value="11"/>
                 <Setter Property="VerticalAlignment" Value="Top"/>
                 <Setter Property="VerticalContentAlignment" Value="Top"/>
             </Style>
 
-            <!-- <Style Selector="TextBox"> -->
-            <!--     <Setter Property="Background" Value="{StaticResource SanetBlueColor}"/> -->
-            <!--     <Setter Property="Foreground" Value="White" /> -->
-            <!-- </Style> -->
-            <!-- <Style Selector="Button"> -->
-            <!--     <Setter Property="Background" Value="{StaticResource SanetBlueColor}"/> -->
-            <!--     <Setter Property="Foreground" Value="White" /> -->
-            <!-- </Style> -->
+            <Style x:Key="DefaultTextBoxStyle" Selector="TextBox">
+                <Setter Property="Background" Value="{StaticResource SanetBlueColor}"/>
+                <Setter Property="Foreground" Value="White" />
+            </Style>
+            <Style x:Key="DefaultButtonStyle" Selector="Button">
+                <Setter Property="Background" Value="{StaticResource SanetBlueColor}"/>
+                <Setter Property="Foreground" Value="White" />
+            </Style>
             <Style x:Key="ToolButtonImageStyle" Selector="Image">
                 <Setter Property="Height" Value="{StaticResource ToolButtonSize}"/>
                 <Setter Property="Width" Value="{StaticResource ToolButtonSize}"/>

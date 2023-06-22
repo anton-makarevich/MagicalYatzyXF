@@ -2,6 +2,7 @@
 using System.IO;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 
 namespace Sanet.MagicalYatzy.Avalonia.Converter;
 
@@ -13,12 +14,12 @@ public class ImageNameConverter : IValueConverter
         System.Globalization.CultureInfo culture)
     {
         if (value is not string assetPath) return null;
-        var assetsDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets");
+        const string assetsDirectory = "avares://MagicalYatzyAUI/Assets/"; 
         var imagePath = Path.Combine(assetsDirectory, assetPath);
 
-        return File.Exists(imagePath) 
-            ? new Bitmap(imagePath) 
-            : null;
+        var asset = AssetLoader.Open(new Uri(imagePath));
+        
+        return new Bitmap(asset);
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter,
