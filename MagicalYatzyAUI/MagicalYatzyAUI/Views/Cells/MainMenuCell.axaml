@@ -10,17 +10,11 @@
 
         <Image Source="{Binding Image, Converter={StaticResource ImageNameConverter}}"
                Grid.RowSpan="2"/>
-        <Label Content="{Binding Label, 
-               Converter = {StaticResource StringUppercasedConverter}}"
-               Grid.Row="0" Grid.Column="1" >
-               <!-- <Label.Styles> -->
-               <!--        <StaticResource ResourceKey="CaptionLabelStyle" /> -->
-               <!-- </Label.Styles> -->
-        </Label>
-        <Label Content="{Binding Description}" Grid.Column="1" Grid.Row="1">
-               <!-- <Label.Styles> -->
-               <!--        <StaticResource ResourceKey="DescriptionLabelStyle" /> -->
-               <!-- </Label.Styles> -->
-        </Label>
+        <Label Content="{Binding Label, Converter = {StaticResource StringUppercasedConverter}}"
+               Classes="caption"
+               Grid.Row="0" Grid.Column="1" />
+        <Label Content="{Binding Description}"
+               Classes="description"
+               Grid.Column="1" Grid.Row="1"/>
     </Grid>
 </UserControl>
