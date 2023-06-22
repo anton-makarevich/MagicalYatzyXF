@@ -19,7 +19,6 @@
             ItemsSource="{Binding MenuActions}"
             Grid.Row="2"
             Grid.Column="1"
-            SelectedItem="MainMenuItemSelected"
             VerticalAlignment = "Top"
             Background = "Transparent" >
             <ListBox.ItemTemplate>
@@ -27,6 +26,11 @@
                     <cells:MainMenuCell />
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+                    <Setter Property="Background" Value="{StaticResource MenuSelectionColor}"/>
+                </Style>
+            </ListBox.Styles>
         </ListBox>
     </Grid>
 </UserControl>
