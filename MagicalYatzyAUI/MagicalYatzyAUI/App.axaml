@@ -13,6 +13,7 @@
         <ResourceDictionary>
             <converter:ImageNameConverter x:Key="ImageNameConverter"/>
             <converter:StringUppercasedConverter x:Key="StringUppercasedConverter"/>    
+            <converter:AdaptiveOrientationConverter x:Key="AdaptiveOrientationConverter"/>    
             <ResourceDictionary.MergedDictionaries>
             <ResourceInclude Source="Resources/AppResources.axaml"/>
             </ResourceDictionary.MergedDictionaries>
