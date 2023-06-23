@@ -176,8 +176,16 @@ namespace Sanet.MagicalYatzy.Models.Game
             if (width > 0 && height > 0)
             {
                 var mw = width - Width;
+                if (mw < 1)
+                {
+                    mw = 1;
+                }
                 PosX = ValueGenerator.Next(1, mw);
                 mw = height - Height;
+                if (mw < 1)
+                {
+                    mw = 1;
+                }
                 PosY = ValueGenerator.Next(1, mw);
             }
             else

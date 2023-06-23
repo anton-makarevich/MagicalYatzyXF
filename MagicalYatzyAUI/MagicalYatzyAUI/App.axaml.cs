@@ -6,6 +6,7 @@ using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using Sanet.MagicalYatzy.Avalonia.DependencyInjection;
 using Sanet.MagicalYatzy.Avalonia.Views;
+using Sanet.MagicalYatzy.Avalonia.Views.Lobby;
 using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MVVM.Core.Services;
 using Sanet.MVVM.Navigation.Avalonia.Services;
@@ -54,6 +55,7 @@ public partial class App : Application
             case ISingleViewApplicationLifetime singleViewPlatform:
                 var mainViewWrapper = new ContentControl();
                 navigationService = new SingleViewNavigationService(singleViewPlatform, mainViewWrapper, serviceProvider);
+                RegisterViews(navigationService);
                 viewModel = navigationService.GetViewModel<MainMenuViewModel>(); 
                 mainViewWrapper.Content = new MainMenuView
                 {
@@ -68,5 +70,6 @@ public partial class App : Application
     private void RegisterViews(INavigationService navigationService)
     {
         navigationService.RegisterViews(typeof(MainMenuView), typeof(MainMenuViewModel));
+        navigationService.RegisterViews(typeof(LobbyViewWide), typeof(LobbyViewModel));
     }
 }
