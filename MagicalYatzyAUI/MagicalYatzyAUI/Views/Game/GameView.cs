@@ -2,7 +2,6 @@ using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MVVM.Views.Avalonia;
 using Sanet.MagicalYatzy.Avalonia.Controls.Game;
 
-
 namespace Sanet.MagicalYatzy.Avalonia.Views.Game;
 
 public abstract class GameView: BaseView<GameViewModel>
