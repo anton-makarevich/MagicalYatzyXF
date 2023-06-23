@@ -3,6 +3,7 @@ using Sanet.MagicalYatzy.Avalonia.Services.Navigation;
 using Sanet.MagicalYatzy.Dto.ApiConfigs;
 using Sanet.MagicalYatzy.Dto.Services;
 using Sanet.MagicalYatzy.Models.Game;
+using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Api;
 using Sanet.MagicalYatzy.Services.Game;
@@ -24,10 +25,14 @@ public static class CoreServices
         services.AddSingleton<IGameService, GameService>();
         services.AddSingleton<IWebService, WebService>();
         services.AddSingleton<IApiConfig, AzureDevConfig>();
+        services.AddSingleton<IRulesService, RulesService>();
+        services.AddSingleton<IDiceGenerator, RandomDiceGenerator>();
+        services.AddSingleton<ILocalizationService, LocalizationService>();
         services.AddSingleton<IStorageService, LocalJsonStorageService>();
     }
     public static void RegisterViewModels(this IServiceCollection services)
     {
         services.AddTransient<MainMenuViewModel, MainMenuViewModel>();
+        services.AddTransient<LobbyViewModel, LobbyViewModel>();
     }
 }
