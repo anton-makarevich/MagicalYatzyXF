@@ -3,7 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
-             xmlns:cells="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.Cells"
              xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.MainMenuView"
@@ -32,11 +31,6 @@
                     />
                 </DataTemplate>
             </ListBox.ItemTemplate>
-            <ListBox.Styles>
-                <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
-                    <Setter Property="Background" Value="{StaticResource MenuSelectionColor}"/>
-                </Style>
-            </ListBox.Styles>
         </ListBox>
     </Grid>
 </UserControl>

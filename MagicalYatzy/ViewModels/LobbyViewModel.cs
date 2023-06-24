@@ -65,8 +65,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             if (!CanAddHuman)
                 return;
             var player = await NavigationService.ShowViewModelForResultAsync<LoginViewModel,IPlayer>();
-            if (player != null)
-                AddPlayer(new PlayerViewModel(player, _localizationService));
+            AddPlayer(new PlayerViewModel(player, _localizationService));
         });
 
         public bool CanAddHuman

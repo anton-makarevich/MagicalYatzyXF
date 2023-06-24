@@ -1,4 +1,5 @@
-﻿using Sanet.MagicalYatzy.Extensions;
+﻿using System;
+using Sanet.MagicalYatzy.Extensions;
 using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Resources;
 using System.Globalization;
@@ -36,7 +37,7 @@ namespace Sanet.MagicalYatzy.Services
 
         public void SetSystemCulture(LanguageCode language)
         {
-            SystemCulture = language.ToCaltureInfo();
+            SystemCulture = language.ToCultureInfo();
             Language = language;
         }
 
@@ -47,6 +48,7 @@ namespace Sanet.MagicalYatzy.Services
 
         public string GetLocalizedString(string key)
         {
+            Console.WriteLine($"---Getting string {key} for {SystemCulture.Name}");
             if (string.IsNullOrEmpty(key))
                 return KeyIsNull;
 
