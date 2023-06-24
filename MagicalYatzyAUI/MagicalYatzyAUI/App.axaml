@@ -8,10 +8,12 @@
         <FluentTheme />
         
         <StyleInclude Source="Styles/AppStyles.axaml"/>
+        <StyleInclude Source="Views/TemplatedControls/MainMenuItem.axaml"/>
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>
             <converter:ImageNameConverter x:Key="ImageNameConverter"/>
+            <converter:PanelWidthConverter x:Key="PanelWidthConverter"/>
             <converter:StringUppercasedConverter x:Key="StringUppercasedConverter"/>    
             <converter:AdaptiveOrientationConverter x:Key="AdaptiveOrientationConverter"/>    
             <ResourceDictionary.MergedDictionaries>

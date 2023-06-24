@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
              xmlns:cells="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.Cells"
+             xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.MainMenuView"
              x:DataType="viewModels:MainMenuViewModel"
@@ -24,7 +25,11 @@
             Background = "Transparent" >
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <cells:MainMenuCell />
+                    <templatedControls:MainMenuItem
+                        Caption="{Binding Label}"
+                        Description="{Binding Description}"
+                        ImageSource="{Binding Image}"
+                    />
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <ListBox.Styles>

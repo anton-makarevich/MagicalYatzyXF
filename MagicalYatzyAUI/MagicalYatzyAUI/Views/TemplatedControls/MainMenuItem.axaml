@@ -1,0 +1,32 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls">
+    <Design.PreviewWith>
+        <controls:MainMenuItem />
+        <controls:MainMenuItem />
+    </Design.PreviewWith>
+
+    <Style Selector="controls|MainMenuItem">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid Background="Transparent" 
+                      ColumnDefinitions="70,*" 
+                      RowDefinitions="*,*">
+
+                    <Image Source="{TemplateBinding ImageSource, Converter={StaticResource ImageNameConverter}}"
+                           Margin="0,0,10,0"
+                           Grid.RowSpan="2"/>
+                    <Label Content="{TemplateBinding Caption, Converter = {StaticResource StringUppercasedConverter}}"
+                           Classes="caption"
+                           Grid.Row="0" Grid.Column="1" />
+                    <TextBlock Text="{TemplateBinding Description}"
+                               Margin="5,0,0,0"
+                               Classes="description"
+                               TextWrapping="Wrap"
+                               Grid.Column="1" Grid.Row="1"/>
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

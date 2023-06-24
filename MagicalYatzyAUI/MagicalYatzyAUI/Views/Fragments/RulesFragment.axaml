@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:cells="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.Cells"
              xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
+             xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="viewModels:LobbyViewModel"
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.Fragments.RulesFragment">
@@ -13,7 +14,10 @@
         Background = "Transparent">
         <ListBox.ItemTemplate>
             <DataTemplate>
-                <cells:RuleCell />
+                <templatedControls:MainMenuItem
+                    Caption="{Binding Name}"
+                    Description="{Binding ShortDescription}"
+                />
             </DataTemplate>
         </ListBox.ItemTemplate>
     </ListBox>
