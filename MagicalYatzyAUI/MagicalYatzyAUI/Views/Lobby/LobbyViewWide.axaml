@@ -20,11 +20,11 @@
                     Converter={StaticResource AdaptiveOrientationConverter}}">
             <StackPanel Orientation="Vertical">
                 <Label Classes="caption" Content="{Binding PlayersTitle}"/>
-                <fragments:PlayersFragment/>
+                <fragments:PlayersFragment Width="600"/>
             </StackPanel>
             <StackPanel Orientation="Vertical">
                 <Label Classes="caption" Content="{Binding RulesTitle}"/>
-                <!-- <fragments:RulesFragment/> -->
+                <fragments:RulesFragment Width="600"/>
             </StackPanel>
         </StackPanel>
         <!-- <controls:ToolBarButton Grid.Row="2" -->
