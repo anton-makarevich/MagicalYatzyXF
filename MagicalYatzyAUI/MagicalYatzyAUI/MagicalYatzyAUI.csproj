@@ -28,4 +28,9 @@
     <ItemGroup>
       <ProjectReference Include="..\..\MagicalYatzy\MagicalYatzy.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <UpToDateCheckInput Remove="Views\Cells\PlayerCell.axaml" />
+      <UpToDateCheckInput Remove="Views\Cells\RuleCell.axaml" />
+    </ItemGroup>
 </Project>

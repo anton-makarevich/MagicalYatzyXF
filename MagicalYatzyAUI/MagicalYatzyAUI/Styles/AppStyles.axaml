@@ -9,13 +9,12 @@
     </Styles.Resources>
     <Style Selector="Label.caption">
         <Setter Property="Foreground" Value="{StaticResource SanetBlueColor}" />
-        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontSize" Value="22"/>
     </Style>
-    <Style Selector="Label.description">
+    <Style Selector="TextBlock.description">
         <Setter Property="Foreground" Value="{StaticResource SanetBlueColor}" />
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
 
     <Style Selector="TextBox">

@@ -14,19 +14,27 @@
     <viewModels:LobbyViewModel />
   </Design.DataContext>
     <Grid Margin="10,0,0,5" RowDefinitions="60,*,Auto">
-        <StackPanel Grid.Row="1"
-                    Orientation="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}, 
-                    Path=Bounds.Size, 
-                    Converter={StaticResource AdaptiveOrientationConverter}}">
-            <StackPanel Orientation="Vertical">
-                <Label Classes="caption" Content="{Binding PlayersTitle}"/>
-                <fragments:PlayersFragment Width="600"/>
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <StackPanel Orientation="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}, 
+                        Path=Bounds.Size, 
+                        Converter={StaticResource AdaptiveOrientationConverter}}">
+                <StackPanel Orientation="Vertical" 
+                            Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=StackPanel},
+                            Path=Bounds.Size,
+                            Converter={StaticResource PanelWidthConverter}}">
+                    <Label Classes="caption" Content="{Binding PlayersTitle}"/>
+                    <fragments:PlayersFragment/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical"
+                            Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=StackPanel},
+                            Path=Bounds.Size,
+                            Converter={StaticResource PanelWidthConverter}}">
+                    <Label Classes="caption" Content="{Binding RulesTitle}"/>
+                    <fragments:RulesFragment/>
+                </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Vertical">
-                <Label Classes="caption" Content="{Binding RulesTitle}"/>
-                <fragments:RulesFragment Width="600"/>
-            </StackPanel>
-        </StackPanel>
+        </ScrollViewer>
+        
         <!-- <controls:ToolBarButton Grid.Row="2" -->
         <!--                         IsVisible="{Binding CanStartGame}" -->
         <!--                         HorizontalAlignment="Center" -->
