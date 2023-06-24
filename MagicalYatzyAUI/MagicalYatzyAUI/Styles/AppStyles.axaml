@@ -30,11 +30,4 @@
         <Setter Property="Height" Value="{StaticResource ToolButtonSize}"/>
         <Setter Property="Width" Value="{StaticResource ToolButtonSize}"/>
     </Style>
-                    
-    <Style Selector="Image.profilepic">
-        <Setter Property="Height" Value="{StaticResource ProfilePicSize}"/>
-        <Setter Property="Width" Value="{StaticResource ProfilePicSize}"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-    </Style>
 </Styles>

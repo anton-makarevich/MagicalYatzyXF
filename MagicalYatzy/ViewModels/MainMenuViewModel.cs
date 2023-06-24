@@ -64,7 +64,7 @@ public class MainMenuViewModel : DicePanelViewModel
             new MainMenuAction
             {
                 Label = Strings.NewLocalGameAction,
-                MenuAction = new SimpleCommand(() => { NavigationService.NavigateToViewModelAsync<LobbyViewModel>(); }),
+                MenuAction = new SimpleCommand(async () => { await NavigationService.NavigateToViewModelAsync<LobbyViewModel>(); }),
                 Description = Strings.NewLocalGameDescription,
                 Image = "SanetDice.png",
             },
