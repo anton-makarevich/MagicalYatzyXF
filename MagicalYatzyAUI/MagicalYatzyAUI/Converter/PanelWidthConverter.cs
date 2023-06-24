@@ -10,16 +10,15 @@ namespace Sanet.MagicalYatzy.Avalonia.Converter;
 
 public class PanelWidthConverter : IValueConverter
 {
+    private const double DefaultPanelWidth = 600;
     public object? Convert(
         object? value, Type targetType, 
         object? parameter,
         System.Globalization.CultureInfo culture)
     {
-        if (value is not Size size)
-        {
-            return 600;
-        }
-        return Math.Min(size.Width, 600);
+        return value is not Size size 
+            ? DefaultPanelWidth 
+            : Math.Min(size.Width, DefaultPanelWidth);
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter,
