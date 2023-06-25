@@ -3,9 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Sanet.MagicalYatzy.Models;
-using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Api;
 using Sanet.MagicalYatzy.Services.Game;
+using Sanet.MagicalYatzy.Services.Localization;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 using Sanet.MVVM.Core.ViewModels;
 

@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Resources;
-using Sanet.MagicalYatzy.Services;
+using Sanet.MagicalYatzy.Services.Localization;
 using Xunit;
 
 namespace MagicalYatzyTests.Services

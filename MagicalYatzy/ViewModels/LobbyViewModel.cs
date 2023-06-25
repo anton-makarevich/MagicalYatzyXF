@@ -6,8 +6,8 @@ using AsyncAwaitBestPractices.MVVM;
 using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.ViewModels.Base;
-using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Game;
+using Sanet.MagicalYatzy.Services.Localization;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 
 namespace Sanet.MagicalYatzy.ViewModels

@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Resources;
-using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Services.Navigation;
 using Sanet.MagicalYatzy.ViewModels;

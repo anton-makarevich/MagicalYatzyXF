@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.Linq;
 using Sanet.MagicalYatzy.Models;
 
 namespace Sanet.MagicalYatzy.Extensions

@@ -1,4 +1,3 @@
-using System;
 using Sanet.MagicalYatzy.Models.Game.Extensions;
 
 namespace Sanet.MagicalYatzy.Models.Game

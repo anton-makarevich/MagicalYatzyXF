@@ -1,7 +1,7 @@
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Resources;
-using Sanet.MagicalYatzy.Services;
+using Sanet.MagicalYatzy.Services.Localization;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 using Xunit;
 
