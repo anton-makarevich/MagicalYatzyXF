@@ -5,7 +5,6 @@ using System.Windows.Input;
 using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.ViewModels.Base;
-using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
@@ -35,15 +34,15 @@ namespace Sanet.MagicalYatzy.ViewModels
             _localizationService = localizationService;
         }
 
-        public string PlayersTitle => Strings.PlayersLabel.ToUpper();
+        public string PlayersTitle => _localizationService.GetLocalizedString("PlayersLabel").ToUpper();
 
-        public string RulesTitle => Strings.RulesLabel.ToUpper();
+        public string RulesTitle => _localizationService.GetLocalizedString("RulesLabel").ToUpper();
         
-        public string StartTitle => Strings.StartGameButton;
+        public string StartTitle => _localizationService.GetLocalizedString("StartGameButton");
 
-        public string AddBotLabel => Strings.AddBotLabel;
+        public string AddBotLabel => _localizationService.GetLocalizedString("AddBotLabel");
         
-        public string AddPlayerLabel => Strings.AddPlayerLabel;
+        public string AddPlayerLabel => _localizationService.GetLocalizedString("AddPlayerLabel");
         
         public string AddBotImage => "AddBot.png";
         
@@ -162,14 +161,17 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         private void SelectRule(Rules rule)
         {
+            var ruleToSelect = Rules.FirstOrDefault(r => r.Rule == rule);
+            if (ruleToSelect == null || ruleToSelect.IsSelected)
+            {
+                return;
+            }
             foreach (var ruleViewModel in Rules)
             {
                 ruleViewModel.IsSelected = false;
             }
 
-            var ruleToSelect = Rules.FirstOrDefault(r => r.Rule == rule);
-            if (ruleToSelect != null)
-                ruleToSelect.IsSelected = true;
+            ruleToSelect.IsSelected = true;
             NotifyPropertyChanged(nameof(SelectedRule));
             NotifyPropertyChanged(nameof(CanStartGame));
         }
