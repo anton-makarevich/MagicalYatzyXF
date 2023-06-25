@@ -26,6 +26,13 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
         }
 
         public string Name => _player.Name;
+        
+        public string TypeName => _player.Type switch
+        {
+            PlayerType.Local or PlayerType.Network => _localizationService.GetLocalizedString("PlayerNameDefault"),
+            PlayerType.AI => _localizationService.GetLocalizedString("BotNameDefault"),
+            _ => throw new ArgumentOutOfRangeException()
+        };
 
         public string Image => _player.ProfileImage;
         public string DeleteImage => "close.png";

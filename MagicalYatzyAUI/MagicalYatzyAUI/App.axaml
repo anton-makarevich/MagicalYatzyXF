@@ -9,6 +9,7 @@
         
         <StyleInclude Source="Styles/AppStyles.axaml"/>
         <StyleInclude Source="Views/TemplatedControls/MainMenuItem.axaml"/>
+        <StyleInclude Source="Views/TemplatedControls/ActionButton.axaml"/>
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>

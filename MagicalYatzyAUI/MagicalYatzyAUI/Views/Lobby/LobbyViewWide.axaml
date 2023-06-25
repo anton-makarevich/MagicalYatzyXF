@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
              xmlns:fragments="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.Fragments"
+             xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.Lobby.LobbyViewWide"
              x:DataType="viewModels:LobbyViewModel"
@@ -35,11 +36,11 @@
             </StackPanel>
         </ScrollViewer>
         
-        <!-- <controls:ToolBarButton Grid.Row="2" -->
-        <!--                         IsVisible="{Binding CanStartGame}" -->
-        <!--                         HorizontalAlignment="Center" -->
-        <!--                         Command="{Binding StartGameCommand}" -->
-        <!--                         ImageSource="{Binding StartImage, Converter={StaticResource ImageNameConverter}}" -->
-        <!--                         Content="{ StartGameButton}"/> -->
+        <templatedControls:ActionButton  Grid.Row="2" 
+            IsVisible="{Binding CanStartGame}"
+            HorizontalAlignment="Center"
+            Command="{Binding StartGameCommand}"
+            ImageSource="{Binding StartImage}"
+            Content="{Binding StartTitle}"/>
     </Grid>
 </UserControl>

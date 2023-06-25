@@ -29,4 +29,8 @@
         <Setter Property="Height" Value="{StaticResource ToolButtonSize}"/>
         <Setter Property="Width" Value="{StaticResource ToolButtonSize}"/>
     </Style>
+    
+    <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource MenuSelectionColor}"/>
+    </Style>
 </Styles>

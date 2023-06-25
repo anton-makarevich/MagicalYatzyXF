@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Linq;
 using Sanet.MagicalYatzy.Models;
 
 namespace Sanet.MagicalYatzy.Extensions
@@ -7,27 +8,26 @@ namespace Sanet.MagicalYatzy.Extensions
     {
         public static LanguageCode ToLanguageCode(this CultureInfo cultureInfo)
         {
-            switch (cultureInfo.Name.ToLower())
+            return cultureInfo.Name.ToLower()[..2] switch
             {
-                case "ru-ru":
-                    return LanguageCode.RuRu;
-            }
-            return LanguageCode.Default;
+                "ru" => LanguageCode.RuRu,
+                "en" => LanguageCode.EnUs,
+                _ => LanguageCode.Default
+            };
         }
 
-        public static CultureInfo ToCaltureInfo(this LanguageCode code)
+        public static CultureInfo ToCultureInfo(this LanguageCode code)
         {
             return new CultureInfo(code.ToCultureString());
         }
 
         public static string ToCultureString(this LanguageCode code)
         {
-            switch (code)
+            return code switch
             {
-                case LanguageCode.RuRu:
-                    return "ru-RU";
-            }
-            return "en-US";
+                LanguageCode.RuRu => "ru-RU",
+                _ => "en-US"
+            };
         }
     }
 }

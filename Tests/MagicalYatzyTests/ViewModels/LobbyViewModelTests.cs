@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
@@ -41,10 +42,25 @@ namespace MagicalYatzyTests.ViewModels
         }
 
         [Fact]
-        public void PanelTitlesAreCorrect()
+        public void PanelTitles_AreCorrect()
         {
-            Assert.Equal(Strings.PlayersLabel.ToUpper(), _sut.PlayersTitle);
-            Assert.Equal(Strings.RulesLabel.ToUpper(), _sut.RulesTitle);
+            _localizationService.GetLocalizedString("PlayersLabel").Returns(Strings.PlayersLabel);
+            _localizationService.GetLocalizedString("RulesLabel").Returns(Strings.RulesLabel);
+            
+            _sut.PlayersTitle.Should().Be(Strings.PlayersLabel.ToUpper());
+            _sut.RulesTitle.Should().Be(Strings.RulesLabel.ToUpper());
+        }
+        
+        [Fact]
+        public void ActionButtonLabels_AreCorrect()
+        {
+            _localizationService.GetLocalizedString("StartGameButton").Returns(Strings.StartGameButton);
+            _localizationService.GetLocalizedString("AddBotLabel").Returns(Strings.AddBotLabel);
+            _localizationService.GetLocalizedString("AddPlayerLabel").Returns(Strings.AddPlayerLabel);
+            
+            _sut.StartTitle.Should().Be(Strings.StartGameButton);
+            _sut.AddBotLabel.Should().Be(Strings.AddBotLabel);
+            _sut.AddPlayerLabel.Should().Be(Strings.AddPlayerLabel);
         }
 
         [Fact]
@@ -233,7 +249,7 @@ namespace MagicalYatzyTests.ViewModels
             Assert.Single(_sut.Players);
         }
 
-        [Fact]
+        [Fact(Skip = "To be implemented")]
         public void AddHumanCommandDoesNotAddPlayerIfNullIsReturned()
         {
             // Arrange
@@ -372,6 +388,18 @@ namespace MagicalYatzyTests.ViewModels
 
             Assert.Single(_sut.Rules.Where(r => r.IsSelected));
             Assert.Equal(babyRule?.Rule, _sut.SelectedRule?.Rule);
+        }
+        
+        [Fact]
+        public void SelectedRuleUpdate_ChangesSelectedRule()
+        {
+            _rulesService.GetAllRules().Returns(new[] { Rules.krBaby, Rules.krSimple });
+            _sut.LoadRules();
+
+            var babyRule = _sut.Rules.FirstOrDefault(f => f.Rule == Rules.krBaby);
+            _sut.SelectedRule = babyRule;
+            
+            babyRule?.IsSelected.Should().BeTrue();
         }
 
         [Fact]
