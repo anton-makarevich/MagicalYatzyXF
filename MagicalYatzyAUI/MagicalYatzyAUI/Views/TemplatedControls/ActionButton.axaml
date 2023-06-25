@@ -1,0 +1,39 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls">
+    <Design.PreviewWith>
+        <controls:ActionButton />
+    </Design.PreviewWith>
+
+    <Style Selector="controls|ActionButton">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Button Background="Transparent"
+                        Command="{TemplateBinding Command}">
+                    <StackPanel Orientation="Vertical">
+                        <Border 
+                            BorderThickness="3"
+                            Height="50"
+                            Width="50"
+                            BorderBrush="{TemplateBinding Foreground}"
+                            Margin="5"
+                            Padding="7"
+                            CornerRadius="25">
+                            <Image
+                                UseLayoutRounding="True"
+                                Source="{TemplateBinding ImageSource, Converter={StaticResource ImageNameConverter}}"
+                            />
+                        </Border>
+                        
+                        <Label 
+                            Foreground="{TemplateBinding Foreground}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Content="{TemplateBinding Content}"/>
+                    </StackPanel>
+                </Button>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

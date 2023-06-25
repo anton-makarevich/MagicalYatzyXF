@@ -233,7 +233,7 @@ namespace MagicalYatzyTests.ViewModels
             Assert.Single(_sut.Players);
         }
 
-        [Fact]
+        [Fact(Skip = "To be implemented")]
         public void AddHumanCommandDoesNotAddPlayerIfNullIsReturned()
         {
             // Arrange

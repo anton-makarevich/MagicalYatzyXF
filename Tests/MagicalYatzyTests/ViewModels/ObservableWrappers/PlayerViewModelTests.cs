@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using FluentAssertions;
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
@@ -141,6 +142,20 @@ namespace MagicalYatzyTests.ViewModels.ObservableWrappers
             
             Assert.Equal(1,resultsUpdatedTimes);
             Assert.Equal(1, isMyTurnUpdatedTimes);
+        }
+        
+        [Theory]
+        [InlineData(PlayerType.AI, "Bot")]
+        [InlineData(PlayerType.Local, "Player")]
+        [InlineData(PlayerType.Network, "Player")]
+        public void TypeName_HasExpectedValue(PlayerType type, string expectedTypeName)
+        {
+            _localizationService.GetLocalizedString("PlayerNameDefault").Returns("Player");
+            _localizationService.GetLocalizedString("BotNameDefault").Returns("Bot");
+            
+            var player = new Player(type, new[] { "Player 1" });
+            var sut = new PlayerViewModel(player, _localizationService);
+            sut.TypeName.Should().Be(expectedTypeName);
         }
     }
 }

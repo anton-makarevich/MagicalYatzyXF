@@ -2,18 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:cells="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.Cells"
              xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
              xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="viewModels:LobbyViewModel"
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.Fragments.PlayersFragment">
-    <Grid 
-       Margin="5,10">
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="{StaticResource ToolBarHeight}"/>
-        </Grid.RowDefinitions>
+    <Grid VerticalAlignment="Stretch"
+       Margin="5,10" RowDefinitions="*,Auto">
         <ItemsControl
             x:Name="PlayersList"
             ItemsSource="{Binding Players}"
@@ -22,7 +17,7 @@
                 <DataTemplate>
                     <templatedControls:MainMenuItem
                         Caption="{Binding Name}"
-                        Description="human"
+                        Description="{Binding TypeName}"
                         ImageSource="{Binding Image}"
                     />
                 </DataTemplate>
@@ -37,16 +32,16 @@
             Grid.Row="1"
             Orientation="Horizontal"
             HorizontalAlignment="Right">
-            <!-- <controls:ToolBarButton -->
-            <!--     IsVisible="{Binding CanAddHuman}" -->
-            <!--     Command="{Binding AddHumanCommand}" -->
-            <!--     ImageSource="{Binding AddPlayerImage, Converter={StaticResource ImageNameConverter}}"  -->
-            <!--     Text="{loc:Strings AddPlayerLabel}"/> -->
-            <!-- <controls:ToolBarButton -->
-            <!--     IsVisible="{Binding CanAddBot}" -->
-            <!--     Command="{Binding AddBotCommand}" -->
-            <!--     ImageSource="{Binding AddBotImage, Converter={StaticResource ImageNameConverter}}"  -->
-            <!--     Text="{loc:Strings AddBotLabel}"/> -->
+            <templatedControls:ActionButton 
+                IsVisible="{Binding CanAddHuman}"
+                Content="{Binding AddPlayerLabel}"
+                Command="{Binding AddHumanCommand}"
+                ImageSource="{Binding AddPlayerImage}"/>
+            <templatedControls:ActionButton 
+                IsVisible="{Binding CanAddBot}"
+                Content="{Binding AddBotLabel}"
+                Command="{Binding AddBotCommand}"
+                ImageSource="{Binding AddBotImage}"/>
         </StackPanel>
     </Grid>
 </UserControl>

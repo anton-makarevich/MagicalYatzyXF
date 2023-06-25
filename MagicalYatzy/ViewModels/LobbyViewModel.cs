@@ -39,6 +39,12 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         public string RulesTitle => Strings.RulesLabel.ToUpper();
         
+        public string StartTitle => Strings.StartGameButton;
+
+        public string AddBotLabel => Strings.AddBotLabel;
+        
+        public string AddPlayerLabel => Strings.AddPlayerLabel;
+        
         public string AddBotImage => "AddBot.png";
         
         public string AddPlayerImage => "AddPlayer.png";
@@ -64,7 +70,8 @@ namespace Sanet.MagicalYatzy.ViewModels
         {
             if (!CanAddHuman)
                 return;
-            var player = await NavigationService.ShowViewModelForResultAsync<LoginViewModel,IPlayer>();
+            var player = new Player(PlayerType.Local, Players.Select(p=>p.Name).ToList());
+            // var player = await NavigationService.ShowViewModelForResultAsync<LoginViewModel,IPlayer>();
             AddPlayer(new PlayerViewModel(player, _localizationService));
         });
 
