@@ -82,7 +82,6 @@ namespace Sanet.MagicalYatzy.ViewModels
         }
 
         public ObservableCollection<RuleViewModel> Rules { get; } = new ObservableCollection<RuleViewModel>();
-        public RuleViewModel SelectedRule => Rules.FirstOrDefault(r => r.IsSelected);
 
         private void AddDefaultPlayer()
         {
@@ -171,7 +170,14 @@ namespace Sanet.MagicalYatzy.ViewModels
             var ruleToSelect = Rules.FirstOrDefault(r => r.Rule == rule);
             if (ruleToSelect != null)
                 ruleToSelect.IsSelected = true;
+            NotifyPropertyChanged(nameof(SelectedRule));
             NotifyPropertyChanged(nameof(CanStartGame));
+        }
+
+        public RuleViewModel SelectedRule
+        {
+            get => Rules.FirstOrDefault(r => r.IsSelected);
+            set => SelectRule(value.Rule);
         }
 
         public ICommand StartGameCommand => new SimpleCommand(async () =>

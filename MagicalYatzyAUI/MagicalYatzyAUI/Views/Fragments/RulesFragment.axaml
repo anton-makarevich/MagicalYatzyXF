@@ -2,7 +2,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:cells="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.Cells"
              xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
              xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -11,6 +10,7 @@
     <ListBox
         x:Name="RulesList"
         ItemsSource="{Binding Rules}"
+        SelectedItem="{Binding SelectedRule}"
         Background = "Transparent">
         <ListBox.ItemTemplate>
             <DataTemplate>
