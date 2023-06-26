@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using AsyncAwaitBestPractices.MVVM;
 using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.ViewModels.Base;
@@ -65,7 +66,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             private set => SetProperty(ref _canAddBot, value);
         }
 
-        public ICommand AddHumanCommand => new SimpleCommand(async () =>
+        public ICommand AddHumanCommand => new SimpleCommand( () =>
         {
             if (!CanAddHuman)
                 return;
@@ -144,7 +145,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         {
             if (Rules.Any())
                 return;
-            var rules = _rulesService.GetAllRules().Select(r=>new RuleViewModel(r, _rulesService, _localizationService));
+            var rules = _rulesService.GetAllRules().Select(r=>new RuleViewModel(r, _localizationService));
             foreach (var rule in rules)
             {
                 rule.RuleSelected += OnRuleSelected;
@@ -182,7 +183,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             set => SelectRule(value.Rule);
         }
 
-        public ICommand StartGameCommand => new SimpleCommand(async () =>
+        public ICommand StartGameCommand => new AsyncCommand(async () =>
         {
             if (!CanStartGame) return;
             var rule = Rules.FirstOrDefault(f => f.IsSelected);

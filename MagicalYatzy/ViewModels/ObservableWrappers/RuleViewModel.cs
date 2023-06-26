@@ -3,24 +3,20 @@ using System.Windows.Input;
 using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
-using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MVVM.Core.ViewModels;
 
 namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
 {
     public class RuleViewModel: BindableBase
     {
-        private readonly IRulesService _rulesService;
         private readonly ILocalizationService _localizationService;
         private bool _isSelected;
         
         public event EventHandler RuleSelected;
 
-        public RuleViewModel(Rules rule, 
-            IRulesService rulesService,
+        public RuleViewModel(Rules rule,
             ILocalizationService localizationService)
         {
-            _rulesService = rulesService;
             _localizationService = localizationService;
             Rule = rule;
         }

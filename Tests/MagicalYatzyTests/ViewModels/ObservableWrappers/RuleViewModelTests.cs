@@ -16,7 +16,7 @@ namespace MagicalYatzyTests.ViewModels.ObservableWrappers
 
         public RuleViewModelTests()
         {
-            _sut = new RuleViewModel(TestRule, _rulesService, _localizationService);
+            _sut = new RuleViewModel(TestRule, _localizationService);
         }
 
         [Fact]
