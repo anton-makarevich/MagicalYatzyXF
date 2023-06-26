@@ -5,7 +5,9 @@
         <WasmMainJSPath>AppBundle\main.js</WasmMainJSPath>
         <OutputType>Exe</OutputType>
         <RootNamespace>Sanet.MagicalYatzy.Avalonia.Browser</RootNamespace>
-        <InvariantGlobalization>true</InvariantGlobalization>
+        <InvariantGlobalization>false</InvariantGlobalization>
+        <PublishTrimmed>true</PublishTrimmed>
+        <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
     </PropertyGroup>
 
     <ItemGroup>
