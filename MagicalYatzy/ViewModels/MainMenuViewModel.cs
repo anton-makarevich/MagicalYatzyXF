@@ -7,6 +7,7 @@ using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Resources;
 using System.Windows.Input;
 using System.Threading.Tasks;
+using AsyncAwaitBestPractices.MVVM;
 using Sanet.MagicalYatzy.Services.Navigation;
 
 namespace Sanet.MagicalYatzy.ViewModels;
@@ -64,7 +65,7 @@ public class MainMenuViewModel : DicePanelViewModel
             new MainMenuAction
             {
                 Label = Strings.NewLocalGameAction,
-                MenuAction = new SimpleCommand(async () => { await NavigationService.NavigateToViewModelAsync<LobbyViewModel>(); }),
+                MenuAction = new AsyncCommand(async () => { await NavigationService.NavigateToViewModelAsync<LobbyViewModel>(); }),
                 Description = Strings.NewLocalGameDescription,
                 Image = "SanetDice.png",
             },
