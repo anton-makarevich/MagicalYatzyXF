@@ -6,7 +6,7 @@
         <OutputType>Exe</OutputType>
         <RootNamespace>Sanet.MagicalYatzy.Avalonia.Browser</RootNamespace>
         <InvariantGlobalization>false</InvariantGlobalization>
-        <PublishTrimmed>true</PublishTrimmed>
+        <PublishTrimmed>false</PublishTrimmed>
         <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
     </PropertyGroup>
 
