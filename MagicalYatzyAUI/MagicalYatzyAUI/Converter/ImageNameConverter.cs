@@ -14,7 +14,7 @@ public class ImageNameConverter : IValueConverter
         System.Globalization.CultureInfo culture)
     {
         if (value is not string assetPath) return null;
-        const string assetsDirectory = "avares://MagicalYatzyAUI/Assets/"; 
+        const string assetsDirectory = "avares://MagicalYatzy.Avalonia/Assets/"; 
         var imagePath = Path.Combine(assetsDirectory, assetPath);
 
         var asset = AssetLoader.Open(new Uri(imagePath));
