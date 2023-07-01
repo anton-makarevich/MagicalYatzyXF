@@ -8,6 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <TrimmerRootAssembly Include="MagicalYatzy" />
+        <TrimmerRootAssembly Include="MagicalYatzy.Dto" />
+        <TrimmerRootAssembly Include="MagicalYatzy.Avalonia" />
+    </ItemGroup>
+
+    <ItemGroup>
         <WasmExtraFilesToDeploy Include="AppBundle\**" />
     </ItemGroup>
 

@@ -5,6 +5,7 @@
         <RootNamespace>Sanet.MagicalYatzy.Dto</RootNamespace>
         <LangVersion>10</LangVersion>
         <Nullable>enable</Nullable>
+        <AssemblyName>MagicalYatzy.Dto</AssemblyName>
     </PropertyGroup>
     
     <ItemGroup>
