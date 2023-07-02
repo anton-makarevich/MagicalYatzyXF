@@ -13,6 +13,7 @@ namespace Sanet.MagicalYatzy.Services.Localization;
 public class GlobalizationInvariantLocalizationService : ILocalizationService
 {
     private Dictionary<string, string> _localizedStrings = new();
+    private Dictionary<string, string> _defaultLocalizedStrings = new();
 
     public LanguageCode Language { get; private set; }
 
@@ -23,8 +24,12 @@ public class GlobalizationInvariantLocalizationService : ILocalizationService
 
     public void SetSystemCulture(LanguageCode language)
     {
+        if (language == LanguageCode.Default && _defaultLocalizedStrings.Count == 0)
+        {
+            _defaultLocalizedStrings = LoadLocalizedStrings(language);
+        }
         if (language == Language && _localizedStrings?.Count!=0) return;
-        LoadLocalizedStrings(language);
+        _localizedStrings = LoadLocalizedStrings(language);
         Language = language;
     }
 
@@ -36,14 +41,19 @@ public class GlobalizationInvariantLocalizationService : ILocalizationService
 
     public string GetLocalizedString(string key)
     {
-        return _localizedStrings.TryGetValue(key, out var localizedString) ? localizedString : key; 
+        if (_localizedStrings.TryGetValue(key, out var localizedString))
+        {
+            return localizedString;
+        }
+
+        return _defaultLocalizedStrings.TryGetValue(key, out localizedString) ? localizedString : key;
     }
 
-    private void LoadLocalizedStrings(LanguageCode language)
+    private static Dictionary<string, string> LoadLocalizedStrings(LanguageCode language)
     {
         var languageCode = language.ToCultureString();
         var resxFileName = language == LanguageCode.Default 
-            ? $"Sanet.MagicalYatzy.Resources.Strings.resources"
+            ? "Sanet.MagicalYatzy.Resources.Strings.resources"
             : $"Sanet.MagicalYatzy.Resources.Strings-{languageCode}.resources";
 
         var assembly = typeof(GlobalizationInvariantLocalizationService).GetTypeInfo().Assembly;
@@ -63,14 +73,16 @@ public class GlobalizationInvariantLocalizationService : ILocalizationService
             throw new MissingManifestResourceException($"Resource not found for language: {languageCode}");
         }
         using var resourceReader = new ResourceReader(resourceStream);
-        _localizedStrings = new Dictionary<string, string>();
+        var localizedStrings = new Dictionary<string, string>();
 
         foreach (DictionaryEntry entry in resourceReader)
         {
             var key = entry.Key.ToString();
             if (key == null) continue;
             var value = entry.Value?.ToString()??key;
-            _localizedStrings[key] = value;
+            localizedStrings[key] = value;
         }
+
+        return localizedStrings;
     }
 }
