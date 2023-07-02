@@ -25,6 +25,7 @@ namespace Sanet.MagicalYatzy.Extensions
             return code switch
             {
                 LanguageCode.RuRu => "ru-RU",
+                LanguageCode.BeBy => "be-BY",
                 _ => "en-US"
             };
         }

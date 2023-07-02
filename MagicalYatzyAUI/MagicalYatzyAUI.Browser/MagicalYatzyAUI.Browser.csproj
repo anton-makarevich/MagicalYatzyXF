@@ -8,6 +8,7 @@
         <InvariantGlobalization>false</InvariantGlobalization>
         <PublishTrimmed>false</PublishTrimmed>
         <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
+        <AssemblyName>MagicalYatzy.Avalonia.Browser</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>

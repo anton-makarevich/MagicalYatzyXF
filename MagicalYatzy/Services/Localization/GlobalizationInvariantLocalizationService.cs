@@ -44,7 +44,7 @@ public class GlobalizationInvariantLocalizationService : ILocalizationService
         var languageCode = language.ToCultureString();
         var resxFileName = language == LanguageCode.Default 
             ? $"Sanet.MagicalYatzy.Resources.Strings.resources"
-            : $"Sanet.MagicalYatzy.Resources.Strings.{languageCode}.resources";
+            : $"Sanet.MagicalYatzy.Resources.Strings-{languageCode}.resources";
 
         var assembly = typeof(GlobalizationInvariantLocalizationService).GetTypeInfo().Assembly;
 

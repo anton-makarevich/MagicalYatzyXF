@@ -4,7 +4,7 @@ using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Services.Localization;
 using Xunit;
 
-namespace MagicalYatzyTests.Services
+namespace MagicalYatzyTests.Services.Localization
 {
     public class LocalizationServiceTests
     {
