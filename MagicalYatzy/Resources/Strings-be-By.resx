@@ -1,0 +1,780 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutAction" xml:space="preserve">
+    <value>Пра гульню</value>
+  </data>
+  <data name="AboutCaption.Text" xml:space="preserve">
+    <value>Пра гульню</value>
+  </data>
+  <data name="AboutDescription" xml:space="preserve">
+    <value>Інфармацыя пра гульню і аўтараў</value>
+  </data>
+  <data name="AboutText.Text" xml:space="preserve">
+    <value>виртуальные кости в твоем планшете</value>
+  </data>
+  <data name="AddBotLabel" xml:space="preserve">
+    <value>Дадаць бота</value>
+  </data>
+  <data name="AddPlayerLabel" xml:space="preserve">
+    <value>Дадаць гульца</value>
+  </data>
+  <data name="AgainLabel" xml:space="preserve">
+    <value>яшчэ разок</value>
+  </data>
+  <data name="AllRecordsLabel" xml:space="preserve">
+    <value>Усе рэкорды ў інтэрнэце</value>
+  </data>
+  <data name="AlreadyInGameMessage" xml:space="preserve">
+    <value>Прабачце не атрымалася злучыцца са сталом - там ужо ёсць нехта з такім жа нікам... паспрабуйце пазней.</value>
+  </data>
+  <data name="AngHighText" xml:space="preserve">
+    <value>высока</value>
+  </data>
+  <data name="AngLowText" xml:space="preserve">
+    <value>нізка</value>
+  </data>
+  <data name="AngVeryHighText" xml:space="preserve">
+    <value>вельмі высока</value>
+  </data>
+  <data name="AppNameLabel" xml:space="preserve">
+    <value>Магічны Yatzy</value>
+  </data>
+  <data name="ArtifactsBonusMessage" xml:space="preserve">
+    <value>{0}, Віншуем! Вы атрымалі бонусныя магічныя артэфакты</value>
+  </data>
+  <data name="ArtifactsForLabel" xml:space="preserve">
+    <value>артэфактаў</value>
+  </data>
+  <data name="ArtifactsLabel" xml:space="preserve">
+    <value>Артэфакты</value>
+  </data>
+  <data name="ArtifactsWinBuyMessage" xml:space="preserve">
+    <value>выіграйце ці купіце</value>
+  </data>
+  <data name="ArtifactsWrongMessage" xml:space="preserve">
+    <value>неправільнае імя ці пароль</value>
+  </data>
+  <data name="AWDescription" xml:space="preserve">
+    <value>Электронны пропіс, які развівае дробную маторыку, памяць, навучае пісьму (лічбы, кірылічныя, лацінскія літары, кітайскія іерогліфы і розныя знакі), дазваляе ў сучаснай форме авалодаць асновамі графічнага пісьма, надаць дзіцяці цягу да ведаў</value>
+  </data>
+  <data name="BestDayLabel" xml:space="preserve">
+    <value>Лепшы сення</value>
+  </data>
+  <data name="BestLocalLabel" xml:space="preserve">
+    <value>Лакальныя рэкорды:</value>
+  </data>
+  <data name="BestLocalShort" xml:space="preserve">
+    <value>Лепшы лакальны:</value>
+  </data>
+  <data name="BestWeekLabel" xml:space="preserve">
+    <value>Лепшы за тыдзень</value>
+  </data>
+  <data name="Bonus" xml:space="preserve">
+    <value>Бонус</value>
+  </data>
+  <data name="BonusShort" xml:space="preserve">
+    <value>Б</value>
+  </data>
+  <data name="BotNameDefault" xml:space="preserve">
+    <value>Бот</value>
+  </data>
+  <data name="BuyLabel" xml:space="preserve">
+    <value>купить</value>
+  </data>
+  <data name="CantJoinMessage" xml:space="preserve">
+    <value>Прабачце, не атрымалася злучыцца з серверам. Паспрабуйце пазней.</value>
+  </data>
+  <data name="Chance" xml:space="preserve">
+    <value>Шанец</value>
+  </data>
+  <data name="ChangeNameLabel" xml:space="preserve">
+    <value>зьмяніце імя</value>
+  </data>
+  <data name="ChangePasswordLabel" xml:space="preserve">
+    <value>патрэбен пароль</value>
+  </data>
+  <data name="ChatPanelLabel" xml:space="preserve">
+    <value>Чат</value>
+  </data>
+  <data name="CheckingLabel" xml:space="preserve">
+    <value>праверка...</value>
+  </data>
+  <data name="clear" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ClientLabel" xml:space="preserve">
+    <value>Кліент:</value>
+  </data>
+  <data name="ClientOutdatedLabel" xml:space="preserve">
+    <value>Састарэў</value>
+  </data>
+  <data name="ClientOutdatedMessage" xml:space="preserve">
+    <value>Версія праграмы састарэла. Для гульні анлайн неабходна абнавіць яе.</value>
+  </data>
+  <data name="ClientUpdatedLabel" xml:space="preserve">
+    <value>Ок</value>
+  </data>
+  <data name="CloseButton.Content" xml:space="preserve">
+    <value>Зачыніць</value>
+  </data>
+  <data name="ContinueLabel" xml:space="preserve">
+    <value>Працягнуць</value>
+  </data>
+  <data name="Cost1Label" xml:space="preserve">
+    <value>$1,49</value>
+  </data>
+  <data name="Cost2Label" xml:space="preserve">
+    <value>$1,99</value>
+  </data>
+  <data name="Cost3Label" xml:space="preserve">
+    <value>$2,49</value>
+  </data>
+  <data name="DeletePlayerLabel" xml:space="preserve">
+    <value>Выдаліць</value>
+  </data>
+  <data name="DevelopedByText" xml:space="preserve">
+    <value>Распрацавана:</value>
+  </data>
+  <data name="DiceBoardLabel" xml:space="preserve">
+    <value>Косткі</value>
+  </data>
+  <data name="DiceDescription" xml:space="preserve">
+    <value>Віртуальныя косткі ў тваім тэлефоне. Выкарыстоўвай іх у сваіх любімых гульнях і калі неабходна прыняць выпадковае рашэнне.</value>
+  </data>
+  <data name="DicePokerAdLine1" xml:space="preserve">
+    <value>Надоело просто бросать кости?</value>
+  </data>
+  <data name="DicePokerAdLine2" xml:space="preserve">
+    <value>Попробуй нашу новую игру -</value>
+  </data>
+  <data name="DicePokerAdLine3" xml:space="preserve">
+    <value>Magical Yatzy:</value>
+  </data>
+  <data name="DicePokerAdLine4" xml:space="preserve">
+    <value>4 набора правил</value>
+  </data>
+  <data name="DicePokerAdLine5" xml:space="preserve">
+    <value>игра с друзьями и компьютером</value>
+  </data>
+  <data name="DicePokerAdLine6" xml:space="preserve">
+    <value>таблица лучших результатов</value>
+  </data>
+  <data name="DicePokerAdLine7" xml:space="preserve">
+    <value>а скоро </value>
+  </data>
+  <data name="DicePokerAdLine8" xml:space="preserve">
+    <value>и сетевая игра!</value>
+  </data>
+  <data name="ErrorLabel" xml:space="preserve">
+    <value>Памылка</value>
+  </data>
+  <data name="ExitConfirmMessage" xml:space="preserve">
+    <value>Выйсцi? Стан бягучай гульнi будзе згублены.</value>
+  </data>
+  <data name="FacebookLabel" xml:space="preserve">
+    <value>Facebook</value>
+  </data>
+  <data name="FirstTimeBonusDescription" xml:space="preserve">
+    <value>Кожны новы гулец з унікальным імем карыстальніка і паролем атрымлівае артэфакты ў якасці бонуса.</value>
+  </data>
+  <data name="FirstTimeBonusLabel" xml:space="preserve">
+    <value>Пачатковы бонус</value>
+  </data>
+  <data name="Fives" xml:space="preserve">
+    <value>Пяцеркі</value>
+  </data>
+  <data name="FivesShort" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="ForthRollLabel" xml:space="preserve">
+    <value>Паўтор хода</value>
+  </data>
+  <data name="ForWin8Label" xml:space="preserve">
+    <value>Магічны Yatzy для Windows 8</value>
+  </data>
+  <data name="ForWPLabel" xml:space="preserve">
+    <value>Maгічны Yatzy для Windows Phone</value>
+  </data>
+  <data name="FourOfAKind" xml:space="preserve">
+    <value>Чатыры аднолькавыя</value>
+  </data>
+  <data name="FourOfAKindShort" xml:space="preserve">
+    <value>Ч</value>
+  </data>
+  <data name="Fours" xml:space="preserve">
+    <value>Чацьверкі</value>
+  </data>
+  <data name="FoursShort" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="FullHouse" xml:space="preserve">
+    <value>Фулл Хаус</value>
+  </data>
+  <data name="FullHouseShort" xml:space="preserve">
+    <value>ФХ</value>
+  </data>
+  <data name="GameFinishedLabel" xml:space="preserve">
+    <value>Гульня скончана!</value>
+  </data>
+  <data name="HowGetLabel" xml:space="preserve">
+    <value>Як атрымаць?</value>
+  </data>
+  <data name="HowToGetDescription" xml:space="preserve">
+    <value>Магічныя артэфакты - каштоўны рэсурс, колькасць якога абмежавана. Існуе некалькі спосабаў папоўніць запасы магіі:</value>
+  </data>
+  <data name="Kniffel" xml:space="preserve">
+    <value>Ятзі!</value>
+  </data>
+  <data name="KniffelShort" xml:space="preserve">
+    <value>Я!</value>
+  </data>
+  <data name="krBaby" xml:space="preserve">
+    <value>Дзіцячыя</value>
+  </data>
+  <data name="krBabyShort" xml:space="preserve">
+    <value>толькі лічбавыя камбінацыі і ятзі, 7 хадоў</value>
+  </data>
+  <data name="krExtended" xml:space="preserve">
+    <value>Пашыраныя</value>
+  </data>
+  <data name="krExtendedShort" xml:space="preserve">
+    <value>стандартныя + бонус ў 100 ачкоў за кожны наступны ятзі, ятзі-джокер, 13 хадоў</value>
+  </data>
+  <data name="krMagic" xml:space="preserve">
+    <value>Магічныя</value>
+  </data>
+  <data name="krMagicShort" xml:space="preserve">
+    <value>пашыраныя + магчымасць выкарыстоўваць "магічныя артэфакты", 13 хадоў</value>
+  </data>
+  <data name="krSimple" xml:space="preserve">
+    <value>Простыя</value>
+  </data>
+  <data name="krSimpleShort" xml:space="preserve">
+    <value>усе камбінацыі, без бонусаў, 13 хадоў</value>
+  </data>
+  <data name="krStandard" xml:space="preserve">
+    <value>Стандартныя</value>
+  </data>
+  <data name="krStandardShort" xml:space="preserve">
+    <value>простыя + бонус у 35 ачкоў за суму лічбавых камбінацый 63 і больш, 13 хадоў</value>
+  </data>
+  <data name="LargeStraight" xml:space="preserve">
+    <value>Ладж Стрыт</value>
+  </data>
+  <data name="LargeStraightShort" xml:space="preserve">
+    <value>ЛС</value>
+  </data>
+  <data name="LaterLabel" xml:space="preserve">
+    <value>Іншым разам</value>
+  </data>
+  <data name="LeaderboardAction" xml:space="preserve">
+    <value>Зал славы</value>
+  </data>
+  <data name="LeaderboardDescription" xml:space="preserve">
+    <value>Лепшыя вынікі па кожных правілах</value>
+  </data>
+  <data name="LocalLabel" xml:space="preserve">
+    <value>Лакальны</value>
+  </data>
+  <data name="LoginLabel" xml:space="preserve">
+    <value>Націсніце, каб увайсці</value>
+  </data>
+  <data name="LoginToFBLabel" xml:space="preserve">
+    <value>Зайдзіце ў Facebook</value>
+  </data>
+  <data name="LogoutLabel" xml:space="preserve">
+    <value>Націсніце, каб выйсці</value>
+  </data>
+  <data name="MagicArtifactsDescription" xml:space="preserve">
+    <value>Магічныя артэфакты могуць павысіць вашыя шанцы на добрую камбінацыю ў магічных правілах. Кожны тып артэфактаў можна выкарыстоўваць толькі адзін раз за гульню. Усяго ў гульні 3 тыпы артэфактаў:</value>
+  </data>
+  <data name="MagicRollDescription" xml:space="preserve">
+    <value> Дазваляе выкінуць адну з незапоўненых покерных камбінацый - ад трох аднолькавых да ятзі ў выпадковым парадку.</value>
+  </data>
+  <data name="MagicRollLabel" xml:space="preserve">
+    <value>Магічны кідок</value>
+  </data>
+  <data name="MagicRoomLabel" xml:space="preserve">
+    <value>Пакоі мага</value>
+  </data>
+  <data name="ManualSetDescription" xml:space="preserve">
+    <value>Дазваляе змяніць значэнне адной з выпаўшых костак па вашым жаданні.</value>
+  </data>
+  <data name="ManualSetLabel" xml:space="preserve">
+    <value>Ручная ўстаноўка</value>
+  </data>
+  <data name="MetroStudioText" xml:space="preserve">
+    <value>Некаторыя іконкі створаны Syncfusion Metro Studio</value>
+  </data>
+  <data name="MoreLabel" xml:space="preserve">
+    <value>Больш...</value>
+  </data>
+  <data name="MoveLabel" xml:space="preserve">
+    <value>ход</value>
+  </data>
+  <data name="NetworkGameNotReadyMessage" xml:space="preserve">
+    <value>Извините, сетевая игра еще не готова. </value>
+  </data>
+  <data name="NeverLabel" xml:space="preserve">
+    <value>Не, дзякуй.</value>
+  </data>
+  <data name="NewLocalGameAction" xml:space="preserve">
+    <value>Лакальная гульня</value>
+  </data>
+  <data name="NewLocalGameDescription" xml:space="preserve">
+    <value>Лакальная гульня - у адзіночку, з сябрамі або з кампутарам</value>
+  </data>
+  <data name="NewOnlineGameAction" xml:space="preserve">
+    <value>Гульня па сеціве</value>
+  </data>
+  <data name="NewOnlineGameDescription" xml:space="preserve">
+    <value>Гульня з іншымі людзьмі праз інтэрнэт</value>
+  </data>
+  <data name="NewsDescription" xml:space="preserve">
+    <value>Чыталка RSS стужак для навін з Беларусі. Усе вашыя навіны сабраны ў адным месцы. У нас навіны з асноўных навінавых сайтаў Беларусі, а магчыма іх будзе яшчэ больш :)</value>
+  </data>
+  <data name="NoArtifactsLabel" xml:space="preserve">
+    <value>Няма магічных артэфактаў</value>
+  </data>
+  <data name="NoArtifactsMessage" xml:space="preserve">
+    <value>У гульца {0} няма магічных артэфактаў. Вам неабходна папоўніць запас артэфактаў, каб скарыстацца перавагамі гульні па магічных правілах.</value>
+  </data>
+  <data name="NoInetMessage" xml:space="preserve">
+    <value>Няма доступу ў інтэрнэт. Калі ласка праверце злучэнне і паспрабуйце зноў.</value>
+  </data>
+  <data name="NoInternetLabel" xml:space="preserve">
+    <value>няма інтэрнэта</value>
+  </data>
+  <data name="NoPurchasesMessage" xml:space="preserve">
+    <value>Прабачце, у версіі для тэлефона нельга нічога купіць. Калі ласка карыстайціся версіяй для Windows 8. </value>
+  </data>
+  <data name="OfAKind" xml:space="preserve">
+    <value>аднолькавыя</value>
+  </data>
+  <data name="OffContent" xml:space="preserve">
+    <value>Выкл.</value>
+  </data>
+  <data name="Offer1Description" xml:space="preserve">
+    <value>Базавая прапанова.</value>
+  </data>
+  <data name="Offer2Description" xml:space="preserve">
+    <value>Выгадная прапанова. Ваша зніжка складае 20%!</value>
+  </data>
+  <data name="Offer3Description" xml:space="preserve">
+    <value>Супер прапанова. Купляйце ў 2 разы танней!</value>
+  </data>
+  <data name="OnContent" xml:space="preserve">
+    <value>Укл.</value>
+  </data>
+  <data name="Ones" xml:space="preserve">
+    <value>Адзінкі</value>
+  </data>
+  <data name="OnesShort" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="OnlineLink.Content" xml:space="preserve">
+    <value>О Kniffel Online</value>
+  </data>
+  <data name="OnlineVersionText" xml:space="preserve">
+    <value>Ідэя кантрола DicePanel і 'чырвоныя' косткі належаць Matthew Tagliaferri</value>
+  </data>
+  <data name="OnlyUniqueCanBuyMessage" xml:space="preserve">
+    <value>Прабачце. Толькі гульцы з унікальным імем і паролем могуць купіць артэфакты. Гэта неабходна, каб засцерагчы вашы набыткі. Калі ласка зьмяніце інфармацыю на старонцы новай гульні. Дзякуй!</value>
+  </data>
+  <data name="OtherAllWrite.Content" xml:space="preserve">
+    <value>Электронные прописи - занимательное обучение письму.</value>
+  </data>
+  <data name="OtherAppsLabel" xml:space="preserve">
+    <value>Іншыя праграмы</value>
+  </data>
+  <data name="OtherSoft.Text" xml:space="preserve">
+    <value>Попробуйте другие программы:</value>
+  </data>
+  <data name="Pairs" xml:space="preserve">
+    <value>пары</value>
+  </data>
+  <data name="PlayerBestScoreLabel" xml:space="preserve">
+    <value>Рэкорд</value>
+  </data>
+  <data name="PlayerBotLabelLocalized" xml:space="preserve">
+    <value>Кампутар</value>
+  </data>
+  <data name="PlayerGamesLabel" xml:space="preserve">
+    <value>Гульняў</value>
+  </data>
+  <data name="PlayerHumanLabelLocalized" xml:space="preserve">
+    <value>Чалавек</value>
+  </data>
+  <data name="PlayerNameDefault" xml:space="preserve">
+    <value>Гулец</value>
+  </data>
+  <data name="PlayerNameLabel" xml:space="preserve">
+    <value>імя</value>
+  </data>
+  <data name="PlayerNoNameLabel" xml:space="preserve">
+    <value>няма iмя</value>
+  </data>
+  <data name="PlayerNoPasswordLabel" xml:space="preserve">
+    <value>няма пароля</value>
+  </data>
+  <data name="PlayerPasswordLabel" xml:space="preserve">
+    <value>пароль</value>
+  </data>
+  <data name="PlayerRememberLabelLocalized" xml:space="preserve">
+    <value>Запомнить</value>
+  </data>
+  <data name="PlayersLabel" xml:space="preserve">
+    <value>Гульцы</value>
+  </data>
+  <data name="PlayerTotalScoreLabel" xml:space="preserve">
+    <value>Ачкоў</value>
+  </data>
+  <data name="PlayerTypeLabel" xml:space="preserve">
+    <value>тып</value>
+  </data>
+  <data name="Privacy1.Text" xml:space="preserve">
+    <value>Палітыка прыватнасці пры выкарыстанні гэтай праграмы. "Магічны ятзі" не збірае, не захоўвае і не перадае трэцім асобам асабістую інфармацыю карыстальніка, а таксама не адсочвае яго перамяшчэння.</value>
+  </data>
+  <data name="Privacy2.Text" xml:space="preserve">
+    <value>У якасці ідэнтыфікатара гульца можа быць выкарыстана імя карыстальніка Windows, яго адрас электроннай пошты. Праграма захоўвае гэтыя дадзеныя ў інтэрнэт табліцы рэкордаў толькі з ведама карыстальніка. "Магічны ятзі" таксама можа адкрываць старонкі ў інтэрнэце, якія могуць быць захаваны вашым браўзэрам. Вы можаце пачытаць пра гэта падрабязней у палітыцы прыватнасці браўзэра, якім Вы карыстаецеся.</value>
+  </data>
+  <data name="PrivacyLabel.Text" xml:space="preserve">
+    <value>Прыватнасць</value>
+  </data>
+  <data name="ProfileLabel" xml:space="preserve">
+    <value>Профіль</value>
+  </data>
+  <data name="PurchaseDescription" xml:space="preserve">
+    <value>Вы можаце папоўніць запас магічных артэфактаў, скарыстаўшыся адной з наступных прапаноў. Скарыстацца кожнай прапановай можна не часцей, чым адзін раз у суткі.</value>
+  </data>
+  <data name="PurchaseErrorMessage" xml:space="preserve">
+    <value>Просім прабачэння. Нешта здарылася пры адпраўцы інфармацыі на сервер. Звяжыцеся са службай падтрымкі.</value>
+  </data>
+  <data name="PurchaseLabel" xml:space="preserve">
+    <value>Цудоўныя прапановы</value>
+  </data>
+  <data name="PurchaseMiniDescription" xml:space="preserve">
+    <value>Магічныя артэфакты можна набыць у краме. Даступна некалькі прапаноў па вельмі прывабных цэнах!</value>
+  </data>
+  <data name="PurchaseMiniLabel" xml:space="preserve">
+    <value>Купіць</value>
+  </data>
+  <data name="RandomLabel" xml:space="preserve">
+    <value>Выпадкова</value>
+  </data>
+  <data name="RateButton.Content" xml:space="preserve">
+    <value>Оцените это приложение, если оно вам нравится</value>
+  </data>
+  <data name="RateLabel" xml:space="preserve">
+    <value>оценить</value>
+  </data>
+  <data name="ReadyLabel" xml:space="preserve">
+    <value>Гуляць!</value>
+  </data>
+  <data name="RemoveAdAction" xml:space="preserve">
+    <value>Адкрыць усе косткі, прыбраць рэкламу</value>
+  </data>
+  <data name="RemoveAdLabel" xml:space="preserve">
+    <value>прыбраць рэкламу</value>
+  </data>
+  <data name="RerollDescription" xml:space="preserve">
+    <value> Дазваляе перайграць бягучы ход спачатку (усе тры кідкі). Значэнні костак будуць выпадаць у тым жа парадку.</value>
+  </data>
+  <data name="ResultBonusDescription" xml:space="preserve">
+    <value> Атрымаеце артэфакты за добрую гульню па пашыраных правілах. Чым лепш Вы гуляеце, тым больш артэфактаў Вы атрымліваеце ў падарунак!</value>
+  </data>
+  <data name="ResultBonusLabel" xml:space="preserve">
+    <value>Бонус за вынік</value>
+  </data>
+  <data name="ResultsTableLabel" xml:space="preserve">
+    <value>Таблiца</value>
+  </data>
+  <data name="ReviewAppAction" xml:space="preserve">
+    <value>Ацаніць праграму</value>
+  </data>
+  <data name="ReviewReminder" xml:space="preserve">
+    <value>Вашы водгукі, прапановы і ацэнкі дапамагаюць нам зрабіць гэтц гульню лепшвя. Хочаце ацаніць праграму?</value>
+  </data>
+  <data name="ReviewReminderHeader" xml:space="preserve">
+    <value>Вам падабаецца?</value>
+  </data>
+  <data name="roll" xml:space="preserve">
+    <value>кідок</value>
+  </data>
+  <data name="RulesLabel" xml:space="preserve">
+    <value>Правілы</value>
+  </data>
+  <data name="SaveScoreLabel" xml:space="preserve">
+    <value>захаваць у кнізе рэкордаў</value>
+  </data>
+  <data name="SelectDiceToChangeMessage" xml:space="preserve">
+    <value>Вылучыце костку значэнне якой трэба змяніць</value>
+  </data>
+  <data name="SelectNewDiceValueMessage" xml:space="preserve">
+    <value>Выберыце новае значэнне косткі</value>
+  </data>
+  <data name="SendFeedbackAction" xml:space="preserve">
+    <value>Расказаць аб памылцы</value>
+  </data>
+  <data name="SendLabel" xml:space="preserve">
+    <value>Адправіць</value>
+  </data>
+  <data name="ServerLabel" xml:space="preserve">
+    <value>Сервер:</value>
+  </data>
+  <data name="ServerMaintananceMessage" xml:space="preserve">
+    <value>УВАГА! {0} (UTC) сервер будзе выключаны для прафілактычных работ. У гэты час гуляць па сеціве будзе нельга (звычайна ўсяго некалькі хвілін).</value>
+  </data>
+  <data name="ServerOfflineLabel" xml:space="preserve">
+    <value>Оффлайн</value>
+  </data>
+  <data name="ServerOfflineMessage" xml:space="preserve">
+    <value>Не атрымалася злучыцца з серверам. Квлі ласка, паспрабуйце крыху пазней.</value>
+  </data>
+  <data name="ServerOnlineLabel" xml:space="preserve">
+    <value>Анлайн</value>
+  </data>
+  <data name="SettingsAction" xml:space="preserve">
+    <value>Налады</value>
+  </data>
+  <data name="SettingsAngleCaptionText" xml:space="preserve">
+    <value>Вугал агляду</value>
+  </data>
+  <data name="SettingsCaptionText" xml:space="preserve">
+    <value>Налады</value>
+  </data>
+  <data name="SettingsDescription" xml:space="preserve">
+    <value>Зьмяніце параметры гульні</value>
+  </data>
+  <data name="SettingsNumbersCaptionText" xml:space="preserve">
+    <value>Число костей</value>
+  </data>
+  <data name="SettingsSpeedCaptionText" xml:space="preserve">
+    <value>Хуткасць кідка</value>
+  </data>
+  <data name="SettingsStyleCaptionText" xml:space="preserve">
+    <value>Выгляд костак</value>
+  </data>
+  <data name="ShareDescription" xml:space="preserve">
+    <value>Присоединяйся ко мне в этой волшебной игре и проверь свою удачу!</value>
+  </data>
+  <data name="ShareLabel" xml:space="preserve">
+    <value>поделиться</value>
+  </data>
+  <data name="ShareMessage" xml:space="preserve">
+    <value>Далучайся да мяне ў гэтай захапляльнай анлайн гульні!</value>
+  </data>
+  <data name="ShareTitle" xml:space="preserve">
+    <value>"Магічны Yatzy" для Windows 8 </value>
+  </data>
+  <data name="Sixs" xml:space="preserve">
+    <value>Шасьцеркі</value>
+  </data>
+  <data name="SixsShort" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="SmallStraight" xml:space="preserve">
+    <value>Смолл Стрыт</value>
+  </data>
+  <data name="SmallStraightShort" xml:space="preserve">
+    <value>СС</value>
+  </data>
+  <data name="SoundLabel" xml:space="preserve">
+    <value>Гукі</value>
+  </data>
+  <data name="SpeedFastText" xml:space="preserve">
+    <value>хутка</value>
+  </data>
+  <data name="SpeedSlowText" xml:space="preserve">
+    <value>марудна</value>
+  </data>
+  <data name="SpeedVeryFastText" xml:space="preserve">
+    <value>вельмі хутка</value>
+  </data>
+  <data name="SpeedVerySlowText" xml:space="preserve">
+    <value>вельмі ціха</value>
+  </data>
+  <data name="StartGameButton" xml:space="preserve">
+    <value>Пачаць гульню!</value>
+  </data>
+  <data name="StartNewGameMessage" xml:space="preserve">
+    <value>Пачаць новую гульню</value>
+  </data>
+  <data name="StatusLabel" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="Support.Text" xml:space="preserve">
+    <value>Служба тэхнічнай падтрымкі:</value>
+  </data>
+  <data name="TablesLabel" xml:space="preserve">
+    <value>Сталы</value>
+  </data>
+  <data name="TapToApplyLabel" xml:space="preserve">
+    <value>Націсніце, каб прымяніць</value>
+  </data>
+  <data name="TapToChangeLabel" xml:space="preserve">
+    <value>Націсніце, каб зьмяніць</value>
+  </data>
+  <data name="ThreeOfAKind" xml:space="preserve">
+    <value>Тры аднолькавыя</value>
+  </data>
+  <data name="ThreeOfAKindShort" xml:space="preserve">
+    <value>Т</value>
+  </data>
+  <data name="Threes" xml:space="preserve">
+    <value>Тройкі</value>
+  </data>
+  <data name="ThreesShort" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Усяго</value>
+  </data>
+  <data name="TotalShort" xml:space="preserve">
+    <value>Ш</value>
+  </data>
+  <data name="Twos" xml:space="preserve">
+    <value>Двойкі</value>
+  </data>
+  <data name="TwosShort" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Версія</value>
+  </data>
+  <data name="WaitForGameLabel" xml:space="preserve">
+    <value>Чакаем новую гульню</value>
+  </data>
+  <data name="WaitForPlayersLabel" xml:space="preserve">
+    <value>Чакаем гульцоў</value>
+  </data>
+  <data name="WinLabel" xml:space="preserve">
+    <value>выіграў</value>
+  </data>
+  <data name="WrongNamePassLabel" xml:space="preserve">
+    <value>неправільнае імя ці пароль</value>
+  </data>
+  <data name="YesLabel" xml:space="preserve">
+    <value>З задавальненнем!</value>
+  </data>
+  <data name="FADescription" xml:space="preserve">
+    <value>Приложение "Забавные зверята" познакомит вашего ребенка с удивительным миром животных. Оно состоит из интерактивных картинок различных животных в их естественной среде обитания. Картинки оживают от прикосновений малышей - присутствует анимация, звуки животных, а также названия животных и описание их среды обитания на нескольких языках.</value>
+  </data>
+</root>
