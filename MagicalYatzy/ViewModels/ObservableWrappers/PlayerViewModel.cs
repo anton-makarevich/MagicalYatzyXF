@@ -35,7 +35,8 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
         };
 
         public string Image => _player.ProfileImage;
-        public string DeleteImage => "close.png";
+        public string DeleteImage => "Close.png";
+        public string DeleteCommandText => _localizationService.GetLocalizedString("DeletePlayerLabel");
         public ICommand DeleteCommand => new SimpleCommand(() =>
         {
             if (CanBeDeleted)
@@ -61,7 +62,8 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
         public List<RollResultViewModel> Results =>
             Player.Results == null
                 ? null
-                : _results ?? (_results = Player.Results.Select(r => new RollResultViewModel(r,_localizationService)).ToList());
+                : _results ??= Player.Results
+                    .Select(r => new RollResultViewModel(r,_localizationService)).ToList();
 
         public bool IsMyTurn => _player.IsMyTurn;
 

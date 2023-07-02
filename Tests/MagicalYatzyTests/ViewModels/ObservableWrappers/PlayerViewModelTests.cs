@@ -51,7 +51,7 @@ namespace MagicalYatzyTests.ViewModels.ObservableWrappers
         [Fact]
         public void HasCorrectValueForDeleteImage()
         {
-            const string deleteImage = "close.png";
+            const string deleteImage = "Close.png";
             
             Assert.Equal(deleteImage, _sut.DeleteImage);
         }
@@ -156,6 +156,15 @@ namespace MagicalYatzyTests.ViewModels.ObservableWrappers
             var player = new Player(type, new[] { "Player 1" });
             var sut = new PlayerViewModel(player, _localizationService);
             sut.TypeName.Should().Be(expectedTypeName);
+        }
+
+        [Fact]
+        public void DeleteCommandText_Returns_ExpectedValue()
+        {
+            const string expectedValue = "Delete Player";
+            _localizationService.GetLocalizedString("DeletePlayerLabel").Returns(expectedValue);
+            
+            _sut.DeleteCommandText.Should().Be(expectedValue);
         }
     }
 }
