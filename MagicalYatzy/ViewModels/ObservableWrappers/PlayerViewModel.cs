@@ -5,7 +5,7 @@ using System.Windows.Input;
 using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
-using Sanet.MagicalYatzy.Services;
+using Sanet.MagicalYatzy.Services.Localization;
 using Sanet.MVVM.Core.ViewModels;
 
 namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers

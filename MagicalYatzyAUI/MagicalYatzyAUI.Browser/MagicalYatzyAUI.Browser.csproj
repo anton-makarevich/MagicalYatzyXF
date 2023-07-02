@@ -5,7 +5,17 @@
         <WasmMainJSPath>AppBundle\main.js</WasmMainJSPath>
         <OutputType>Exe</OutputType>
         <RootNamespace>Sanet.MagicalYatzy.Avalonia.Browser</RootNamespace>
+        <InvariantGlobalization>false</InvariantGlobalization>
+        <PublishTrimmed>false</PublishTrimmed>
+        <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
+        <AssemblyName>MagicalYatzy.Avalonia.Browser</AssemblyName>
     </PropertyGroup>
+
+    <ItemGroup>
+        <TrimmerRootAssembly Include="MagicalYatzy" />
+        <TrimmerRootAssembly Include="MagicalYatzy.Dto" />
+        <TrimmerRootAssembly Include="MagicalYatzy.Avalonia" />
+    </ItemGroup>
 
     <ItemGroup>
         <WasmExtraFilesToDeploy Include="AppBundle\**" />

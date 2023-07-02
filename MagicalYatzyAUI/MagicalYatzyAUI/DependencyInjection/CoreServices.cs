@@ -7,6 +7,7 @@ using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Api;
 using Sanet.MagicalYatzy.Services.Game;
+using Sanet.MagicalYatzy.Services.Localization;
 using Sanet.MagicalYatzy.Services.Navigation;
 using Sanet.MagicalYatzy.Services.StorageService;
 using Sanet.MagicalYatzy.ViewModels;
@@ -27,7 +28,7 @@ public static class CoreServices
         services.AddSingleton<IApiConfig, AzureDevConfig>();
         services.AddSingleton<IRulesService, RulesService>();
         services.AddSingleton<IDiceGenerator, RandomDiceGenerator>();
-        services.AddSingleton<ILocalizationService, LocalizationService>();
+        services.AddSingleton<ILocalizationService, GlobalizationInvariantLocalizationService>();
         services.AddSingleton<IStorageService, LocalJsonStorageService>();
     }
     public static void RegisterViewModels(this IServiceCollection services)

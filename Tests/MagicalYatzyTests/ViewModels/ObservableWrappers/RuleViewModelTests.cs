@@ -1,7 +1,7 @@
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Game;
-using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Game;
+using Sanet.MagicalYatzy.Services.Localization;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 using Xunit;
 
@@ -16,7 +16,7 @@ namespace MagicalYatzyTests.ViewModels.ObservableWrappers
 
         public RuleViewModelTests()
         {
-            _sut = new RuleViewModel(TestRule, _rulesService, _localizationService);
+            _sut = new RuleViewModel(TestRule, _localizationService);
         }
 
         [Fact]
