@@ -10,7 +10,7 @@
         <!-- Set Defaults -->
         <Setter Property="Template">
             <ControlTemplate>
-                <Grid Background="Transparent" 
+                <Grid Height="70" Background="Transparent" 
                       ColumnDefinitions="70,*" 
                       RowDefinitions="*,*">
 

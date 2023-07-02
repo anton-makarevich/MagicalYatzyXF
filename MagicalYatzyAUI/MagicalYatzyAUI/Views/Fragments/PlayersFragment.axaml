@@ -15,23 +15,32 @@
             Background = "Transparent">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <templatedControls:MainMenuItem
-                        Caption="{Binding Name}"
-                        Description="{Binding TypeName}"
-                        ImageSource="{Binding Image}"
-                    />
+                    <Grid ColumnDefinitions="*,Auto">
+                        <templatedControls:MainMenuItem
+                            Caption="{Binding Name}"
+                            Description="{Binding TypeName}"
+                            ImageSource="{Binding Image}"
+                        />
+                        <templatedControls:ActionButton Grid.Column="1"
+                            IsVisible="{Binding CanBeDeleted}"
+                            Command="{Binding DeleteCommand}"
+                            Content="{Binding DeleteCommandText}"
+                            ImageSource="{Binding DeleteImage}"
+                            />
+                    </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <StackPanel Orientation="Vertical"/>
+                    <StackPanel Spacing="5" Orientation="Vertical"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
         <StackPanel
+            Margin="0,10"
             Grid.Row="1"
             Orientation="Horizontal"
-            HorizontalAlignment="Right">
+            HorizontalAlignment="Center">
             <templatedControls:ActionButton 
                 IsVisible="{Binding CanAddHuman}"
                 Content="{Binding AddPlayerLabel}"
