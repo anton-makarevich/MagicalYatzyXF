@@ -3,9 +3,11 @@
     
     <Color x:Key = "SanetBlueColor">#009CD6</Color>
     <Color x:Key = "MenuSelectionColor">#41009CD6</Color>
-            
+
     <x:Int16 x:Key = "ToolButtonSize">32</x:Int16>
-    
+    <x:Double x:Key = "MenuCellSize">70</x:Double>
+    <GridLength x:Key = "MenuCellGridSize">70</GridLength>
+
     <GridLength x:Key = "ProfilePicSize">50</GridLength>
     <GridLength x:Key = "ToolBarHeight">50</GridLength>
     <GridLength x:Key = "ToolButtonGridSize">32</GridLength>
