@@ -49,6 +49,16 @@ namespace MagicalYatzyTests.ViewModels.ObservableWrappers
         }
         
         [Fact]
+        public void SetsCorrectValue_ForName()
+        {
+            const string playerName = "New Player";
+            
+            _sut.Name = playerName;
+            
+            Assert.Equal(playerName, _player.Name);
+        }
+        
+        [Fact]
         public void HasCorrectValueForDeleteImage()
         {
             const string deleteImage = "Close.png";
