@@ -2,11 +2,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="using:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls">
     <Design.PreviewWith>
-        <controls:MainMenuItem />
-        <controls:MainMenuItem />
+        <controls:EditableMenuItem />
     </Design.PreviewWith>
 
-    <Style Selector="controls|MainMenuItem">
+    <Style Selector="controls|EditableMenuItem">
         <!-- Set Defaults -->
         <Setter Property="Template">
             <ControlTemplate>
@@ -19,8 +18,8 @@
                     <Image Source="{TemplateBinding ImageSource, Converter={StaticResource ImageNameConverter}}"
                            Margin="0,0,10,0"
                            Grid.RowSpan="2"/>
-                    <Label Content="{TemplateBinding Caption, Converter = {StaticResource StringUppercasedConverter}}"
-                           Classes="caption"
+                    <TextBox Text="{TemplateBinding Caption, Mode=TwoWay}"
+                             Classes="caption"
                            Grid.Row="0" Grid.Column="1" />
                     <TextBlock Text="{TemplateBinding Description}"
                                Margin="5,0,0,0"

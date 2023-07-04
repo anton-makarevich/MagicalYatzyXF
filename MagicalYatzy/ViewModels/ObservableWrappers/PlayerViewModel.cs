@@ -25,8 +25,12 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
             _localizationService = localizationService;
         }
 
-        public string Name => _player.Name;
-        
+        public string Name
+        {
+            get => _player.Name;
+            set => _player.Name = value;
+        }
+
         public string TypeName => _player.Type switch
         {
             PlayerType.Local or PlayerType.Network => _localizationService.GetLocalizedString("PlayerNameDefault"),

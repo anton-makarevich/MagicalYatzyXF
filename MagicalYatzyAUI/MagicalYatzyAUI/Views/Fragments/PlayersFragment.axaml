@@ -16,8 +16,8 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid ColumnDefinitions="*,Auto">
-                        <templatedControls:MainMenuItem
-                            Caption="{Binding Name}"
+                        <templatedControls:EditableMenuItem
+                            Caption="{Binding Name, Mode=TwoWay}"
                             Description="{Binding TypeName}"
                             ImageSource="{Binding Image}"
                         />

@@ -10,6 +10,7 @@
         <StyleInclude Source="Styles/AppStyles.axaml"/>
         <StyleInclude Source="Views/TemplatedControls/MainMenuItem.axaml"/>
         <StyleInclude Source="Views/TemplatedControls/ActionButton.axaml"/>
+        <StyleInclude Source="Views/TemplatedControls/EditableMenuItem.axaml"/>
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>
