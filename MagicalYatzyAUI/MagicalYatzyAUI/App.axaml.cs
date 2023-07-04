@@ -70,6 +70,18 @@ public partial class App : Application
     private void RegisterViews(INavigationService navigationService)
     {
         navigationService.RegisterViews(typeof(MainMenuView), typeof(MainMenuViewModel));
-        navigationService.RegisterViews(typeof(LobbyViewWide), typeof(LobbyViewModel));
+        if (IsMobile())
+        {
+            navigationService.RegisterViews(typeof(LobbyViewNarrow), typeof(LobbyViewModel));
+        }
+        else
+        {
+            navigationService.RegisterViews(typeof(LobbyViewWide), typeof(LobbyViewModel));
+        }
+    }
+
+    private bool IsMobile()
+    {
+        return OperatingSystem.IsIOS() || OperatingSystem.IsAndroid();
     }
 }
