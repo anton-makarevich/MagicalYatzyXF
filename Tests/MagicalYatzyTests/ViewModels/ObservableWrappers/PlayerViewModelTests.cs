@@ -54,8 +54,8 @@ namespace MagicalYatzyTests.ViewModels.ObservableWrappers
             const string playerName = "New Player";
             
             _sut.Name = playerName;
-            
-            Assert.Equal(playerName, _player.Name);
+
+            _player.Name.Should().Be(playerName);
         }
         
         [Fact]
