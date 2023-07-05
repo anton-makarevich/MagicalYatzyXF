@@ -4,7 +4,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 
-namespace Sanet.MagicalYatzy.Avalonia.Converter;
+namespace Sanet.MagicalYatzy.Avalonia.Converters;
 
 public class ImageNameConverter : IValueConverter
 {

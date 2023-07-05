@@ -34,7 +34,7 @@
             </ItemsControl>
             <Label
                 Foreground="{StaticResource SanetBlueColor}"
-                FontSize="Large"
+                FontSize="14"
                 Content="Total" />
         </StackPanel>
         <ItemsControl 

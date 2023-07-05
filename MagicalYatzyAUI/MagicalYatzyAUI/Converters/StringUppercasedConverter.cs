@@ -1,7 +1,7 @@
 ﻿using System;
 using Avalonia.Data.Converters;
 
-namespace Sanet.MagicalYatzy.Avalonia.Converter;
+namespace Sanet.MagicalYatzy.Avalonia.Converters;
 
 public class StringUppercasedConverter : IValueConverter
 {

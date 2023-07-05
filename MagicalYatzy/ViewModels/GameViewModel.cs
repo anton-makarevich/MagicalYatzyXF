@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Events;
@@ -299,6 +300,26 @@ namespace Sanet.MagicalYatzy.ViewModels
             }
         });
 
+        public string MagicRollLabel => GetGameButtonLabel();
+        public string ManualSetLabel => GetGameButtonLabel();
+        public string RollResetLabel => GetGameButtonLabel();
+        public RollResultViewModel SelectedRollResult
+        {
+            get => null;
+            set
+            {
+                if (value?.RollResult != null)
+                {
+                    ApplyRollResult(value.RollResult);
+                }
+            }
+        }
+
+        private string GetGameButtonLabel([CallerMemberNameAttribute] string propertyName = "")
+        {
+            return _localizationService?.GetLocalizedString(propertyName);
+        }
+        
         private void GameOnPlayerLeft(object sender, PlayerEventArgs e)
         {
             var playerVm = Players.FirstOrDefault(p => p.Player.InGameId == e.Player.InGameId);

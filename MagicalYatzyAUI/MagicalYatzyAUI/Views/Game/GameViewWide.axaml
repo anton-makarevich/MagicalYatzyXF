@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
              xmlns:fragments="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.Fragments"
+             xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="viewModels:GameViewModel"
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.Game.GameViewWide">
@@ -20,15 +21,15 @@
             Grid.Column="2"
             Grid.Row="1"
             Orientation="Vertical"
-            WidthRequest="60"
-            VerticalOptions="Center"/>
+            Width="60"
+            VerticalAlignment="Center"/>
         <ListBox 
             Grid.Row="2" 
             Grid.Column="0"
             Grid.ColumnSpan="3"
             HorizontalAlignment="Center"
             ItemsSource="{Binding RollResults}"
-            SelectionChanged="RollResultSelected">
+            SelectedItem="{Binding SelectedRollResult}">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal"/>
@@ -36,7 +37,9 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <cells:RollResultCell/>
+                    <templatedControls:RollResultView
+                        ScoreValue="{Binding PossibleValue}"
+                        ScoreName="{Binding ShortName}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

@@ -20,10 +20,4 @@ public partial class GameViewWide : GameView
         DicePanelView.SetValue(Grid.ColumnProperty, 1);
         PageGrid.Children.Insert(0, DicePanelView);
     }
-    
-    public void RollResultSelected(object? sender, SelectionChangedEventArgs e)
-    {
-        if (e?.ItemData is RollResultViewModel viewModel)
-            ViewModel?.ApplyRollResult(viewModel.RollResult);
-    }
 }

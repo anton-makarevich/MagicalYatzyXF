@@ -4,7 +4,7 @@ using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Layout;
 
-namespace Sanet.MagicalYatzy.Avalonia.Converter;
+namespace Sanet.MagicalYatzy.Avalonia.Converters;
 
 public class AdaptiveOrientationConverter : IValueConverter
 {

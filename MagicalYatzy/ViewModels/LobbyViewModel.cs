@@ -160,8 +160,12 @@ namespace Sanet.MagicalYatzy.ViewModels
             SelectRule(((RuleViewModel)sender).Rule);
         }
 
-        private void SelectRule(Rules rule)
+        private void SelectRule(Rules? rule)
         {
+            if (rule == null)
+            {
+                return;
+            }
             var ruleToSelect = Rules.FirstOrDefault(r => r.Rule == rule);
             if (ruleToSelect == null || ruleToSelect.IsSelected)
             {
@@ -177,10 +181,10 @@ namespace Sanet.MagicalYatzy.ViewModels
             NotifyPropertyChanged(nameof(CanStartGame));
         }
 
-        public RuleViewModel SelectedRule
+        public RuleViewModel? SelectedRule
         {
             get => Rules.FirstOrDefault(r => r.IsSelected);
-            set => SelectRule(value.Rule);
+            set => SelectRule(value?.Rule);
         }
 
         public ICommand StartGameCommand => new AsyncCommand(async () =>
