@@ -181,7 +181,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             NotifyPropertyChanged(nameof(CanStartGame));
         }
 
-        public RuleViewModel? SelectedRule
+        public RuleViewModel SelectedRule
         {
             get => Rules.FirstOrDefault(r => r.IsSelected);
             set => SelectRule(value?.Rule);
