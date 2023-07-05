@@ -403,6 +403,12 @@ namespace MagicalYatzyTests.ViewModels
         }
 
         [Fact]
+        public void SettingSelectedRuleToNull_DoesNotBreakCode()
+        {
+            _sut.SelectedRule = null;
+        }
+
+        [Fact]
         public async Task StartNewGameCallsStartNewGameWithSelectedRule()
         {
             _rulesService.GetAllRules().Returns(new[] { Rules.krBaby, Rules.krSimple });

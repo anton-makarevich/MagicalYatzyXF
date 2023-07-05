@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Sanet.MagicalYatzy.Avalonia.Services.Navigation;
+using Sanet.MagicalYatzy.Avalonia.Services.Stubs;
 using Sanet.MagicalYatzy.Dto.ApiConfigs;
 using Sanet.MagicalYatzy.Dto.Services;
 using Sanet.MagicalYatzy.Models.Game;
@@ -8,6 +8,7 @@ using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Api;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Services.Localization;
+using Sanet.MagicalYatzy.Services.Media;
 using Sanet.MagicalYatzy.Services.Navigation;
 using Sanet.MagicalYatzy.Services.StorageService;
 using Sanet.MagicalYatzy.ViewModels;
@@ -30,10 +31,12 @@ public static class CoreServices
         services.AddSingleton<IDiceGenerator, RandomDiceGenerator>();
         services.AddSingleton<ILocalizationService, GlobalizationInvariantLocalizationService>();
         services.AddSingleton<IStorageService, LocalJsonStorageService>();
+        services.AddSingleton<ISoundsProvider, SoundsProviderStub>();
     }
     public static void RegisterViewModels(this IServiceCollection services)
     {
         services.AddTransient<MainMenuViewModel, MainMenuViewModel>();
         services.AddTransient<LobbyViewModel, LobbyViewModel>();
+        services.AddTransient<GameViewModel, GameViewModel>();
     }
 }

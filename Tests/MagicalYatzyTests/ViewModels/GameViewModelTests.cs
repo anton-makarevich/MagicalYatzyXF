@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
@@ -12,6 +13,7 @@ using Sanet.MagicalYatzy.Services.Localization;
 using Sanet.MagicalYatzy.Services.Media;
 using Sanet.MagicalYatzy.Utils;
 using Sanet.MagicalYatzy.ViewModels;
+using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 using Sanet.MVVM.Core.Services;
 using Xunit;
 
@@ -24,8 +26,10 @@ public class GameViewModelTests
     private readonly INavigationService _navigationService;
     private readonly IDicePanel _dicePanel;
     private readonly ISoundsProvider _soundsProvider;
+    private readonly ILocalizationService _localizationService;
     private readonly IPlayer _humanPlayer;
     private readonly IPlayer _botPlayer;
+    private readonly IRollResult _rollResult;
 
     public GameViewModelTests()
     {
@@ -35,6 +39,8 @@ public class GameViewModelTests
 
         _botPlayer = Substitute.For<IPlayer>();
         _botPlayer.InGameId.Returns("1");
+
+        _rollResult = Substitute.For<IRollResult>();
 
         _gameService = Substitute.For<IGameService>();
         _gameService.CurrentLocalGame.Rules.Returns(new Rule(Rules.krSimple));
@@ -46,11 +52,12 @@ public class GameViewModelTests
 
         _navigationService = Substitute.For<INavigationService>();
 
-        var localizationService = Substitute.For<ILocalizationService>();
+        
+        _localizationService = Substitute.For<ILocalizationService>();
 
         _dicePanel = Substitute.For<IDicePanel>();
         _soundsProvider = Substitute.For<ISoundsProvider>();
-        _sut = new GameViewModel(_gameService, _dicePanel, _soundsProvider, localizationService);
+        _sut = new GameViewModel(_gameService, _dicePanel, _soundsProvider, _localizationService);
     }
 
     [Fact]
@@ -1365,7 +1372,55 @@ public class GameViewModelTests
             
         _gameService.CurrentLocalGame.Received().ReportRoll();
     }
+
+    [Fact]
+    public void MagicRollButtonLabel_IsReturnedFromTheLocalizationService()
+    {
+        const string magicRoll = "Magic Roll";
+        _localizationService.GetLocalizedString("MagicRollLabel").Returns(magicRoll);
+
+        var result = _sut.MagicRollLabel;
+
+        result.Should().Be(magicRoll);
+    }
+    
+    [Fact]
+    public void ManualSetButtonLabel_IsReturnedFromTheLocalizationService()
+    {
+        const string expected = "Manual Set";
+        _localizationService.GetLocalizedString("ManualSetLabel").Returns(expected);
+
+        var result = _sut.ManualSetLabel;
+
+        result.Should().Be(expected);
+    }
+    
+    [Fact]
+    public void RollResetButtonLabel_IsReturnedFromTheLocalizationService()
+    {
+        const string expected = "Roll Reset";
+        _localizationService.GetLocalizedString("RollResetLabel").Returns(expected);
+
+        var result = _sut.RollResetLabel;
+
+        result.Should().Be(expected);
+    }
+
+    [Fact]
+    public void GettingSelectedRollResult_IsNull()
+    {
+        _sut.SelectedRollResult.Should().BeNull();
+    }
+
+    [Fact]
+    public void SettingSelectedRollResult_AppliesItToGame()
+    {
+        var rollResult = new RollResultViewModel(_rollResult, _localizationService);
+        _sut.SelectedRollResult = rollResult;
         
+        _gameService.CurrentLocalGame.Received().ApplyScore(_rollResult);
+    }
+    
     #region Private methods
 
     // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local

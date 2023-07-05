@@ -6,6 +6,7 @@ using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using Sanet.MagicalYatzy.Avalonia.DependencyInjection;
 using Sanet.MagicalYatzy.Avalonia.Views;
+using Sanet.MagicalYatzy.Avalonia.Views.Game;
 using Sanet.MagicalYatzy.Avalonia.Views.Lobby;
 using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MVVM.Core.Services;
@@ -70,6 +71,7 @@ public partial class App : Application
     private void RegisterViews(INavigationService navigationService)
     {
         navigationService.RegisterViews(typeof(MainMenuView), typeof(MainMenuViewModel));
+        navigationService.RegisterViews(typeof(GameViewWide), typeof(GameViewModel));
         if (IsMobile())
         {
             navigationService.RegisterViews(typeof(LobbyViewNarrow), typeof(LobbyViewModel));

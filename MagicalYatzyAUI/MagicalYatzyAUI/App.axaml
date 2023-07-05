@@ -1,6 +1,6 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:converter="clr-namespace:Sanet.MagicalYatzy.Avalonia.Converter"
+             xmlns:converters="clr-namespace:Sanet.MagicalYatzy.Avalonia.Converters"
              x:Class="Sanet.MagicalYatzy.Avalonia.App"
              RequestedThemeVariant="Dark">
 
@@ -11,13 +11,15 @@
         <StyleInclude Source="Views/TemplatedControls/MainMenuItem.axaml"/>
         <StyleInclude Source="Views/TemplatedControls/ActionButton.axaml"/>
         <StyleInclude Source="Views/TemplatedControls/EditableMenuItem.axaml"/>
+        <StyleInclude Source="Views/TemplatedControls/RollResultView.axaml"/>
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>
-            <converter:ImageNameConverter x:Key="ImageNameConverter"/>
-            <converter:PanelWidthConverter x:Key="PanelWidthConverter"/>
-            <converter:StringUppercasedConverter x:Key="StringUppercasedConverter"/>    
-            <converter:AdaptiveOrientationConverter x:Key="AdaptiveOrientationConverter"/>    
+            <converters:ImageNameConverter x:Key="ImageNameConverter"/>
+            <converters:PanelWidthConverter x:Key="PanelWidthConverter"/>
+            <converters:StringUppercasedConverter x:Key="StringUppercasedConverter"/>    
+            <converters:AdaptiveOrientationConverter x:Key="AdaptiveOrientationConverter"/>    
+            <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>    
             <ResourceDictionary.MergedDictionaries>
             <ResourceInclude Source="Resources/AppResources.axaml"/>
             </ResourceDictionary.MergedDictionaries>

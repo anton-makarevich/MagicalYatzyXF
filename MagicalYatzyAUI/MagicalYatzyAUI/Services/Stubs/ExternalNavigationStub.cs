@@ -1,6 +1,6 @@
 ﻿using Sanet.MagicalYatzy.Services.Navigation;
 
-namespace Sanet.MagicalYatzy.Avalonia.Services.Navigation;
+namespace Sanet.MagicalYatzy.Avalonia.Services.Stubs;
 
 public class ExternalNavigationStub:IExternalNavigationService
 {
