@@ -9,9 +9,12 @@
     <StackPanel
         Orientation="Vertical">
         <Label
-            Background="{Binding IsMyTurn, Converter={StaticResource BoolToColorConverter}}"
+            Margin="0,0,0,2"
+            Background="{Binding IsMyTurn,
+                Converter={StaticResource BoolToColorConverter},
+                ConverterParameter=SanetBlueColor}"
             Foreground="White"
-            Content="{Binding Name}" />
+            Content="{Binding Name}"/>
         <ItemsControl 
             ItemsSource="{Binding Results}"
             VerticalAlignment = "Top"
@@ -19,8 +22,13 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Label
-                        Foreground="{StaticResource SanetBlueColor}"
-                        Content="{Binding Value}" />
+                        Background="{Binding  HasValue,
+                            Converter={StaticResource BoolToColorConverter},
+                            ConverterParameter=SanetBlueColor}"
+                        Foreground="White"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Content="{Binding Value}"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>
@@ -30,6 +38,7 @@
             </ItemsControl.ItemsPanel>
         </ItemsControl>
         <Label
+            Margin="0,2,0,0"
             Foreground="White"
             FontSize="14"
             HorizontalAlignment="Center"
