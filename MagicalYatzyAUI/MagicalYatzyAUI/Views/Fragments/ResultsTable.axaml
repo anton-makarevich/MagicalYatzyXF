@@ -12,8 +12,7 @@
         >
         <StackPanel
             Orientation="Vertical">
-            <Label
-                Foreground="Yellow"
+            <Label Margin="0,0,0,2"
                 Content=" " />
             <ItemsControl 
                 ItemsSource="{Binding RollResultsLabels}"
@@ -33,21 +32,24 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
             <Label
+                Margin="0,2,0,0"
                 Foreground="{StaticResource SanetBlueColor}"
                 FontSize="14"
-                Content="Total" />
+                Content="{Binding TotalLabel, Converter={StaticResource StringUppercasedConverter}}" />
         </StackPanel>
         <ItemsControl 
             ItemsSource="{Binding Players}"
         >
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <cells:PlayerScoresCell/>
+                    <cells:PlayerScoresCell MinWidth="50"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal"/>
+                    <StackPanel
+                        Orientation="Horizontal"
+                        Spacing="2"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>

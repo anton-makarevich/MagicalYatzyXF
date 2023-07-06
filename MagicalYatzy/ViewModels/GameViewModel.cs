@@ -313,6 +313,8 @@ namespace Sanet.MagicalYatzy.ViewModels
         public string MagicRollLabel => GetGameButtonLabel();
         public string ManualSetLabel => GetGameButtonLabel();
         public string RollResetLabel => GetGameButtonLabel();
+        public string TotalLabel => _localizationService.GetLocalizedString("PlayerTotalScoreLabel");
+
         public RollResultViewModel SelectedRollResult
         {
             get => null;

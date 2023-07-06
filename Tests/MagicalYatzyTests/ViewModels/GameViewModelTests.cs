@@ -1434,6 +1434,17 @@ public class GameViewModelTests
 
         result.Should().Be(expected);
     }
+    
+    [Fact]
+    public void TotalLabel_IsReturnedFromTheLocalizationService()
+    {
+        const string expected = "Total";
+        _localizationService.GetLocalizedString("PlayerTotalScoreLabel").Returns(expected);
+
+        var result = _sut.TotalLabel;
+
+        result.Should().Be(expected);
+    }
 
     [Fact]
     public void GettingSelectedRollResult_IsNull()
