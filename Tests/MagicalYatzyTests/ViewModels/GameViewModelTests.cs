@@ -1180,6 +1180,34 @@ public class GameViewModelTests
             
         Assert.Equal(1,_humanPlayer.Roll);
     }
+    
+    [Fact]
+    public void DicePanelOnRollEnded_DoesNotUpdateCurrentPlayerRollResults_IfGameHasNotStarted()
+    {
+        _humanPlayer.IsHuman.Returns(true);
+        _humanPlayer.Roll = 1;
+        _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+        _sut.AttachHandlers();
+
+        _dicePanel.RollEnded +=
+            Raise.Event();
+
+        _sut.RollResults.Should().BeNull();
+    }
+    
+    [Fact]
+    public void DicePanelOnRollEnded_ShouldShowRollForHuman_IfGameHasNotStarted()
+    {
+        _humanPlayer.IsHuman.Returns(true);
+        _humanPlayer.Roll = 1;
+        _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+        _sut.AttachHandlers();
+
+        _dicePanel.RollEnded +=
+            Raise.Event();
+
+        _sut.CanRoll.Should().BeTrue();
+    }
         
     [Fact]
     public void DicePanelOnRollEndedDoesNotRefreshGameStatusIfThereIsNoCurrentPlayer()
@@ -1294,7 +1322,7 @@ public class GameViewModelTests
     {
         _humanPlayer.IsHuman.Returns(true);
         _humanPlayer.Roll = 1;
-        _humanPlayer.Results.Returns(new List<RollResult>() {new RollResult(Scores.Ones, Rules.krSimple)});
+        _humanPlayer.Results.Returns(new List<RollResult>() {new RollResult(Scores.Ones, Rules.krSimple){PossibleValue = 5}});
         _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
         _sut.AttachHandlers();
 
@@ -1310,6 +1338,7 @@ public class GameViewModelTests
     {
         _humanPlayer.IsHuman.Returns(true);
         _humanPlayer.Roll = 1;
+        _humanPlayer.Results.Returns(new IRollResult[] { new RollResult(Scores.Fives, Rules.krBaby){PossibleValue = 5} });
         _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
 
         var testAction = new Action(() =>
