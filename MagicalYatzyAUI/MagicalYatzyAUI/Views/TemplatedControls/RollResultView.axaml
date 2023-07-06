@@ -11,7 +11,7 @@
             <ControlTemplate>
                 <Grid
                     Height="60"
-                    Width="60" RowDefinitions="*,20">
+                    Width="60" RowDefinitions="*,Auto">
                     <Label 
                         Foreground="White"
                         HorizontalAlignment="Center"
@@ -23,7 +23,7 @@
                         Foreground="White"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        FontSize="16"
+                        FontSize="14"
                         Content="{TemplateBinding ScoreName}"/>
                 </Grid>
             </ControlTemplate>

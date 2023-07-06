@@ -127,6 +127,16 @@ namespace Sanet.MagicalYatzy.ViewModels
             if (!HasCurrentPlayer)
                 return;
 
+            if (CurrentPlayer.Player.Roll == 1 && CurrentPlayer.Player.Results.All(r => r.PossibleValue == 0))
+            {
+                if (CurrentPlayer.Player.IsHuman)
+                {
+                    NotifyPropertyChanged(nameof(CanRoll));
+                }
+
+                return;
+            }
+
             if (CurrentPlayer.Player.IsHuman)
             {
                 SetRollResults();

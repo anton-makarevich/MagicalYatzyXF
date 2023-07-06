@@ -9,7 +9,7 @@
              x:DataType="viewModels:GameViewModel"
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.Game.GameViewWide">
     <Grid
-        x:Name="PageGrid" RowDefinitions="Auto,*,60" ColumnDefinitions="Auto,*,Auto">
+        x:Name="PageGrid" RowDefinitions="Auto,*,Auto" ColumnDefinitions="Auto,*,Auto">
         <Label
             Classes="caption"
             Content="{Binding Title}"/>
