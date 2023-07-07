@@ -20,6 +20,7 @@
             <converters:StringUppercasedConverter x:Key="StringUppercasedConverter"/>    
             <converters:AdaptiveOrientationConverter x:Key="AdaptiveOrientationConverter"/>    
             <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>    
+            <converters:ScoreToColorConverter x:Key="ScoreToColorConverter"/>    
             <ResourceDictionary.MergedDictionaries>
             <ResourceInclude Source="Resources/AppResources.axaml"/>
             </ResourceDictionary.MergedDictionaries>

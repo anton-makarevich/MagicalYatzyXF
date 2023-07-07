@@ -22,6 +22,7 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
         public bool HasBonus => _rollResult.HasBonus;
 
         public string ShortName => _localizationService.GetLocalizedString(_rollResult.ScoreType+"Short");
+        public string Name => _localizationService.GetLocalizedString(_rollResult.ScoreType.ToString());
         public IRollResult RollResult => _rollResult;
         public ScoreStatus Status => _rollResult.Status;
 
