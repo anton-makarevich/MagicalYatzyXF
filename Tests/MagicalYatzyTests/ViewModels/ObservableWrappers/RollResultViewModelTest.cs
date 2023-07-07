@@ -143,5 +143,14 @@ namespace MagicalYatzyTests.ViewModels.ObservableWrappers
 
             Assert.Equal(expectedName, _sut.ShortName);
         }
+        
+        [Fact]
+        public void Name_IsCorrect()
+        {
+            var expectedName = Strings.Ones;
+            _localizationService.GetLocalizedString("Ones").Returns(expectedName);
+
+            Assert.Equal(expectedName, _sut.Name);
+        }
     }
 }
