@@ -25,6 +25,11 @@
                         Orientation="Horizontal"
                         Width="60"
                         VerticalAlignment="Center"/>
+                    <fragments:RollResultsPanel 
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Orientation="Vertical"
+                        VerticalAlignment="Bottom"/>
                 </Grid>
             </TabItem>
             <TabItem Header="{Binding ScoresTitle}">
