@@ -1,0 +1,41 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
+             xmlns:fragments="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.Fragments"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="viewModels:GameViewModel"
+             x:Class="Sanet.MagicalYatzy.Avalonia.Views.Game.GameViewNarrow">
+    <Grid Margin="10,0,0,5" RowDefinitions="60,*">
+        <Label
+            Classes="caption"
+            Content="{Binding Title}"/>
+        <TabControl
+            Grid.Row="1"
+            TabStripPlacement="Bottom">
+            <TabItem Header="{Binding PanelTitle}">
+                <!-- <fragments:PlayersFragment/> -->
+                <Grid x:Name="PageGrid"
+                      ColumnDefinitions="Auto,*,Auto"
+                      RowDefinitions="*,Auto">
+                    <fragments:GameButtons
+                        Grid.ColumnSpan="3"
+                        Grid.Row="1"
+                        Orientation="Horizontal"
+                        Width="60"
+                        VerticalAlignment="Center"/>
+                    <fragments:RollResultsPanel 
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Orientation="Vertical"
+                        VerticalAlignment="Bottom"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="{Binding ScoresTitle}">
+                <fragments:ResultsTable/>
+            </TabItem>
+        
+        </TabControl>
+    </Grid>
+</UserControl>

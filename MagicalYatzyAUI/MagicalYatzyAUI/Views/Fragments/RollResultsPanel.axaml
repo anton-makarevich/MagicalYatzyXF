@@ -1,0 +1,37 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
+             xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="viewModels:GameViewModel"
+             x:Class="Sanet.MagicalYatzy.Avalonia.Views.Fragments.RollResultsPanel">
+    <ListBox 
+        HorizontalAlignment="Center"
+        ItemsSource="{Binding RollResults}"
+        SelectedItem="{Binding SelectedRollResult}">
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel 
+                    Orientation="{Binding Orientation, RelativeSource={RelativeSource Self}}" 
+                    Spacing="2"/>
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <templatedControls:RollResultView Padding="0"
+                                                  Background="{Binding ScoreType, Converter={StaticResource ScoreToColorConverter}}"
+                                                  ScoreValue="{Binding PossibleValue}"
+                                                  ScoreName="{Binding  Name}"/>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+        <ListBox.Styles>
+            <Style Selector="ListBoxItem">
+                <Setter Property="Width" Value="{StaticResource RollResultCellSize}"/>
+                <Setter Property="Height" Value="{StaticResource RollResultCellSize}"/>
+                <Setter Property="Padding" Value="0"/>
+            </Style>
+        </ListBox.Styles>
+    </ListBox>
+</UserControl>

@@ -23,33 +23,10 @@
             Orientation="Vertical"
             Width="60"
             VerticalAlignment="Center"/>
-        <ListBox 
-            Grid.Row="2" 
+        <fragments:RollResultsPanel 
+            Grid.Row="2"
             Grid.Column="0"
             Grid.ColumnSpan="3"
-            HorizontalAlignment="Center"
-            ItemsSource="{Binding RollResults}"
-            SelectedItem="{Binding SelectedRollResult}">
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal" Spacing="2"/>
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <templatedControls:RollResultView Padding="0"
-                        Background="{Binding ScoreType, Converter={StaticResource ScoreToColorConverter}}"
-                        ScoreValue="{Binding PossibleValue}"
-                        ScoreName="{Binding  Name}"/>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-            <ListBox.Styles>
-                <Style Selector="ListBoxItem">
-                    <Setter Property="Width" Value="{StaticResource RollResultCellSize}"/>
-                    <Setter Property="Height" Value="{StaticResource RollResultCellSize}"/>
-                    <Setter Property="Padding" Value="0"/>
-                </Style>
-            </ListBox.Styles>
-        </ListBox>
+            Orientation="Horizontal"/>
     </Grid>
 </UserControl>
