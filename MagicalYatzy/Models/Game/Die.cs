@@ -199,7 +199,6 @@ namespace Sanet.MagicalYatzy.Models.Game
             if (PosX < 0) PosX = 0;
             if (PosY < 0) PosY = 0;
         }
-
         
         public void UpdateDiePosition()
         {
