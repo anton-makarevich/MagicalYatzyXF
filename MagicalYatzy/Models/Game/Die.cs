@@ -258,6 +258,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         private bool IsInSaveArea()
         {
+            if (_dicePanel.Bounds.Height == 0 || _dicePanel.Bounds.Width == 0) return false;
             return PosX <= _dicePanel.SaveMargins.Left
                    || PosX >= _dicePanel.Bounds.Width - Width - _dicePanel.SaveMargins.Right
                    || PosY <= _dicePanel.SaveMargins.Top

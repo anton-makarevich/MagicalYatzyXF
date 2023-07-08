@@ -14,13 +14,14 @@ namespace MagicalYatzyTests.Models.Game
         private readonly IGameSettingsService _gameSettingMock;
         private readonly IDicePanel _dicePanelMock;
 
-        private readonly Rectangle _dicePanelBounds = new Rectangle(0, 0, 200, 200);
+        private readonly Rectangle _dicePanelBounds = new(0, 0, 200, 200);
 
         public DiceTests()
         {
             _gameSettingMock = Substitute.For<IGameSettingsService>();
             _dicePanelMock = Substitute.For<IDicePanel>();
-            _dicePanelMock.Bounds.Returns((arg) => _dicePanelBounds);
+            _dicePanelMock.Bounds.Returns((_) => _dicePanelBounds);
+            _dicePanelMock.SaveMargins.Returns(new Thickness());
             _sut = new Die(_dicePanelMock, _gameSettingMock);
         }
 
