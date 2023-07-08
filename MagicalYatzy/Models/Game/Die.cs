@@ -169,24 +169,26 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         private string GetFramePicPath() => StyleString + _rotationString + Frame + ".png";
 
-        public void InitializeLocation()
+        public void InitializePosition()
         {
-            var width = (int) _dicePanel.Bounds.Width;
-            var height = (int) _dicePanel.Bounds.Height;
+            var width = (int)_dicePanel.Bounds.Width;
+            var height = (int)_dicePanel.Bounds.Height;
+    
             if (width > 0 && height > 0)
             {
-                var mw = width - Width;
+                var mw = width - Width - (int)_dicePanel.SaveMargins.Right;
                 if (mw < 1)
                 {
                     mw = 1;
                 }
-                PosX = ValueGenerator.Next(1, mw);
-                mw = height - Height;
+                PosX = ValueGenerator.Next((int)_dicePanel.SaveMargins.Left + 1, mw);
+        
+                mw = height - Height - (int)_dicePanel.SaveMargins.Bottom;
                 if (mw < 1)
                 {
                     mw = 1;
                 }
-                PosY = ValueGenerator.Next(1, mw);
+                PosY = ValueGenerator.Next((int)_dicePanel.SaveMargins.Top + 1, mw);
             }
             else
             {
@@ -197,6 +199,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             if (PosX < 0) PosX = 0;
             if (PosY < 0) PosY = 0;
         }
+
         
         public void UpdateDiePosition()
         {
@@ -222,7 +225,9 @@ namespace Sanet.MagicalYatzy.Models.Game
             {
                 case DieStatus.Rolling:
                     // Stop when max amount of rolls has been reached
-                    if (_rollLoop > _gameSettingsService.MaxRollLoop & ValueGenerator.Next(1, 100) < 10)
+                    if (_rollLoop > _gameSettingsService.MaxRollLoop 
+                        && ValueGenerator.Next(1, GetRollDurationModifier()) < 10
+                        && !IsInSaveArea())
                     {
                         Status = DieStatus.Landing;
                         _rollLoop = 0;
@@ -233,12 +238,31 @@ namespace Sanet.MagicalYatzy.Models.Game
                 
                 case DieStatus.Landing:
 
-                    if (_rollLoop > (5 - _gameSettingsService.DieAngle))
+                    if (_rollLoop > 5 - _gameSettingsService.DieAngle && !IsInSaveArea())
                     {
                         Status = DieStatus.Stopped;
                     }
                     break;
             }
+        }
+
+        private int GetRollDurationModifier()
+        {
+            var modifiers = 0;
+            const int saveMarginsFactor = 10;
+            if (_dicePanel.SaveMargins.Left!=0) modifiers+=saveMarginsFactor;
+            if (_dicePanel.SaveMargins.Right!=0) modifiers+=saveMarginsFactor;
+            if (_dicePanel.SaveMargins.Top!=0) modifiers+=saveMarginsFactor;
+            if (_dicePanel.SaveMargins.Bottom!=0) modifiers+=saveMarginsFactor;
+            return 100 - modifiers;
+        }
+
+        private bool IsInSaveArea()
+        {
+            return PosX <= _dicePanel.SaveMargins.Left
+                   || PosX >= _dicePanel.Bounds.Width - Width - _dicePanel.SaveMargins.Right
+                   || PosY <= _dicePanel.SaveMargins.Top
+                   || PosY >= _dicePanel.Bounds.Height - Height - _dicePanel.SaveMargins.Bottom;
         }
 
         public void InitializeRoll(int iResult = 0)

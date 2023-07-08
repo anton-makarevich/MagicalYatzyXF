@@ -18,6 +18,7 @@ public partial class GameViewWide : GameView
         base.InitDicePanel();
         DicePanelView.SetValue(Grid.RowProperty, 1);
         DicePanelView.SetValue(Grid.ColumnProperty, 1);
+        DicePanelView.SaveMargins = new Thickness(0, 0, 60, 80);
         PageGrid.Children.Insert(0, DicePanelView);
     }
 }

@@ -11,15 +11,13 @@
             <ControlTemplate>
                 <Grid
                     Margin="0"
-                    Height="{StaticResource RollResultCellSize}"
-                    Width="{StaticResource RollResultCellSize}"
                     Background="{TemplateBinding Background}"
                     RowDefinitions="*,Auto">
                     <Label 
                         Foreground="White"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        FontSize="32"
+                        FontSize="{TemplateBinding ScoreFontSize}"
                         Content="{TemplateBinding ScoreValue}"/>
                     <Border
                         Background="Black"

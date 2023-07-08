@@ -87,6 +87,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         public int FixedDiceCount => Dice.Count(d => d.IsFixed);
 
         public bool AreAllDiceFixed => FixedDiceCount == Dice.Count;
+        public Thickness SaveMargins { get; set; } = new Thickness();
 
         #endregion
 
@@ -276,7 +277,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             {
                 attempt += 1;
                 isDone = true;
-                die.InitializeLocation();
+                die.InitializePosition();
                 foreach (var otherDie in Dice)
                 {
                     isDone = !die.Overlapping(otherDie);

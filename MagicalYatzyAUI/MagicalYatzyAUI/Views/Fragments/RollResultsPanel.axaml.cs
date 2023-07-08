@@ -25,4 +25,13 @@ public partial class RollResultsPanel : UserControl
         get => GetValue(OrientationProperty);
         set => SetValue(OrientationProperty, value);
     }
+
+    public static readonly StyledProperty<double> SizeProperty = AvaloniaProperty.Register<RollResultsPanel, double>(
+        nameof(Size));
+
+    public double Size
+    {
+        get => GetValue(SizeProperty);
+        set => SetValue(SizeProperty, value);
+    }
 }

@@ -29,7 +29,6 @@
     <Folder Include="Utils\" />
     <Folder Include="Models\" />
     <Folder Include="Models\Game\" />
-    <Folder Include="Models\Common\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MagicalYatzyDto\MagicalYatzyDto.csproj" />
