@@ -27,6 +27,8 @@
             Grid.Row="2"
             Grid.Column="0"
             Grid.ColumnSpan="3"
+            Size="80"
+            FontSize="32"
             Orientation="Horizontal"/>
     </Grid>
 </UserControl>

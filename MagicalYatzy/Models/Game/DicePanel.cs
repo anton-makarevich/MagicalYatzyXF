@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Sanet.MagicalYatzy.Models.Events;
+using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
 using static Sanet.MagicalYatzy.Models.Events.GameEvents;
 
 namespace Sanet.MagicalYatzy.Models.Game
@@ -87,6 +88,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         public int FixedDiceCount => Dice.Count(d => d.IsFixed);
 
         public bool AreAllDiceFixed => FixedDiceCount == Dice.Count;
+        public Thickness SaveMargins { get; set; } = new Thickness();
 
         #endregion
 
@@ -254,7 +256,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
             while (Dice.Count < DiceCount)
             {
-                var dice = new Die(this, _gameSettingsService);
+                var dice = new Die(this, _gameSettingsService, new RandomValueGenerator());
 
                 FindDiePosition(dice);
 
@@ -276,7 +278,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             {
                 attempt += 1;
                 isDone = true;
-                die.InitializeLocation();
+                die.InitializePosition();
                 foreach (var otherDie in Dice)
                 {
                     isDone = !die.Overlapping(otherDie);

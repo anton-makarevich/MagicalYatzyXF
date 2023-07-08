@@ -1,7 +1,9 @@
 ﻿using System;
+using FluentAssertions;
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Common;
 using Sanet.MagicalYatzy.Models.Game;
+using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
 using Sanet.MagicalYatzy.Services;
 using Xunit;
 
@@ -9,18 +11,22 @@ namespace MagicalYatzyTests.Models.Game
 {
     public class DiceTests
     {
-        private readonly Die _sut;
+        private  Die _sut;
         private readonly IGameSettingsService _gameSettingMock;
+        private readonly IValueGenerator _valueGenerator;
         private readonly IDicePanel _dicePanelMock;
 
-        private readonly Rectangle _dicePanelBounds = new Rectangle(0, 0, 200, 200);
+        private readonly Rectangle _dicePanelBounds = new(0, 0, 200, 200);
 
         public DiceTests()
         {
             _gameSettingMock = Substitute.For<IGameSettingsService>();
             _dicePanelMock = Substitute.For<IDicePanel>();
-            _dicePanelMock.Bounds.Returns((arg) => _dicePanelBounds);
-            _sut = new Die(_dicePanelMock, _gameSettingMock);
+            _valueGenerator = Substitute.For<IValueGenerator>();
+            _valueGenerator.Next(Arg.Any<int>(), Arg.Any<int>()).Returns(5);
+            _dicePanelMock.Bounds.Returns((_) => _dicePanelBounds);
+            _dicePanelMock.SaveMargins.Returns(new Thickness());
+            _sut = new Die(_dicePanelMock, _gameSettingMock,_valueGenerator);
         }
 
         [Fact]
@@ -30,7 +36,7 @@ namespace MagicalYatzyTests.Models.Game
             const int thisDirection = 3;
             const int othersDirection = -3;
             _sut.DirectionX = thisDirection;
-            var otherDice = new Die(_dicePanelMock, _gameSettingMock)
+            var otherDice = new Die(_dicePanelMock, _gameSettingMock,_valueGenerator)
             {
                 PosX = 40,
                 DirectionX = -othersDirection
@@ -51,7 +57,7 @@ namespace MagicalYatzyTests.Models.Game
             const int thisDirection = 3;
             const int othersDirection = 2;
             _sut.DirectionX = thisDirection;
-            var otherDice = new Die(_dicePanelMock, _gameSettingMock)
+            var otherDice = new Die(_dicePanelMock, _gameSettingMock,_valueGenerator)
             {
                 PosX = 40,
                 DirectionX = -othersDirection
@@ -72,7 +78,7 @@ namespace MagicalYatzyTests.Models.Game
             const int thisDirection = -2;
             const int othersDirection = -3;
             _sut.DirectionX = thisDirection;
-            var otherDice = new Die(_dicePanelMock, _gameSettingMock)
+            var otherDice = new Die(_dicePanelMock, _gameSettingMock,_valueGenerator)
             {
                 PosX = 40,
                 DirectionX = -othersDirection
@@ -93,7 +99,7 @@ namespace MagicalYatzyTests.Models.Game
             const int thisDirection = 3;
             const int othersDirection = -3;
             _sut.DirectionY = thisDirection;
-            var otherDice = new Die(_dicePanelMock, _gameSettingMock)
+            var otherDice = new Die(_dicePanelMock, _gameSettingMock,_valueGenerator)
             {
                 PosY = 40,
                 DirectionY = -othersDirection
@@ -114,7 +120,7 @@ namespace MagicalYatzyTests.Models.Game
             const int thisDirection = 3;
             const int othersDirection = 2;
             _sut.DirectionY = thisDirection;
-            var otherDice = new Die(_dicePanelMock, _gameSettingMock)
+            var otherDice = new Die(_dicePanelMock, _gameSettingMock,_valueGenerator)
             {
                 PosY = 40,
                 DirectionY = -othersDirection
@@ -135,7 +141,7 @@ namespace MagicalYatzyTests.Models.Game
             const int thisDirection = -2;
             const int othersDirection = -3;
             _sut.DirectionY = thisDirection;
-            var otherDice = new Die(_dicePanelMock, _gameSettingMock)
+            var otherDice = new Die(_dicePanelMock, _gameSettingMock,_valueGenerator)
             {
                 PosY = 40,
                 DirectionY = -othersDirection
@@ -218,7 +224,7 @@ namespace MagicalYatzyTests.Models.Game
         {
             _dicePanelMock.Bounds.Returns(new Rectangle(0,0,0,0));
             
-            _sut.InitializeLocation();
+            _sut.InitializePosition();
             
             Assert.Equal(0,_sut.PosX);
             Assert.Equal(0,_sut.PosY);
@@ -265,7 +271,7 @@ namespace MagicalYatzyTests.Models.Game
         [Fact]
         public void RegularMovementDoesNotChangeDiceDirection()
         {
-            _sut.InitializeLocation();
+            _sut.InitializePosition();
             _sut.Status = DieStatus.Rolling;
             _sut.DirectionX = 5;
             _sut.DirectionY = 5;
@@ -274,6 +280,42 @@ namespace MagicalYatzyTests.Models.Game
             
             Assert.Equal(5,_sut.DirectionX);
             Assert.Equal(5,_sut.DirectionY);
+        }
+        
+        [Fact]
+        public void InitializePosition_WithinSaveMargins_ShouldSetPositionOutsideMargins()
+        {
+            // Arrange
+            _dicePanelMock.SaveMargins.Returns(new Thickness(10, 20, 30, 40));
+            
+            // Act
+            _sut = new Die(_dicePanelMock, _gameSettingMock, new RandomValueGenerator());
+            _sut.InitializePosition();
+    
+            // Assert
+            _sut.PosX.Should().BeGreaterOrEqualTo((int)_dicePanelMock.SaveMargins.Left + 1);
+            _sut.PosX.Should().BeLessOrEqualTo((int)_dicePanelMock.Bounds.Width - 72 - (int)_dicePanelMock.SaveMargins.Right);
+
+            _sut.PosY.Should().BeGreaterOrEqualTo((int)_dicePanelMock.SaveMargins.Top + 1);
+            _sut.PosY.Should().BeLessOrEqualTo((int)_dicePanelMock.Bounds.Height - 72 - (int)_dicePanelMock.SaveMargins.Bottom);
+        }
+
+        [Fact]
+        public void UpdateDiePosition_DicePositionWithinSaveMargins_ShouldNotSetStatusToLanding()
+        {
+            // Arrange
+            _gameSettingMock.MaxRollLoop.Returns(0);
+            _dicePanelMock.SaveMargins.Returns(new Thickness(10, 20, 30, 40));
+            
+            _sut.PosX = 5;
+            _sut.PosY = 10;
+            _sut.Status = DieStatus.Rolling;
+
+            // Act
+            _sut.UpdateDiePosition();
+
+            // Assert
+            _sut.Status.Should().NotBe(DieStatus.Landing);
         }
     }
 }

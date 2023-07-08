@@ -23,6 +23,11 @@ namespace Sanet.MagicalYatzy.Models.Game
         int FixedDiceCount { get; }
         bool AreAllDiceFixed { get; }
 
+        /// <summary>
+        /// Area where dice should not stop
+        /// </summary>
+        Thickness SaveMargins { get; set; }
+
         event DieChangedEventHandler DieChangedManually;
         event EventHandler<DiceFixedEventArgs> DieFixed;
         event DieManualChangeRequestEventHandler DieManualChangeRequested;

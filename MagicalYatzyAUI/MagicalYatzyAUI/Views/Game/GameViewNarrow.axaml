@@ -29,6 +29,8 @@
                         Grid.Row="0"
                         Grid.Column="2"
                         Orientation="Vertical"
+                        Size="60"
+                        FontSize="26"
                         VerticalAlignment="Bottom"/>
                 </Grid>
             </TabItem>

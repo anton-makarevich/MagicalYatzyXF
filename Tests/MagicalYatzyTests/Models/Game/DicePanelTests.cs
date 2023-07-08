@@ -15,11 +15,12 @@ namespace MagicalYatzyTests.Models.Game
         private const int TestDiceCount = 6;
         private const int TestRollDelay = 6;
 
-        private readonly List<int> _testResults = new List<int> { 2, 4, 3, 3, 1, 5 };
+        private readonly List<int> _testResults = new() { 2, 4, 3, 3, 1, 5 };
 
         public DicePanelTests()
         {
             var gameSettingMock = Substitute.For<IGameSettingsService>();
+            gameSettingMock.MaxRollLoop.Returns(1);
             _sut = new DicePanel(gameSettingMock)
             {
                 DiceCount = TestDiceCount,

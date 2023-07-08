@@ -58,5 +58,18 @@ namespace Sanet.MagicalYatzy.Avalonia.Controls.Game
             _dicePanelModel?.DieClicked(point);
             base.OnPointerReleased(e);
         }
+        
+        public Thickness SaveMargins
+        {
+            get => _dicePanelModel == null 
+                ? new Thickness() 
+                : new Thickness(_dicePanelModel.SaveMargins.Left, _dicePanelModel.SaveMargins.Top, _dicePanelModel.SaveMargins.Right, _dicePanelModel.SaveMargins.Bottom);
+            set
+            {
+                if (_dicePanelModel != null)
+                    _dicePanelModel.SaveMargins =
+                        new Models.Common.Thickness(value.Left, value.Top, value.Right, value.Bottom);
+            }
+        }
     }
 }

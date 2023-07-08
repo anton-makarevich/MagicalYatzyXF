@@ -1,6 +1,7 @@
 ﻿using Sanet.MagicalYatzy.Models.Common;
 using Sanet.MagicalYatzy.Services;
 using System;
+using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
 using Sanet.MagicalYatzy.Models.Game.Extensions;
 using Sanet.MVVM.Core.ViewModels;
 
@@ -8,20 +9,20 @@ namespace Sanet.MagicalYatzy.Models.Game
 {
     public class Die : BindableBase
     {
-        private static readonly Random ValueGenerator = new();
-
         private const int MaxMove = 5;
         private const int MinDiceValue = 1;
         private const int MaxDiceValue = 6;
         private readonly IGameSettingsService _gameSettingsService;
+        private readonly IValueGenerator _valueGenerator;
         private readonly IDicePanel _dicePanel;
 
         #region Constructor
 
-        public Die(IDicePanel dicePanel, IGameSettingsService gameSettingsService)
+        public Die(IDicePanel dicePanel, IGameSettingsService gameSettingsService, IValueGenerator valueGenerator)
         {
             _dicePanel = dicePanel;
             _gameSettingsService = gameSettingsService;
+            _valueGenerator = valueGenerator;
         }
 
         #endregion
@@ -169,24 +170,26 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         private string GetFramePicPath() => StyleString + _rotationString + Frame + ".png";
 
-        public void InitializeLocation()
+        public void InitializePosition()
         {
-            var width = (int) _dicePanel.Bounds.Width;
-            var height = (int) _dicePanel.Bounds.Height;
+            var width = (int)_dicePanel.Bounds.Width;
+            var height = (int)_dicePanel.Bounds.Height;
+    
             if (width > 0 && height > 0)
             {
-                var mw = width - Width;
+                var mw = width - Width - (int)_dicePanel.SaveMargins.Right;
                 if (mw < 1)
                 {
                     mw = 1;
                 }
-                PosX = ValueGenerator.Next(1, mw);
-                mw = height - Height;
+                PosX = _valueGenerator.Next((int)_dicePanel.SaveMargins.Left + 1, mw);
+        
+                mw = height - Height - (int)_dicePanel.SaveMargins.Bottom;
                 if (mw < 1)
                 {
                     mw = 1;
                 }
-                PosY = ValueGenerator.Next(1, mw);
+                PosY = _valueGenerator.Next((int)_dicePanel.SaveMargins.Top + 1, mw);
             }
             else
             {
@@ -222,7 +225,9 @@ namespace Sanet.MagicalYatzy.Models.Game
             {
                 case DieStatus.Rolling:
                     // Stop when max amount of rolls has been reached
-                    if (_rollLoop > _gameSettingsService.MaxRollLoop & ValueGenerator.Next(1, 100) < 10)
+                    if (_rollLoop > _gameSettingsService.MaxRollLoop 
+                        && _valueGenerator.Next(1, GetRollDurationModifier()) < 10
+                        && !IsInSaveArea())
                     {
                         Status = DieStatus.Landing;
                         _rollLoop = 0;
@@ -233,12 +238,32 @@ namespace Sanet.MagicalYatzy.Models.Game
                 
                 case DieStatus.Landing:
 
-                    if (_rollLoop > (5 - _gameSettingsService.DieAngle))
+                    if (_rollLoop > 5 - _gameSettingsService.DieAngle && !IsInSaveArea())
                     {
                         Status = DieStatus.Stopped;
                     }
                     break;
             }
+        }
+
+        private int GetRollDurationModifier()
+        {
+            var modifiers = 0;
+            const int saveMarginsFactor = 10;
+            if (_dicePanel.SaveMargins.Left!=0) modifiers+=saveMarginsFactor;
+            if (_dicePanel.SaveMargins.Right!=0) modifiers+=saveMarginsFactor;
+            if (_dicePanel.SaveMargins.Top!=0) modifiers+=saveMarginsFactor;
+            if (_dicePanel.SaveMargins.Bottom!=0) modifiers+=saveMarginsFactor;
+            return 100 - modifiers;
+        }
+
+        private bool IsInSaveArea()
+        {
+            if (_dicePanel.Bounds.Height == 0 || _dicePanel.Bounds.Width == 0) return false;
+            return PosX <= _dicePanel.SaveMargins.Left
+                   || PosX >= _dicePanel.Bounds.Width - Width - _dicePanel.SaveMargins.Right
+                   || PosY <= _dicePanel.SaveMargins.Top
+                   || PosY >= _dicePanel.Bounds.Height - Height - _dicePanel.SaveMargins.Bottom;
         }
 
         public void InitializeRoll(int iResult = 0)
@@ -251,13 +276,13 @@ namespace Sanet.MagicalYatzy.Models.Game
             {
                 do
                 {
-                    DirectionX = ValueGenerator.Next(-MaxMove, MaxMove + 1);
+                    DirectionX = _valueGenerator.Next(-MaxMove, MaxMove + 1);
                 } while (!(Math.Abs(DirectionX) > 2));
                 do
                 {
-                    DirectionY = ValueGenerator.Next(-MaxMove, MaxMove + 1);
+                    DirectionY = _valueGenerator.Next(-MaxMove, MaxMove + 1);
                 } while (!(Math.Abs(DirectionY) > 2));
-                Result = iResult == 0 ? ValueGenerator.Next(1, 7) : iResult;
+                Result = iResult == 0 ? _valueGenerator.Next(1, 7) : iResult;
                 _rollLoop = 0;
                 Status = DieStatus.Rolling;
             }
