@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Sanet.MagicalYatzy.Models.Events;
+using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
 using static Sanet.MagicalYatzy.Models.Events.GameEvents;
 
 namespace Sanet.MagicalYatzy.Models.Game
@@ -255,7 +256,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
             while (Dice.Count < DiceCount)
             {
-                var dice = new Die(this, _gameSettingsService);
+                var dice = new Die(this, _gameSettingsService, new RandomValueGenerator());
 
                 FindDiePosition(dice);
 
