@@ -1,5 +1,6 @@
 ﻿using System;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Sanet.MagicalYatzy.Avalonia.Controls.Game;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using Sanet.MVVM.Views.Avalonia;
@@ -25,10 +26,10 @@ namespace Sanet.MagicalYatzy.Avalonia.Views.Base
             ViewModel.DicePanel.RollDelay = 30;
         }
 
-        protected override void OnLoaded()
+        protected override void OnLoaded(RoutedEventArgs e)
         {
             InitDicePanel();
-            base.OnLoaded();
+            base.OnLoaded(e);
             ViewModel.DicePanel.RollEnded += Roll;
             Roll(null,null);
         }
@@ -38,9 +39,9 @@ namespace Sanet.MagicalYatzy.Avalonia.Views.Base
             ViewModel.DicePanel.RollDice(null);
         }
 
-        protected override void OnUnloaded()
+        protected override void OnUnloaded(RoutedEventArgs e)
         {
-            base.OnUnloaded();
+            base.OnUnloaded(e);
             ViewModel.DicePanel.RollEnded -= Roll;
         }
     }
