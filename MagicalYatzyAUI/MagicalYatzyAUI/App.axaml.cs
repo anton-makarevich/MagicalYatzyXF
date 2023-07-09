@@ -3,6 +3,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
+using Avalonia.Themes.Fluent;
 using Microsoft.Extensions.DependencyInjection;
 using Sanet.MagicalYatzy.Avalonia.DependencyInjection;
 using Sanet.MagicalYatzy.Avalonia.Views;
@@ -29,9 +31,14 @@ public partial class App : Application
             throw new Exception("Game services are not initialized");
         }
 
+        if (Current != null && Current.Resources.TryGetResource("SanetBlueColor", null, out var sanetColor))
+        {
+            Current.Resources["SystemAccentColor"] = sanetColor;
+        }
+
         services.RegisterServices();
         services.RegisterViewModels();
-        
+
         var serviceProvider = services.BuildServiceProvider();
        
         INavigationService navigationService;
