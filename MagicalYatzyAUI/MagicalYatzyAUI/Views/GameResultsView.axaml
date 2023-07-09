@@ -1,0 +1,56 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
+             xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="viewModels:GameResultsViewModel"
+             x:Class="Sanet.MagicalYatzy.Avalonia.Views.GameResultsView">
+    <Grid
+        Background="Transparent"
+        RowDefinitions="Auto,*,Auto">
+
+        <Label
+            Classes="caption"
+            HorizontalAlignment="Center"
+            Content="{Binding Title}"
+        />
+        <ItemsControl
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Grid.Row="1"
+            ItemsSource="{Binding Players}"
+            Background = "Transparent">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="3*,1*">
+                        <Label
+                            HorizontalAlignment="Left"
+                            Foreground="{StaticResource SanetBlueColor}"
+                            Content="{Binding Name}" />
+                        <Label
+                            Grid.Column="1"
+                            HorizontalAlignment="Left"
+                            Foreground="{StaticResource SanetBlueColor}"
+                            Content="{Binding Total}" />
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <StackPanel
+            Grid.Row="2"
+            Orientation="Horizontal"
+            HorizontalAlignment="Center"
+            Spacing="16">
+            <templatedControls:ActionButton
+                Command="{Binding RestartGameCommand}"
+                ImageSource="{Binding RestartImage}" 
+                Content="{Binding AgainLabel}"/>
+            <templatedControls:ActionButton
+                Command="{Binding CloseCommand}"
+                ImageSource="{Binding CloseImage}"
+                Content="{ Binding CloseButtonContent}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

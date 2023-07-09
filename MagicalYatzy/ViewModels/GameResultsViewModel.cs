@@ -47,10 +47,14 @@ namespace Sanet.MagicalYatzy.ViewModels
         }));
 
         public string RestartImage => "PlayAgain.png";
+        public string CloseImage => "Close.png";
+
         public ICommand CloseCommand => 
             new SimpleCommand(async () => await NavigationService.NavigateToRootAsync());
-
-        public string CloseImage => "close.png";
+        
+        public string CloseButtonContent => _localizationService.GetLocalizedString("CloseButtonContent"); 
+        public string Title => _localizationService.GetLocalizedString("GameFinishedLabel");
+        public string AgainLabel => _localizationService.GetLocalizedString("AgainLabel");
 
         public override void AttachHandlers()
         {
@@ -68,7 +72,7 @@ namespace Sanet.MagicalYatzy.ViewModels
 #pragma warning restore 4014
         }
 
-        private async Task SaveScoreAsync()
+        private async Task SaveScoreAsync()                                           
         {
             foreach (var player in Players.Where(p => p.Player.IsHuman))
             {

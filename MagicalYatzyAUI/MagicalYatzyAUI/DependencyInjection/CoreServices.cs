@@ -38,5 +38,6 @@ public static class CoreServices
         services.AddTransient<MainMenuViewModel, MainMenuViewModel>();
         services.AddTransient<LobbyViewModel, LobbyViewModel>();
         services.AddTransient<GameViewModel, GameViewModel>();
+        services.AddTransient<GameResultsViewModel, GameResultsViewModel>();
     }
 }
