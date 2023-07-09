@@ -1,3 +1,4 @@
+using Avalonia.Interactivity;
 using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MVVM.Views.Avalonia;
 using Sanet.MagicalYatzy.Avalonia.Controls.Game;
@@ -7,10 +8,10 @@ namespace Sanet.MagicalYatzy.Avalonia.Views.Game;
 public abstract class GameView: BaseView<GameViewModel>
 {
     protected DicePanelControl? DicePanelView;
-    protected override void OnLoaded()
+    protected override void OnLoaded(RoutedEventArgs e)
     {
         InitDicePanel();
-        base.OnLoaded();
+        base.OnLoaded(e);
     }
 
     protected virtual void InitDicePanel()
