@@ -1454,7 +1454,7 @@ public class GameViewModelTests
         const string expected = "T!";
         _localizationService.GetLocalizedString("TotalShort").Returns(expected);
 
-        var result = _sut.TotalLabel;
+        var result = _sut.TotalShortLabel;
 
         result.Should().Be(expected);
     }
