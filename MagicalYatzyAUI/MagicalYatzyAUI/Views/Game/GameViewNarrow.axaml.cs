@@ -15,7 +15,7 @@ public partial class GameViewNarrow : GameView
     {
         base.InitDicePanel();
         DicePanelView.SetValue(Grid.ColumnProperty, 1);
-        DicePanelView.SaveMargins = new Thickness(50, 0, 60, 60);
-        PageGrid.Children.Insert(0, DicePanelView);
+        DicePanelView.SaveMargins = new Thickness(0, 0, 91, 61);
+        PageGrid.Children.Insert(1, DicePanelView);
     }
 }

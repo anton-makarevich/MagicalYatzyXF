@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -267,6 +268,10 @@ namespace Sanet.MagicalYatzy.ViewModels
         public List<string> RollResultsLabels => Game.Rules.ScoresForRule
             .Select(score => new RollResult(score,Game.Rules.CurrentRule))
             .Select(s => _localizationService.GetLocalizedString(s.ScoreType.ToString())).ToList();
+        
+        public List<string> RollResultsShortLabels => Game.Rules.ScoresForRule
+            .Select(score => new RollResult(score,Game.Rules.CurrentRule))
+            .Select(s => _localizationService.GetLocalizedString($"{s.ScoreType}Short")).ToList();
 
         public bool HasCurrentPlayer => CurrentPlayer != null;
 
@@ -314,6 +319,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         public string ManualSetLabel => GetGameButtonLabel();
         public string RollResetLabel => GetGameButtonLabel();
         public string TotalLabel => _localizationService.GetLocalizedString("PlayerTotalScoreLabel");
+        public string TotalShortLabel => _localizationService.GetLocalizedString("TotalShort");
 
         public RollResultViewModel SelectedRollResult
         {
@@ -326,7 +332,7 @@ namespace Sanet.MagicalYatzy.ViewModels
                 }
             }
         }
-
+        
         private string GetGameButtonLabel([CallerMemberNameAttribute] string propertyName = "")
         {
             return _localizationService?.GetLocalizedString(propertyName);

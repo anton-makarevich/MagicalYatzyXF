@@ -71,7 +71,6 @@ public partial class App : Application
     private void RegisterViews(INavigationService navigationService)
     {
         navigationService.RegisterViews(typeof(MainMenuView), typeof(MainMenuViewModel));
-       
         if (IsMobile())
         {
             navigationService.RegisterViews(typeof(LobbyViewNarrow), typeof(LobbyViewModel));
@@ -79,8 +78,8 @@ public partial class App : Application
         }
         else
         {
-            navigationService.RegisterViews(typeof(GameViewWide), typeof(GameViewModel));
             navigationService.RegisterViews(typeof(LobbyViewWide), typeof(LobbyViewModel));
+            navigationService.RegisterViews(typeof(GameViewWide), typeof(GameViewModel));
         }
     }
 
