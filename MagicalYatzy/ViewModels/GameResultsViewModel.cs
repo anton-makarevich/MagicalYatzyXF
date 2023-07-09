@@ -51,8 +51,7 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         public ICommand CloseCommand => 
             new SimpleCommand(async () => await NavigationService.NavigateToRootAsync());
-
-
+        
         public string CloseButtonContent => _localizationService.GetLocalizedString("CloseButtonContent"); 
         public string Title => _localizationService.GetLocalizedString("GameFinishedLabel");
         public string AgainLabel => _localizationService.GetLocalizedString("AgainLabel");
