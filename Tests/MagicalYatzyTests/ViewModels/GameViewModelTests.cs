@@ -1006,6 +1006,8 @@ public class GameViewModelTests
 
             Assert.NotEmpty(_sut.RollResultsLabels);
             Assert.Equal(rollResults.Count, _sut.RollResultsLabels.Count);
+            Assert.NotEmpty(_sut.RollResultsShortLabels);
+            Assert.Equal(rollResults.Count, _sut.RollResultsShortLabels.Count);
         }
     }
         
@@ -1440,6 +1442,17 @@ public class GameViewModelTests
     {
         const string expected = "Total";
         _localizationService.GetLocalizedString("PlayerTotalScoreLabel").Returns(expected);
+
+        var result = _sut.TotalLabel;
+
+        result.Should().Be(expected);
+    }
+    
+    [Fact]
+    public void TotalShortLabel_IsReturnedFromTheLocalizationService()
+    {
+        const string expected = "T!";
+        _localizationService.GetLocalizedString("TotalShort").Returns(expected);
 
         var result = _sut.TotalLabel;
 

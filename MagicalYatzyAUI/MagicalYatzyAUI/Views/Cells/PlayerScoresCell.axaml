@@ -8,13 +8,14 @@
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.Cells.PlayerScoresCell">
     <StackPanel
         Orientation="Vertical">
-        <Label
+        <TextBlock
             Margin="0,0,0,2"
             Background="{Binding IsMyTurn,
                 Converter={StaticResource BoolToColorConverter},
                 ConverterParameter=SanetBlueColor}"
             Foreground="White"
-            Content="{Binding Name}"/>
+            TextTrimming="CharacterEllipsis"
+            Text="{Binding Name}"/>
         <ItemsControl 
             ItemsSource="{Binding Results}"
             VerticalAlignment = "Top"

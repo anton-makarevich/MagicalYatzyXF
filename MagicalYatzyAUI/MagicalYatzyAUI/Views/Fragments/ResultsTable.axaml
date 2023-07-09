@@ -12,8 +12,8 @@
         >
         <StackPanel
             Orientation="Vertical">
-            <Label Margin="0,0,0,2"
-                Content=" " />
+            <TextBlock Margin="0,0,0,2"
+                Text=" " />
             <ItemsControl 
                 ItemsSource="{Binding RollResultsLabels}"
                 VerticalAlignment = "Top"

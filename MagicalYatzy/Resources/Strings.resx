@@ -797,4 +797,8 @@
     <value>Ch</value>
     <comment>ChanceShort</comment>
   </data>
+  <data name="TotalShort" xml:space="preserve">
+    <value>T!</value>
+    <comment>TotalShort</comment>
+  </data>
 </root>

@@ -4,14 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
              xmlns:fragments="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.Fragments"
+             xmlns:cells="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.Cells"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="viewModels:GameViewModel"
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.Game.GameViewNarrow">
-    <Grid Margin="10,0,0,5" RowDefinitions="60,*">
+    <Grid Margin="0,0,0,5" RowDefinitions="60,*">
         <Label
             Classes="caption"
             Content="{Binding Title}"/>
         <TabControl
+            Padding="0"
             Grid.Row="1"
             TabStripPlacement="Bottom">
             <TabItem Header="{Binding PanelTitle}">
@@ -19,7 +21,42 @@
                 <Grid x:Name="PageGrid"
                       ColumnDefinitions="Auto,*,Auto"
                       RowDefinitions="*,Auto">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <StackPanel
+                            Orientation="Vertical">
+                            <TextBlock Margin="0,0,0,2"
+                                   Text=" " />
+                            <ItemsControl 
+                                ItemsSource="{Binding RollResultsShortLabels}"
+                                VerticalAlignment = "Top"
+                                Background = "Transparent">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label
+                                            Foreground="{StaticResource SanetBlueColor}"
+                                            Content="{Binding}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                            <Label
+                                Margin="0,2,0,0"
+                                Foreground="{StaticResource SanetBlueColor}"
+                                FontSize="14"
+                                Content="{Binding TotalShortLabel}" />
+                        </StackPanel>
+                        <cells:PlayerScoresCell 
+                            DataContext="{Binding CurrentPlayer}"
+                            Width="50"/>
+                    </StackPanel>
+                    
                     <fragments:GameButtons
+                        Grid.Column="0"
                         Grid.ColumnSpan="3"
                         Grid.Row="1"
                         Orientation="Horizontal"
