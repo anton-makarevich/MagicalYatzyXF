@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Sanet.MagicalYatzy.Avalonia.Controls.Game;
@@ -42,7 +43,7 @@ namespace Sanet.MagicalYatzy.Avalonia.Views.Base
         protected override void OnUnloaded(RoutedEventArgs e)
         {
             base.OnUnloaded(e);
-            ViewModel.DicePanel.RollEnded -= Roll;
+            if (ViewModel != null) ViewModel.DicePanel.RollEnded -= Roll;
         }
     }
 }

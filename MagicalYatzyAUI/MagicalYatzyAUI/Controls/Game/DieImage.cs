@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using Avalonia.Controls;
-using Avalonia.Media.Imaging;
 using Sanet.MagicalYatzy.Avalonia.Helpers;
 using Sanet.MagicalYatzy.Models.Game;
 
@@ -19,7 +18,7 @@ public class DieImage : Image
         UpdatePosition();
     }
 
-    private void OnDiePropertyChanged(object sender, PropertyChangedEventArgs e)
+    private void OnDiePropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
         {
@@ -54,4 +53,6 @@ public class DieImage : Image
 
         Opacity = _die.Opacity;
     }
+    
+    public Die Die => _die;
 }

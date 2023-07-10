@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using System.Linq;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Sanet.MagicalYatzy.Models.Game;
@@ -24,15 +25,24 @@ namespace Sanet.MagicalYatzy.Avalonia.Controls.Game
                 if (_dicePanelModel != null)
                 {
                     _dicePanelModel.DieAdded -= OnDieAdded;
+                    _dicePanelModel.DieRemoved -= OnDieRemoved;
                 }
-                // TODO clear handlers
                 _dicePanelModel = value;
                 
-                // TODO add handlers
                 if (_dicePanelModel != null)
                 {
                     _dicePanelModel.DieAdded += OnDieAdded;
+                    _dicePanelModel.DieRemoved += OnDieRemoved;
                 }
+            }
+        }
+
+        private void OnDieRemoved(object? sender, Die e)
+        {
+            var dieImageToRemove = Children.FirstOrDefault(c => (c as DieImage)?.Die == e);
+            if (dieImageToRemove != null)
+            {
+                Children.Remove(dieImageToRemove);
             }
         }
 

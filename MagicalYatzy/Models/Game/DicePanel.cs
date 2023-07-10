@@ -43,7 +43,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         
         public bool PlaySound { get; set; }
         public DiceStyle PanelStyle { get; } = DiceStyle.Classic;
-        public List<Die> Dice { get; set; } = new List<Die>();
+        public List<Die> Dice { get; set; } = new();
         /// <summary>
         /// Number of Dice in the Panel
         /// </summary>
@@ -88,7 +88,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         public int FixedDiceCount => Dice.Count(d => d.IsFixed);
 
         public bool AreAllDiceFixed => FixedDiceCount == Dice.Count;
-        public Thickness SaveMargins { get; set; } = new Thickness();
+        public Thickness SaveMargins { get; set; } = new();
 
         #endregion
 
