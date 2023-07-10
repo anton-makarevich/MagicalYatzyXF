@@ -140,6 +140,12 @@ namespace MagicalYatzyTests.ViewModels
         {
             Assert.Equal("Start.png", _sut.StartImage);
         }
+        
+        [Fact]
+        public void BackImage_HasCorrectValue()
+        {
+             _sut.BackImage.Should().Be("Back.png");
+        }
 
         [Fact]
         public void AddBotCommandAddsNewPlayer()

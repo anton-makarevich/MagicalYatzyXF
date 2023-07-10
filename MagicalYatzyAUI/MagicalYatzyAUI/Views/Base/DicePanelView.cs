@@ -15,7 +15,7 @@ namespace Sanet.MagicalYatzy.Avalonia.Views.Base
             if (_dicePanel != null)
                 return;
             if (Content is not Grid pageGrid || ViewModel?.DicePanel == null) return;
-            _dicePanel = new DicePanelControl(true);
+            _dicePanel = new DicePanelControl();
             if (pageGrid.RowDefinitions.Count > 0)
                 _dicePanel.SetValue(Grid.RowSpanProperty, pageGrid.RowDefinitions.Count);
             if (pageGrid.ColumnDefinitions.Count > 0)

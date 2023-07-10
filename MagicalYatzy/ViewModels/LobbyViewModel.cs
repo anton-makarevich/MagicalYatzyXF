@@ -51,6 +51,8 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         public string StartImage => "Start.png";
         
+        public string BackImage => "Back.png";
+        
         public ObservableCollection<PlayerViewModel> Players { get; } = new ObservableCollection<PlayerViewModel>();
         public ICommand AddBotCommand => new SimpleCommand(() =>
         {
