@@ -19,7 +19,7 @@ public static class CoreServices
 {
     public static void RegisterServices(this IServiceCollection services)
     {
-        services.AddSingleton<IDicePanel,DicePanel>();
+        services.AddTransient<IDicePanel,DicePanel>();
         services.AddSingleton<IPlayerService,PlayerService>();
         services.AddSingleton<IExternalNavigationService, ExternalNavigationStub>();
         services.AddSingleton<IGameSettingsService, GameSettingsService>();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Sanet.MagicalYatzy.Avalonia.Controls.Game;
@@ -15,7 +16,7 @@ namespace Sanet.MagicalYatzy.Avalonia.Views.Base
             if (_dicePanel != null)
                 return;
             if (Content is not Grid pageGrid || ViewModel?.DicePanel == null) return;
-            _dicePanel = new DicePanelControl(true);
+            _dicePanel = new DicePanelControl();
             if (pageGrid.RowDefinitions.Count > 0)
                 _dicePanel.SetValue(Grid.RowSpanProperty, pageGrid.RowDefinitions.Count);
             if (pageGrid.ColumnDefinitions.Count > 0)
@@ -42,7 +43,7 @@ namespace Sanet.MagicalYatzy.Avalonia.Views.Base
         protected override void OnUnloaded(RoutedEventArgs e)
         {
             base.OnUnloaded(e);
-            ViewModel.DicePanel.RollEnded -= Roll;
+            if (ViewModel != null) ViewModel.DicePanel.RollEnded -= Roll;
         }
     }
 }

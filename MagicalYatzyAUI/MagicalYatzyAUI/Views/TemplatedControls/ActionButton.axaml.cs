@@ -14,4 +14,6 @@ public class ActionButton : Button
         get => GetValue(ImageSourceProperty);
         set => SetValue(ImageSourceProperty, value);
     }
+
+    public bool HasLabel => Content != null;
 }
