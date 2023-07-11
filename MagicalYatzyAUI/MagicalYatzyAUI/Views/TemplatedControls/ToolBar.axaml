@@ -1,0 +1,32 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls">
+    <Design.PreviewWith>
+        <controls:ToolBar />
+    </Design.PreviewWith>
+
+    <Style Selector="controls|ToolBar">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <controls:ActionButton
+                        Command="{TemplateBinding LeftCommand}"
+                        ImageSource="{TemplateBinding LeftIcon}"
+                        IsVisible="{Binding HasLeftButton, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ToolBar}}}"
+                        />
+                    <Label Grid.Column="1"
+                           Classes="caption"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Content="{TemplateBinding Title, Converter={StaticResource StringUppercasedConverter}}"/>
+                    <controls:ActionButton
+                        Grid.Column="2"
+                        Command="{TemplateBinding RightCommand}"
+                        ImageSource="{TemplateBinding RightIcon}"
+                        IsVisible="{Binding HasRightButton, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ToolBar}}}"/>
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>
