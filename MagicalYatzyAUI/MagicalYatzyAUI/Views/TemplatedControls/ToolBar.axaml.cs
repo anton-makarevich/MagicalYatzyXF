@@ -1,6 +1,7 @@
 ﻿using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls.Primitives;
+using Avalonia.Layout;
 
 namespace Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls;
 
@@ -20,6 +21,15 @@ public class ToolBar : TemplatedControl
 
     public static readonly StyledProperty<string> RightIconProperty = AvaloniaProperty.Register<ToolBar, string>(
         nameof(RightIcon));
+
+    public static readonly StyledProperty<HorizontalAlignment> TitleAlignmentProperty = AvaloniaProperty.Register<ToolBar, HorizontalAlignment>(
+        nameof(TitleAlignment));
+
+    public HorizontalAlignment TitleAlignment
+    {
+        get => GetValue(TitleAlignmentProperty);
+        set => SetValue(TitleAlignmentProperty, value);
+    }
     
     public string RightIcon
     {

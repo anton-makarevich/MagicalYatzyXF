@@ -65,7 +65,8 @@ namespace Sanet.MagicalYatzy.ViewModels
         public string MagicRollImage => "MagicRoll.png";
         public string ManualSetImage => "ManualSet.png";
         public string RollResetImage => "RollReset.png";
-
+        public string CloseImage => "Close.png";
+        
         private bool HasArtifact(Artifacts artifactType)
         {
             if (Game.Rules.CurrentRule != Rules.krMagic)
@@ -82,6 +83,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         }
 
         public ObservableCollection<PlayerViewModel> Players { get; } = new ObservableCollection<PlayerViewModel>();
+
 
         public override void AttachHandlers()
         {
@@ -249,7 +251,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             RollResults = null;
             RefreshGameStatus();            
         }
-       
+
         private void GameOnMagicRollUsed(object sender, PlayerEventArgs e)
         {
             if (!HasCurrentPlayer)
@@ -264,16 +266,17 @@ namespace Sanet.MagicalYatzy.ViewModels
             get => _rollResults;
             private set => SetProperty(ref _rollResults, value);
         }
-        
+
         public List<string> RollResultsLabels => Game.Rules.ScoresForRule
             .Select(score => new RollResult(score,Game.Rules.CurrentRule))
             .Select(s => _localizationService.GetLocalizedString(s.ScoreType.ToString())).ToList();
-        
+
         public List<string> RollResultsShortLabels => Game.Rules.ScoresForRule
             .Select(score => new RollResult(score,Game.Rules.CurrentRule))
             .Select(s => _localizationService.GetLocalizedString($"{s.ScoreType}Short")).ToList();
 
         public bool HasCurrentPlayer => CurrentPlayer != null;
+
 
         public bool CanRoll => HasCurrentPlayer
                                && CurrentPlayer.Player.IsHuman
@@ -283,6 +286,7 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         public string ScoresTitle => Strings.ResultsTableLabel.ToUpper();
         public string PanelTitle => Strings.DiceBoardLabel.ToUpper();
+
         public ICommand RollCommand => new SimpleCommand(() =>
         {
             if (CanRoll)
@@ -321,6 +325,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         public string TotalLabel => _localizationService.GetLocalizedString("PlayerTotalScoreLabel");
         public string TotalShortLabel => _localizationService.GetLocalizedString("TotalShort");
 
+
         public RollResultViewModel SelectedRollResult
         {
             get => null;
@@ -332,7 +337,7 @@ namespace Sanet.MagicalYatzy.ViewModels
                 }
             }
         }
-        
+
         private string GetGameButtonLabel([CallerMemberNameAttribute] string propertyName = "")
         {
             return _localizationService?.GetLocalizedString(propertyName);

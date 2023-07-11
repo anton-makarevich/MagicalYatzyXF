@@ -1021,10 +1021,11 @@ public class GameViewModelTests
     [Fact]
     public void ButtonImagesAreCorrect()
     {
-        Assert.Equal("Roll.png", _sut.RollImage);
-        Assert.Equal("MagicRoll.png", _sut.MagicRollImage);
-        Assert.Equal("ManualSet.png", _sut.ManualSetImage);
-        Assert.Equal("RollReset.png", _sut.RollResetImage);
+        _sut.RollImage.Should().Be("Roll.png");
+        _sut.MagicRollImage.Should().Be("MagicRoll.png");
+        _sut.ManualSetImage.Should().Be("ManualSet.png");
+        _sut.RollResetImage.Should().Be("RollReset.png");
+        _sut.CloseImage.Should().Be("Close.png");
     }
 
     [Fact]

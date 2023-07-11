@@ -9,7 +9,8 @@
         <!-- Set Defaults -->
         <Setter Property="Template">
             <ControlTemplate>
-                <Grid ColumnDefinitions="Auto,*,Auto">
+                <Grid ColumnDefinitions="Auto,*,Auto"
+                      HorizontalAlignment="Stretch">
                     <controls:ActionButton
                         Command="{TemplateBinding LeftCommand}"
                         ImageSource="{TemplateBinding LeftIcon}"
@@ -18,7 +19,7 @@
                     <Label Grid.Column="1"
                            Classes="caption"
                            VerticalAlignment="Center"
-                           HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                           HorizontalAlignment="{TemplateBinding TitleAlignment}"
                            Content="{TemplateBinding Title, Converter={StaticResource StringUppercasedConverter}}"/>
                     <controls:ActionButton
                         Grid.Column="2"
