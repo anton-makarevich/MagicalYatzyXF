@@ -15,16 +15,12 @@
     <viewModels:LobbyViewModel />
   </Design.DataContext>
     <Grid Margin="0" RowDefinitions="Auto,*,Auto">
-        <Grid ColumnDefinitions="Auto,*,Auto">
-            <templatedControls:ActionButton
-                Command="{Binding BackCommand}"
-                ImageSource="{Binding BackImage}"/>
-            <Label Grid.Column="1"
-                   Classes="caption"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   Content="{Binding StartTitle, Converter={StaticResource StringUppercasedConverter}}"/>
-        </Grid>
+        <templatedControls:ToolBar
+            LeftCommand="{Binding BackCommand}"
+            LeftIcon="{Binding BackImage}"
+            Title="{Binding StartTitle}"
+            HorizontalAlignment="Left"
+        />
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <StackPanel Orientation="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}, 
                         Path=Bounds.Size, 

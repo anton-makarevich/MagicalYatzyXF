@@ -9,16 +9,12 @@
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.Lobby.LobbyViewNarrow"
              x:DataType="viewModels:LobbyViewModel">
     <Grid Margin="10,0,0,5" RowDefinitions="Auto,*,Auto">
-        <Grid ColumnDefinitions="Auto,*,Auto">
-            <templatedControls:ActionButton
-                Command="{Binding BackCommand}"
-                ImageSource="{Binding BackImage}"/>
-            <Label Grid.Column="1"
-                   Classes="caption"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Left"
-                   Content="{Binding StartTitle, Converter={StaticResource StringUppercasedConverter}}"/>
-        </Grid>
+        <templatedControls:ToolBar
+            LeftCommand="{Binding BackCommand}"
+            LeftIcon="{Binding BackImage}"
+            Title="{Binding StartTitle}"
+            HorizontalAlignment="Left"
+        />
         <TabControl
         Grid.Row="1"
         TabStripPlacement="Bottom">

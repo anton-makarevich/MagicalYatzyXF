@@ -12,6 +12,7 @@
         <StyleInclude Source="Views/TemplatedControls/ActionButton.axaml"/>
         <StyleInclude Source="Views/TemplatedControls/EditableMenuItem.axaml"/>
         <StyleInclude Source="Views/TemplatedControls/RollResultView.axaml"/>
+        <StyleInclude Source="Views/TemplatedControls/ToolBar.axaml"/>
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>

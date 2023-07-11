@@ -10,9 +10,14 @@
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.Game.GameViewWide">
     <Grid
         x:Name="PageGrid" RowDefinitions="Auto,*,Auto" ColumnDefinitions="Auto,*,Auto">
-        <Label
-            Classes="caption"
-            Content="{Binding Title}"/>
+        <templatedControls:ToolBar
+            RightCommand="{Binding BackCommand}"
+            RightIcon="{Binding CloseImage}"
+            Title="{Binding Title}"
+            HorizontalAlignment="Stretch"
+            TitleAlignment="Left"
+            Grid.ColumnSpan="3"
+            />
         <fragments:ResultsTable 
             Grid.Row="1"
             Grid.RowSpan="2" 
