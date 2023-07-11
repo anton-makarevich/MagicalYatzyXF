@@ -8,8 +8,18 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.Lobby.LobbyViewNarrow"
              x:DataType="viewModels:LobbyViewModel">
-    <Grid Margin="10,0,0,5" RowDefinitions="60,*,Auto">
-    <TabControl
+    <Grid Margin="10,0,0,5" RowDefinitions="Auto,*,Auto">
+        <Grid ColumnDefinitions="Auto,*,Auto">
+            <templatedControls:ActionButton
+                Command="{Binding BackCommand}"
+                ImageSource="{Binding BackImage}"/>
+            <Label Grid.Column="1"
+                   Classes="caption"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Left"
+                   Content="{Binding StartTitle, Converter={StaticResource StringUppercasedConverter}}"/>
+        </Grid>
+        <TabControl
         Grid.Row="1"
         TabStripPlacement="Bottom">
         <TabItem Header="{Binding PlayersTitle}">
