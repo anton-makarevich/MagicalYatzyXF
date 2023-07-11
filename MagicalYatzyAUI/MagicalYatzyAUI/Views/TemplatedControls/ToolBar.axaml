@@ -18,7 +18,7 @@
                     <Label Grid.Column="1"
                            Classes="caption"
                            VerticalAlignment="Center"
-                           HorizontalAlignment="Center"
+                           HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                            Content="{TemplateBinding Title, Converter={StaticResource StringUppercasedConverter}}"/>
                     <controls:ActionButton
                         Grid.Column="2"
