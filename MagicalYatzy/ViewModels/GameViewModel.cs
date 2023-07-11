@@ -83,8 +83,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         }
 
         public ObservableCollection<PlayerViewModel> Players { get; } = new ObservableCollection<PlayerViewModel>();
-
-
+        
         public override void AttachHandlers()
         {
             base.AttachHandlers();
@@ -276,8 +275,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             .Select(s => _localizationService.GetLocalizedString($"{s.ScoreType}Short")).ToList();
 
         public bool HasCurrentPlayer => CurrentPlayer != null;
-
-
+        
         public bool CanRoll => HasCurrentPlayer
                                && CurrentPlayer.Player.IsHuman
                                && !DicePanel.IsRolling
@@ -324,8 +322,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         public string RollResetLabel => GetGameButtonLabel();
         public string TotalLabel => _localizationService.GetLocalizedString("PlayerTotalScoreLabel");
         public string TotalShortLabel => _localizationService.GetLocalizedString("TotalShort");
-
-
+        
         public RollResultViewModel SelectedRollResult
         {
             get => null;
