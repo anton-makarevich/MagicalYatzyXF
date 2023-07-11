@@ -16,6 +16,8 @@ public class MainMenuViewModel : DicePanelViewModel
 {
     private readonly IPlayerService _playerService;
     private readonly IExternalNavigationService _externalNavigationService;
+    
+    private MainMenuAction _selectedMenuAction;
 
     public MainMenuViewModel(IDicePanel dicePanel,
         IExternalNavigationService externalNavigationService,
@@ -48,6 +50,17 @@ public class MainMenuViewModel : DicePanelViewModel
         NotifyPropertyChanged(nameof(PlayerName));
         NotifyPropertyChanged(nameof(PlayerImage));
     });
+
+    public MainMenuAction SelectedMenuAction
+    {
+        get => _selectedMenuAction;
+        set
+        {
+            value?.MenuAction.Execute(null);
+            SetProperty(ref _selectedMenuAction, value);
+        }
+    }
+
     #endregion
 
     #region Methods
@@ -138,12 +151,14 @@ public class MainMenuViewModel : DicePanelViewModel
     public override async void AttachHandlers()
     {
         _playerService.PlayersUpdated += OnPlayersUpdated;
+        SelectedMenuAction = null;
         await LoadLocalPlayersAsync();
     }
 
     public override void DetachHandlers()
     {
         _playerService.PlayersUpdated -= OnPlayersUpdated;
+        SelectedMenuAction = null;
     }
 
     void OnPlayersUpdated(object sender, EventArgs e)
