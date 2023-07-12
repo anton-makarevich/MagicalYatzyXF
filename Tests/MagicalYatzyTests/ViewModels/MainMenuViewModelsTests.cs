@@ -134,4 +134,20 @@ public class MainMenuViewModelsTests
         // Assert
         _navigationServiceMock.ReceivedWithAnyArgs().ShowViewModelAsync<LoginViewModel>();
     }
+
+    [Fact]
+    public async Task SettingSelectedMenuActionInvokesNavigationAction()
+    {
+        //Arrange
+        _sut.SetNavigationService(_navigationServiceMock);
+            
+        var newLocalGameMenuItem = _sut.MenuActions.FirstOrDefault(mm => mm.Label == Strings.NewLocalGameAction);
+        
+        // Act
+        _sut.SelectedMenuAction = newLocalGameMenuItem;
+        
+        // Assert
+        Assert.Equal(newLocalGameMenuItem, _sut.SelectedMenuAction);
+        await _navigationServiceMock.ReceivedWithAnyArgs().NavigateToViewModelAsync<LobbyViewModel>();
+    }
 }

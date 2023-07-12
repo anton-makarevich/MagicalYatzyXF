@@ -539,5 +539,37 @@ namespace MagicalYatzyTests.ViewModels
             
             Assert.Equal(LobbyViewModel.MaxPlayers, _sut.Players.Count);
         }
+
+        [Fact]
+        public async Task StartCommand_SetsPlayers_ToBeNotReady()
+        {
+            _rulesService.GetAllRules().Returns(new[] { Rules.krBaby, Rules.krSimple });
+            _sut.AddBotCommand.Execute(null);
+
+            _sut.SetNavigationService(_navigationService);
+            _sut.AddHumanCommand.Execute(null);
+            _sut.LoadRules();
+            var rule = _sut.Rules.First();
+            rule.SelectRuleCommand.Execute(null);
+            
+            var game = new YatzyGame(rule.Rule, Substitute.For<IDiceGenerator>());
+            _gameService.CreateNewLocalGameAsync(rule.Rule)
+                .Returns(Task.FromResult<IGame>(game));
+            
+            foreach (var playerViewModel in _sut.Players)
+            {
+                playerViewModel.Player.IsReady=true;
+            }
+            
+            _sut.StartGameCommand.Execute(null);
+
+            await _gameService.Received().CreateNewLocalGameAsync(rule.Rule);
+            
+            Assert.Equal(2,game.NumberOfPlayers);
+            foreach (var playerViewModel in _sut.Players)
+            {
+                playerViewModel.Player.IsReady.Should().BeFalse();
+            }
+        }
     }
 }

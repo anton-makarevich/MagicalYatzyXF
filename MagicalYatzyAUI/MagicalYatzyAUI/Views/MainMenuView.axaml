@@ -20,7 +20,8 @@
             Grid.Row="2"
             Grid.Column="1"
             VerticalAlignment = "Top"
-            SelectionChanged="MainMenuList_OnSelectionChanged"
+            SelectedItem="{Binding SelectedMenuAction, Mode=TwoWay}"
+            SelectionMode="Single"
             Background = "Transparent" >
             <ListBox.ItemTemplate>
                 <DataTemplate>
