@@ -7,5 +7,7 @@ namespace Sanet.MagicalYatzy.Services
         int DieAngle { get; set; }
         DiceStyle DieStyle { get; set; }
         int MaxRollLoop { get; set; }
+        int DieSpeed { get; set; }
+        bool IsSoundEnabled { get; set; }
     }
 }

@@ -29,6 +29,9 @@ namespace Sanet.MagicalYatzy.Services
                     value = 150;
                 _maxRollLoop = value;
             }
-        } 
+        }
+
+        public int DieSpeed { get; set; }
+        public bool IsSoundEnabled { get; set; }
     }
 }
