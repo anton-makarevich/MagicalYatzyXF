@@ -209,4 +209,184 @@ public class SettingsViewModelTests
         // Assert
         onContent.Should().Be(expectedOnContent);
     }
+    
+    [Fact]
+    public void SettingsStyleCaption_ShouldReturnCorrectLocalizedString()
+    {
+        // Arrange
+        const string expectedSettingsStyleCaption = "SettingsStyleCaptionText";
+
+        _localizationService.GetLocalizedString("SettingsStyleCaptionText").Returns(expectedSettingsStyleCaption);
+
+        // Act
+        var settingsStyleCaption = _sut.SettingsStyleCaption;
+
+        // Assert
+        settingsStyleCaption.Should().Be(expectedSettingsStyleCaption);
+    }
+
+    [Fact]
+    public void AngLowText_ShouldReturnCorrectLocalizedString()
+    {
+        // Arrange
+        const string expectedAngLowText = "AngLowText";
+
+        _localizationService.GetLocalizedString("AngLowText").Returns(expectedAngLowText);
+
+        // Act
+        var angLowText = _sut.AngLowText;
+
+        // Assert
+        angLowText.Should().Be(expectedAngLowText);
+    }
+
+    [Fact]
+    public void AngHighText_ShouldReturnCorrectLocalizedString()
+    {
+        // Arrange
+        const string expectedAngHighText = "AngHighText";
+
+        _localizationService.GetLocalizedString("AngHighText").Returns(expectedAngHighText);
+
+        // Act
+        var angHighText = _sut.AngHighText;
+
+        // Assert
+        angHighText.Should().Be(expectedAngHighText);
+    }
+
+    [Fact]
+    public void AngVeryHighText_ShouldReturnCorrectLocalizedString()
+    {
+        // Arrange
+        const string expectedAngVeryHighText = "AngVeryHighText";
+
+        _localizationService.GetLocalizedString("AngVeryHighText").Returns(expectedAngVeryHighText);
+
+        // Act
+        var angVeryHighText = _sut.AngVeryHighText;
+
+        // Assert
+        angVeryHighText.Should().Be(expectedAngVeryHighText);
+    }
+
+    [Fact]
+    public void SettingsAngleCaption_ShouldReturnCorrectLocalizedString()
+    {
+        // Arrange
+        const string expectedSettingsAngleCaption = "SettingsAngleCaptionText";
+
+        _localizationService.GetLocalizedString("SettingsAngleCaptionText").Returns(expectedSettingsAngleCaption);
+
+        // Act
+        var settingsAngleCaption = _sut.SettingsAngleCaption;
+
+        // Assert
+        settingsAngleCaption.Should().Be(expectedSettingsAngleCaption);
+    }
+
+    [Fact]
+    public void SpeedSlow_ShouldReturnCorrectLocalizedString()
+    {
+        // Arrange
+        const string expectedSpeedSlow = "SpeedSlowText";
+
+        _localizationService.GetLocalizedString("SpeedSlowText").Returns(expectedSpeedSlow);
+
+        // Act
+        var speedSlow = _sut.SpeedSlow;
+
+        // Assert
+        speedSlow.Should().Be(expectedSpeedSlow);
+    }
+
+    [Fact]
+    public void SpeedVerySlow_ShouldReturnCorrectLocalizedString()
+    {
+        // Arrange
+        const string expectedSpeedVerySlow = "SpeedVerySlowText";
+
+        _localizationService.GetLocalizedString("SpeedVerySlowText").Returns(expectedSpeedVerySlow);
+
+        // Act
+        var speedVerySlow = _sut.SpeedVerySlow;
+
+        // Assert
+        speedVerySlow.Should().Be(expectedSpeedVerySlow);
+    }
+
+    [Fact]
+    public void SpeedFast_ShouldReturnCorrectLocalizedString()
+    {
+        // Arrange
+        const string expectedSpeedFast = "SpeedFastText";
+
+        _localizationService.GetLocalizedString("SpeedFastText").Returns(expectedSpeedFast);
+
+        // Act
+        var speedFast = _sut.SpeedFast;
+
+        // Assert
+        speedFast.Should().Be(expectedSpeedFast);
+    }
+
+    [Fact]
+    public void SpeedVeryFast_ShouldReturnCorrectLocalizedString()
+    {
+        // Arrange
+        const string expectedSpeedVeryFast = "SpeedVeryFastText";
+
+        _localizationService.GetLocalizedString("SpeedVeryFastText").Returns(expectedSpeedVeryFast);
+
+        // Act
+        var speedVeryFast = _sut.SpeedVeryFast;
+
+        // Assert
+        speedVeryFast.Should().Be(expectedSpeedVeryFast);
+    }
+
+    [Fact]
+    public void DieAngle_ShouldReturnDieAngleFromGameSettingsService()
+    {
+        // Arrange
+        const int expectedDieAngle = 2;
+
+        _gameSettingsService.DieAngle.Returns(expectedDieAngle);
+
+        // Act
+        var dieAngle = _sut.DieAngle;
+
+        // Assert
+        dieAngle.Should().Be(expectedDieAngle);
+    }
+
+    [Fact]
+    public void DieSpeed_ShouldReturnDieSpeedFromGameSettingsService()
+    {
+        // Arrange
+        const int expectedDieSpeed = 50;
+
+        _gameSettingsService.DieSpeed.Returns(expectedDieSpeed);
+
+        // Act
+        var dieSpeed = _sut.DieSpeed;
+
+        // Assert
+        dieSpeed.Should().Be(expectedDieSpeed);
+    }
+
+    [Fact]
+    public void DieStyle_ShouldReturnDieStyleFromGameSettingsService()
+    {
+        // Arrange
+        const DiceStyle expectedDieStyle = DiceStyle.Red;
+
+        _gameSettingsService.DieStyle.Returns(expectedDieStyle);
+
+        // Act
+        var dieStyle = _sut.DieStyle;
+
+        // Assert
+        dieStyle.Should().Be(expectedDieStyle);
+    }
 }
