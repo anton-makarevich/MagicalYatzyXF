@@ -111,7 +111,7 @@ public class SettingsViewModelTests
     public void IsAngLow_ShouldSetDieAngleTo0_WhenValueIsTrue()
     {
         // Act
-        _sut.IsAngLow = true;
+        _sut.IsAngleLow = true;
 
         // Assert
         _gameSettingsService.DieAngle.Should().Be(0);
@@ -121,7 +121,7 @@ public class SettingsViewModelTests
     public void IsAngHigh_ShouldSetDieAngleTo2_WhenValueIsTrue()
     {
         // Act
-        _sut.IsAngHigh = true;
+        _sut.IsAngleHigh = true;
 
         // Assert
         _gameSettingsService.DieAngle.Should().Be(2);
@@ -131,7 +131,7 @@ public class SettingsViewModelTests
     public void IsAngVeryHigh_ShouldSetDieAngleTo4_WhenValueIsTrue()
     {
         // Act
-        _sut.IsAngVeryHigh = true;
+        _sut.IsAngleVeryHigh = true;
 
         // Assert
         _gameSettingsService.DieAngle.Should().Be(4);
@@ -234,7 +234,7 @@ public class SettingsViewModelTests
         _localizationService.GetLocalizedString("AngLowText").Returns(expectedAngLowText);
 
         // Act
-        var angLowText = _sut.AngLowText;
+        var angLowText = _sut.AngleLowText;
 
         // Assert
         angLowText.Should().Be(expectedAngLowText);
@@ -249,7 +249,7 @@ public class SettingsViewModelTests
         _localizationService.GetLocalizedString("AngHighText").Returns(expectedAngHighText);
 
         // Act
-        var angHighText = _sut.AngHighText;
+        var angHighText = _sut.AngleHighText;
 
         // Assert
         angHighText.Should().Be(expectedAngHighText);
@@ -264,7 +264,7 @@ public class SettingsViewModelTests
         _localizationService.GetLocalizedString("AngVeryHighText").Returns(expectedAngVeryHighText);
 
         // Act
-        var angVeryHighText = _sut.AngVeryHighText;
+        var angVeryHighText = _sut.AngleVeryHighText;
 
         // Assert
         angVeryHighText.Should().Be(expectedAngVeryHighText);
@@ -595,7 +595,7 @@ public class SettingsViewModelTests
         _gameSettingsService.DieAngle.Returns(0);
 
         // Act
-        var isAngLow = _sut.IsAngLow;
+        var isAngLow = _sut.IsAngleLow;
 
         // Assert
         isAngLow.Should().BeTrue();
@@ -608,7 +608,7 @@ public class SettingsViewModelTests
         _gameSettingsService.DieAngle.Returns(2);
 
         // Act
-        var isAngLow = _sut.IsAngLow;
+        var isAngLow = _sut.IsAngleLow;
 
         // Assert
         isAngLow.Should().BeFalse();
@@ -621,7 +621,7 @@ public class SettingsViewModelTests
         _gameSettingsService.DieAngle.Returns(2);
 
         // Act
-        var isAngHigh = _sut.IsAngHigh;
+        var isAngHigh = _sut.IsAngleHigh;
 
         // Assert
         isAngHigh.Should().BeTrue();
@@ -634,7 +634,7 @@ public class SettingsViewModelTests
         _gameSettingsService.DieAngle.Returns(0);
 
         // Act
-        var isAngHigh = _sut.IsAngHigh;
+        var isAngHigh = _sut.IsAngleHigh;
 
         // Assert
         isAngHigh.Should().BeFalse();
@@ -647,7 +647,7 @@ public class SettingsViewModelTests
         _gameSettingsService.DieAngle.Returns(4);
 
         // Act
-        var isAngVeryHigh = _sut.IsAngVeryHigh;
+        var isAngVeryHigh = _sut.IsAngleVeryHigh;
 
         // Assert
         isAngVeryHigh.Should().BeTrue();
@@ -660,7 +660,7 @@ public class SettingsViewModelTests
         _gameSettingsService.DieAngle.Returns(2);
 
         // Act
-        var isAngVeryHigh = _sut.IsAngVeryHigh;
+        var isAngVeryHigh = _sut.IsAngleVeryHigh;
 
         // Assert
         isAngVeryHigh.Should().BeFalse();

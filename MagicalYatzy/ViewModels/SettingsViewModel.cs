@@ -22,11 +22,11 @@ public class SettingsViewModel : BaseViewModel
 
     public string SettingsStyleCaption => _localizationService.GetLocalizedString("SettingsStyleCaptionText");
 
-    public string AngLowText => _localizationService.GetLocalizedString("AngLowText");
+    public string AngleLowText => _localizationService.GetLocalizedString("AngLowText");
 
-    public string AngHighText => _localizationService.GetLocalizedString("AngHighText");
+    public string AngleHighText => _localizationService.GetLocalizedString("AngHighText");
 
-    public string AngVeryHighText => _localizationService.GetLocalizedString("AngVeryHighText");
+    public string AngleVeryHighText => _localizationService.GetLocalizedString("AngVeryHighText");
 
     public string SettingsAngleCaption => _localizationService.GetLocalizedString("SettingsAngleCaptionText");
 
@@ -48,9 +48,9 @@ public class SettingsViewModel : BaseViewModel
             if (_gameSettingsService.DieAngle == value) return;
             _gameSettingsService.DieAngle = value;
             NotifyPropertyChanged();
-            NotifyPropertyChanged(nameof(IsAngLow));
-            NotifyPropertyChanged(nameof(IsAngHigh));
-            NotifyPropertyChanged(nameof(IsAngVeryHigh));
+            NotifyPropertyChanged(nameof(IsAngleLow));
+            NotifyPropertyChanged(nameof(IsAngleHigh));
+            NotifyPropertyChanged(nameof(IsAngleVeryHigh));
         }
     }
     public int DieSpeed
@@ -161,7 +161,7 @@ public class SettingsViewModel : BaseViewModel
         }
     }
 
-    public bool IsAngLow
+    public bool IsAngleLow
     {
         get => DieAngle == 0;
         set
@@ -172,7 +172,7 @@ public class SettingsViewModel : BaseViewModel
             }
         }
     }
-    public bool IsAngHigh
+    public bool IsAngleHigh
     {
         get => DieAngle == 2;
         set
@@ -183,7 +183,7 @@ public class SettingsViewModel : BaseViewModel
             }
         }
     }
-    public bool IsAngVeryHigh
+    public bool IsAngleVeryHigh
     {
         get => DieAngle == 4;
         set
