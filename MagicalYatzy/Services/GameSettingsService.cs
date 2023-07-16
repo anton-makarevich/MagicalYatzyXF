@@ -6,6 +6,7 @@ namespace Sanet.MagicalYatzy.Services
     {
         private int _dieAngle = 2;
         private int _maxRollLoop = 100;
+        private int _dieSpeed;
 
         public DiceStyle DieStyle { get; set; }
         public int DieAngle {
@@ -29,6 +30,22 @@ namespace Sanet.MagicalYatzy.Services
                     value = 150;
                 _maxRollLoop = value;
             }
-        } 
+        }
+
+        public int DieSpeed
+        {
+            get => _dieSpeed;
+            set
+            {
+                _dieSpeed = value switch
+                {
+                    < 15 => 15,
+                    > 70 => 70,
+                    _ => value
+                };
+            }
+        }
+
+        public bool IsSoundEnabled { get; set; }
     }
 }
