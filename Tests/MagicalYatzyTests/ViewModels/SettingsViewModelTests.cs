@@ -389,4 +389,280 @@ public class SettingsViewModelTests
         // Assert
         dieStyle.Should().Be(expectedDieStyle);
     }
+    
+    
+    [Fact]
+    public void SettingsSpeedCaption_ShouldReturnCorrectLocalizedString()
+    {
+        // Arrange
+        const string expectedSettingsSpeedCaption = "SettingsSpeedCaptionText";
+
+        _localizationService.GetLocalizedString("SettingsSpeedCaptionText").Returns(expectedSettingsSpeedCaption);
+
+        // Act
+        var settingsSpeedCaption = _sut.SettingsSpeedCaption;
+
+        // Assert
+        settingsSpeedCaption.Should().Be(expectedSettingsSpeedCaption);
+    }
+
+    [Fact]
+    public void IsStyleBlue_ShouldReturnTrue_WhenDieStyleIsBlue()
+    {
+        // Arrange
+        _gameSettingsService.DieStyle.Returns(DiceStyle.Blue);
+
+        // Act
+        var isStyleBlue = _sut.IsStyleBlue;
+
+        // Assert
+        isStyleBlue.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsStyleBlue_ShouldReturnFalse_WhenDieStyleIsNotBlue()
+    {
+        // Arrange
+        _gameSettingsService.DieStyle.Returns(DiceStyle.Red);
+
+        // Act
+        var isStyleBlue = _sut.IsStyleBlue;
+
+        // Assert
+        isStyleBlue.Should().BeFalse();
+    }
+
+    [Fact]
+    public void IsStyleRed_ShouldReturnTrue_WhenDieStyleIsRed()
+    {
+        // Arrange
+        _gameSettingsService.DieStyle.Returns(DiceStyle.Red);
+
+        // Act
+        var isStyleRed = _sut.IsStyleRed;
+
+        // Assert
+        isStyleRed.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsStyleRed_ShouldReturnFalse_WhenDieStyleIsNotRed()
+    {
+        // Arrange
+        _gameSettingsService.DieStyle.Returns(DiceStyle.Blue);
+
+        // Act
+        var isStyleRed = _sut.IsStyleRed;
+
+        // Assert
+        isStyleRed.Should().BeFalse();
+    }
+
+    [Fact]
+    public void IsStyleWhite_ShouldReturnTrue_WhenDieStyleIsClassic()
+    {
+        // Arrange
+        _gameSettingsService.DieStyle.Returns(DiceStyle.Classic);
+
+        // Act
+        var isStyleWhite = _sut.IsStyleWhite;
+
+        // Assert
+        isStyleWhite.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsStyleWhite_ShouldReturnFalse_WhenDieStyleIsNotClassic()
+    {
+        // Arrange
+        _gameSettingsService.DieStyle.Returns(DiceStyle.Blue);
+
+        // Act
+        var isStyleWhite = _sut.IsStyleWhite;
+
+        // Assert
+        isStyleWhite.Should().BeFalse();
+    }
+
+    [Fact]
+    public void IsSpeedVerySlow_ShouldReturnTrue_WhenDieSpeedIs70()
+    {
+        // Arrange
+        _gameSettingsService.DieSpeed.Returns(70);
+
+        // Act
+        var isSpeedVerySlow = _sut.IsSpeedVerySlow;
+
+        // Assert
+        isSpeedVerySlow.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsSpeedVerySlow_ShouldReturnFalse_WhenDieSpeedIsNot70()
+    {
+        // Arrange
+        _gameSettingsService.DieSpeed.Returns(50);
+
+        // Act
+        var isSpeedVerySlow = _sut.IsSpeedVerySlow;
+
+        // Assert
+        isSpeedVerySlow.Should().BeFalse();
+    }
+
+    [Fact]
+    public void IsSpeedSlow_ShouldReturnTrue_WhenDieSpeedIs50()
+    {
+        // Arrange
+        _gameSettingsService.DieSpeed.Returns(50);
+
+        // Act
+        var isSpeedSlow = _sut.IsSpeedSlow;
+
+        // Assert
+        isSpeedSlow.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsSpeedSlow_ShouldReturnFalse_WhenDieSpeedIsNot50()
+    {
+        // Arrange
+        _gameSettingsService.DieSpeed.Returns(70);
+
+        // Act
+        var isSpeedSlow = _sut.IsSpeedSlow;
+
+        // Assert
+        isSpeedSlow.Should().BeFalse();
+    }
+
+    [Fact]
+    public void IsSpeedFast_ShouldReturnTrue_WhenDieSpeedIs30()
+    {
+        // Arrange
+        _gameSettingsService.DieSpeed.Returns(30);
+
+        // Act
+        var isSpeedFast = _sut.IsSpeedFast;
+
+        // Assert
+        isSpeedFast.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsSpeedFast_ShouldReturnFalse_WhenDieSpeedIsNot30()
+    {
+        // Arrange
+        _gameSettingsService.DieSpeed.Returns(50);
+
+        // Act
+        var isSpeedFast = _sut.IsSpeedFast;
+
+        // Assert
+        isSpeedFast.Should().BeFalse();
+    }
+
+    [Fact]
+    public void IsSpeedVeryFast_ShouldReturnTrue_WhenDieSpeedIs15()
+    {
+        // Arrange
+        _gameSettingsService.DieSpeed.Returns(15);
+
+        // Act
+        var isSpeedVeryFast = _sut.IsSpeedVeryFast;
+
+        // Assert
+        isSpeedVeryFast.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsSpeedVeryFast_ShouldReturnFalse_WhenDieSpeedIsNot15()
+    {
+        // Arrange
+        _gameSettingsService.DieSpeed.Returns(30);
+
+        // Act
+        var isSpeedVeryFast = _sut.IsSpeedVeryFast;
+
+        // Assert
+        isSpeedVeryFast.Should().BeFalse();
+    }
+
+    [Fact]
+    public void IsAngLow_ShouldReturnTrue_WhenDieAngleIs0()
+    {
+        // Arrange
+        _gameSettingsService.DieAngle.Returns(0);
+
+        // Act
+        var isAngLow = _sut.IsAngLow;
+
+        // Assert
+        isAngLow.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsAngLow_ShouldReturnFalse_WhenDieAngleIsNot0()
+    {
+        // Arrange
+        _gameSettingsService.DieAngle.Returns(2);
+
+        // Act
+        var isAngLow = _sut.IsAngLow;
+
+        // Assert
+        isAngLow.Should().BeFalse();
+    }
+
+    [Fact]
+    public void IsAngHigh_ShouldReturnTrue_WhenDieAngleIs2()
+    {
+        // Arrange
+        _gameSettingsService.DieAngle.Returns(2);
+
+        // Act
+        var isAngHigh = _sut.IsAngHigh;
+
+        // Assert
+        isAngHigh.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsAngHigh_ShouldReturnFalse_WhenDieAngleIsNot2()
+    {
+        // Arrange
+        _gameSettingsService.DieAngle.Returns(0);
+
+        // Act
+        var isAngHigh = _sut.IsAngHigh;
+
+        // Assert
+        isAngHigh.Should().BeFalse();
+    }
+
+    [Fact]
+    public void IsAngVeryHigh_ShouldReturnTrue_WhenDieAngleIs4()
+    {
+        // Arrange
+        _gameSettingsService.DieAngle.Returns(4);
+
+        // Act
+        var isAngVeryHigh = _sut.IsAngVeryHigh;
+
+        // Assert
+        isAngVeryHigh.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsAngVeryHigh_ShouldReturnFalse_WhenDieAngleIsNot4()
+    {
+        // Arrange
+        _gameSettingsService.DieAngle.Returns(2);
+
+        // Act
+        var isAngVeryHigh = _sut.IsAngVeryHigh;
+
+        // Assert
+        isAngVeryHigh.Should().BeFalse();
+    }
 }
