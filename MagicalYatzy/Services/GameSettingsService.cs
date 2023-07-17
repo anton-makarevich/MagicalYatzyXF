@@ -6,7 +6,7 @@ namespace Sanet.MagicalYatzy.Services
     {
         private int _dieAngle = 2;
         private int _maxRollLoop = 100;
-        private int _dieSpeed = 50;
+        private int _dieSpeed = (int)DiceSpeed.Fast;
 
         public DiceStyle DieStyle { get; set; }
         public int DieAngle {

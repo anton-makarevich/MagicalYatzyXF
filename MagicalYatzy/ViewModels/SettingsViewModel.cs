@@ -56,13 +56,13 @@ public class SettingsViewModel : DicePanelViewModel
             NotifyPropertyChanged(nameof(IsAngleVeryHigh));
         }
     }
-    public int DieSpeed
+    public DiceSpeed DieSpeed
     {
-        get => _gameSettingsService.DieSpeed;
+        get => (DiceSpeed)_gameSettingsService.DieSpeed;
         set
         {
-            if (_gameSettingsService.DieSpeed == value) return;
-            _gameSettingsService.DieSpeed = value;
+            if ((DiceSpeed)_gameSettingsService.DieSpeed == value) return;
+            _gameSettingsService.DieSpeed = (int)value;
             NotifyPropertyChanged();
             NotifyPropertyChanged(nameof(IsSpeedVerySlow));
             NotifyPropertyChanged(nameof(IsSpeedSlow));
@@ -121,45 +121,45 @@ public class SettingsViewModel : DicePanelViewModel
 
     public bool IsSpeedVerySlow
     {
-        get => DieSpeed== 70;
+        get => DieSpeed== DiceSpeed.VerySlow;
         set
         {
             if (value)
             {
-                DieSpeed = 70;
+                DieSpeed = DiceSpeed.VerySlow;
             }
         }
     }
     public bool IsSpeedSlow
     {
-        get => DieSpeed == 50;
+        get => DieSpeed == DiceSpeed.Slow;
         set
         {
             if (value)
             {
-                DieSpeed = 50;
+                DieSpeed = DiceSpeed.Slow;
             }
         }
     }
     public bool IsSpeedFast
     {
-        get => DieSpeed == 30;
+        get => DieSpeed == DiceSpeed.Fast;
         set
         {
             if (value)
             {
-                DieSpeed = 30;
+                DieSpeed = DiceSpeed.Fast;
             }
         }
     }
     public bool IsSpeedVeryFast
     {
-        get => DieSpeed == 15;
+        get => DieSpeed == DiceSpeed.VeryFast;
         set
         {
             if (value)
             {
-                DieSpeed = 15;
+                DieSpeed = DiceSpeed.VeryFast;
             }
         }
     }
