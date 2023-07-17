@@ -17,7 +17,6 @@ namespace Sanet.MagicalYatzy.Models.Game
         DiceStyle PanelStyle { get; }
         bool PlaySound { get; set; }
         DieResult Result { get; }
-        int RollDelay { get; set; }
         bool WithSound { get; set; }
         Rectangle Bounds { get; }
         int FixedDiceCount { get; }

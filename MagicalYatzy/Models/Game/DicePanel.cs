@@ -78,9 +78,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         public bool IsRolling => Dice.Any(d => d.IsRolling);
 
         public bool WithSound { get; set; } = false;
-
-        public int RollDelay { get; set; } = 20;
-
+        
         public bool ManualSetMode { get; set; } 
 
         public Rectangle Bounds { get; private set; }
@@ -289,7 +287,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         private async Task BeginLoop()
         {
-            await Task.Delay(RollDelay);
+            await Task.Delay(_gameSettingsService.DieSpeed);
             OnLoopCompleted();
         }
 
