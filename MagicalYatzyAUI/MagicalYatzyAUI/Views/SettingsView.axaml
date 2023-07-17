@@ -17,42 +17,41 @@
              Grid.ColumnSpan="3"
          />
          <Grid
-                    Grid.Column="1"
-                    Grid.Row="1"
-                    Grid.ColumnSpan="2" RowDefinitions="100,*" ColumnDefinitions="*,*,*">
+            Grid.Column="1"
+            Grid.Row="1"
+            Grid.ColumnSpan="2" RowDefinitions="100,*" ColumnDefinitions="*,*,*">
 
-             <TextBlock 
-                        HorizontalAlignment="Left"
-                        Foreground="{StaticResource SanetBlueColor}"
-                        Text="{Binding SettingsStyleCaption}"
-                        Grid.Row="0"
-                        VerticalAlignment="Center"/>
-                    <StackPanel
-                    Grid.Row="1" Grid.Column="0">
-                    <ToggleButton
-                        Height="70"
-                        Width="70"
-                            IsChecked="{Binding IsStyleWhite,Mode=TwoWay}">
-                        <Image Source="../Assets/Styles/White.png" />
-                    </ToggleButton>
-                    <ToggleButton
-                        Height="70"
-                        Width="70"
-                        IsChecked="{Binding IsStyleBlue,Mode=TwoWay}">
-                        <Image Source="../Assets/Styles/Blue.png" />
-                    </ToggleButton>
-                    <ToggleButton
-                        Height="70"
-                        Width="70"
-                        IsChecked="{Binding IsStyleRed,Mode=TwoWay}">
-                            <Image Source="../Assets/Styles/Red.png" />
-                    </ToggleButton>
-                    </StackPanel>
+             <Label 
+                Classes="caption"       
+                Content="{Binding SettingsStyleCaption, Converter={StaticResource StringUppercasedConverter}}"
+                Grid.Row="0"
+                VerticalAlignment="Center"/>
+                
+             <StackPanel
+             Grid.Row="1" Grid.Column="0">
+             <ToggleButton
+                Height="70"
+                Width="70"
+                    IsChecked="{Binding IsStyleWhite,Mode=TwoWay}">
+                <Image Source="../Assets/Styles/White.png" />
+             </ToggleButton>
+             <ToggleButton
+                Height="70"
+                Width="70"
+                IsChecked="{Binding IsStyleBlue,Mode=TwoWay}">
+                <Image Source="../Assets/Styles/Blue.png" />
+             </ToggleButton>
+             <ToggleButton
+                Height="70"
+                Width="70"
+                IsChecked="{Binding IsStyleRed,Mode=TwoWay}">
+                    <Image Source="../Assets/Styles/Red.png" />
+             </ToggleButton>
+             </StackPanel>
 
-                    <TextBlock 
-                               HorizontalAlignment="Left"
-                           Foreground="{StaticResource SanetBlueColor}"
-                           Text="{Binding SettingsSpeedCaption}"
+             <Label 
+                           Classes="caption"
+                           Content="{Binding SettingsSpeedCaption, Converter={StaticResource StringUppercasedConverter}}"
                            Grid.Row="0"
                                Grid.Column="1"
                            VerticalAlignment="Center"/>
@@ -87,12 +86,12 @@
 
                 </StackPanel>
 
-                <TextBlock HorizontalAlignment="Left"
-                           Foreground="{StaticResource SanetBlueColor}"
-                           Text="{Binding SettingsAngleCaption}"
-                           Grid.Row="0"
-                               Grid.Column="2"
-                           VerticalAlignment="Center"/>
+                <Label
+                    Classes="caption" 
+                    Content="{Binding SettingsAngleCaption, Converter={StaticResource StringUppercasedConverter}}"
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    VerticalAlignment="Center"/>
                 <StackPanel
                     Grid.Row="1"
                     Grid.Column="2">
@@ -115,20 +114,16 @@
                         />
                     </ToggleButton>
                     <StackPanel
-                        Margin="20">
-                        <TextBlock
-                               HorizontalAlignment="Left"
-                            Margin="-20,0,0,20"
-                           Foreground="{StaticResource SanetBlueColor}"
-                            Text="{Binding SoundLabel}"/>
+                        Margin="0,20">
+                        <Label
+                            Classes="caption"
+                            Content="{Binding SoundLabel, Converter={StaticResource StringUppercasedConverter}}"/>
                         <ToggleSwitch 
                             IsChecked="{Binding IsSoundEnabled,Mode=TwoWay}"
                             OnContent="{Binding OnContent}"
                             OffContent="{Binding OffContent}"/>
-
                     </StackPanel>
                 </StackPanel>
-
-            </Grid>
+         </Grid>
      </Grid>
 </UserControl>
