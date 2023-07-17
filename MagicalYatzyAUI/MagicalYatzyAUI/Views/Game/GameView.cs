@@ -26,6 +26,5 @@ public abstract class GameView: BaseView<GameViewModel>
         };
 
         ViewModel.DicePanel.DiceCount = 5;
-        ViewModel.DicePanel.RollDelay = 30;
     }
 }

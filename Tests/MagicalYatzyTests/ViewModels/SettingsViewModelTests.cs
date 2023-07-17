@@ -16,10 +16,11 @@ public class SettingsViewModelTests
 
     public SettingsViewModelTests()
     {
+        var dicePanel = Substitute.For<IDicePanel>();
         _gameSettingsService = Substitute.For<IGameSettingsService>();
         _localizationService = Substitute.For<ILocalizationService>();
 
-        _sut = new SettingsViewModel(_gameSettingsService, _localizationService);
+        _sut = new SettingsViewModel(dicePanel, _gameSettingsService, _localizationService);
     }
 
     [Fact]
@@ -68,43 +69,43 @@ public class SettingsViewModelTests
     }
 
         [Fact]
-    public void IsSpeedVerySlow_ShouldSetDieSpeedTo70_WhenValueIsTrue()
+    public void IsSpeedVerySlow_ShouldSetDieSpeedToVerySlow_WhenValueIsTrue()
     {
         // Act
         _sut.IsSpeedVerySlow = true;
 
         // Assert
-        _gameSettingsService.DieSpeed.Should().Be(70);
+        _gameSettingsService.DieSpeed.Should().Be((int)DiceSpeed.VerySlow);
     }
 
     [Fact]
-    public void IsSpeedSlow_ShouldSetDieSpeedTo50_WhenValueIsTrue()
+    public void IsSpeedSlow_ShouldSetDieSpeedToSlow_WhenValueIsTrue()
     {
         // Act
         _sut.IsSpeedSlow = true;
 
         // Assert
-        _gameSettingsService.DieSpeed.Should().Be(50);
+        _gameSettingsService.DieSpeed.Should().Be((int)DiceSpeed.Slow);
     }
 
     [Fact]
-    public void IsSpeedFast_ShouldSetDieSpeedTo30_WhenValueIsTrue()
+    public void IsSpeedFast_ShouldSetDieSpeedToFast_WhenValueIsTrue()
     {
         // Act
         _sut.IsSpeedFast = true;
 
         // Assert
-        _gameSettingsService.DieSpeed.Should().Be(30);
+        _gameSettingsService.DieSpeed.Should().Be((int)DiceSpeed.Fast);
     }
 
     [Fact]
-    public void IsSpeedVeryFast_ShouldSetDieSpeedTo15_WhenValueIsTrue()
+    public void IsSpeedVeryFast_ShouldSetDieSpeedToVeryFast_WhenValueIsTrue()
     {
         // Act
         _sut.IsSpeedVeryFast = true;
 
         // Assert
-        _gameSettingsService.DieSpeed.Should().Be(15);
+        _gameSettingsService.DieSpeed.Should().Be((int)DiceSpeed.VeryFast);
     }
 
     [Fact]
@@ -364,7 +365,7 @@ public class SettingsViewModelTests
     public void DieSpeed_ShouldReturnDieSpeedFromGameSettingsService()
     {
         // Arrange
-        const int expectedDieSpeed = 50;
+        const int expectedDieSpeed = (int)DiceSpeed.VerySlow;
 
         _gameSettingsService.DieSpeed.Returns(expectedDieSpeed);
 
@@ -372,7 +373,7 @@ public class SettingsViewModelTests
         var dieSpeed = _sut.DieSpeed;
 
         // Assert
-        dieSpeed.Should().Be(expectedDieSpeed);
+        dieSpeed.Should().Be((DiceSpeed)expectedDieSpeed);
     }
 
     [Fact]
@@ -485,10 +486,10 @@ public class SettingsViewModelTests
     }
 
     [Fact]
-    public void IsSpeedVerySlow_ShouldReturnTrue_WhenDieSpeedIs70()
+    public void IsSpeedVerySlow_ShouldReturnTrue_WhenDieSpeedIsVerySlow()
     {
         // Arrange
-        _gameSettingsService.DieSpeed.Returns(70);
+        _gameSettingsService.DieSpeed.Returns((int)DiceSpeed.VerySlow);
 
         // Act
         var isSpeedVerySlow = _sut.IsSpeedVerySlow;
@@ -498,10 +499,10 @@ public class SettingsViewModelTests
     }
 
     [Fact]
-    public void IsSpeedVerySlow_ShouldReturnFalse_WhenDieSpeedIsNot70()
+    public void IsSpeedVerySlow_ShouldReturnFalse_WhenDieSpeedIsNotVerySlow()
     {
         // Arrange
-        _gameSettingsService.DieSpeed.Returns(50);
+        _gameSettingsService.DieSpeed.Returns((int)DiceSpeed.Slow);
 
         // Act
         var isSpeedVerySlow = _sut.IsSpeedVerySlow;
@@ -511,10 +512,10 @@ public class SettingsViewModelTests
     }
 
     [Fact]
-    public void IsSpeedSlow_ShouldReturnTrue_WhenDieSpeedIs50()
+    public void IsSpeedSlow_ShouldReturnTrue_WhenDieSpeedIsSlow()
     {
         // Arrange
-        _gameSettingsService.DieSpeed.Returns(50);
+        _gameSettingsService.DieSpeed.Returns((int)DiceSpeed.Slow);
 
         // Act
         var isSpeedSlow = _sut.IsSpeedSlow;
@@ -524,10 +525,10 @@ public class SettingsViewModelTests
     }
 
     [Fact]
-    public void IsSpeedSlow_ShouldReturnFalse_WhenDieSpeedIsNot50()
+    public void IsSpeedSlow_ShouldReturnFalse_WhenDieSpeedIsNotSlow()
     {
         // Arrange
-        _gameSettingsService.DieSpeed.Returns(70);
+        _gameSettingsService.DieSpeed.Returns((int)DiceSpeed.VerySlow);
 
         // Act
         var isSpeedSlow = _sut.IsSpeedSlow;
@@ -537,10 +538,10 @@ public class SettingsViewModelTests
     }
 
     [Fact]
-    public void IsSpeedFast_ShouldReturnTrue_WhenDieSpeedIs30()
+    public void IsSpeedFast_ShouldReturnTrue_WhenDieSpeedIsFast()
     {
         // Arrange
-        _gameSettingsService.DieSpeed.Returns(30);
+        _gameSettingsService.DieSpeed.Returns((int)DiceSpeed.Fast);
 
         // Act
         var isSpeedFast = _sut.IsSpeedFast;
@@ -550,10 +551,10 @@ public class SettingsViewModelTests
     }
 
     [Fact]
-    public void IsSpeedFast_ShouldReturnFalse_WhenDieSpeedIsNot30()
+    public void IsSpeedFast_ShouldReturnFalse_WhenDieSpeedIsNotFast()
     {
         // Arrange
-        _gameSettingsService.DieSpeed.Returns(50);
+        _gameSettingsService.DieSpeed.Returns((int)DiceSpeed.Slow);
 
         // Act
         var isSpeedFast = _sut.IsSpeedFast;
@@ -563,10 +564,10 @@ public class SettingsViewModelTests
     }
 
     [Fact]
-    public void IsSpeedVeryFast_ShouldReturnTrue_WhenDieSpeedIs15()
+    public void IsSpeedVeryFast_ShouldReturnTrue_WhenDieSpeedIsVeryFast()
     {
         // Arrange
-        _gameSettingsService.DieSpeed.Returns(15);
+        _gameSettingsService.DieSpeed.Returns((int)DiceSpeed.VeryFast);
 
         // Act
         var isSpeedVeryFast = _sut.IsSpeedVeryFast;

@@ -1,20 +1,23 @@
 ﻿using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Localization;
-using Sanet.MVVM.Core.ViewModels;
+using Sanet.MagicalYatzy.ViewModels.Base;
 
 namespace Sanet.MagicalYatzy.ViewModels;
 
-public class SettingsViewModel : BaseViewModel
+public class SettingsViewModel : DicePanelViewModel
 {
     private readonly IGameSettingsService _gameSettingsService;
     private readonly ILocalizationService _localizationService;
 
-    public SettingsViewModel(IGameSettingsService gameSettingsService, ILocalizationService localizationService)
+    public SettingsViewModel(
+        IDicePanel dicePanel,
+        IGameSettingsService gameSettingsService,
+        ILocalizationService localizationService):base(dicePanel)
     {
         _gameSettingsService = gameSettingsService;
         _localizationService = localizationService;
-    }
+    }     
 
     #region bind props
 
@@ -53,13 +56,13 @@ public class SettingsViewModel : BaseViewModel
             NotifyPropertyChanged(nameof(IsAngleVeryHigh));
         }
     }
-    public int DieSpeed
+    public DiceSpeed DieSpeed
     {
-        get => _gameSettingsService.DieSpeed;
+        get => (DiceSpeed)_gameSettingsService.DieSpeed;
         set
         {
-            if (_gameSettingsService.DieSpeed == value) return;
-            _gameSettingsService.DieSpeed = value;
+            if ((DiceSpeed)_gameSettingsService.DieSpeed == value) return;
+            _gameSettingsService.DieSpeed = (int)value;
             NotifyPropertyChanged();
             NotifyPropertyChanged(nameof(IsSpeedVerySlow));
             NotifyPropertyChanged(nameof(IsSpeedSlow));
@@ -118,45 +121,45 @@ public class SettingsViewModel : BaseViewModel
 
     public bool IsSpeedVerySlow
     {
-        get => DieSpeed== 70;
+        get => DieSpeed== DiceSpeed.VerySlow;
         set
         {
             if (value)
             {
-                DieSpeed = 70;
+                DieSpeed = DiceSpeed.VerySlow;
             }
         }
     }
     public bool IsSpeedSlow
     {
-        get => DieSpeed == 50;
+        get => DieSpeed == DiceSpeed.Slow;
         set
         {
             if (value)
             {
-                DieSpeed = 50;
+                DieSpeed = DiceSpeed.Slow;
             }
         }
     }
     public bool IsSpeedFast
     {
-        get => DieSpeed == 30;
+        get => DieSpeed == DiceSpeed.Fast;
         set
         {
             if (value)
             {
-                DieSpeed = 30;
+                DieSpeed = DiceSpeed.Fast;
             }
         }
     }
     public bool IsSpeedVeryFast
     {
-        get => DieSpeed == 15;
+        get => DieSpeed == DiceSpeed.VeryFast;
         set
         {
             if (value)
             {
-                DieSpeed = 15;
+                DieSpeed = DiceSpeed.VeryFast;
             }
         }
     }
@@ -212,6 +215,7 @@ public class SettingsViewModel : BaseViewModel
     public string SoundLabel => _localizationService.GetLocalizedString("SoundLabel");
     public string OffContent => _localizationService.GetLocalizedString("OffContent");
     public string OnContent => _localizationService.GetLocalizedString("OnContent");
-    
+    public string BackImage => "Back.png";
+
     #endregion
 }

@@ -3,8 +3,127 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy"
+             xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.SettingsView"
              x:DataType="viewModels:SettingsViewModel">
-    Welcome to Avalonia!
+     <Grid x:Name="ControlGrid" ColumnDefinitions="120,*,130" RowDefinitions="Auto,*">
+         
+         <templatedControls:ToolBar
+             LeftCommand="{Binding BackCommand}"
+             LeftIcon="{Binding BackImage}"
+             Title="{Binding Title}"
+             HorizontalAlignment="Left"
+             Grid.ColumnSpan="3"
+         />
+         <Grid
+            Grid.Column="1"
+            Grid.Row="1"
+            Grid.ColumnSpan="2" RowDefinitions="100,*" ColumnDefinitions="*,*,*">
+
+             <Label 
+                Classes="caption"       
+                Content="{Binding SettingsStyleCaption, Converter={StaticResource StringUppercasedConverter}}"
+                Grid.Row="0"
+                VerticalAlignment="Center"/>
+                
+             <StackPanel
+             Grid.Row="1" Grid.Column="0">
+             <ToggleButton
+                Height="70"
+                Width="70"
+                    IsChecked="{Binding IsStyleWhite,Mode=TwoWay}">
+                <Image Source="../Assets/Styles/White.png" />
+             </ToggleButton>
+             <ToggleButton
+                Height="70"
+                Width="70"
+                IsChecked="{Binding IsStyleBlue,Mode=TwoWay}">
+                <Image Source="../Assets/Styles/Blue.png" />
+             </ToggleButton>
+             <ToggleButton
+                Height="70"
+                Width="70"
+                IsChecked="{Binding IsStyleRed,Mode=TwoWay}">
+                    <Image Source="../Assets/Styles/Red.png" />
+             </ToggleButton>
+             </StackPanel>
+
+             <Label 
+                           Classes="caption"
+                           Content="{Binding SettingsSpeedCaption, Converter={StaticResource StringUppercasedConverter}}"
+                           Grid.Row="0"
+                               Grid.Column="1"
+                           VerticalAlignment="Center"/>
+                    <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1">
+                    <ToggleButton
+                    IsChecked="{Binding IsSpeedVerySlow,Mode=TwoWay}">
+                                <TextBlock
+                        Text="{Binding SpeedVerySlow}"
+                        />
+                    </ToggleButton>
+                    <ToggleButton
+            IsChecked="{Binding IsSpeedSlow,Mode=TwoWay}">
+                        <TextBlock
+                Text="{Binding SpeedSlow}"
+                />
+                    </ToggleButton>
+                    <ToggleButton
+            IsChecked="{Binding IsSpeedFast,Mode=TwoWay}">
+                        <TextBlock
+                Text="{Binding SpeedFast}"
+            />
+                    </ToggleButton>
+                    <ToggleButton
+            
+            IsChecked="{Binding IsSpeedVeryFast,Mode=TwoWay}">
+                        <TextBlock
+               Text="{Binding SpeedVeryFast}"
+            />
+                    </ToggleButton>
+
+                </StackPanel>
+
+                <Label
+                    Classes="caption" 
+                    Content="{Binding SettingsAngleCaption, Converter={StaticResource StringUppercasedConverter}}"
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    VerticalAlignment="Center"/>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="2">
+                    <ToggleButton
+                        IsChecked="{Binding IsAngleLow,Mode=TwoWay}">
+                                    <TextBlock
+                            Text="{Binding AngleLowText}"
+                            />
+                    </ToggleButton>
+                    <ToggleButton
+                        IsChecked="{Binding IsAngleHigh,Mode=TwoWay}">
+                                    <TextBlock
+                            Text="{Binding AngleHighText}"
+                            />
+                    </ToggleButton>
+                    <ToggleButton
+                        IsChecked="{Binding IsAngleVeryHigh,Mode=TwoWay}">
+                                    <TextBlock
+                            Text="{Binding AngleVeryHighText}"
+                        />
+                    </ToggleButton>
+                    <StackPanel
+                        Margin="0,20">
+                        <Label
+                            Classes="caption"
+                            Content="{Binding SoundLabel, Converter={StaticResource StringUppercasedConverter}}"/>
+                        <ToggleSwitch 
+                            IsChecked="{Binding IsSoundEnabled,Mode=TwoWay}"
+                            OnContent="{Binding OnContent}"
+                            OffContent="{Binding OffContent}"/>
+                    </StackPanel>
+                </StackPanel>
+         </Grid>
+     </Grid>
 </UserControl>

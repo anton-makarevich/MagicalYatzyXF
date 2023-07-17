@@ -13,18 +13,17 @@ namespace MagicalYatzyTests.Models.Game
         private readonly DicePanel _sut;
 
         private const int TestDiceCount = 6;
-        private const int TestRollDelay = 6;
 
         private readonly List<int> _testResults = new() { 2, 4, 3, 3, 1, 5 };
-
+private readonly IGameSettingsService _gameSettingMock = Substitute.For<IGameSettingsService>();
         public DicePanelTests()
         {
-            var gameSettingMock = Substitute.For<IGameSettingsService>();
-            gameSettingMock.MaxRollLoop.Returns(1);
-            _sut = new DicePanel(gameSettingMock)
+            
+            _gameSettingMock.MaxRollLoop.Returns(1);
+            _gameSettingMock.DieSpeed.Returns(0);
+            _sut = new DicePanel(_gameSettingMock)
             {
                 DiceCount = TestDiceCount,
-                RollDelay = TestRollDelay
             };
         }
 
@@ -56,6 +55,9 @@ namespace MagicalYatzyTests.Models.Game
         [Fact]
         public void AllDiceRollWhenRollIsInvoked()
         {
+            // Arrange
+            _gameSettingMock.DieSpeed.Returns(10);
+            
             // Act
             _sut.RollDice(null);
 
@@ -83,7 +85,6 @@ namespace MagicalYatzyTests.Models.Game
         {
             // Arrange
             var rollEndFired = false;
-            _sut.RollDelay = 0;
             _sut.RollEnded += (s,e) => { rollEndFired = true; };
             // Act
             _sut.RollDice(null);
@@ -95,9 +96,6 @@ namespace MagicalYatzyTests.Models.Game
         [Fact]
         public void AllDiceStopWhenRollIsEnded()
         {
-            // Arrange
-            _sut.RollDelay = 0;
-
             // Act
             _sut.RollDice(null);
 
@@ -110,9 +108,6 @@ namespace MagicalYatzyTests.Models.Game
         [Fact]
         public void EveryDiceHasProperResultValue()
         {
-            // Arrange
-            _sut.RollDelay = 0;
-
             // Act
             _sut.RollDice(null);
 
@@ -124,9 +119,6 @@ namespace MagicalYatzyTests.Models.Game
         [Fact]
         public void DiceResultHasValuePassedToRollMethod()
         {
-            // Arrange
-            _sut.RollDelay = 0;
-
             // Act
             _sut.RollDice(_testResults);
 
@@ -142,11 +134,9 @@ namespace MagicalYatzyTests.Models.Game
         [Fact]
         public void PanelFixesSpecifiedDice()
         {
-            const int resultToFix = 2;
-
             // Arrange
-            _sut.RollDelay = 0;
-
+            const int resultToFix = 2;
+            
             // Act
             _sut.RollDice(_testResults);
             _sut.FixDice(resultToFix, true);
@@ -161,9 +151,6 @@ namespace MagicalYatzyTests.Models.Game
         [Fact]
         public void PanelFixesAllDice()
         {
-            // Arrange
-            _sut.RollDelay = 0;
-
             // Act
             _sut.RollDice(_testResults);
             foreach(var result in _testResults)
@@ -176,11 +163,9 @@ namespace MagicalYatzyTests.Models.Game
         [Fact]
         public void PanelUnfixesSpecifiedDice()
         {
-            const int resultToFix = 2;
-
             // Arrange
-            _sut.RollDelay = 0;
-
+            const int resultToFix = 2;
+            
             // Act
             _sut.RollDice(_testResults);
             _sut.FixDice(resultToFix, true);
@@ -193,10 +178,8 @@ namespace MagicalYatzyTests.Models.Game
         [Fact]
         public void PanelUnfixesAllDice()
         {
-            const int resultToFix = 2;
-
             // Arrange
-            _sut.RollDelay = 0;
+            const int resultToFix = 2;
 
             // Act
             _sut.RollDice(_testResults);
@@ -210,9 +193,6 @@ namespace MagicalYatzyTests.Models.Game
         [Fact]
         public void PanelChangesDiceValueWhenRequested()
         {
-            // Arrange
-            _sut.RollDelay = 0;
-
             // Act
             _sut.RollDice(_testResults);
             _sut.ChangeDice(1, 6);
@@ -316,9 +296,6 @@ namespace MagicalYatzyTests.Models.Game
         [Fact]
         public void PanelResultIsTheSumOfAllDice()
         {
-            // Arrange
-            _sut.RollDelay = 0;
-
             // Act
             _sut.RollDice(_testResults);
             var result = _sut.Result.DiceResults.Sum();
@@ -331,7 +308,6 @@ namespace MagicalYatzyTests.Models.Game
         public void ReturnsDiceCoordinatesByValue()
         {
             const int diceValueToLookFor = 4;
-            _sut.RollDelay = 0;
             _sut.RollDice(_testResults);
             var dice = _sut.Dice.First(f => f.Result == diceValueToLookFor);
 
@@ -350,9 +326,6 @@ namespace MagicalYatzyTests.Models.Game
         [Fact]
         public void ChangeDiceDoesNotWorkIfValueIsInvalid()
         {
-            // Arrange
-            _sut.RollDelay = 0;
-
             // Act
             _sut.RollDice(_testResults);
             _sut.ChangeDice(1, 2);
@@ -366,7 +339,6 @@ namespace MagicalYatzyTests.Models.Game
         public void ManualSetModeIsSwitchedOffOnRollDice()
         {
             // Arrange
-            _sut.RollDelay = 0;
             _sut.ManualSetMode = true;
 
             // Act
@@ -381,7 +353,6 @@ namespace MagicalYatzyTests.Models.Game
         {
             // Arrange
             var rollStartedTimes = 0;
-            _sut.RollDelay = 0;
             _sut.RollStarted += (sender, args) =>
             {
                 rollStartedTimes++;
@@ -403,7 +374,6 @@ namespace MagicalYatzyTests.Models.Game
         public void FixedDiceValueIsNotOverridenOnNextRoll()
         {
             // Arrange
-            _sut.RollDelay = 0;
             _sut.RollDice(_testResults);
             _sut.FixDice(1,true);
             var newResults = new List<int> { 2, 4, 3, 3, 6, 5 };
@@ -457,7 +427,6 @@ namespace MagicalYatzyTests.Models.Game
         public void GetDicePositionReturnsNullIfWrongValueIsPassedAsArgument()
         {
             // Arrange
-            _sut.RollDelay = 0;
             _sut.RollDice(_testResults);
 
             // Act

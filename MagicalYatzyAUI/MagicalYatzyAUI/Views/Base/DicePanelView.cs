@@ -24,7 +24,6 @@ namespace Sanet.MagicalYatzy.Avalonia.Views.Base
             _dicePanel.DicePanel = ViewModel.DicePanel;
             pageGrid.Children.Insert(0, _dicePanel);
             ViewModel.DicePanel.DiceCount = 5;
-            ViewModel.DicePanel.RollDelay = 30;
         }
 
         protected override void OnLoaded(RoutedEventArgs e)
