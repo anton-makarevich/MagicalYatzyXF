@@ -34,4 +34,10 @@
       <UpToDateCheckInput Remove="Views\Cells\PlayerCell.axaml" />
       <UpToDateCheckInput Remove="Views\Cells\RuleCell.axaml" />
     </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Assets\Styles\White.png" />
+      <EmbeddedResource Include="Assets\Styles\Red.png" />
+      <EmbeddedResource Include="Assets\Styles\Blue.png" />
+    </ItemGroup>
 </Project>

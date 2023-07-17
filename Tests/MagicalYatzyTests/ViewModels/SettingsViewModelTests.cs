@@ -16,10 +16,11 @@ public class SettingsViewModelTests
 
     public SettingsViewModelTests()
     {
+        var dicePanel = Substitute.For<IDicePanel>();
         _gameSettingsService = Substitute.For<IGameSettingsService>();
         _localizationService = Substitute.For<ILocalizationService>();
 
-        _sut = new SettingsViewModel(_gameSettingsService, _localizationService);
+        _sut = new SettingsViewModel(dicePanel, _gameSettingsService, _localizationService);
     }
 
     [Fact]

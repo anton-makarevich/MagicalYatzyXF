@@ -85,7 +85,7 @@ public class MainMenuViewModel : DicePanelViewModel
             new MainMenuAction
             {
                 Label = Strings.SettingsAction,
-                MenuAction = new SimpleCommand(() => { /*_navigationService.NavigateToPage(AppPages.SettingsPage);*/ }),
+                MenuAction = new AsyncCommand(async () => {await NavigationService.NavigateToViewModelAsync<SettingsViewModel>(); }),
                 Description = Strings.SettingsDescription,
                 Image = "Settings.png",
             },

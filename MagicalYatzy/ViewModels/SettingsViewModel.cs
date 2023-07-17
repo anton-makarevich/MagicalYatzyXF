@@ -1,20 +1,23 @@
 ﻿using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Localization;
-using Sanet.MVVM.Core.ViewModels;
+using Sanet.MagicalYatzy.ViewModels.Base;
 
 namespace Sanet.MagicalYatzy.ViewModels;
 
-public class SettingsViewModel : BaseViewModel
+public class SettingsViewModel : DicePanelViewModel
 {
     private readonly IGameSettingsService _gameSettingsService;
     private readonly ILocalizationService _localizationService;
 
-    public SettingsViewModel(IGameSettingsService gameSettingsService, ILocalizationService localizationService)
+    public SettingsViewModel(
+        IDicePanel dicePanel,
+        IGameSettingsService gameSettingsService,
+        ILocalizationService localizationService):base(dicePanel)
     {
         _gameSettingsService = gameSettingsService;
         _localizationService = localizationService;
-    }
+    }     
 
     #region bind props
 
@@ -212,6 +215,7 @@ public class SettingsViewModel : BaseViewModel
     public string SoundLabel => _localizationService.GetLocalizedString("SoundLabel");
     public string OffContent => _localizationService.GetLocalizedString("OffContent");
     public string OnContent => _localizationService.GetLocalizedString("OnContent");
-    
+    public string BackImage => "Back.png";
+
     #endregion
 }
