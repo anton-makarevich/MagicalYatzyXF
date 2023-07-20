@@ -1,4 +1,7 @@
-﻿using Sanet.MagicalYatzy.Models.Game;
+﻿using System.Collections.ObjectModel;
+using System.Linq;
+using Sanet.MagicalYatzy.Models;
+using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Localization;
 using Sanet.MagicalYatzy.ViewModels.Base;
@@ -17,6 +20,9 @@ public class SettingsViewModel : DicePanelViewModel
     {
         _gameSettingsService = gameSettingsService;
         _localizationService = localizationService;
+
+        AvailableLanguages = new ObservableCollection<string>(
+            _localizationService.Languages.Select(f=>f.Code));
     }     
 
     #region bind props
@@ -215,7 +221,16 @@ public class SettingsViewModel : DicePanelViewModel
     public string SoundLabel => _localizationService.GetLocalizedString("SoundLabel");
     public string OffContent => _localizationService.GetLocalizedString("OffContent");
     public string OnContent => _localizationService.GetLocalizedString("OnContent");
+    public string LanguageLabel => _localizationService.GetLocalizedString("LanguageLabel");
     public string BackImage => "Back.png";
+    
+    public ObservableCollection<string> AvailableLanguages { get; }
+
+    public string SelectedLanguage
+    {
+        get => _localizationService.ActiveLanguage.Code;
+        set => _localizationService.SetActiveLanguage(value);
+    }
 
     #endregion
 }

@@ -37,6 +37,21 @@ public class SettingsViewModelTests
         // Assert
         title.Should().Be(expectedTitle);
     }
+    
+    [Fact]
+    public void LanguageLabel_ShouldReturnCorrectLocalizedString()
+    {
+        // Arrange
+        const string expected = "Language";
+
+        _localizationService.GetLocalizedString("LanguageLabel").Returns(expected);
+
+        // Act
+        var language = _sut.LanguageLabel;
+
+        // Assert
+        language.Should().Be(expected);
+    }
 
     [Fact]
     public void IsStyleBlue_ShouldSetDieStyleToBlue_WhenValueIsTrue()

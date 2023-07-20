@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Extensions\" />
     <Folder Include="Utils\" />
     <Folder Include="Models\" />
     <Folder Include="Models\Game\" />

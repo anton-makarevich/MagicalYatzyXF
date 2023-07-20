@@ -1,14 +1,16 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
 using Sanet.MagicalYatzy.Models;
 
 namespace Sanet.MagicalYatzy.Services.Localization;
 
 public interface ILocalizationService
 {
-    LanguageCode Language { get; }
+    Language ActiveLanguage { get; }
+    List<Language> Languages { get; }
 
-    void SetSystemCulture(LanguageCode language);
-    void SetSystemCulture(CultureInfo cultureInfo);
+    void SetActiveLanguage(Language language);
+    
+    void SetActiveLanguage(string languageCode);
 
     string GetLocalizedString(string key);
 }
