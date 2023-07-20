@@ -76,8 +76,8 @@ public class GameSettingsServiceTests
     }
 
     [Theory]
-    [InlineData(10, 15)]  // Less than allowed range, set to 15
-    [InlineData(75, 70)]  // Greater than allowed range, set to 70
+    [InlineData(5, 10)]  // Less than allowed range, set to 15
+    [InlineData(75, 55)]  // Greater than allowed range, set to 70
     public void DieSpeed_ShouldSetThresholdValue_WhenOutsideAllowedRange(int inputDieSpeed, int expectedDieSpeed)
     {
         // Act
