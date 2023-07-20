@@ -39,8 +39,8 @@ namespace Sanet.MagicalYatzy.Services
             {
                 _dieSpeed = value switch
                 {
-                    < 15 => 15,
-                    > 70 => 70,
+                    < (int)DiceSpeed.VeryFast => (int)DiceSpeed.VeryFast,
+                    > (int)DiceSpeed.VerySlow => (int)DiceSpeed.VerySlow,
                     _ => value
                 };
             }
