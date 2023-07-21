@@ -1,5 +1,7 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using FluentAssertions;
 using NSubstitute;
+using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Localization;
@@ -13,12 +15,16 @@ public class SettingsViewModelTests
     private readonly SettingsViewModel _sut;
     private readonly IGameSettingsService _gameSettingsService;
     private readonly ILocalizationService _localizationService;
+    
+    private readonly Language _defLanguage = new Language("en", true, "english");
 
     public SettingsViewModelTests()
     {
         var dicePanel = Substitute.For<IDicePanel>();
         _gameSettingsService = Substitute.For<IGameSettingsService>();
         _localizationService = Substitute.For<ILocalizationService>();
+
+        _localizationService.Languages.Returns(new List<Language> {_defLanguage});
 
         _sut = new SettingsViewModel(dicePanel, _gameSettingsService, _localizationService);
     }

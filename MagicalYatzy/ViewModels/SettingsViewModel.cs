@@ -22,7 +22,7 @@ public class SettingsViewModel : DicePanelViewModel
         _localizationService = localizationService;
 
         AvailableLanguages = new ObservableCollection<string>(
-            _localizationService.Languages.Select(f=>f.Code));
+            _localizationService.Languages.Select(f=>f.Name));
     }     
 
     #region bind props
