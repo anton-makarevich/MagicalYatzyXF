@@ -61,14 +61,14 @@ public class GlobalizationInvariantLocalizationService : ILocalizationService
     {
         var resxFileName = language.IsDefault 
             ? "Sanet.MagicalYatzy.Resources.Strings.resources"
-            : $"Sanet.MagicalYatzy.Resources.Strings-{language.Code}.resources";
+            : $"Sanet.MagicalYatzy.Resources.Strings-{language.Code}";
 
         var assembly = typeof(GlobalizationInvariantLocalizationService).GetTypeInfo().Assembly;
 
         var resourceNames = assembly.GetManifestResourceNames();
         
         var matchingResourceName = resourceNames.FirstOrDefault(resourceName =>
-            resourceName.EndsWith(resxFileName, StringComparison.OrdinalIgnoreCase));
+            resourceName.Contains(resxFileName, StringComparison.OrdinalIgnoreCase));
 
         if (matchingResourceName == null)
         {
@@ -112,8 +112,18 @@ public class GlobalizationInvariantLocalizationService : ILocalizationService
             throw new ApplicationException("Missing default language resource.");
         }
 
-        var languages = new List<Language>(){new Language("en", true, "English")};
-        
+        var languages = new List<Language>(){new Language("en", true, "english")};
+
+        if (resourceNames.Count > 1)
+        {
+            languages.AddRange(resourceNames.Where(l => l.Contains("Strings-"))
+                .Select(l =>
+                {
+                    var languageAttributes = l.Split('.').First(p => p.Contains('-')).Split('-');
+                    return new Language(languageAttributes[1], false, languageAttributes[2]);
+                }).ToList());
+        }
+
         return  languages;
     }
 }
