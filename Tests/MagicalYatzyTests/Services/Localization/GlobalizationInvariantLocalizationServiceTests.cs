@@ -27,11 +27,19 @@ public class GlobalizationInvariantLocalizationServiceTests
     }
     
     [Fact]
-    public void SetSystemCulture_WithLanguage_Should_SetLanguage() 
+    public void SetActiveLanguage_WithLanguage_Should_SetLanguage() 
     {
         var language = _sut.Languages.FirstOrDefault(l=>l.Code =="be");
         _sut.SetActiveLanguage(language);
         _sut.ActiveLanguage.Should().Be(language);
+    }
+    
+    [Fact]
+    public void SetActiveLanguage_WithLanguageCode_Should_SetLanguage() 
+    {
+        const string languageCode = "be";
+        _sut.SetActiveLanguage(languageCode);
+        _sut.ActiveLanguage.Code.Should().Be(languageCode);
     }
     
     [Fact]

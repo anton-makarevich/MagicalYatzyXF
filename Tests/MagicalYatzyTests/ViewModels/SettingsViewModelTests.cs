@@ -687,4 +687,31 @@ public class SettingsViewModelTests
         // Assert
         isAngVeryHigh.Should().BeFalse();
     }
+    
+    [Fact]
+    public void SelectedLanguage_ShouldReturnActiveLanguageCode_FromLocalizationService()
+    {
+        // Arrange
+        var language  = new Language("en",false); // Example language code
+        _localizationService.ActiveLanguage.Returns(language);
+
+        // Act
+        var selectedLanguage = _sut.SelectedLanguage;
+
+        // Assert
+        selectedLanguage.Should().Be(language.Code);
+    }
+    
+    [Fact]
+    public void SelectedLanguage_ShouldCallSetActiveLanguage_WithCorrectArgument()
+    {
+        // Arrange
+        const string expectedLanguageCode = "en"; // Example language code
+
+        // Act
+        _sut.SelectedLanguage = expectedLanguageCode;
+
+        // Assert
+        _localizationService.Received(1).SetActiveLanguage(expectedLanguageCode);
+    }
 }
