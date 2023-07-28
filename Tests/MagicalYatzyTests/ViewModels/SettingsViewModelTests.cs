@@ -699,19 +699,25 @@ public class SettingsViewModelTests
         var selectedLanguage = _sut.SelectedLanguage;
 
         // Assert
-        selectedLanguage.Should().Be(language.Code);
+        selectedLanguage.Should().Be(language);
     }
     
     [Fact]
     public void SelectedLanguage_ShouldCallSetActiveLanguage_WithCorrectArgument()
     {
         // Arrange
-        const string expectedLanguageCode = "en"; // Example language code
+        var expectedLanguage = new Language( "en",true,"english"); // Example language code
 
         // Act
-        _sut.SelectedLanguage = expectedLanguageCode;
+        _sut.SelectedLanguage = expectedLanguage;
 
         // Assert
-        _localizationService.Received(1).SetActiveLanguage(expectedLanguageCode);
+        _localizationService.Received(1).SetActiveLanguage(expectedLanguage);
+    }
+
+    [Fact]
+    public void AvailableLanguages_ReturnsList_FromLocalizationService()
+    {
+        _sut.AvailableLanguages.Should().Equal(new List<Language>() { _defLanguage });
     }
 }

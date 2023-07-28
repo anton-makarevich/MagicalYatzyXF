@@ -21,8 +21,8 @@ public class SettingsViewModel : DicePanelViewModel
         _gameSettingsService = gameSettingsService;
         _localizationService = localizationService;
 
-        AvailableLanguages = new ObservableCollection<string>(
-            _localizationService.Languages.Select(f=>f.Name));
+        AvailableLanguages = new ObservableCollection<Language>(
+            _localizationService.Languages);
     }     
 
     #region bind props
@@ -224,11 +224,11 @@ public class SettingsViewModel : DicePanelViewModel
     public string LanguageLabel => _localizationService.GetLocalizedString("LanguageLabel");
     public string BackImage => "Back.png";
     
-    public ObservableCollection<string> AvailableLanguages { get; }
+    public ObservableCollection<Language> AvailableLanguages { get; }
 
-    public string SelectedLanguage
+    public Language SelectedLanguage
     {
-        get => _localizationService.ActiveLanguage.Code;
+        get => _localizationService.ActiveLanguage;
         set => _localizationService.SetActiveLanguage(value);
     }
 

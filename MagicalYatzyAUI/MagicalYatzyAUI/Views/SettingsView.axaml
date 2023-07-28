@@ -17,8 +17,7 @@
         </Style>
     </UserControl.Styles>
     <Grid x:Name="ControlGrid"  RowDefinitions="Auto,*,Auto">
-         
-         <templatedControls:ToolBar
+        <templatedControls:ToolBar
              LeftCommand="{Binding BackCommand}"
              LeftIcon="{Binding BackImage}"
              Title="{Binding Title}"
@@ -38,7 +37,15 @@
                          Classes="caption"       
                          Content="{Binding LanguageLabel, Converter={StaticResource StringUppercasedConverter}}"
                          VerticalAlignment="Center"/>
-                     
+                     <ComboBox
+                         ItemsSource="{Binding AvailableLanguages}"
+                         SelectedItem="{Binding SelectedLanguage}">
+                         <ComboBox.ItemTemplate>
+                             <DataTemplate>
+                                 <Label Content="{Binding Name}"/>
+                             </DataTemplate>
+                         </ComboBox.ItemTemplate>
+                     </ComboBox>
                      <Label 
                         Classes="caption"       
                         Content="{Binding SettingsStyleCaption, Converter={StaticResource StringUppercasedConverter}}"
