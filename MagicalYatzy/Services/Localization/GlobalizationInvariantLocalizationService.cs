@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Resources;
-using Sanet.MagicalYatzy.Extensions;
 using Sanet.MagicalYatzy.Models;
 
 namespace Sanet.MagicalYatzy.Services.Localization;
@@ -15,25 +14,34 @@ public class GlobalizationInvariantLocalizationService : ILocalizationService
     private Dictionary<string, string> _localizedStrings = new();
     private Dictionary<string, string> _defaultLocalizedStrings = new();
 
-    public LanguageCode Language { get; private set; }
+    public Language ActiveLanguage { get; private set; }
+    public List<Language> Languages { get; private set; }
 
     public GlobalizationInvariantLocalizationService()
     {
-        SetSystemCulture(LanguageCode.Default); // Set the default language (English) initially
+        Languages = GetAvailableLanguages();
+        SetActiveLanguage(Languages.FirstOrDefault(l=>l.IsDefault)); // Set the default language (English) initially
     }
 
-    public void SetSystemCulture(LanguageCode language)
+    public void SetActiveLanguage(Language language)
     {
-        if (language == LanguageCode.Default && _defaultLocalizedStrings.Count == 0)
+        if (language.IsDefault && _defaultLocalizedStrings.Count == 0)
         {
             _defaultLocalizedStrings = LoadLocalizedStrings(language);
         }
-        if (language == Language && _localizedStrings?.Count!=0) return;
+        if (language == ActiveLanguage && _localizedStrings?.Count!=0) return;
         _localizedStrings = LoadLocalizedStrings(language);
-        Language = language;
+        ActiveLanguage = language;
     }
 
-    public void SetSystemCulture(System.Globalization.CultureInfo cultureInfo)
+    //[ConstantExpected]
+    public void SetActiveLanguage(string languageCode)
+    {
+        var language = Languages.FirstOrDefault(l => l.Code == languageCode);
+        SetActiveLanguage(language);
+    }
+
+    public void SetActiveLanguage(System.Globalization.CultureInfo cultureInfo)
     {
         // Not supported in this implementation since it requires CultureInfo
         throw new NotSupportedException("Setting culture using CultureInfo is not supported.");
@@ -49,28 +57,28 @@ public class GlobalizationInvariantLocalizationService : ILocalizationService
         return _defaultLocalizedStrings.TryGetValue(key, out localizedString) ? localizedString : key;
     }
 
-    private static Dictionary<string, string> LoadLocalizedStrings(LanguageCode language)
+    private static Dictionary<string, string> LoadLocalizedStrings(Language language)
     {
-        var languageCode = language.ToCultureString();
-        var resxFileName = language == LanguageCode.Default 
+        var resxFileName = language.IsDefault 
             ? "Sanet.MagicalYatzy.Resources.Strings.resources"
-            : $"Sanet.MagicalYatzy.Resources.Strings-{languageCode}.resources";
+            : $"Sanet.MagicalYatzy.Resources.Strings-{language.Code}";
 
         var assembly = typeof(GlobalizationInvariantLocalizationService).GetTypeInfo().Assembly;
 
         var resourceNames = assembly.GetManifestResourceNames();
+        
         var matchingResourceName = resourceNames.FirstOrDefault(resourceName =>
-            resourceName.EndsWith(resxFileName, StringComparison.OrdinalIgnoreCase));
+            resourceName.Contains(resxFileName, StringComparison.OrdinalIgnoreCase));
 
         if (matchingResourceName == null)
         {
-            throw new FileNotFoundException($"Resource file not found for language: {languageCode}");
+            throw new FileNotFoundException($"Resource file not found for language: {language.Code}");
         }
 
         using var resourceStream = assembly.GetManifestResourceStream(matchingResourceName);
         if (resourceStream == null)
         {
-            throw new MissingManifestResourceException($"Resource not found for language: {languageCode}");
+            throw new MissingManifestResourceException($"Resource not found for language: {language.Code}");
         }
         using var resourceReader = new ResourceReader(resourceStream);
         var localizedStrings = new Dictionary<string, string>();
@@ -84,5 +92,38 @@ public class GlobalizationInvariantLocalizationService : ILocalizationService
         }
 
         return localizedStrings;
+    }
+
+    private List<Language> GetAvailableLanguages()
+    {
+        var assembly = typeof(GlobalizationInvariantLocalizationService).GetTypeInfo().Assembly;
+
+        var resourceNames = assembly.GetManifestResourceNames()
+            .Where(resourceName => resourceName.Contains("Strings", StringComparison.OrdinalIgnoreCase)).ToList();
+        
+        if (resourceNames.Count == 0)
+        {
+            throw new ApplicationException("Missing localization resources.");
+        }
+
+        var defaultLanguageResource = resourceNames.FirstOrDefault(lrn => lrn.Contains("Strings."));
+        if (defaultLanguageResource == null)
+        {
+            throw new ApplicationException("Missing default language resource.");
+        }
+
+        var languages = new List<Language>(){new Language("en", true, "english")};
+
+        if (resourceNames.Count > 1)
+        {
+            languages.AddRange(resourceNames.Where(l => l.Contains("Strings-"))
+                .Select(l =>
+                {
+                    var languageAttributes = l.Split('.').First(p => p.Contains('-')).Split('-');
+                    return new Language(languageAttributes[1], false, languageAttributes[2]);
+                }).ToList());
+        }
+
+        return  languages;
     }
 }

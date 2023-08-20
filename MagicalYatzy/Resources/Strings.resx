@@ -801,4 +801,7 @@
     <value>T!</value>
     <comment>TotalShort</comment>
   </data>
+  <data name="LanguageLabel" xml:space="preserve">
+    <value>Language</value>
+  </data>
 </root>

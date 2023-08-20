@@ -1,5 +1,7 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using FluentAssertions;
 using NSubstitute;
+using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Localization;
@@ -13,12 +15,16 @@ public class SettingsViewModelTests
     private readonly SettingsViewModel _sut;
     private readonly IGameSettingsService _gameSettingsService;
     private readonly ILocalizationService _localizationService;
+    
+    private readonly Language _defLanguage = new Language("en", true, "english");
 
     public SettingsViewModelTests()
     {
         var dicePanel = Substitute.For<IDicePanel>();
         _gameSettingsService = Substitute.For<IGameSettingsService>();
         _localizationService = Substitute.For<ILocalizationService>();
+
+        _localizationService.Languages.Returns(new List<Language> {_defLanguage});
 
         _sut = new SettingsViewModel(dicePanel, _gameSettingsService, _localizationService);
     }
@@ -36,6 +42,21 @@ public class SettingsViewModelTests
 
         // Assert
         title.Should().Be(expectedTitle);
+    }
+    
+    [Fact]
+    public void LanguageLabel_ShouldReturnCorrectLocalizedString()
+    {
+        // Arrange
+        const string expected = "Language";
+
+        _localizationService.GetLocalizedString("LanguageLabel").Returns(expected);
+
+        // Act
+        var language = _sut.LanguageLabel;
+
+        // Assert
+        language.Should().Be(expected);
     }
 
     [Fact]
@@ -665,5 +686,38 @@ public class SettingsViewModelTests
 
         // Assert
         isAngVeryHigh.Should().BeFalse();
+    }
+    
+    [Fact]
+    public void SelectedLanguage_ShouldReturnActiveLanguageCode_FromLocalizationService()
+    {
+        // Arrange
+        var language  = new Language("en",false); // Example language code
+        _localizationService.ActiveLanguage.Returns(language);
+
+        // Act
+        var selectedLanguage = _sut.SelectedLanguage;
+
+        // Assert
+        selectedLanguage.Should().Be(language);
+    }
+    
+    [Fact]
+    public void SelectedLanguage_ShouldCallSetActiveLanguage_WithCorrectArgument()
+    {
+        // Arrange
+        var expectedLanguage = new Language( "en",true,"english"); // Example language code
+
+        // Act
+        _sut.SelectedLanguage = expectedLanguage;
+
+        // Assert
+        _localizationService.Received(1).SetActiveLanguage(expectedLanguage);
+    }
+
+    [Fact]
+    public void AvailableLanguages_ReturnsList_FromLocalizationService()
+    {
+        _sut.AvailableLanguages.Should().Equal(new List<Language>() { _defLanguage });
     }
 }

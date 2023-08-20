@@ -12,10 +12,12 @@
             <Setter Property="Margin" Value="0,0,20,20"/>
             <Setter Property="Spacing" Value="10"></Setter>
         </Style>
+        <Style Selector="StackPanel.middle-panel">
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
     </UserControl.Styles>
     <Grid x:Name="ControlGrid"  RowDefinitions="Auto,*,Auto">
-         
-         <templatedControls:ToolBar
+        <templatedControls:ToolBar
              LeftCommand="{Binding BackCommand}"
              LeftIcon="{Binding BackImage}"
              Title="{Binding Title}"
@@ -31,32 +33,45 @@
                         Path=Bounds.Size, 
                         Converter={StaticResource AdaptiveOrientationConverter}}">
                  <StackPanel Classes="panel">
-                 <Label 
-                    Classes="caption"       
-                    Content="{Binding SettingsStyleCaption, Converter={StaticResource StringUppercasedConverter}}"
-                    VerticalAlignment="Center"/>
-                    
-                 <StackPanel
-                     Orientation="Horizontal">
-                 <ToggleButton
-                     Height="70"
-                     Width="70"
-                        IsChecked="{Binding IsStyleWhite,Mode=TwoWay}">
-                     <Image Source="../Assets/Styles/White.png" />
-                 </ToggleButton>
-                 <ToggleButton
-                    Height="70"
-                    Width="70"
-                    IsChecked="{Binding IsStyleBlue,Mode=TwoWay}">
-                    <Image Source="../Assets/Styles/Blue.png" />
-                 </ToggleButton>
-                 <ToggleButton
-                    Height="70"
-                    Width="70"
-                    IsChecked="{Binding IsStyleRed,Mode=TwoWay}">
-                        <Image Source="../Assets/Styles/Red.png" />
-                 </ToggleButton>
-                 </StackPanel>
+                     <Label 
+                         Classes="caption"       
+                         Content="{Binding LanguageLabel, Converter={StaticResource StringUppercasedConverter}}"
+                         VerticalAlignment="Center"/>
+                     <ComboBox
+                         ItemsSource="{Binding AvailableLanguages}"
+                         SelectedItem="{Binding SelectedLanguage}">
+                         <ComboBox.ItemTemplate>
+                             <DataTemplate>
+                                 <Label Content="{Binding Name}"/>
+                             </DataTemplate>
+                         </ComboBox.ItemTemplate>
+                     </ComboBox>
+                     <Label 
+                        Classes="caption"       
+                        Content="{Binding SettingsStyleCaption, Converter={StaticResource StringUppercasedConverter}}"
+                        VerticalAlignment="Center"/>
+                        
+                     <StackPanel
+                         Orientation="Horizontal">
+                     <ToggleButton
+                         Height="70"
+                         Width="70"
+                            IsChecked="{Binding IsStyleWhite,Mode=TwoWay}">
+                         <Image Source="../Assets/Styles/White.png" />
+                     </ToggleButton>
+                     <ToggleButton
+                        Height="70"
+                        Width="70"
+                        IsChecked="{Binding IsStyleBlue,Mode=TwoWay}">
+                        <Image Source="../Assets/Styles/Blue.png" />
+                     </ToggleButton>
+                     <ToggleButton
+                        Height="70"
+                        Width="70"
+                        IsChecked="{Binding IsStyleRed,Mode=TwoWay}">
+                            <Image Source="../Assets/Styles/Red.png" />
+                     </ToggleButton>
+                     </StackPanel>
                  </StackPanel>
                  
                  <StackPanel Classes="panel">
@@ -102,7 +117,7 @@
                     Content="{Binding SettingsAngleCaption, Converter={StaticResource StringUppercasedConverter}}"
                     VerticalAlignment="Center"/>
                 <StackPanel
-                    Margin="0,0,0,10"
+                    Classes="middle-panel"
                     Orientation="Horizontal">
                     <ToggleButton
                         IsChecked="{Binding IsAngleLow,Mode=TwoWay}">
