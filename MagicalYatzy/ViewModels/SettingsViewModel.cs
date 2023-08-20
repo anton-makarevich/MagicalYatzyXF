@@ -229,7 +229,11 @@ public class SettingsViewModel : DicePanelViewModel
     public Language SelectedLanguage
     {
         get => _localizationService.ActiveLanguage;
-        set => _localizationService.SetActiveLanguage(value);
+        set
+        {
+            _localizationService.SetActiveLanguage(value);
+            NotifyAllPropertiesChanged();
+        }
     }
 
     #endregion
