@@ -38,7 +38,25 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
             _ => throw new ArgumentOutOfRangeException()
         };
 
-        public string Image => _player.ProfileImage;
+        public string Image
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(_player.ProfileImage))
+                {
+                    return _player.ProfileImage;
+                }
+
+                return _player.Type switch
+                {
+                    PlayerType.Local => "SanetDice.png",
+                    PlayerType.Network => "SanetDice.png",
+                    PlayerType.AI => "BotPlayer.png",
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+            }
+        }
+
         public string DeleteImage => "Close.png";
         public string DeleteCommandText => _localizationService.GetLocalizedString("DeletePlayerLabel");
         public ICommand DeleteCommand => new SimpleCommand(() =>

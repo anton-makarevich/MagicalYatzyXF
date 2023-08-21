@@ -6,7 +6,7 @@ namespace Sanet.MagicalYatzy.Services.StorageService
 {
     public interface IStorageService
     {
-        Task SavePlayersAsync(List<Player> players);
-        Task<List<Player>> LoadPlayersAsync(string dataFile = null);
+        Task SavePlayersAsync(List<IPlayer> players);
+        Task<List<IPlayer>> LoadPlayersAsync(string dataFile = null);
     }
 }

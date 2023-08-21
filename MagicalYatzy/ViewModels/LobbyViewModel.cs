@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -196,9 +195,10 @@ public class LobbyViewModel: DicePanelViewModel
     {
         if (!CanAddBot)
             return;
-        var name = GetUniqueInGameName(_localizationService.GetLocalizedString("BotNameDefault"),
-            Players.Select(p => p.Name).ToList());
-        var newBot = new Player(PlayerType.AI, name, "BotPlayer.png");
+        var newBot = _playerService.CreateLocalPlayer(
+            _localizationService.GetLocalizedString("BotNameDefault"),
+            PlayerType.AI, Players.Select(p => p.Name).ToList());
+        
         AddPlayer(new PlayerViewModel(newBot, _localizationService));
     });
 
@@ -206,25 +206,10 @@ public class LobbyViewModel: DicePanelViewModel
     {
         if (!CanAddHuman)
             return;
-        var name = GetUniqueInGameName(_localizationService.GetLocalizedString("PlayerNameDefault"),
-            Players.Select(p => p.Name).ToList());
-        var player = new Player(PlayerType.Local,name, "SanetDice.png");
+        var player = _playerService.CreateLocalPlayer(
+            _localizationService.GetLocalizedString("PlayerNameDefault"),
+            PlayerType.Local, Players.Select(p => p.Name).ToList());
+        
         AddPlayer(new PlayerViewModel(player, _localizationService));
     });
-    
-    private string GetUniqueInGameName(string defaultName, ICollection<string> names)
-    {
-        var numberOfPlayers = 1;
-
-        if (names == null || !names.Any()) return $"{defaultName} 1";
-        do
-        {
-            var name = $"{defaultName} {numberOfPlayers}";
-            if (!names.Contains(name))
-                return name;
-            numberOfPlayers++;
-        } while (numberOfPlayers < Math.Min(names.Count+2,10));
-
-        return $"{defaultName} 1";
-    }
 }
