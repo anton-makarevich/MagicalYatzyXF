@@ -6,6 +6,7 @@ using Sanet.MagicalYatzy.Extensions;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services.Api;
 using Sanet.MagicalYatzy.Services.Game;
+using Sanet.MagicalYatzy.Services.Localization;
 using Sanet.MagicalYatzy.Services.StorageService;
 using Xunit;
 
@@ -16,12 +17,14 @@ namespace MagicalYatzyTests.Services.Game
         private readonly IApiClient _apiMock;
         private readonly IStorageService _storageMock;
         private PlayerService _sut;
+        private readonly ILocalizationService _localizationServiceMock;
 
         public PlayerServiceTests()
         {
             _apiMock = Substitute.For<IApiClient>();
             _storageMock = Substitute.For<IStorageService>();
-            _sut = new PlayerService(_apiMock,_storageMock);
+            _localizationServiceMock = Substitute.For<ILocalizationService>();
+            _sut = new PlayerService(_apiMock,_storageMock, _localizationServiceMock);
         }
 
         [Fact]
@@ -50,11 +53,11 @@ namespace MagicalYatzyTests.Services.Game
         public async Task SuccessfullyLogsInSavesPlayer()
         {
             // Arrange
-            var players = new List<Player>();
+            var players = new List<IPlayer>();
             _apiMock.LoginUserAsync(TestUserName, TestUserPassword).Returns(Task.FromResult(TestPlayer));
-            _storageMock.SavePlayersAsync((List<Player>)_sut.Players).Returns((t) =>
+            _storageMock.SavePlayersAsync((List<IPlayer>)_sut.Players).Returns((t) =>
             {
-                players = (List<Player>)_sut.Players;
+                players = (List<IPlayer>)_sut.Players;
                 return null;
             });
 
@@ -62,7 +65,7 @@ namespace MagicalYatzyTests.Services.Game
             await _sut.LoginAsync(TestUserName, TestUserPassword);
             await Task.Delay(100);
             _storageMock.LoadPlayersAsync().Returns(Task.FromResult(players));
-            _sut = new PlayerService(_apiMock, _storageMock);
+            _sut = new PlayerService(_apiMock, _storageMock,_localizationServiceMock);
             await _sut.LoadPlayersAsync();
             // Asset
             Assert.True(_sut.Players.Count == players.Count);
