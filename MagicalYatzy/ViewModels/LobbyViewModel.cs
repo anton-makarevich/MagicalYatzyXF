@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -195,7 +196,9 @@ public class LobbyViewModel: DicePanelViewModel
     {
         if (!CanAddBot)
             return;
-        var newBot = new Player(PlayerType.AI, Players.Select(p=>p.Name).ToList());
+        var name = GetUniqueInGameName(_localizationService.GetLocalizedString("BotNameDefault"),
+            Players.Select(p => p.Name).ToList());
+        var newBot = new Player(PlayerType.AI, name, "BotPlayer.png");
         AddPlayer(new PlayerViewModel(newBot, _localizationService));
     });
 
@@ -203,8 +206,25 @@ public class LobbyViewModel: DicePanelViewModel
     {
         if (!CanAddHuman)
             return;
-        var player = new Player(PlayerType.Local, Players.Select(p=>p.Name).ToList());
-        // var player = await NavigationService.ShowViewModelForResultAsync<LoginViewModel,IPlayer>();
+        var name = GetUniqueInGameName(_localizationService.GetLocalizedString("PlayerNameDefault"),
+            Players.Select(p => p.Name).ToList());
+        var player = new Player(PlayerType.Local,name, "SanetDice.png");
         AddPlayer(new PlayerViewModel(player, _localizationService));
     });
+    
+    private string GetUniqueInGameName(string defaultName, ICollection<string> names)
+    {
+        var numberOfPlayers = 1;
+
+        if (names == null || !names.Any()) return $"{defaultName} 1";
+        do
+        {
+            var name = $"{defaultName} {numberOfPlayers}";
+            if (!names.Contains(name))
+                return name;
+            numberOfPlayers++;
+        } while (numberOfPlayers < Math.Min(names.Count+2,10));
+
+        return $"{defaultName} 1";
+    }
 }
