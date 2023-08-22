@@ -550,6 +550,8 @@ public class GameViewModelTests
     public void TitleContainsWaitingForPlayersTextIfThereIsNoPlayer()
     {
         _sut.AttachHandlers();
+        
+        _localizationService.GetLocalizedString("WaitForPlayersLabel").Returns(Strings.WaitForPlayersLabel);
             
         Assert.Contains(Strings.WaitForPlayersLabel,_sut.Title);
     }
@@ -1014,6 +1016,9 @@ public class GameViewModelTests
     [Fact]
     public void PanelTitlesAreCorrect()
     {
+        _localizationService.GetLocalizedString("ResultsTableLabel").Returns(Strings.ResultsTableLabel);
+        _localizationService.GetLocalizedString("DiceBoardLabel").Returns(Strings.DiceBoardLabel);
+        
         Assert.Equal(Strings.ResultsTableLabel.ToUpper(), _sut.ScoresTitle);
         Assert.Equal(Strings.DiceBoardLabel.ToUpper(), _sut.PanelTitle);
     }

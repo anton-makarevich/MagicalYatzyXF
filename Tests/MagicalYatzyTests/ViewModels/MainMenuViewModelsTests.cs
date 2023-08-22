@@ -25,6 +25,7 @@ public class MainMenuViewModelsTests
     {
         var externalNavigationServiceMock = Substitute.For<IExternalNavigationService>();
         _localizationService = Substitute.For<ILocalizationService>();
+        _localizationService.GetLocalizedString("SettingsAction").Returns(Strings.SettingsAction);
         _sut = new MainMenuViewModel(_dicePanelMock, externalNavigationServiceMock, _playerServiceMock, _localizationService);
     }
 
@@ -39,6 +40,8 @@ public class MainMenuViewModelsTests
     [Fact]
     public void MainMenuContainsNewLocalGameItem()
     {
+        _localizationService.GetLocalizedString("NewLocalGameAction").Returns(Strings.NewLocalGameAction);
+        _localizationService.GetLocalizedString("NewLocalGameDescription").Returns(Strings.NewLocalGameDescription);
         _sut.FillMainActions();
 
         var newLocalGameMenuItem = _sut.MenuActions.FirstOrDefault(mm => mm.Label == Strings.NewLocalGameAction);
@@ -50,6 +53,7 @@ public class MainMenuViewModelsTests
     [Fact]
     public void CallingNewLocalGameItemTriggersCorrespondingNavigationServiceMethod()
     {
+        _localizationService.GetLocalizedString("NewLocalGameAction").Returns(Strings.NewLocalGameAction);
         _sut.SetNavigationService(_navigationServiceMock);
         _sut.FillMainActions();
 
@@ -144,13 +148,13 @@ public class MainMenuViewModelsTests
         //Arrange
         _sut.SetNavigationService(_navigationServiceMock);
             
-        var newLocalGameMenuItem = _sut.MenuActions.FirstOrDefault(mm => mm.Label == Strings.NewLocalGameAction);
+        var newLocalGameMenuItem = _sut.MenuActions.FirstOrDefault(mm => mm.Label == Strings.SettingsAction);
         
         // Act
         _sut.SelectedMenuAction = newLocalGameMenuItem;
         
         // Assert
         Assert.Equal(newLocalGameMenuItem, _sut.SelectedMenuAction);
-        await _navigationServiceMock.ReceivedWithAnyArgs().NavigateToViewModelAsync<LobbyViewModel>();
+        await _navigationServiceMock.ReceivedWithAnyArgs().NavigateToViewModelAsync<SettingsViewModel>();
     }
 }

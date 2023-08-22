@@ -14,15 +14,17 @@ namespace Sanet.MagicalYatzy.Models.Game
         {
         }
 
-        public Player(PlayerType type, string playerName = "Unknown", string playerImage = "")
+        public Player(PlayerType type, string playerName = "", string playerImage = "")
         {
+            if (playerName == "")
+            {
+                playerName=type==PlayerType.AI?"Bot":"Unknown";
+            }
             Type = type;
             if (type == PlayerType.AI)
                 DecisionMaker = new BotDecisionMaker(this);
             Name = playerName;
-                // GetUniqueInGameName(playersInGame?.ToList() ?? new List<string>()); //TODO should be part of game, not Player
             ProfileImage = playerImage;
-                //(IsBot) ? "BotPlayer.png" : "SanetDice.png";
         }
 
         public bool AllNumericFilled => default;

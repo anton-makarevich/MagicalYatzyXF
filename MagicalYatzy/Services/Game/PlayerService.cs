@@ -34,14 +34,13 @@ namespace Sanet.MagicalYatzy.Services.Game
             if (players != null && players.Any())
             {
                 _players = players;
+                PlayersUpdated?.Invoke(this, null);
             }
             else
             {
                 CreateLocalPlayer(_localizationService.GetLocalizedString("PlayerNameDefault"),
                     PlayerType.Local, new List<string>());
             }
-
-            PlayersUpdated?.Invoke(this, null);
         }
 
         private int PlayerToBeSetIndex { get; set; }

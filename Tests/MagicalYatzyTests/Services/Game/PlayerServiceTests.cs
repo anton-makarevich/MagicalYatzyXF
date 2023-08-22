@@ -146,7 +146,7 @@ namespace MagicalYatzyTests.Services.Game
             await _sut.LoadPlayersAsync();
 
             // Asset
-            Assert.Single(_storageMock.ReceivedCalls());
+            await _storageMock.Received(1).LoadPlayersAsync();
         }
 
         [Fact]
@@ -154,7 +154,10 @@ namespace MagicalYatzyTests.Services.Game
         {
             // Arrange
             var playersUpdatedCalledTimes = 0;
-            _sut.PlayersUpdated += (s, e) => { playersUpdatedCalledTimes++; };
+            _sut.PlayersUpdated += (s, e) =>
+            {
+                playersUpdatedCalledTimes++;
+            };
 
             // Act
             await _sut.LoadPlayersAsync();
@@ -190,6 +193,16 @@ namespace MagicalYatzyTests.Services.Game
             var player = _sut.CreateLocalPlayer("Bot",PlayerType.AI, existedPlayersNames);
             
             Assert.Equal("Bot 1", player.Name);
+        }
+        
+        [Fact]
+        public void NextAddedBotHasIncreasedNumber()
+        {
+            var existedPlayersNames = new List<string>(){"Bot 1"};
+            
+            var player = _sut.CreateLocalPlayer("Bot",PlayerType.AI, existedPlayersNames);
+            
+            Assert.Equal("Bot 2", player.Name);
         }
 
         public static string TestUserName => "Anton";

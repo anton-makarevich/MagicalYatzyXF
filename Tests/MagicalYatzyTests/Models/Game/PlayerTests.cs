@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
 using Sanet.MagicalYatzy.Extensions;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.Magical;
-using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Utils;
 using Xunit;
 
@@ -11,12 +11,7 @@ namespace MagicalYatzyTests.Models.Game
 {
     public class PlayerTests
     {
-        private readonly Player _sut;
-
-        public PlayerTests()
-        {
-            _sut = new Player();
-        }
+        private readonly Player _sut = new();
 
         [Fact]
         public void DefaultPlayerIsHuman()
@@ -117,13 +112,13 @@ namespace MagicalYatzyTests.Models.Game
         public void AiPlayerHasBotName()
         {
             var sut = new Player(PlayerType.AI);
-            Assert.Contains(Strings.BotNameDefault, sut.Name);
+            Assert.Contains("Bot", sut.Name);
         }
         
         [Fact]
-        public void LocalPlayerHasPlayerName()
+        public void LocalPlayerHasIsUnknown_WhenName_IsNot_Passed()
         {
-            Assert.Contains(Strings.PlayerNameDefault, _sut.Name);
+            _sut.Name.Should().Be("Unknown");
         }
 
         [Fact]

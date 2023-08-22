@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Sanet.MagicalYatzy.Extensions;
@@ -12,8 +13,7 @@ namespace Sanet.MagicalYatzy.Services.StorageService
     {
         public Task<List<IPlayer>> LoadPlayersAsync(string dataFile = null)
         {
-            if (dataFile == null)
-                dataFile = DataFile;
+            dataFile ??= DataFile;
             if (!File.Exists(dataFile))
                 return Task.FromResult<List<IPlayer>>(null);
             return Task<List<IPlayer>>.Factory.StartNew(() =>
@@ -21,7 +21,8 @@ namespace Sanet.MagicalYatzy.Services.StorageService
                 try
                 {
                     var stringData = File.ReadAllText(dataFile).Decrypt(32);
-                    return JsonConvert.DeserializeObject<List<IPlayer>>(stringData);
+                    return JsonConvert.DeserializeObject<List<Player>>(stringData)
+                        .Cast<IPlayer>().ToList();
                 }
                 catch
                 {
