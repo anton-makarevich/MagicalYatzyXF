@@ -177,6 +177,20 @@ namespace MagicalYatzyTests.Services.Game
             // Asset
             Assert.Equal(1, playersUpdatedCalledTimes);
         }
+        
+        [Fact]
+        public void PlayerHasDefaultNameIfThereAreMoreThanTenPlayersWithIncreasingDefNames()
+        {
+            var existedPlayersNames = new List<string>();
+            for (var index = 0; index < 11; index++)
+            {
+                existedPlayersNames.Add($"Bot {index}");
+            }
+            
+            var player = _sut.CreateLocalPlayer("Bot",PlayerType.AI, existedPlayersNames);
+            
+            Assert.Equal("Bot 1", player.Name);
+        }
 
         public static string TestUserName => "Anton";
         public static string TestUserPassword => "123456";

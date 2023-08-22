@@ -4,6 +4,7 @@ using NSubstitute;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Services.Game;
+using Sanet.MagicalYatzy.Services.Localization;
 using Sanet.MagicalYatzy.Services.Navigation;
 using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MVVM.Core.Services;
@@ -18,11 +19,13 @@ public class MainMenuViewModelsTests
     private readonly IPlayerService _playerServiceMock = Substitute.For<IPlayerService>();
     private readonly INavigationService _navigationServiceMock = Substitute.For<INavigationService>();
     private readonly IDicePanel _dicePanelMock = Substitute.For<IDicePanel>();
+    private readonly ILocalizationService _localizationService;
 
     public MainMenuViewModelsTests()
     {
         var externalNavigationServiceMock = Substitute.For<IExternalNavigationService>();
-        _sut = new MainMenuViewModel(_dicePanelMock, externalNavigationServiceMock, _playerServiceMock);
+        _localizationService = Substitute.For<ILocalizationService>();
+        _sut = new MainMenuViewModel(_dicePanelMock, externalNavigationServiceMock, _playerServiceMock, _localizationService);
     }
 
     [Fact]

@@ -407,19 +407,5 @@ namespace MagicalYatzyTests.Models.Game
             
             Assert.False(isEqual);
         }
-
-        [Fact]
-        public void PlayerHasDefaultNameIfThereAreMoreThanTenPlayersWithIncreasingDefNames()
-        {
-            var existedPlayersNames = new List<string>();
-            for (var index = 0; index < 11; index++)
-            {
-                existedPlayersNames.Add($"Bot {index}");
-            }
-            
-            var sut = new Player(PlayerType.AI, existedPlayersNames);
-            
-            Assert.Equal("Bot 1", sut.Name);
-        }
     }
 }

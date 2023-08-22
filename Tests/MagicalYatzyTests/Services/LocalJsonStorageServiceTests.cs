@@ -14,7 +14,7 @@ namespace MagicalYatzyTests.Services
             // Arrange
             var sut = new LocalJsonStorageService();
 
-            var playersToSave = new List<Player>
+            var playersToSave = new List<IPlayer>
             {
                 new Player{ Name = "Player 1", Password = "1234"},
                 new Player{ Name = "Player 2", Password = "1234"}

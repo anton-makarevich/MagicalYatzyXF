@@ -163,7 +163,7 @@ namespace MagicalYatzyTests.ViewModels.ObservableWrappers
             _localizationService.GetLocalizedString("PlayerNameDefault").Returns("Player");
             _localizationService.GetLocalizedString("BotNameDefault").Returns("Bot");
             
-            var player = new Player(type, new[] { "Player 1" });
+            var player = new Player(type, "Player 1");
             var sut = new PlayerViewModel(player, _localizationService);
             sut.TypeName.Should().Be(expectedTypeName);
         }

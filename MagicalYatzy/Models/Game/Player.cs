@@ -10,11 +10,11 @@ namespace Sanet.MagicalYatzy.Models.Game
 {
     public class Player: IPlayer
     {
-        public Player():this(PlayerType.Local, "Unknown", "BotPlayer.png")
+        public Player():this(PlayerType.Local)
         {
         }
 
-        public Player(PlayerType type, string playerName, string playerImage)
+        public Player(PlayerType type, string playerName = "Unknown", string playerImage = "")
         {
             Type = type;
             if (type == PlayerType.AI)
