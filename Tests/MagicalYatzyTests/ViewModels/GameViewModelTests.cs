@@ -547,13 +547,24 @@ public class GameViewModelTests
     }
         
     [Fact]
-    public void TitleContainsWaitingForPlayersTextIfThereIsNoPlayer()
+    public void TitleIs_WaitingForPlayers_When_ThereIsNoPlayer()
     {
         _sut.AttachHandlers();
         
         _localizationService.GetLocalizedString("WaitForPlayersLabel").Returns(Strings.WaitForPlayersLabel);
             
         Assert.Contains(Strings.WaitForPlayersLabel,_sut.Title);
+    }
+    
+    [Fact]
+    public void TitleContainsMoveLabel_WhenThereIsAPlayer()
+    {
+        _sut.AttachHandlers();
+        
+        _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
+        _localizationService.GetLocalizedString("MoveLabel").Returns(Strings.MoveLabel);
+            
+        _sut.Title.Should().Contain(Strings.MoveLabel);
     }
 
     [Fact]

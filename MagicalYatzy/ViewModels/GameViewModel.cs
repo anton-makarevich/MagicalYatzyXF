@@ -39,7 +39,7 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         private string LocalizedRollLabel => _localizationService.GetLocalizedString("roll");
         private string LocalizedWaitForPlayersLabel => _localizationService.GetLocalizedString("WaitForPlayersLabel");
-        private string LocalizedMoveLabel => _localizationService.GetLocalizedString("WaitForPlayersLabel");
+        private string LocalizedMoveLabel => _localizationService.GetLocalizedString("MoveLabel");
 
         public string RollLabel =>
             CurrentPlayer != null
