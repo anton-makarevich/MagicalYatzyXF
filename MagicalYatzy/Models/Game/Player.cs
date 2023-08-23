@@ -5,7 +5,6 @@ using Sanet.MagicalYatzy.Extensions;
 using Sanet.MagicalYatzy.Models.Game.Ai;
 using Sanet.MagicalYatzy.Models.Game.Extensions;
 using Sanet.MagicalYatzy.Models.Game.Magical;
-using Sanet.MagicalYatzy.Resources;
 
 namespace Sanet.MagicalYatzy.Models.Game
 {
@@ -15,13 +14,17 @@ namespace Sanet.MagicalYatzy.Models.Game
         {
         }
 
-        public Player(PlayerType type, IEnumerable<string> playersInGame = null)
+        public Player(PlayerType type, string playerName = "", string playerImage = "")
         {
+            if (playerName == "")
+            {
+                playerName=type==PlayerType.AI?"Bot":"Unknown";
+            }
             Type = type;
             if (type == PlayerType.AI)
                 DecisionMaker = new BotDecisionMaker(this);
-            Name = GetUniqueInGameName(playersInGame?.ToList() ?? new List<string>());
-            ProfileImage = (IsBot) ? "BotPlayer.png" : "SanetDice.png";
+            Name = playerName;
+            ProfileImage = playerImage;
         }
 
         public bool AllNumericFilled => default;
@@ -169,24 +172,6 @@ namespace Sanet.MagicalYatzy.Models.Game
             // ReSharper disable NonReadonlyMemberInGetHashCode
             return $"player{Name}{Password.Decrypt(33)}".GetHashCode();
             // ReSharper restore NonReadonlyMemberInGetHashCode
-        }
-
-        private string GetUniqueInGameName(ICollection<string> names)
-        {
-            var numberOfPlayers = 1;
-            var defaultName = (IsBot) ? Strings.BotNameDefault : Strings.PlayerNameDefault;
-            if (names != null && names.Any())
-            {
-                do
-                {
-                    var name = $"{defaultName} {numberOfPlayers}";
-                    if (!names.Contains(name))
-                        return name;
-                    numberOfPlayers++;
-                } while (numberOfPlayers < Math.Min(names.Count+2,10));
-            }
-
-            return $"{defaultName} 1";
         }
     }
 }

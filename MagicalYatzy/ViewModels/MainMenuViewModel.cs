@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Services.Game;
-using Sanet.MagicalYatzy.Resources;
 using System.Windows.Input;
 using System.Threading.Tasks;
 using AsyncAwaitBestPractices.MVVM;
+using Sanet.MagicalYatzy.Services.Localization;
 using Sanet.MagicalYatzy.Services.Navigation;
 
 namespace Sanet.MagicalYatzy.ViewModels;
@@ -15,16 +15,19 @@ namespace Sanet.MagicalYatzy.ViewModels;
 public class MainMenuViewModel : DicePanelViewModel
 {
     private readonly IPlayerService _playerService;
+    private readonly ILocalizationService _localizationService;
     private readonly IExternalNavigationService _externalNavigationService;
     
     private MainMenuAction _selectedMenuAction;
 
     public MainMenuViewModel(IDicePanel dicePanel,
         IExternalNavigationService externalNavigationService,
-        IPlayerService playerService) : base(dicePanel)
+        IPlayerService playerService,
+        ILocalizationService localizationService) : base(dicePanel)
     {
         _externalNavigationService = externalNavigationService;
         _playerService = playerService;
+        _localizationService = localizationService;
 
         FillMainActions();
         FillSecondaryActions();
@@ -70,38 +73,38 @@ public class MainMenuViewModel : DicePanelViewModel
         {
             new MainMenuAction
             {
-                Label = Strings.NewOnlineGameAction,
+                Label = _localizationService.GetLocalizedString("NewOnlineGameAction"),
                 MenuAction = new SimpleCommand(() => { /*_navigationService.NavigateToPage(AppPages.OnlineLobbyPage);*/ }),
-                Description = Strings.NewOnlineGameDescription,
+                Description = _localizationService.GetLocalizedString("NewOnlineGameDescription"),
                 Image = "OnlineGame.png",
             },
             new MainMenuAction
             {
-                Label = Strings.NewLocalGameAction,
+                Label = _localizationService.GetLocalizedString("NewLocalGameAction"),
                 MenuAction = new AsyncCommand(async () => { await NavigationService.NavigateToViewModelAsync<LobbyViewModel>(); }),
-                Description = Strings.NewLocalGameDescription,
+                Description = _localizationService.GetLocalizedString("NewLocalGameDescription"),
                 Image = "SanetDice.png",
             },
             new MainMenuAction
             {
-                Label = Strings.SettingsAction,
+                Label = _localizationService.GetLocalizedString("SettingsAction"),
                 MenuAction = new AsyncCommand(async () => {await NavigationService.NavigateToViewModelAsync<SettingsViewModel>(); }),
-                Description = Strings.SettingsDescription,
+                Description = _localizationService.GetLocalizedString("SettingsDescription"),
                 Image = "Settings.png",
             },
 
             new MainMenuAction
             {
-                Label = Strings.LeaderboardAction,
+                Label = _localizationService.GetLocalizedString("LeaderboardAction"),
                 MenuAction = new SimpleCommand(() => { /*_navigationService.NavigateToPage(AppPages.LeaderboardPage);*/ }),
-                Description = Strings.LeaderboardDescription,
+                Description = _localizationService.GetLocalizedString("LeaderboardDescription"),
                 Image = "Victory.png",
             },
             new MainMenuAction
             {
-                Label = Strings.AboutAction,
+                Label = _localizationService.GetLocalizedString("AboutAction"),
                 MenuAction = new SimpleCommand(() => { /*_navigationService.NavigateToPage(AppPages.AboutPage);*/ }),
-                Description = Strings.AboutDescription,
+                Description = _localizationService.GetLocalizedString("AboutDescription"),
                 Image = "About.png",
             }
         };
@@ -113,25 +116,25 @@ public class MainMenuViewModel : DicePanelViewModel
         {
             new MainMenuAction
             {
-                Label = Strings.SendFeedbackAction,
+                Label =_localizationService.GetLocalizedString("SendFeedbackAction"),
                 MenuAction = new SimpleCommand(_externalNavigationService.SendFeedback),
                 Image = "Mail.png"
             },
             new MainMenuAction
             {
-                Label = Strings.ReviewAppAction,
+                Label = _localizationService.GetLocalizedString("ReviewAppAction"),
                 MenuAction = new SimpleCommand(_externalNavigationService.RateApp),
                 Image = "Rate.png"
             },
             new MainMenuAction
             {
-                Label = Strings.FBPage,
+                Label = _localizationService.GetLocalizedString("FBPage"),
                 MenuAction = new SimpleCommand(_externalNavigationService.OpenYatzyFBPage),
                 Image = "Facebook.png"
             },
             new MainMenuAction
             {
-                Label = Strings.ShareApp,
+                Label = _localizationService.GetLocalizedString("ShareApp"),
                 MenuAction = new SimpleCommand(() =>
                 {
                 }),

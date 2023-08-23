@@ -47,7 +47,20 @@ namespace MagicalYatzyTests.ViewModels.ObservableWrappers
             Assert.Equal(playerName, _sut.Name);
             Assert.Equal(profileImage, _sut.Image);
         }
-        
+
+        [Theory]
+        [InlineData(PlayerType.AI, "BotPlayer.png")]
+        [InlineData(PlayerType.Local, "SanetDice.png")]
+        [InlineData(PlayerType.Network, "SanetDice.png")]
+        public void ReturnsCorrectImage_ForPlayerType_WhenProfileImageIsNotSet(
+            PlayerType playerType, string expectedImage)
+        {
+            _player.ProfileImage.Returns("");
+            _player.Type.Returns(playerType);
+
+            _sut.Image.Should().Be(expectedImage);
+        }
+
         [Fact]
         public void SetsCorrectValue_ForName()
         {
@@ -163,7 +176,7 @@ namespace MagicalYatzyTests.ViewModels.ObservableWrappers
             _localizationService.GetLocalizedString("PlayerNameDefault").Returns("Player");
             _localizationService.GetLocalizedString("BotNameDefault").Returns("Bot");
             
-            var player = new Player(type, new[] { "Player 1" });
+            var player = new Player(type, "Player 1");
             var sut = new PlayerViewModel(player, _localizationService);
             sut.TypeName.Should().Be(expectedTypeName);
         }

@@ -10,10 +10,12 @@ namespace Sanet.MagicalYatzy.Services.Game
         IReadOnlyList<IPlayer> Players { get; }
 
         IPlayer CurrentPlayer { get; }
-
+        
         Task<IPlayer> LoginToFacebookAsync();
 
         Task<IPlayer> LoginAsync(string newUsername, string newPassword);
+
+        IPlayer CreateLocalPlayer(string defaultName, PlayerType type, List<string> playersForGame);
 
         Task LoadPlayersAsync();
 

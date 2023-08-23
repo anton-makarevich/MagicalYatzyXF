@@ -195,7 +195,10 @@ public class LobbyViewModel: DicePanelViewModel
     {
         if (!CanAddBot)
             return;
-        var newBot = new Player(PlayerType.AI, Players.Select(p=>p.Name).ToList());
+        var newBot = _playerService.CreateLocalPlayer(
+            _localizationService.GetLocalizedString("BotNameDefault"),
+            PlayerType.AI, Players.Select(p => p.Name).ToList());
+        
         AddPlayer(new PlayerViewModel(newBot, _localizationService));
     });
 
@@ -203,8 +206,10 @@ public class LobbyViewModel: DicePanelViewModel
     {
         if (!CanAddHuman)
             return;
-        var player = new Player(PlayerType.Local, Players.Select(p=>p.Name).ToList());
-        // var player = await NavigationService.ShowViewModelForResultAsync<LoginViewModel,IPlayer>();
+        var player = _playerService.CreateLocalPlayer(
+            _localizationService.GetLocalizedString("PlayerNameDefault"),
+            PlayerType.Local, Players.Select(p => p.Name).ToList());
+        
         AddPlayer(new PlayerViewModel(player, _localizationService));
     });
 }

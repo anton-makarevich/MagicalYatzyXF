@@ -4,6 +4,7 @@ using NSubstitute;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Services.Game;
+using Sanet.MagicalYatzy.Services.Localization;
 using Sanet.MagicalYatzy.Services.Navigation;
 using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MVVM.Core.Services;
@@ -18,11 +19,14 @@ public class MainMenuViewModelsTests
     private readonly IPlayerService _playerServiceMock = Substitute.For<IPlayerService>();
     private readonly INavigationService _navigationServiceMock = Substitute.For<INavigationService>();
     private readonly IDicePanel _dicePanelMock = Substitute.For<IDicePanel>();
+    private readonly ILocalizationService _localizationService;
 
     public MainMenuViewModelsTests()
     {
         var externalNavigationServiceMock = Substitute.For<IExternalNavigationService>();
-        _sut = new MainMenuViewModel(_dicePanelMock, externalNavigationServiceMock, _playerServiceMock);
+        _localizationService = Substitute.For<ILocalizationService>();
+        _localizationService.GetLocalizedString("SettingsAction").Returns(Strings.SettingsAction);
+        _sut = new MainMenuViewModel(_dicePanelMock, externalNavigationServiceMock, _playerServiceMock, _localizationService);
     }
 
     [Fact]
@@ -36,6 +40,8 @@ public class MainMenuViewModelsTests
     [Fact]
     public void MainMenuContainsNewLocalGameItem()
     {
+        _localizationService.GetLocalizedString("NewLocalGameAction").Returns(Strings.NewLocalGameAction);
+        _localizationService.GetLocalizedString("NewLocalGameDescription").Returns(Strings.NewLocalGameDescription);
         _sut.FillMainActions();
 
         var newLocalGameMenuItem = _sut.MenuActions.FirstOrDefault(mm => mm.Label == Strings.NewLocalGameAction);
@@ -47,6 +53,7 @@ public class MainMenuViewModelsTests
     [Fact]
     public void CallingNewLocalGameItemTriggersCorrespondingNavigationServiceMethod()
     {
+        _localizationService.GetLocalizedString("NewLocalGameAction").Returns(Strings.NewLocalGameAction);
         _sut.SetNavigationService(_navigationServiceMock);
         _sut.FillMainActions();
 
@@ -141,13 +148,13 @@ public class MainMenuViewModelsTests
         //Arrange
         _sut.SetNavigationService(_navigationServiceMock);
             
-        var newLocalGameMenuItem = _sut.MenuActions.FirstOrDefault(mm => mm.Label == Strings.NewLocalGameAction);
+        var newLocalGameMenuItem = _sut.MenuActions.FirstOrDefault(mm => mm.Label == Strings.SettingsAction);
         
         // Act
         _sut.SelectedMenuAction = newLocalGameMenuItem;
         
         // Assert
         Assert.Equal(newLocalGameMenuItem, _sut.SelectedMenuAction);
-        await _navigationServiceMock.ReceivedWithAnyArgs().NavigateToViewModelAsync<LobbyViewModel>();
+        await _navigationServiceMock.ReceivedWithAnyArgs().NavigateToViewModelAsync<SettingsViewModel>();
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -9,7 +8,6 @@ using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.Magical;
-using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Services.Localization;
 using Sanet.MagicalYatzy.Services.Media;
@@ -39,9 +37,13 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         public IGame Game => _gameService?.CurrentLocalGame;
 
+        private string LocalizedRollLabel => _localizationService.GetLocalizedString("roll");
+        private string LocalizedWaitForPlayersLabel => _localizationService.GetLocalizedString("WaitForPlayersLabel");
+        private string LocalizedMoveLabel => _localizationService.GetLocalizedString("WaitForPlayersLabel");
+
         public string RollLabel =>
             CurrentPlayer != null
-                ? $"{Strings.roll} {Game.Roll}"
+                ? $"{LocalizedRollLabel} {Game.Roll}"
                 : string.Empty;
 
         public bool CanFix => HasCurrentPlayer 
@@ -49,8 +51,8 @@ namespace Sanet.MagicalYatzy.ViewModels
                               && CurrentPlayer.Player.Roll != 1;
         
         public string Title => (HasCurrentPlayer)
-            ? $"{Strings.MoveLabel} {Game.Round}, {CurrentPlayer.Player.Name} {Strings.roll} {Game.Roll}"
-            : Strings.WaitForPlayersLabel;
+            ? $"{LocalizedMoveLabel} {Game.Round}, {CurrentPlayer.Player.Name} {LocalizedRollLabel} {Game.Roll}"
+            : LocalizedWaitForPlayersLabel;
  
         public PlayerViewModel CurrentPlayer => 
             Game.CurrentPlayer == null 
@@ -282,8 +284,8 @@ namespace Sanet.MagicalYatzy.ViewModels
                                && CurrentPlayer.Player.Roll > 0
                                && CurrentPlayer.Player.Roll <= YatzyGame.MaxRoll;
 
-        public string ScoresTitle => Strings.ResultsTableLabel.ToUpper();
-        public string PanelTitle => Strings.DiceBoardLabel.ToUpper();
+        public string ScoresTitle => _localizationService.GetLocalizedString("ResultsTableLabel").ToUpper();
+        public string PanelTitle => _localizationService.GetLocalizedString("DiceBoardLabel").ToUpper();
 
         public ICommand RollCommand => new SimpleCommand(() =>
         {
@@ -335,7 +337,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             }
         }
 
-        private string GetGameButtonLabel([CallerMemberNameAttribute] string propertyName = "")
+        private string GetGameButtonLabel([CallerMemberName] string propertyName = "")
         {
             return _localizationService?.GetLocalizedString(propertyName);
         }
