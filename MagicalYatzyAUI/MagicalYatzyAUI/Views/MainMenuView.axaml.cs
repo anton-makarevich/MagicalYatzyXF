@@ -1,3 +1,4 @@
+using Avalonia.Interactivity;
 using Sanet.MagicalYatzy.Avalonia.Views.Base;
 using Sanet.MagicalYatzy.ViewModels;
 
