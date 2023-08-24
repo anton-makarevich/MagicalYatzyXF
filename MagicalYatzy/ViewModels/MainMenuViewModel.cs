@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using AsyncAwaitBestPractices.MVVM;
 using Sanet.MagicalYatzy.Services.Localization;
 using Sanet.MagicalYatzy.Services.Navigation;
+using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 
 namespace Sanet.MagicalYatzy.ViewModels;
 
@@ -18,7 +19,7 @@ public class MainMenuViewModel : DicePanelViewModel
     private readonly ILocalizationService _localizationService;
     private readonly IExternalNavigationService _externalNavigationService;
     
-    private MainMenuAction _selectedMenuAction;
+    private MainMenuActionViewModel _selectedMenuAction;
 
     public MainMenuViewModel(IDicePanel dicePanel,
         IExternalNavigationService externalNavigationService,
@@ -39,9 +40,9 @@ public class MainMenuViewModel : DicePanelViewModel
 
     public string PlayerImage => _playerService.CurrentPlayer?.ProfileImage;
 
-    public List<MainMenuAction> MenuActions { get; private set; }
+    public List<MainMenuActionViewModel> MenuActions { get; private set; }
 
-    public List<MainMenuAction> SecondaryMenuActions { get; private set; }
+    public List<MainMenuActionViewModel> SecondaryMenuActions { get; private set; }
 
     #endregion
 
@@ -54,7 +55,7 @@ public class MainMenuViewModel : DicePanelViewModel
         NotifyPropertyChanged(nameof(PlayerImage));
     });
 
-    public MainMenuAction SelectedMenuAction
+    public MainMenuActionViewModel SelectedMenuAction
     {
         get => _selectedMenuAction;
         set
@@ -69,77 +70,82 @@ public class MainMenuViewModel : DicePanelViewModel
     #region Methods
     public void FillMainActions()
     {
-        MenuActions = new List<MainMenuAction>
-        {
-            new MainMenuAction
-            {
-                Label = _localizationService.GetLocalizedString("NewOnlineGameAction"),
-                MenuAction = new SimpleCommand(() => { /*_navigationService.NavigateToPage(AppPages.OnlineLobbyPage);*/ }),
-                Description = _localizationService.GetLocalizedString("NewOnlineGameDescription"),
-                Image = "OnlineGame.png",
-            },
-            new MainMenuAction
-            {
-                Label = _localizationService.GetLocalizedString("NewLocalGameAction"),
-                MenuAction = new AsyncCommand(async () => { await NavigationService.NavigateToViewModelAsync<LobbyViewModel>(); }),
-                Description = _localizationService.GetLocalizedString("NewLocalGameDescription"),
-                Image = "SanetDice.png",
-            },
-            new MainMenuAction
-            {
-                Label = _localizationService.GetLocalizedString("SettingsAction"),
-                MenuAction = new AsyncCommand(async () => {await NavigationService.NavigateToViewModelAsync<SettingsViewModel>(); }),
-                Description = _localizationService.GetLocalizedString("SettingsDescription"),
-                Image = "Settings.png",
-            },
-
-            new MainMenuAction
-            {
-                Label = _localizationService.GetLocalizedString("LeaderboardAction"),
-                MenuAction = new SimpleCommand(() => { /*_navigationService.NavigateToPage(AppPages.LeaderboardPage);*/ }),
-                Description = _localizationService.GetLocalizedString("LeaderboardDescription"),
-                Image = "Victory.png",
-            },
-            new MainMenuAction
-            {
-                Label = _localizationService.GetLocalizedString("AboutAction"),
-                MenuAction = new SimpleCommand(() => { /*_navigationService.NavigateToPage(AppPages.AboutPage);*/ }),
-                Description = _localizationService.GetLocalizedString("AboutDescription"),
-                Image = "About.png",
-            }
-        };
         NotifyPropertyChanged(nameof(MenuActions));
+        MenuActions = new List<MainMenuActionViewModel>
+        {
+            new(new MainMenuAction(
+                    "NewOnlineGameAction",
+                    "NewOnlineGameDescription",
+                    "OnlineGame.png",
+                    new SimpleCommand(() =>
+                    {
+                        /*_navigationService.NavigateToPage(AppPages.OnlineLobbyPage);*/
+                    })),
+                _localizationService),
+            new(new MainMenuAction(
+                    "NewLocalGameAction",
+                    "NewLocalGameDescription",
+                    "SanetDice.png",
+                    new AsyncCommand(
+                        async () => { await NavigationService.NavigateToViewModelAsync<LobbyViewModel>(); })),
+                _localizationService),
+            new(new MainMenuAction(
+                    "SettingsAction",
+                    "SettingsDescription",
+                    "Settings.png",
+                    new AsyncCommand(async () =>
+                    {
+                        await NavigationService.NavigateToViewModelAsync<SettingsViewModel>();
+                    })),
+                _localizationService),
+            new MainMenuActionViewModel(new MainMenuAction(
+                    "LeaderboardAction",
+                    "LeaderboardDescription",
+                    "Victory.png",
+                    new SimpleCommand(() =>
+                    {
+                        /*_navigationService.NavigateToPage(AppPages.LeaderboardPage);*/
+                    })),
+                _localizationService),
+            new(new MainMenuAction(
+                    "AboutAction",
+                    "AboutDescription",
+                    "About.png",
+                    new SimpleCommand(() =>
+                    {
+                        /*_navigationService.NavigateToPage(AppPages.AboutPage);*/
+                    })),
+                _localizationService)
+        };
     }
     public void FillSecondaryActions()
     {
-        SecondaryMenuActions = new List<MainMenuAction>
+        SecondaryMenuActions = new List<MainMenuActionViewModel>
         {
-            new MainMenuAction
-            {
-                Label =_localizationService.GetLocalizedString("SendFeedbackAction"),
-                MenuAction = new SimpleCommand(_externalNavigationService.SendFeedback),
-                Image = "Mail.png"
-            },
-            new MainMenuAction
-            {
-                Label = _localizationService.GetLocalizedString("ReviewAppAction"),
-                MenuAction = new SimpleCommand(_externalNavigationService.RateApp),
-                Image = "Rate.png"
-            },
-            new MainMenuAction
-            {
-                Label = _localizationService.GetLocalizedString("FBPage"),
-                MenuAction = new SimpleCommand(_externalNavigationService.OpenYatzyFBPage),
-                Image = "Facebook.png"
-            },
-            new MainMenuAction
-            {
-                Label = _localizationService.GetLocalizedString("ShareApp"),
-                MenuAction = new SimpleCommand(() =>
-                {
-                }),
-                Image = "Share.png"
-            }
+            new(new MainMenuAction(
+                    "SendFeedbackAction",
+                    "",
+                    "Mail.png",
+                    new SimpleCommand(_externalNavigationService.SendFeedback)),
+                _localizationService),
+            new(new MainMenuAction(
+                    "ReviewAppAction",
+                    "",
+                    "Rate.png",
+                    new SimpleCommand(_externalNavigationService.RateApp)),
+                _localizationService),
+            new(new MainMenuAction(
+                    "FBPage",
+                    "",
+                    "Facebook.png",
+                    new SimpleCommand(_externalNavigationService.OpenYatzyFBPage)),
+                _localizationService),
+            new(new MainMenuAction(
+                    "ShareApp",
+                    "",
+                    "Share.png",
+                    new SimpleCommand(() => { })),
+                _localizationService)
         };
 
         NotifyPropertyChanged(nameof(SecondaryMenuActions));
