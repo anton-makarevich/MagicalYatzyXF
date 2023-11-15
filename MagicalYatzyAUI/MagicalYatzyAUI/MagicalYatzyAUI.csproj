@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
-        <LangVersion>latest</LangVersion>
+        <LangVersion>12</LangVersion>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <RootNamespace>Sanet.MagicalYatzy.Avalonia</RootNamespace>
         <AssemblyName>MagicalYatzy.Avalonia</AssemblyName>
@@ -14,16 +14,16 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.0.3" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.3" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.3" />
+        <PackageReference Include="Avalonia" Version="11.0.5" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.5" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.5" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.3" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-        <PackageReference Include="Sanet.MVVM.DI.Avalonia" Version="1.1.0.1103" />
-        <PackageReference Include="Sanet.MVVM.Navigation.Avalonia" Version="1.1.0.1103" />
-        <PackageReference Include="Sanet.MVVM.Views.Avalonia" Version="1.1.0.1103" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.5" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+        <PackageReference Include="Sanet.MVVM.DI.Avalonia" Version="1.1.1.1105" />
+        <PackageReference Include="Sanet.MVVM.Navigation.Avalonia" Version="1.1.1.1105" />
+        <PackageReference Include="Sanet.MVVM.Views.Avalonia" Version="1.1.1.1105" />
     </ItemGroup>
 
     <ItemGroup>
