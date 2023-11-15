@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <RootNamespace>Sanet.MagicalYatzy.Dto</RootNamespace>
-        <LangVersion>10</LangVersion>
+        <LangVersion>12</LangVersion>
         <Nullable>enable</Nullable>
         <AssemblyName>MagicalYatzy.Dto</AssemblyName>
     </PropertyGroup>
@@ -11,8 +11,8 @@
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="System.ServiceModel.Duplex" Version="6.0.0" />
-      <PackageReference Include="System.ServiceModel.Http" Version="6.0.0" />
-      <PackageReference Include="System.ServiceModel.NetTcp" Version="6.0.0" />
+      <PackageReference Include="System.ServiceModel.Http" Version="6.2.0" />
+      <PackageReference Include="System.ServiceModel.NetTcp" Version="6.2.0" />
       <PackageReference Include="System.ServiceModel.Security" Version="6.0.0" />
     </ItemGroup>
 
