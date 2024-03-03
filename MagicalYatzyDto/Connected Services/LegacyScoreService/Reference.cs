@@ -13,6 +13,9 @@
 // 
 
 using System.Runtime.Serialization;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
+using System.ServiceModel.Description;
 
 namespace Sanet.MagicalYatzy.Dto.ConnectedServices.LegacyScoreService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -1376,16 +1379,8 @@ namespace Sanet.MagicalYatzy.Dto.ConnectedServices.LegacyScoreService {
         public KniffelServiceSoapClient() {
         }
         
-        public KniffelServiceSoapClient(string endpointConfigurationName) : 
-                base(endpointConfigurationName) {
-        }
-        
-        public KniffelServiceSoapClient(string endpointConfigurationName, string remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
-        }
-        
-        public KniffelServiceSoapClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public KniffelServiceSoapClient(ServiceEndpoint endpoint) : 
+                base( endpoint) {
         }
         
         public KniffelServiceSoapClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 

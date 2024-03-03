@@ -11,8 +11,8 @@
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="System.ServiceModel.Duplex" Version="6.0.0" />
-      <PackageReference Include="System.ServiceModel.Http" Version="6.2.0" />
-      <PackageReference Include="System.ServiceModel.NetTcp" Version="6.2.0" />
+      <PackageReference Include="System.ServiceModel.Http" Version="8.0.0" />
+      <PackageReference Include="System.ServiceModel.NetTcp" Version="8.0.0" />
       <PackageReference Include="System.ServiceModel.Security" Version="6.0.0" />
     </ItemGroup>
 

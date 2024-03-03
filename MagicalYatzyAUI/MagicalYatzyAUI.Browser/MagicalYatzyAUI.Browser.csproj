@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia.Browser" Version="11.0.5" />
+        <PackageReference Include="Avalonia.Browser" Version="11.0.9" />
         <PackageReference Include="Sanet.MVVM.DI.Avalonia" Version="1.1.1.1105" />
     </ItemGroup>
 
