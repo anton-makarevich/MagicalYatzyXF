@@ -35,5 +35,5 @@ jobs:
         uses: tibor19/static-website-deploy@v3
         with:
           enabled-static-website: 'true'
-          folder: 'MagicalYatzyAUI/MagicalYatzyAUI.Browser/bin/Release/net7.0/browser-wasm/AppBundle'
+          folder: 'MagicalYatzyAUI/MagicalYatzyAUI.Browser/bin/Release/net8.0/browser-wasm/AppBundle'
           connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION }}

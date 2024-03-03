@@ -26,6 +26,7 @@ jobs:
         run: |
           cd MagicalYatzyAUI/MagicalYatzyAUI.Android
           dotnet workload restore
+          dotnet build -t:InstallAndroidDependencies -f:net8.0-android -p:AcceptAndroidSDKLicenses=True -p:AndroidSdkPath="/usr/local/lib/android/sdk/"
           dotnet publish -c Release -o bin/Release/android/publish
 
       - name: Upload to App Center
