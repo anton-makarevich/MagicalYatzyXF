@@ -3,8 +3,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Avalonia.Media;
-using Avalonia.Themes.Fluent;
 using Microsoft.Extensions.DependencyInjection;
 using Sanet.MagicalYatzy.Avalonia.DependencyInjection;
 using Sanet.MagicalYatzy.Avalonia.Views;
