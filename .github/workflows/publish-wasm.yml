@@ -35,11 +35,11 @@ jobs:
           cd MagicalYatzyAUI/MagicalYatzyAUI.Browser
           dotnet workload restore
           dotnet workload repair
-          dotnet publish -c ${{ github.event.inputs.configuration }}
+          dotnet publish -c ${{ github.event.inputs.configuration || 'Release' }}
 
       - name: Deploy the website
         uses: tibor19/static-website-deploy@v3
         with:
           enabled-static-website: 'true'
-          folder: 'MagicalYatzyAUI/MagicalYatzyAUI.Browser/bin/${{ github.event.inputs.configuration }}/net8.0/browser-wasm/AppBundle'
+          folder: MagicalYatzyAUI/MagicalYatzyAUI.Browser/bin/${{ github.event.inputs.configuration || 'Release' }}/net8.0/browser-wasm/AppBundle
           connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION }}
