@@ -5,11 +5,17 @@ on:
     branches:
       - develop
   workflow_dispatch:
+    inputs:
+      configuration:
+        description: 'Build configuration (Release or Debug)'
+        required: true
+        default: 'Release'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
+    
     steps:
       - name: Inject extra env vars
         uses: FranzDiebold/github-env-vars-action@v2
@@ -29,11 +35,11 @@ jobs:
           cd MagicalYatzyAUI/MagicalYatzyAUI.Browser
           dotnet workload restore
           dotnet workload repair
-          dotnet publish -c Release
+          dotnet publish -c ${{ github.event.inputs.configuration }}
 
       - name: Deploy the website
         uses: tibor19/static-website-deploy@v3
         with:
           enabled-static-website: 'true'
-          folder: 'MagicalYatzyAUI/MagicalYatzyAUI.Browser/bin/Release/net8.0/browser-wasm/AppBundle'
+          folder: 'MagicalYatzyAUI/MagicalYatzyAUI.Browser/bin/${{ github.event.inputs.configuration }}/net8.0/browser-wasm/AppBundle'
           connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION }}
