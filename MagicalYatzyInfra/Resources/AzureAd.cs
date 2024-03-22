@@ -13,6 +13,7 @@ public class AzureAd
         var tenant = new B2CTenant("MyTenant", new B2CTenantArgs
         {
             CountryCode = "NL",
+            Location = "europe",
             DisplayName = "MagicalYatzy B2C Tenant",
             ResourceGroupName = resourceGroup.Name,
             Sku = new B2CResourceSKUArgs
