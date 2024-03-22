@@ -3,7 +3,7 @@ using Pulumi.AzureNative.AzureActiveDirectory;
 using Pulumi.AzureNative.AzureActiveDirectory.Inputs;
 using Pulumi.AzureNative.Resources;
 
-namespace MagicalYatzy.Infra.Resources;
+namespace Sanet.MagicalYatzy.Infra.Azure.LZ.Resources;
 
 public class AzureAd
 {

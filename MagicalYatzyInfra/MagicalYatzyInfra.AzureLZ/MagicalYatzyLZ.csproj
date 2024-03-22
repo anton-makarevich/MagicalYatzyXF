@@ -4,13 +4,16 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <RootNamespace>MagicalYatzy.Infra</RootNamespace>
+    <RootNamespace>Sanet.MagicalYatzy.Infra.Azure.LZ</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Pulumi" Version="3.*" />
-    <PackageReference Include="Pulumi.AzureAD" Version="5.47.2" />
     <PackageReference Include="Pulumi.AzureNative" Version="2.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>

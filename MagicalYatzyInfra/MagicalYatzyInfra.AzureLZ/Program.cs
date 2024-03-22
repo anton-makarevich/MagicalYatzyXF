@@ -1,6 +1,6 @@
 ﻿using Pulumi.AzureNative.Resources;
 using System.Collections.Generic;
-using MagicalYatzy.Infra.Resources;
+using Sanet.MagicalYatzy.Infra.Azure.LZ.Resources;
 
 return await Pulumi.Deployment.RunAsync(() =>
 {
@@ -12,6 +12,7 @@ return await Pulumi.Deployment.RunAsync(() =>
     // Export the primary key of the Storage Account
     return new Dictionary<string, object?>
     {
+        ["resourceGroup"] = resourceGroup.Name,
         ["tenantId"] = azureAd.TenantId
     };
 });
