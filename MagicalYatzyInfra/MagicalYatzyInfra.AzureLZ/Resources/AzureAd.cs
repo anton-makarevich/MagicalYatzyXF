@@ -10,11 +10,12 @@ public class AzureAd
     public AzureAd(ResourceGroup resourceGroup)
     {
         // Create an Azure AD B2C Tenant
-        var tenant = new B2CTenant("MyTenant", new B2CTenantArgs
+        var tenant = new B2CTenant("MagicalYatzyId", new B2CTenantArgs
         {
-            CountryCode = "NL",
-            Location = "europe",
+            CountryCode = "Netherlands",
+            Location = "Europe",
             DisplayName = "MagicalYatzy B2C Tenant",
+            ResourceName = "magicalyatzy",
             ResourceGroupName = resourceGroup.Name,
             Sku = new B2CResourceSKUArgs
             {
