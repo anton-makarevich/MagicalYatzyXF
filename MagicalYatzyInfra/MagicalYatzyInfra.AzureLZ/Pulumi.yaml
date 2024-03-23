@@ -1,0 +1,7 @@
+name: MagicalYatzyLZ
+runtime: dotnet
+description: Base infra for MagicalYatzy, not supposed to be deployed from ci/cd
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: azure-csharp
