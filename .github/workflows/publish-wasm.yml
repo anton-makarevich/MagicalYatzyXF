@@ -41,5 +41,5 @@ jobs:
         uses: tibor19/static-website-deploy@v3
         with:
           enabled-static-website: 'true'
-          folder: MagicalYatzyAUI/MagicalYatzyAUI.Browser/bin/${{ github.event.inputs.configuration || 'Release' }}/net8.0/browser-wasm/AppBundle
+          folder: MagicalYatzyAUI/MagicalYatzyAUI.Browser/bin/${{ github.event.inputs.configuration || 'Release' }}/net8.0-browser/publish/wwwroot
           connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION }}
