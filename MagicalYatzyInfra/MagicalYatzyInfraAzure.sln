@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicalYatzyLZ", "MagicalYatzyInfra.AzureLZ\MagicalYatzyLZ.csproj", "{EE721D56-7567-4D11-BCA9-79FE0A5E2936}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicalYatzyAzureResources", "MagicalYatzyInfra.AzureResources\MagicalYatzyAzureResources.csproj", "{3BAD28FF-6734-4B4F-90D2-8F8BFB753D75}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EE721D56-7567-4D11-BCA9-79FE0A5E2936}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE721D56-7567-4D11-BCA9-79FE0A5E2936}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE721D56-7567-4D11-BCA9-79FE0A5E2936}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE721D56-7567-4D11-BCA9-79FE0A5E2936}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BAD28FF-6734-4B4F-90D2-8F8BFB753D75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BAD28FF-6734-4B4F-90D2-8F8BFB753D75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BAD28FF-6734-4B4F-90D2-8F8BFB753D75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BAD28FF-6734-4B4F-90D2-8F8BFB753D75}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
