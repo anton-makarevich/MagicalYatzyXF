@@ -1,5 +1,12 @@
 ﻿## Azure Infra
 
+To authenticate Pulumi requires a Service Principal.
+Locally it should be saved in `Pulumi.{pulume-project-name}.yaml` but should not be tracked in Git.
+
+```yaml
+
+```
+
 ### Auth/z
 
 #### Local CLI

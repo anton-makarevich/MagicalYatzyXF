@@ -1,5 +1,0 @@
-config:
-  MagicalYatzyAzureResources:errorDocument: error.html
-  MagicalYatzyAzureResources:indexDocument: index.html
-  MagicalYatzyAzureResources:path: wwwroot
-  azure-native:location: WestEurope
