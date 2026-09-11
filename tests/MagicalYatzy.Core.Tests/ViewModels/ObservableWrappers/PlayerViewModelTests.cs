@@ -1,5 +1,5 @@
-using System.Collections.Generic;
-using FluentAssertions;
+﻿using System.Collections.Generic;
+using Shouldly;
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
@@ -58,7 +58,7 @@ namespace MagicalYatzyTests.ViewModels.ObservableWrappers
             _player.ProfileImage.Returns("");
             _player.Type.Returns(playerType);
 
-            _sut.Image.Should().Be(expectedImage);
+            _sut.Image.ShouldBe(expectedImage);
         }
 
         [Fact]
@@ -68,7 +68,7 @@ namespace MagicalYatzyTests.ViewModels.ObservableWrappers
             
             _sut.Name = playerName;
 
-            _player.Name.Should().Be(playerName);
+            _player.Name.ShouldBe(playerName);
         }
         
         [Fact]
@@ -178,7 +178,7 @@ namespace MagicalYatzyTests.ViewModels.ObservableWrappers
             
             var player = new Player(type, "Player 1");
             var sut = new PlayerViewModel(player, _localizationService);
-            sut.TypeName.Should().Be(expectedTypeName);
+            sut.TypeName.ShouldBe(expectedTypeName);
         }
 
         [Fact]
@@ -187,7 +187,7 @@ namespace MagicalYatzyTests.ViewModels.ObservableWrappers
             const string expectedValue = "Delete Player";
             _localizationService.GetLocalizedString("DeletePlayerLabel").Returns(expectedValue);
             
-            _sut.DeleteCommandText.Should().Be(expectedValue);
+            _sut.DeleteCommandText.ShouldBe(expectedValue);
         }
     }
 }

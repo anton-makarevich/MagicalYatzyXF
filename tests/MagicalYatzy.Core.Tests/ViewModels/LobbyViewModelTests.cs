@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
@@ -48,8 +48,8 @@ namespace MagicalYatzyTests.ViewModels
             _localizationService.GetLocalizedString("PlayersLabel").Returns(Strings.PlayersLabel);
             _localizationService.GetLocalizedString("RulesLabel").Returns(Strings.RulesLabel);
             
-            _sut.PlayersTitle.Should().Be(Strings.PlayersLabel.ToUpper());
-            _sut.RulesTitle.Should().Be(Strings.RulesLabel.ToUpper());
+            _sut.PlayersTitle.ShouldBe(Strings.PlayersLabel.ToUpper());
+            _sut.RulesTitle.ShouldBe(Strings.RulesLabel.ToUpper());
         }
         
         [Fact]
@@ -59,9 +59,9 @@ namespace MagicalYatzyTests.ViewModels
             _localizationService.GetLocalizedString("AddBotLabel").Returns(Strings.AddBotLabel);
             _localizationService.GetLocalizedString("AddPlayerLabel").Returns(Strings.AddPlayerLabel);
             
-            _sut.StartTitle.Should().Be(Strings.StartGameButton);
-            _sut.AddBotLabel.Should().Be(Strings.AddBotLabel);
-            _sut.AddPlayerLabel.Should().Be(Strings.AddPlayerLabel);
+            _sut.StartTitle.ShouldBe(Strings.StartGameButton);
+            _sut.AddBotLabel.ShouldBe(Strings.AddBotLabel);
+            _sut.AddPlayerLabel.ShouldBe(Strings.AddPlayerLabel);
         }
 
         [Fact]
@@ -145,7 +145,7 @@ namespace MagicalYatzyTests.ViewModels
         [Fact]
         public void BackImage_HasCorrectValue()
         {
-             _sut.BackImage.Should().Be("Back.png");
+             _sut.BackImage.ShouldBe("Back.png");
         }
 
         [Fact]
@@ -388,7 +388,7 @@ namespace MagicalYatzyTests.ViewModels
             var babyRule = _sut.Rules.FirstOrDefault(f => f.Rule == Rules.krBaby);
             _sut.SelectedRule = babyRule;
             
-            babyRule?.IsSelected.Should().BeTrue();
+            babyRule?.IsSelected.ShouldBeTrue();
         }
 
         [Fact]
@@ -551,7 +551,7 @@ namespace MagicalYatzyTests.ViewModels
             Assert.Equal(2,game.NumberOfPlayers);
             foreach (var playerViewModel in _sut.Players)
             {
-                playerViewModel.Player.IsReady.Should().BeFalse();
+                playerViewModel.Player.IsReady.ShouldBeFalse();
             }
         }
     }

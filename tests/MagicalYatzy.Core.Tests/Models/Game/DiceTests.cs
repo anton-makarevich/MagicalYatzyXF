@@ -1,5 +1,5 @@
 ﻿using System;
-using FluentAssertions;
+using Shouldly;
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Common;
 using Sanet.MagicalYatzy.Models.Game;
@@ -293,11 +293,11 @@ namespace MagicalYatzyTests.Models.Game
             _sut.InitializePosition();
     
             // Assert
-            _sut.PosX.Should().BeGreaterOrEqualTo((int)_dicePanelMock.SaveMargins.Left + 1);
-            _sut.PosX.Should().BeLessOrEqualTo((int)_dicePanelMock.Bounds.Width - 72 - (int)_dicePanelMock.SaveMargins.Right);
+            _sut.PosX.ShouldBeGreaterThanOrEqualTo((int)_dicePanelMock.SaveMargins.Left + 1);
+            _sut.PosX.ShouldBeLessThanOrEqualTo((int)_dicePanelMock.Bounds.Width - 72 - (int)_dicePanelMock.SaveMargins.Right);
 
-            _sut.PosY.Should().BeGreaterOrEqualTo((int)_dicePanelMock.SaveMargins.Top + 1);
-            _sut.PosY.Should().BeLessOrEqualTo((int)_dicePanelMock.Bounds.Height - 72 - (int)_dicePanelMock.SaveMargins.Bottom);
+            _sut.PosY.ShouldBeGreaterThanOrEqualTo((int)_dicePanelMock.SaveMargins.Top + 1);
+            _sut.PosY.ShouldBeLessThanOrEqualTo((int)_dicePanelMock.Bounds.Height - 72 - (int)_dicePanelMock.SaveMargins.Bottom);
         }
 
         [Fact]
@@ -315,7 +315,7 @@ namespace MagicalYatzyTests.Models.Game
             _sut.UpdateDiePosition();
 
             // Assert
-            _sut.Status.Should().NotBe(DieStatus.Landing);
+            _sut.Status.ShouldNotBe(DieStatus.Landing);
         }
     }
 }

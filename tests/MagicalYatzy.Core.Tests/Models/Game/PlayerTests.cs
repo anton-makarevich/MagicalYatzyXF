@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using FluentAssertions;
+using Shouldly;
 using Sanet.MagicalYatzy.Extensions;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.Magical;
@@ -118,7 +118,7 @@ namespace MagicalYatzyTests.Models.Game
         [Fact]
         public void LocalPlayerHasIsUnknown_WhenName_IsNot_Passed()
         {
-            _sut.Name.Should().Be("Unknown");
+            _sut.Name.ShouldBe("Unknown");
         }
 
         [Fact]

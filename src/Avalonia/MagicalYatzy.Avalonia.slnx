@@ -1,6 +1,5 @@
 <Solution>
   <Project Path="../../tests/MagicalYatzy.Core.Tests/MagicalYatzy.Core.Tests.csproj" />
-  <Project Path="../../tests/MagicalYatzy.Dto.Tests/MagicalYatzy.Dto.Tests.csproj" />
   <Project Path="../MagicalYatzy.Core/MagicalYatzy.Core.csproj" />
   <Project Path="../MagicalYatzy.Dto/MagicalYatzy.Dto.csproj" />
   <Project Path="MagicalYatzy.Avalonia.Android/MagicalYatzy.Avalonia.Android.csproj" />

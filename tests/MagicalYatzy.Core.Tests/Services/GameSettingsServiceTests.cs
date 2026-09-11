@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using Shouldly;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
 using Xunit;
@@ -72,7 +72,7 @@ public class GameSettingsServiceTests
         _sut.DieSpeed = expectedDieSpeed;
 
         // Assert
-        _sut.DieSpeed.Should().Be(expectedDieSpeed);
+        _sut.DieSpeed.ShouldBe(expectedDieSpeed);
     }
 
     [Theory]
@@ -84,7 +84,7 @@ public class GameSettingsServiceTests
         _sut.DieSpeed = inputDieSpeed;
 
         // Assert
-        _sut.DieSpeed.Should().Be(expectedDieSpeed);
+        _sut.DieSpeed.ShouldBe(expectedDieSpeed);
     }
 
     [Fact]
@@ -92,6 +92,6 @@ public class GameSettingsServiceTests
     {
         _sut.IsSoundEnabled = true;
             
-        _sut.IsSoundEnabled.Should().BeTrue();
+        _sut.IsSoundEnabled.ShouldBeTrue();
     }
 }

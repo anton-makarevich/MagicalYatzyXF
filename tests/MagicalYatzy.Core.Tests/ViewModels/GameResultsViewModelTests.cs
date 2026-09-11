@@ -1,7 +1,7 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services.Api;
@@ -142,7 +142,7 @@ public class GameResultsViewModelTests
         
         var result = _sut.CloseButtonContent;
 
-        result.Should().Be(returnThis);
+        result.ShouldBe(returnThis);
     }
     
     [Fact]
@@ -153,7 +153,7 @@ public class GameResultsViewModelTests
         
         var result = _sut.Title;
 
-        result.Should().Be(returnThis);
+        result.ShouldBe(returnThis);
     }
     
     [Fact]
@@ -164,6 +164,6 @@ public class GameResultsViewModelTests
         
         var result = _sut.AgainLabel;
 
-        result.Should().Be(returnThis);
+        result.ShouldBe(returnThis);
     }
 }

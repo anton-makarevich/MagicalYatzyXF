@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using FluentAssertions;
+using Shouldly;
 using NSubstitute;
 using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Game;
@@ -41,7 +41,7 @@ public class SettingsViewModelTests
         var title = _sut.Title;
 
         // Assert
-        title.Should().Be(expectedTitle);
+        title.ShouldBe(expectedTitle);
     }
     
     [Fact]
@@ -56,7 +56,7 @@ public class SettingsViewModelTests
         var language = _sut.LanguageLabel;
 
         // Assert
-        language.Should().Be(expected);
+        language.ShouldBe(expected);
     }
 
     [Fact]
@@ -66,7 +66,7 @@ public class SettingsViewModelTests
         _sut.IsStyleBlue = true;
 
         // Assert
-        _gameSettingsService.DieStyle.Should().Be(DiceStyle.Blue);
+        _gameSettingsService.DieStyle.ShouldBe(DiceStyle.Blue);
     }
 
     [Fact]
@@ -76,7 +76,7 @@ public class SettingsViewModelTests
         _sut.IsStyleRed = true;
 
         // Assert
-        _gameSettingsService.DieStyle.Should().Be(DiceStyle.Red);
+        _gameSettingsService.DieStyle.ShouldBe(DiceStyle.Red);
     }
 
     [Fact]
@@ -86,7 +86,7 @@ public class SettingsViewModelTests
         _sut.IsStyleWhite = true;
 
         // Assert
-        _gameSettingsService.DieStyle.Should().Be(DiceStyle.Classic);
+        _gameSettingsService.DieStyle.ShouldBe(DiceStyle.Classic);
     }
 
         [Fact]
@@ -96,7 +96,7 @@ public class SettingsViewModelTests
         _sut.IsSpeedVerySlow = true;
 
         // Assert
-        _gameSettingsService.DieSpeed.Should().Be((int)DiceSpeed.VerySlow);
+        _gameSettingsService.DieSpeed.ShouldBe((int)DiceSpeed.VerySlow);
     }
 
     [Fact]
@@ -106,7 +106,7 @@ public class SettingsViewModelTests
         _sut.IsSpeedSlow = true;
 
         // Assert
-        _gameSettingsService.DieSpeed.Should().Be((int)DiceSpeed.Slow);
+        _gameSettingsService.DieSpeed.ShouldBe((int)DiceSpeed.Slow);
     }
 
     [Fact]
@@ -116,7 +116,7 @@ public class SettingsViewModelTests
         _sut.IsSpeedFast = true;
 
         // Assert
-        _gameSettingsService.DieSpeed.Should().Be((int)DiceSpeed.Fast);
+        _gameSettingsService.DieSpeed.ShouldBe((int)DiceSpeed.Fast);
     }
 
     [Fact]
@@ -126,7 +126,7 @@ public class SettingsViewModelTests
         _sut.IsSpeedVeryFast = true;
 
         // Assert
-        _gameSettingsService.DieSpeed.Should().Be((int)DiceSpeed.VeryFast);
+        _gameSettingsService.DieSpeed.ShouldBe((int)DiceSpeed.VeryFast);
     }
 
     [Fact]
@@ -136,7 +136,7 @@ public class SettingsViewModelTests
         _sut.IsAngleLow = true;
 
         // Assert
-        _gameSettingsService.DieAngle.Should().Be(0);
+        _gameSettingsService.DieAngle.ShouldBe(0);
     }
 
     [Fact]
@@ -146,7 +146,7 @@ public class SettingsViewModelTests
         _sut.IsAngleHigh = true;
 
         // Assert
-        _gameSettingsService.DieAngle.Should().Be(2);
+        _gameSettingsService.DieAngle.ShouldBe(2);
     }
 
     [Fact]
@@ -156,7 +156,7 @@ public class SettingsViewModelTests
         _sut.IsAngleVeryHigh = true;
 
         // Assert
-        _gameSettingsService.DieAngle.Should().Be(4);
+        _gameSettingsService.DieAngle.ShouldBe(4);
     }
 
     [Fact]
@@ -171,7 +171,7 @@ public class SettingsViewModelTests
         var isSoundEnabled = _sut.IsSoundEnabled;
 
         // Assert
-        isSoundEnabled.Should().Be(expectedIsSoundEnabled);
+        isSoundEnabled.ShouldBe(expectedIsSoundEnabled);
     }
 
     [Fact]
@@ -184,7 +184,7 @@ public class SettingsViewModelTests
         _sut.IsSoundEnabled = expectedIsSoundEnabled;
 
         // Assert
-        _gameSettingsService.IsSoundEnabled.Should().Be(expectedIsSoundEnabled);
+        _gameSettingsService.IsSoundEnabled.ShouldBe(expectedIsSoundEnabled);
     }
 
     [Fact]
@@ -199,7 +199,7 @@ public class SettingsViewModelTests
         var soundLabel = _sut.SoundLabel;
 
         // Assert
-        soundLabel.Should().Be(expectedSoundLabel);
+        soundLabel.ShouldBe(expectedSoundLabel);
     }
 
     [Fact]
@@ -214,7 +214,7 @@ public class SettingsViewModelTests
         var offContent = _sut.OffContent;
 
         // Assert
-        offContent.Should().Be(expectedOffContent);
+        offContent.ShouldBe(expectedOffContent);
     }
 
     [Fact]
@@ -229,7 +229,7 @@ public class SettingsViewModelTests
         var onContent = _sut.OnContent;
 
         // Assert
-        onContent.Should().Be(expectedOnContent);
+        onContent.ShouldBe(expectedOnContent);
     }
     
     [Fact]
@@ -244,7 +244,7 @@ public class SettingsViewModelTests
         var settingsStyleCaption = _sut.SettingsStyleCaption;
 
         // Assert
-        settingsStyleCaption.Should().Be(expectedSettingsStyleCaption);
+        settingsStyleCaption.ShouldBe(expectedSettingsStyleCaption);
     }
 
     [Fact]
@@ -259,7 +259,7 @@ public class SettingsViewModelTests
         var angLowText = _sut.AngleLowText;
 
         // Assert
-        angLowText.Should().Be(expectedAngLowText);
+        angLowText.ShouldBe(expectedAngLowText);
     }
 
     [Fact]
@@ -274,7 +274,7 @@ public class SettingsViewModelTests
         var angHighText = _sut.AngleHighText;
 
         // Assert
-        angHighText.Should().Be(expectedAngHighText);
+        angHighText.ShouldBe(expectedAngHighText);
     }
 
     [Fact]
@@ -289,7 +289,7 @@ public class SettingsViewModelTests
         var angVeryHighText = _sut.AngleVeryHighText;
 
         // Assert
-        angVeryHighText.Should().Be(expectedAngVeryHighText);
+        angVeryHighText.ShouldBe(expectedAngVeryHighText);
     }
 
     [Fact]
@@ -304,7 +304,7 @@ public class SettingsViewModelTests
         var settingsAngleCaption = _sut.SettingsAngleCaption;
 
         // Assert
-        settingsAngleCaption.Should().Be(expectedSettingsAngleCaption);
+        settingsAngleCaption.ShouldBe(expectedSettingsAngleCaption);
     }
 
     [Fact]
@@ -319,7 +319,7 @@ public class SettingsViewModelTests
         var speedSlow = _sut.SpeedSlow;
 
         // Assert
-        speedSlow.Should().Be(expectedSpeedSlow);
+        speedSlow.ShouldBe(expectedSpeedSlow);
     }
 
     [Fact]
@@ -334,7 +334,7 @@ public class SettingsViewModelTests
         var speedVerySlow = _sut.SpeedVerySlow;
 
         // Assert
-        speedVerySlow.Should().Be(expectedSpeedVerySlow);
+        speedVerySlow.ShouldBe(expectedSpeedVerySlow);
     }
 
     [Fact]
@@ -349,7 +349,7 @@ public class SettingsViewModelTests
         var speedFast = _sut.SpeedFast;
 
         // Assert
-        speedFast.Should().Be(expectedSpeedFast);
+        speedFast.ShouldBe(expectedSpeedFast);
     }
 
     [Fact]
@@ -364,7 +364,7 @@ public class SettingsViewModelTests
         var speedVeryFast = _sut.SpeedVeryFast;
 
         // Assert
-        speedVeryFast.Should().Be(expectedSpeedVeryFast);
+        speedVeryFast.ShouldBe(expectedSpeedVeryFast);
     }
 
     [Fact]
@@ -379,7 +379,7 @@ public class SettingsViewModelTests
         var dieAngle = _sut.DieAngle;
 
         // Assert
-        dieAngle.Should().Be(expectedDieAngle);
+        dieAngle.ShouldBe(expectedDieAngle);
     }
 
     [Fact]
@@ -394,7 +394,7 @@ public class SettingsViewModelTests
         var dieSpeed = _sut.DieSpeed;
 
         // Assert
-        dieSpeed.Should().Be((DiceSpeed)expectedDieSpeed);
+        dieSpeed.ShouldBe((DiceSpeed)expectedDieSpeed);
     }
 
     [Fact]
@@ -409,7 +409,7 @@ public class SettingsViewModelTests
         var dieStyle = _sut.DieStyle;
 
         // Assert
-        dieStyle.Should().Be(expectedDieStyle);
+        dieStyle.ShouldBe(expectedDieStyle);
     }
     
     [Fact]
@@ -424,7 +424,7 @@ public class SettingsViewModelTests
         var settingsSpeedCaption = _sut.SettingsSpeedCaption;
 
         // Assert
-        settingsSpeedCaption.Should().Be(expectedSettingsSpeedCaption);
+        settingsSpeedCaption.ShouldBe(expectedSettingsSpeedCaption);
     }
 
     [Fact]
@@ -437,7 +437,7 @@ public class SettingsViewModelTests
         var isStyleBlue = _sut.IsStyleBlue;
 
         // Assert
-        isStyleBlue.Should().BeTrue();
+        isStyleBlue.ShouldBeTrue();
     }
 
     [Fact]
@@ -450,7 +450,7 @@ public class SettingsViewModelTests
         var isStyleBlue = _sut.IsStyleBlue;
 
         // Assert
-        isStyleBlue.Should().BeFalse();
+        isStyleBlue.ShouldBeFalse();
     }
 
     [Fact]
@@ -463,7 +463,7 @@ public class SettingsViewModelTests
         var isStyleRed = _sut.IsStyleRed;
 
         // Assert
-        isStyleRed.Should().BeTrue();
+        isStyleRed.ShouldBeTrue();
     }
 
     [Fact]
@@ -476,7 +476,7 @@ public class SettingsViewModelTests
         var isStyleRed = _sut.IsStyleRed;
 
         // Assert
-        isStyleRed.Should().BeFalse();
+        isStyleRed.ShouldBeFalse();
     }
 
     [Fact]
@@ -489,7 +489,7 @@ public class SettingsViewModelTests
         var isStyleWhite = _sut.IsStyleWhite;
 
         // Assert
-        isStyleWhite.Should().BeTrue();
+        isStyleWhite.ShouldBeTrue();
     }
 
     [Fact]
@@ -502,7 +502,7 @@ public class SettingsViewModelTests
         var isStyleWhite = _sut.IsStyleWhite;
 
         // Assert
-        isStyleWhite.Should().BeFalse();
+        isStyleWhite.ShouldBeFalse();
     }
 
     [Fact]
@@ -515,7 +515,7 @@ public class SettingsViewModelTests
         var isSpeedVerySlow = _sut.IsSpeedVerySlow;
 
         // Assert
-        isSpeedVerySlow.Should().BeTrue();
+        isSpeedVerySlow.ShouldBeTrue();
     }
 
     [Fact]
@@ -528,7 +528,7 @@ public class SettingsViewModelTests
         var isSpeedVerySlow = _sut.IsSpeedVerySlow;
 
         // Assert
-        isSpeedVerySlow.Should().BeFalse();
+        isSpeedVerySlow.ShouldBeFalse();
     }
 
     [Fact]
@@ -541,7 +541,7 @@ public class SettingsViewModelTests
         var isSpeedSlow = _sut.IsSpeedSlow;
 
         // Assert
-        isSpeedSlow.Should().BeTrue();
+        isSpeedSlow.ShouldBeTrue();
     }
 
     [Fact]
@@ -554,7 +554,7 @@ public class SettingsViewModelTests
         var isSpeedSlow = _sut.IsSpeedSlow;
 
         // Assert
-        isSpeedSlow.Should().BeFalse();
+        isSpeedSlow.ShouldBeFalse();
     }
 
     [Fact]
@@ -567,7 +567,7 @@ public class SettingsViewModelTests
         var isSpeedFast = _sut.IsSpeedFast;
 
         // Assert
-        isSpeedFast.Should().BeTrue();
+        isSpeedFast.ShouldBeTrue();
     }
 
     [Fact]
@@ -580,7 +580,7 @@ public class SettingsViewModelTests
         var isSpeedFast = _sut.IsSpeedFast;
 
         // Assert
-        isSpeedFast.Should().BeFalse();
+        isSpeedFast.ShouldBeFalse();
     }
 
     [Fact]
@@ -593,7 +593,7 @@ public class SettingsViewModelTests
         var isSpeedVeryFast = _sut.IsSpeedVeryFast;
 
         // Assert
-        isSpeedVeryFast.Should().BeTrue();
+        isSpeedVeryFast.ShouldBeTrue();
     }
 
     [Fact]
@@ -606,7 +606,7 @@ public class SettingsViewModelTests
         var isSpeedVeryFast = _sut.IsSpeedVeryFast;
 
         // Assert
-        isSpeedVeryFast.Should().BeFalse();
+        isSpeedVeryFast.ShouldBeFalse();
     }
 
     [Fact]
@@ -619,7 +619,7 @@ public class SettingsViewModelTests
         var isAngLow = _sut.IsAngleLow;
 
         // Assert
-        isAngLow.Should().BeTrue();
+        isAngLow.ShouldBeTrue();
     }
 
     [Fact]
@@ -632,7 +632,7 @@ public class SettingsViewModelTests
         var isAngLow = _sut.IsAngleLow;
 
         // Assert
-        isAngLow.Should().BeFalse();
+        isAngLow.ShouldBeFalse();
     }
 
     [Fact]
@@ -645,7 +645,7 @@ public class SettingsViewModelTests
         var isAngHigh = _sut.IsAngleHigh;
 
         // Assert
-        isAngHigh.Should().BeTrue();
+        isAngHigh.ShouldBeTrue();
     }
 
     [Fact]
@@ -658,7 +658,7 @@ public class SettingsViewModelTests
         var isAngHigh = _sut.IsAngleHigh;
 
         // Assert
-        isAngHigh.Should().BeFalse();
+        isAngHigh.ShouldBeFalse();
     }
 
     [Fact]
@@ -671,7 +671,7 @@ public class SettingsViewModelTests
         var isAngVeryHigh = _sut.IsAngleVeryHigh;
 
         // Assert
-        isAngVeryHigh.Should().BeTrue();
+        isAngVeryHigh.ShouldBeTrue();
     }
 
     [Fact]
@@ -684,7 +684,7 @@ public class SettingsViewModelTests
         var isAngVeryHigh = _sut.IsAngleVeryHigh;
 
         // Assert
-        isAngVeryHigh.Should().BeFalse();
+        isAngVeryHigh.ShouldBeFalse();
     }
     
     [Fact]
@@ -698,7 +698,7 @@ public class SettingsViewModelTests
         var selectedLanguage = _sut.SelectedLanguage;
 
         // Assert
-        selectedLanguage.Should().Be(language);
+        selectedLanguage.ShouldBe(language);
     }
     
     [Fact]
@@ -717,6 +717,6 @@ public class SettingsViewModelTests
     [Fact]
     public void AvailableLanguages_ReturnsList_FromLocalizationService()
     {
-        _sut.AvailableLanguages.Should().Equal(new List<Language>() { _defLanguage });
+        _sut.AvailableLanguages.ShouldBe(new List<Language>() { _defLanguage });
     }
 }
