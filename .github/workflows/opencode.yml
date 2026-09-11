@@ -1,0 +1,63 @@
+name: opencode
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+
+jobs:
+  opencode:
+    timeout-minutes: 60
+    if: |
+      (contains(github.event.comment.body, '/oc') ||
+      contains(github.event.comment.body, '/opencode')) &&
+      github.event.comment.user.type != 'Bot' &&
+        contains(
+          fromJson('["OWNER"]'),
+          github.event.comment.author_association
+        )
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Install mise tools
+        uses: jdx/mise-action@v2
+
+      - name: Install skills
+        run: mise run install-skills
+
+      - name: Install Serena
+        run: mise run install-serena
+
+      - name: Configure Serena for OpenCode
+        run: |
+          cat > opencode.json << 'EOF'
+          {
+            "mcp": {
+              "serena": {
+                "type": "local",
+                "command": ["serena", "start-mcp-server", "--context=ide"],
+                "enabled": true
+              }
+            }
+          }
+          EOF
+
+      - name: Run OpenCode
+        uses: anomalyco/opencode/github@v1.18.30
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        with:
+          model: opencode/big-pickle
+          share: true
+          agent: build
