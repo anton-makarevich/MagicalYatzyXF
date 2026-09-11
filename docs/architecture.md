@@ -9,7 +9,7 @@
 
 Dependency flow: `Avalonia heads → MagicalYatzy.Avalonia → MagicalYatzy.Core → MagicalYatzy.Dto`.
 
-### MagicalYatzy.Core (`src/MagicalYatzy.Core`, net9.0)
+### MagicalYatzy.Core (`src/MagicalYatzy.Core`, net10.0)
 
 Root namespace `Sanet.MagicalYatzy`. No UI dependencies.
 
@@ -17,11 +17,11 @@ Root namespace `Sanet.MagicalYatzy`. No UI dependencies.
 - `ViewModels` — all screen ViewModels. All inherit `Base/DicePanelViewModel` (which extends Sanet.MVVM `BaseViewModel` and exposes the shared `IDicePanel`). `ObservableWrappers/` holds UI-facing wrappers around models (e.g. `PlayerViewModel`).
 - `Services` — `Api` (`AzureApiClient`, `LegacyWcfClient`), `Game` (`GameService`, `PlayerService`, `RulesService`, `GameSettingsService`), `Localization` (`GlobalizationInvariantLocalizationService` over `Resources/Strings.resx`), `Storage` (`LocalJsonStorageService`), `Navigation` (`IExternalNavigationService`), `Media` (`ISoundsProvider`).
 
-### MagicalYatzy.Dto (`src/MagicalYatzy.Dto`, net9.0, nullable enabled)
+### MagicalYatzy.Dto (`src/MagicalYatzy.Dto`, net10.0, nullable enabled)
 
 Request/response DTOs, `IWebService`/`WebService`, and the WCF connected-service reference for the legacy score service. Referenced by Core.
 
-### MagicalYatzy.Avalonia (`src/Avalonia/MagicalYatzy.Avalonia`, net9.0, nullable enabled)
+### MagicalYatzy.Avalonia (`src/Avalonia/MagicalYatzy.Avalonia`, net10.0, nullable enabled)
 
 Shared UI for all heads, plus the **composition root**:
 
@@ -48,3 +48,4 @@ Thin entry points (1–3 files each): `Program.cs`/`MainActivity`/`AppDelegate` 
 ## Infrastructure
 
 `infra/` — Pulumi C# projects (`AzureLZ` landing zone, `AzureResources`) on net6.0, deployed manually (`az login` / service principal, see `infra/README.md`).
+

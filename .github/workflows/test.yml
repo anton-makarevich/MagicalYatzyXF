@@ -17,10 +17,11 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: 10.0.x
 
       - name: Run Core tests
         run: dotnet test tests/MagicalYatzy.Core.Tests/MagicalYatzy.Core.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute=GeneratedCodeAttribute /p:Include=[MagicalYatzy]*
 
       - name: Upload Core tests results
         run: bash <(curl -s https://codecov.io/bash) -f "tests/MagicalYatzy.Core.Tests/coverage.opencover.xml" -t ${{ secrets.CODECOV_TOKEN }}
+

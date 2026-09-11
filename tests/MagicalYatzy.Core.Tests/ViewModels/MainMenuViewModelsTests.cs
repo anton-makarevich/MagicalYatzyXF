@@ -9,6 +9,7 @@ using Sanet.MagicalYatzy.Services.Navigation;
 using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MVVM.Core.Services;
 using Xunit;
+using ExternalNavigationService = Sanet.MagicalYatzy.Services.Navigation.IExternalNavigationService;
 
 namespace MagicalYatzyTests.ViewModels;
 
@@ -23,7 +24,7 @@ public class MainMenuViewModelsTests
 
     public MainMenuViewModelsTests()
     {
-        var externalNavigationServiceMock = Substitute.For<IExternalNavigationService>();
+        var externalNavigationServiceMock = Substitute.For<ExternalNavigationService>();
         _localizationService = Substitute.For<ILocalizationService>();
         _localizationService.GetLocalizedString("SettingsAction").Returns(Strings.SettingsAction);
         _sut = new MainMenuViewModel(_dicePanelMock, externalNavigationServiceMock, _playerServiceMock, _localizationService);
