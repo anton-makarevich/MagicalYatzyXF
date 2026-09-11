@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using FluentAssertions;
+using Shouldly;
 using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Services.Localization;
 using Xunit;
@@ -23,7 +23,7 @@ public class GlobalizationInvariantLocalizationServiceTests
     public void DefaultLanguage_IsSet_When_ServiceIsCreated()
     {
         var defaultLanguage = _sut.Languages.FirstOrDefault(l=>l.IsDefault);
-        _sut.ActiveLanguage.Should().Be(defaultLanguage);
+        _sut.ActiveLanguage.ShouldBe(defaultLanguage);
     }
     
     [Fact]
@@ -31,7 +31,7 @@ public class GlobalizationInvariantLocalizationServiceTests
     {
         var language = _sut.Languages.FirstOrDefault(l=>l.Code =="be");
         _sut.SetActiveLanguage(language);
-        _sut.ActiveLanguage.Should().Be(language);
+        _sut.ActiveLanguage.ShouldBe(language);
     }
     
     [Fact]
@@ -39,28 +39,26 @@ public class GlobalizationInvariantLocalizationServiceTests
     {
         const string languageCode = "be";
         _sut.SetActiveLanguage(languageCode);
-        _sut.ActiveLanguage.Code.Should().Be(languageCode);
+        _sut.ActiveLanguage.Code.ShouldBe(languageCode);
     }
     
     [Fact]
     public void SetSystemCulture_WithUnavailableLanguage_ShouldThrowException() 
     {
         var language = new Language("agr", false);
-        FluentActions.Invoking(() =>_sut.SetActiveLanguage(language))
-            .Should().Throw<FileNotFoundException>();
+        Should.Throw<FileNotFoundException>(() => _sut.SetActiveLanguage(language));
     }
     
     [Fact]
     public void DefaultLanguage_IsEnglish() 
     {
-        _sut.ActiveLanguage.Code.Should().Be("en");
+        _sut.ActiveLanguage.Code.ShouldBe("en");
     }
     
     [Fact]
     public void SetSystemCulture_WithCulture_Should_ThrowException() 
     {
-        FluentActions.Invoking(() => _sut.SetActiveLanguage(CultureInfo.CurrentCulture))
-            .Should().Throw<NotSupportedException>();
+        Should.Throw<NotSupportedException>(() => _sut.SetActiveLanguage(CultureInfo.CurrentCulture));
     }
 
     [Fact]
@@ -68,7 +66,7 @@ public class GlobalizationInvariantLocalizationServiceTests
     {
         _sut.SetActiveLanguage(new Language("be", false));
         var localizedString = _sut.GetLocalizedString("PlayerNameDefault");
-        localizedString.Should().Be("Гулец");
+        localizedString.ShouldBe("Гулец");
     }
     
     [Fact]
@@ -76,7 +74,7 @@ public class GlobalizationInvariantLocalizationServiceTests
     {
         _sut.SetActiveLanguage(new Language("be", false));
         var localizedString = _sut.GetLocalizedString("OtherAllWriteContent");
-        localizedString.Should().Be("Learning English and Russian writing with Sanet AllWrite");
+        localizedString.ShouldBe("Learning English and Russian writing with Sanet AllWrite");
     }
 
     [Fact]
@@ -88,7 +86,7 @@ public class GlobalizationInvariantLocalizationServiceTests
 
         foreach (var language in expectedLanguages)
         {
-            languages.Should().Contain(language);
+            languages.ShouldContain(language);
         }
     }
 }

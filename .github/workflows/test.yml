@@ -2,7 +2,7 @@ name: Build and Test
 on:
   push:
     branches:
-      - develop
+      - main
   pull_request:
 
   workflow_dispatch:
@@ -18,12 +18,6 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 9.0.x
-
-      - name: Run DTO tests
-        run: dotnet test tests/MagicalYatzy.Dto.Tests/MagicalYatzy.Dto.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute=GeneratedCodeAttribute /p:Include=[MagicalYatzy]*
-
-      - name: Upload DTO tests results
-        run: bash <(curl -s https://codecov.io/bash) -f "tests/MagicalYatzy.Dto.Tests/coverage.opencover.xml" -t ${{ secrets.CODECOV_TOKEN }}
 
       - name: Run Core tests
         run: dotnet test tests/MagicalYatzy.Core.Tests/MagicalYatzy.Core.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute=GeneratedCodeAttribute /p:Include=[MagicalYatzy]*

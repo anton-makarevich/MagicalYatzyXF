@@ -1,7 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FluentAssertions;
+using Shouldly;
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
@@ -563,7 +563,7 @@ public class GameViewModelTests
         _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
         _localizationService.GetLocalizedString("MoveLabel").Returns(Strings.MoveLabel);
             
-        _sut.Title.Should().Contain(Strings.MoveLabel);
+        _sut.Title.ShouldContain(Strings.MoveLabel);
     }
 
     [Fact]
@@ -1036,11 +1036,11 @@ public class GameViewModelTests
     [Fact]
     public void ButtonImagesAreCorrect()
     {
-        _sut.RollImage.Should().Be("Roll.png");
-        _sut.MagicRollImage.Should().Be("MagicRoll.png");
-        _sut.ManualSetImage.Should().Be("ManualSet.png");
-        _sut.RollResetImage.Should().Be("RollReset.png");
-        _sut.CloseImage.Should().Be("Close.png");
+        _sut.RollImage.ShouldBe("Roll.png");
+        _sut.MagicRollImage.ShouldBe("MagicRoll.png");
+        _sut.ManualSetImage.ShouldBe("ManualSet.png");
+        _sut.RollResetImage.ShouldBe("RollReset.png");
+        _sut.CloseImage.ShouldBe("Close.png");
     }
 
     [Fact]
@@ -1210,7 +1210,7 @@ public class GameViewModelTests
         _dicePanel.RollEnded +=
             Raise.Event();
 
-        _sut.RollResults.Should().BeNull();
+        _sut.RollResults.ShouldBeNull();
     }
     
     [Fact]
@@ -1224,7 +1224,7 @@ public class GameViewModelTests
         _dicePanel.RollEnded +=
             Raise.Event();
 
-        _sut.CanRoll.Should().BeTrue();
+        _sut.CanRoll.ShouldBeTrue();
     }
         
     [Fact]
@@ -1428,7 +1428,7 @@ public class GameViewModelTests
 
         var result = _sut.MagicRollLabel;
 
-        result.Should().Be(magicRoll);
+        result.ShouldBe(magicRoll);
     }
     
     [Fact]
@@ -1439,7 +1439,7 @@ public class GameViewModelTests
 
         var result = _sut.ManualSetLabel;
 
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
     
     [Fact]
@@ -1450,7 +1450,7 @@ public class GameViewModelTests
 
         var result = _sut.RollResetLabel;
 
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
     
     [Fact]
@@ -1461,7 +1461,7 @@ public class GameViewModelTests
 
         var result = _sut.TotalLabel;
 
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
     
     [Fact]
@@ -1472,13 +1472,13 @@ public class GameViewModelTests
 
         var result = _sut.TotalShortLabel;
 
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 
     [Fact]
     public void GettingSelectedRollResult_IsNull()
     {
-        _sut.SelectedRollResult.Should().BeNull();
+        _sut.SelectedRollResult.ShouldBeNull();
     }
 
     [Fact]

@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using Shouldly;
 using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
 using Xunit;
 
@@ -14,7 +14,7 @@ public class RandomValueGeneratorTests
         const int min = 1;
         const int max = 6;
         var value = _sut.Next(min, max);
-        value.Should().BeGreaterOrEqualTo(min);
-        value.Should().BeLessThan(max);
+        value.ShouldBeGreaterThanOrEqualTo(min);
+        value.ShouldBeLessThan(max);
     }
 }

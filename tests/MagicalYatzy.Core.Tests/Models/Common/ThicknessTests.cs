@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using Shouldly;
 using Sanet.MagicalYatzy.Models.Common;
 using Xunit;
 namespace MagicalYatzyTests.Models.Common;
@@ -12,10 +12,10 @@ public class ThicknessTests
         var thickness = new Thickness();
 
         // Assert
-        thickness.Left.Should().Be(0.0);
-        thickness.Right.Should().Be(0.0);
-        thickness.Top.Should().Be(0.0);
-        thickness.Bottom.Should().Be(0.0);
+        thickness.Left.ShouldBe(0.0);
+        thickness.Right.ShouldBe(0.0);
+        thickness.Top.ShouldBe(0.0);
+        thickness.Bottom.ShouldBe(0.0);
     }
 
     [Fact]
@@ -31,10 +31,10 @@ public class ThicknessTests
         var thickness = new Thickness(left, top, right, bottom);
 
         // Assert
-        thickness.Left.Should().Be(left);
-        thickness.Right.Should().Be(right);
-        thickness.Top.Should().Be(top);
-        thickness.Bottom.Should().Be(bottom);
+        thickness.Left.ShouldBe(left);
+        thickness.Right.ShouldBe(right);
+        thickness.Top.ShouldBe(top);
+        thickness.Bottom.ShouldBe(bottom);
     }
 
     [Fact]
@@ -47,10 +47,10 @@ public class ThicknessTests
         var thickness = new Thickness(value);
 
         // Assert
-        thickness.Left.Should().Be(value);
-        thickness.Right.Should().Be(value);
-        thickness.Top.Should().Be(value);
-        thickness.Bottom.Should().Be(value);
+        thickness.Left.ShouldBe(value);
+        thickness.Right.ShouldBe(value);
+        thickness.Top.ShouldBe(value);
+        thickness.Bottom.ShouldBe(value);
     }
 
     [Fact]
@@ -64,10 +64,10 @@ public class ThicknessTests
         var thickness = new Thickness(horizontal, vertical);
 
         // Assert
-        thickness.Left.Should().Be(horizontal);
-        thickness.Right.Should().Be(horizontal);
-        thickness.Top.Should().Be(vertical);
-        thickness.Bottom.Should().Be(vertical);
+        thickness.Left.ShouldBe(horizontal);
+        thickness.Right.ShouldBe(horizontal);
+        thickness.Top.ShouldBe(vertical);
+        thickness.Bottom.ShouldBe(vertical);
     }
 }
 
