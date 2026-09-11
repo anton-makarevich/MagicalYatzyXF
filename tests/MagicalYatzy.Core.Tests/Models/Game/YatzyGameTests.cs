@@ -22,7 +22,6 @@ namespace MagicalYatzyTests.Models.Game
             _sut = new YatzyGame();
         }
         
-        
         private void StartGame(IPlayer player)
         {
             _sut.JoinGame(player);
@@ -1101,7 +1100,6 @@ namespace MagicalYatzyTests.Models.Game
             var player = new Player();
             _sut.JoinGame(player);
 
-            
             _sut.NextTurn();
             
             Assert.Equal(1,gameFinishedTimes);

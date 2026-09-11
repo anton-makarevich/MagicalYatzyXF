@@ -361,7 +361,7 @@ namespace MagicalYatzyTests.Models.Game
            
                 var expectedTotal = _sut.Results
                                         .Where(r => r.HasValue).Select(r => r.Value)
-                                        .Sum() + _sut.Results.Count(f=>f.HasBonus)*100;
+                                        .Sum() + (_sut.Results.Count(f=>f.HasBonus)*100);
                 
                 // Assert
                 Assert.Equal(expectedTotal,_sut.Total);

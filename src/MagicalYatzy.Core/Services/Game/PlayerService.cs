@@ -31,7 +31,7 @@ namespace Sanet.MagicalYatzy.Services.Game
             if (Players.Any())
                 return;
             var players = await _storageService.LoadPlayersAsync();
-            if (players != null && players.Any())
+            if (players != null && players.Count > 0)
             {
                 _players = players;
                 PlayersUpdated?.Invoke(this, null);
@@ -90,7 +90,7 @@ namespace Sanet.MagicalYatzy.Services.Game
         {
             var numberOfPlayers = 1;
 
-            if (names == null || !names.Any()) return $"{defaultName} 1";
+            if (names == null || names.Count == 0) return $"{defaultName} 1";
             do
             {
                 var name = $"{defaultName} {numberOfPlayers}";

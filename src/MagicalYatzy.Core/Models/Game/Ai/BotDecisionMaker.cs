@@ -110,7 +110,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Ai
                     (Scores) scoreIndex,
                     game,
                     rollResult => _player.Roll == 3
-                                  && rollResult.PossibleValue >= rollResult.MinAllowableValue() - (game.Round - 1) / 2
+                                  && rollResult.PossibleValue >= rollResult.MinAllowableValue() - ((game.Round - 1) / 2)
                                   && rollResult.PossibleValue > 0))
                     return;
             }
@@ -129,7 +129,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Ai
                 game,
                 rollResult => rollResult.PossibleValue > 0
                               && _player.Roll == 3
-                              && rollResult.PossibleValue >= rollResult.MinAllowableValue() - (game.Round - 1) / 2))
+                              && rollResult.PossibleValue >= rollResult.MinAllowableValue() - ((game.Round - 1) / 2)))
                 return;
 
             //once again 4 and 3 in row
@@ -183,7 +183,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Ai
         {
             var diceToCheck = amountOfDiceForValue.Where(f => f.amountOfDice > 1).ToList();
             var valueTuples = diceToCheck.ToList();
-            if (valueTuples.Count() != 2) return false;
+            if (valueTuples.Count != 2) return false;
             var result = _player.GetResultForScore(Scores.FullHouse);
             if (result == null || result.HasValue) return false;
             foreach (var (diceValue, _) in valueTuples)
@@ -231,7 +231,7 @@ namespace Sanet.MagicalYatzy.Models.Game.Ai
             var result = _player.GetResultForScore(score);
             if (result == null 
                 || result.HasValue 
-                || additionalCondition != null && !additionalCondition(result)) return false;
+                || (additionalCondition != null && !additionalCondition(result))) return false;
             game.ApplyScore(result);
             return true;
         }

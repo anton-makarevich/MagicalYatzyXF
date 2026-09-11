@@ -81,7 +81,6 @@ namespace MagicalYatzyTests.Services.Game
             // Arrange
             _apiMock.LoginUserAsync(TestUserName, "1234").Returns(Task.FromResult<IPlayer>(null));
 
-
             // Act
             await _sut.LoginAsync(TestUserName, "1234");
 

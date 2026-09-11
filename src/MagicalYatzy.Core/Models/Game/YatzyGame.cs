@@ -69,7 +69,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         {
             get
             {
-                if (Players != null && Players.Count(f => f.IsReady) == 0)
+                if (Players != null && !Players.Any(f => f.IsReady))
                     _isPlaying = false;
                 return _isPlaying;
             }
@@ -249,8 +249,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                 }
                 else
                 {
-                    if (_fixedRollResults.Contains(value))
-                        _fixedRollResults.Remove(value);
+                    _fixedRollResults.Remove(value);
                 }
 
                 DiceFixed?.Invoke(this, new FixDiceEventArgs(CurrentPlayer, value, isFixed));
@@ -267,7 +266,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             lock (_syncRoot)
             {
                 var seat = 0;
-                if (Players.Count(f => f.IsReady) == 0)
+                if (!Players.Any(f => f.IsReady))
                 {
                     IsPlaying = false;
                     Round = 1;

@@ -18,7 +18,6 @@ namespace MagicalYatzyTests.Models.Game
 private readonly IGameSettingsService _gameSettingMock = Substitute.For<IGameSettingsService>();
         public DicePanelTests()
         {
-            
             _gameSettingMock.MaxRollLoop.Returns(1);
             _gameSettingMock.DieSpeed.Returns(0);
             _sut = new DicePanel(_gameSettingMock)

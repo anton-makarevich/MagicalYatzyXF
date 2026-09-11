@@ -242,7 +242,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         private void GenerateDice()
         {
-            if (Dice != null && Dice.Any())
+            if (Dice != null && Dice.Count > 0)
             {
                 foreach (var die in Dice)
                 {

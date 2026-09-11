@@ -21,7 +21,7 @@
 
         public Point[] Corners => new Point[] { TopLeft, TopRight, BottomRight, BottomLeft };
 
-        public Point Center => new Point(X + Width * 0.5, Y + Height * 0.5);
+        public Point Center => new Point(X + (Width * 0.5), Y + (Height * 0.5));
 
         public Rectangle(double x, double y, double width, double height)
         {

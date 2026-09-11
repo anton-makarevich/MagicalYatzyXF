@@ -201,7 +201,7 @@ namespace MagicalYatzyTests.Models.Game
                     // Arrange
                     _gameSettingMock.DieAngle.Returns(angle);
                     _sut.Result = result;
-                    var expectedFrame = (result - 1) * 6 + angle;
+                    var expectedFrame = ((result - 1) * 6) + angle;
 
                     // Act
                     _sut.DrawDie();

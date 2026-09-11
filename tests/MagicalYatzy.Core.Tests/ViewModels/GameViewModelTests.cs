@@ -52,7 +52,6 @@ public class GameViewModelTests
 
         _navigationService = Substitute.For<INavigationService>();
 
-        
         _localizationService = Substitute.For<ILocalizationService>();
 
         _dicePanel = Substitute.For<IDicePanel>();

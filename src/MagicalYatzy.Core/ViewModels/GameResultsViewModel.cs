@@ -61,7 +61,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             base.AttachHandlers();
 
             if (_gameService?.CurrentLocalGame?.Players == null
-                || !_gameService.CurrentLocalGame.Players.Any())
+                || _gameService.CurrentLocalGame.Players.Count == 0)
             {
                 return;
             }

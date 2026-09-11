@@ -412,7 +412,6 @@ public class SettingsViewModelTests
         dieStyle.Should().Be(expectedDieStyle);
     }
     
-    
     [Fact]
     public void SettingsSpeedCaption_ShouldReturnCorrectLocalizedString()
     {

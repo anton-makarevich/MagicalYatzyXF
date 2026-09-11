@@ -57,7 +57,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public int Total => (Results == null)
             ? 0 
-            : Results.Where(r => r.HasValue).Select(r => r.Value).Sum() + Results.Count(f=>f.HasBonus)*100;
+            : Results.Where(r => r.HasValue).Select(r => r.Value).Sum() + (Results.Count(f=>f.HasBonus)*100);
 
         public IReadOnlyList<IRollResult> Results { get; private set; }
         
