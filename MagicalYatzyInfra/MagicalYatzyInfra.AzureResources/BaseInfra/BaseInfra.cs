@@ -19,7 +19,7 @@ public class BaseInfra
             ResourceGroupName = resourceGroupName,
         }, new CustomResourceOptions
         {
-            ImportId = resourceGroupName
+            ImportId = resourceGroupName.Apply(x => x)
         });
 
         // Export the resource group name
