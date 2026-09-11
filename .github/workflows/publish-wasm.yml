@@ -18,28 +18,28 @@ jobs:
     
     steps:
       - name: Inject extra env vars
-        uses: FranzDiebold/github-env-vars-action@v2
+        uses: FranzDiebold/github-env-vars-action@v2.4.0
 
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
         with:
           submodules: true
 
       - name: Set up .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '9.x'
+          dotnet-version: '9.0.x'
 
       - name: Build
         run: |
-          cd MagicalYatzyAUI/MagicalYatzyAUI.Browser
+          cd src/Avalonia/MagicalYatzy.Avalonia.Browser
           dotnet workload restore
           dotnet workload repair
           dotnet publish -c ${{ github.event.inputs.configuration || 'Release' }}
 
       - name: Deploy the website
-        uses: tibor19/static-website-deploy@v3
+        uses: tibor19/static-website-deploy@v4
         with:
           enabled-static-website: 'true'
-          folder: MagicalYatzyAUI/MagicalYatzyAUI.Browser/bin/${{ github.event.inputs.configuration || 'Release' }}/net9.0-browser/publish/wwwroot
+          folder: src/Avalonia/MagicalYatzy.Avalonia.Browser/bin/${{ github.event.inputs.configuration || 'Release' }}/net9.0-browser/publish/wwwroot
           connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION }}

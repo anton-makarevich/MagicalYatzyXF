@@ -1,0 +1,85 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy.Core"
+             xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="viewModels:GameResultsViewModel"
+             x:Class="Sanet.MagicalYatzy.Avalonia.Views.GameResultsView">
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <viewModels:GameResultsViewModel />
+    </Design.DataContext>
+    <Grid
+        Background="Transparent"
+        RowDefinitions="*,Auto,*,Auto,*,Auto,*">
+
+        <Label
+            Grid.Row="1"
+            Classes="caption"
+            HorizontalAlignment="Center"
+            Content="{Binding Title, Converter={StaticResource StringUppercasedConverter}}"
+        />
+        <ItemsControl
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Width="340"
+            Grid.Row="3"
+            ItemsSource="{Binding Players}"
+            Background = "Transparent">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{StaticResource MenuCellGridSize}"/>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Image
+                            Source="{Binding Image, Converter={StaticResource ImageNameConverter}}"
+                            VerticalAlignment="Center"
+                           Margin="0,0,10,0"
+                           />
+                        <Label
+                            Grid.Column="1"
+                            MaxWidth="250"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Classes="caption"
+                            Foreground="White"
+                            Content="{Binding Name}" />
+                        <Label
+                            Grid.Column="2"
+                            Classes="caption"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Foreground="White"
+                            Content="{Binding Total}" />
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Spacing="10"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+        <StackPanel
+            Grid.Row="5"
+            Orientation="Horizontal"
+            HorizontalAlignment="Center"
+            Spacing="10">
+            <templatedControls:ActionButton
+                Command="{Binding RestartGameCommand}"
+                ImageSource="{Binding RestartImage}" 
+                Content="{Binding AgainLabel}"/>
+            <templatedControls:ActionButton
+                Command="{Binding CloseCommand}"
+                ImageSource="{Binding CloseImage}"
+                Content="{ Binding CloseButtonContent}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

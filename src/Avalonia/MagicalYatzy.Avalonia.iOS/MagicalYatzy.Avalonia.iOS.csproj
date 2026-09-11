@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net9.0-ios</TargetFramework>
+        <SupportedOSPlatformVersion>12.2</SupportedOSPlatformVersion>
+        <ProvisioningType>manual</ProvisioningType>
+        <Nullable>enable</Nullable>
+        <RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>
+        <RootNamespace>Sanet.MagicalYatzy.Avalonia.iOS</RootNamespace>
+        <LangVersion>13</LangVersion>
+        <!-- These properties need to be set in order to run on a real iDevice -->
+        <!--<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>-->
+        <!--<CodesignKey></CodesignKey>-->
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <CodesignKey>iPhone Developer</CodesignKey>
+      <MtouchDebug>true</MtouchDebug>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <MtouchLink>Full</MtouchLink>
+      <CodesignKey>Apple Distribution: Anton Makarevich (Z8GJWJ4Q4E)</CodesignKey>
+      <OutputPath>bin\Release/net7.0-ios/ios/</OutputPath>
+      <CodesignProvision>MagicalYatzy_AdHoc</CodesignProvision>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia.iOS" Version="11.2.1" />
+        <PackageReference Include="Sanet.MVVM.DI.Avalonia" Version="1.1.1.1113" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\MagicalYatzy.Avalonia\MagicalYatzy.Avalonia.csproj" />
+    </ItemGroup>
+</Project>

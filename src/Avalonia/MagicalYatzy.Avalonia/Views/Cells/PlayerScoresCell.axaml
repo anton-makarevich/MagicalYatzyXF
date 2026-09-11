@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:observableWrappers="clr-namespace:Sanet.MagicalYatzy.ViewModels.ObservableWrappers;assembly=MagicalYatzy.Core"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="observableWrappers:PlayerViewModel"
+             x:Class="Sanet.MagicalYatzy.Avalonia.Views.Cells.PlayerScoresCell">
+    <StackPanel
+        Orientation="Vertical">
+        <TextBlock
+            Margin="0,0,0,2"
+            Background="{Binding IsMyTurn,
+                Converter={StaticResource BoolToColorConverter},
+                ConverterParameter=SanetBlueColor}"
+            Foreground="White"
+            TextTrimming="CharacterEllipsis"
+            Text="{Binding Name}"/>
+        <ItemsControl 
+            ItemsSource="{Binding Results}"
+            VerticalAlignment = "Top"
+            Background = "Transparent">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Label
+                        Background="{Binding  HasValue,
+                            Converter={StaticResource BoolToColorConverter},
+                            ConverterParameter=SanetBlueColor}"
+                        Foreground="White"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Content="{Binding Value}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+        <Label
+            Margin="0,2,0,0"
+            Foreground="White"
+            FontSize="14"
+            HorizontalAlignment="Center"
+            Content="{Binding Total}" />
+    </StackPanel>
+</UserControl>

@@ -1,4 +1,4 @@
-﻿name: Publish iOS App
+name: Publish iOS App
 
 on:
   push:
@@ -12,15 +12,15 @@ jobs:
 
     steps:
       - name: Inject extra env vars
-        uses: FranzDiebold/github-env-vars-action@v2
+        uses: FranzDiebold/github-env-vars-action@v2.4.0
         
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
 
       - name: Set up .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '9.x'
+          dotnet-version: '9.0.x'
 
       - name: Setup Keychain
         env:
@@ -58,7 +58,7 @@ jobs:
       
       - name: Build and publish
         run: |
-          cd MagicalYatzyAUI/MagicalYatzyAUI.iOS
+          cd src/Avalonia/MagicalYatzy.Avalonia.iOS
           dotnet workload restore
           dotnet publish -c Release -r ios-arm64 --self-contained -o bin/Release/iOS/publish
           cd bin/Release/iOS/publish
@@ -69,4 +69,4 @@ jobs:
           APPCENTER_ACCESS_TOKEN: ${{ secrets.APP_CENTER_TOKEN }}
         run: |
           npm install -g appcenter-cli
-          appcenter distribute groups publish -f MagicalYatzyAUI/MagicalYatzyAUI.iOS/bin/Release/iOS/publish/MagicalYatzyAUI.iOS.ipa -g Alpha --app anton.makarevich/Magical-Yatzy-iOS --build-version 0.1 --build-number 0.1
+          appcenter distribute groups publish -f src/Avalonia/MagicalYatzy.Avalonia.iOS/bin/Release/iOS/publish/MagicalYatzy.Avalonia.iOS.ipa -g Alpha --app anton.makarevich/Magical-Yatzy-iOS --build-version 0.1 --build-number 0.1

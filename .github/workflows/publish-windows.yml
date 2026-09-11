@@ -1,4 +1,4 @@
-﻿name: Publish Windows App
+name: Publish Windows App
 
 on:
   push:
@@ -12,25 +12,25 @@ jobs:
 
     steps:
       - name: Inject extra env vars
-        uses: FranzDiebold/github-env-vars-action@v2
+        uses: FranzDiebold/github-env-vars-action@v2.4.0
         
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
 
       - name: Set up .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '9.x'
+          dotnet-version: '9.0.x'
 
       - name: Build and publish
         run: |
-          dotnet publish MagicalYatzyAUI/MagicalYatzyAUI.Desktop/MagicalYatzyAUI.Desktop.csproj -c Release  -r win-x64 -o MagicalYatzyAUI\MagicalYatzyAUI.Desktop\bin\Release\publish
+          dotnet publish src/Avalonia/MagicalYatzy.Avalonia.Desktop/MagicalYatzy.Avalonia.Desktop.csproj -c Release  -r win-x64 -o src/Avalonia\MagicalYatzy.Avalonia.Desktop\bin\Release\publish
           
       - name: Create installer
         run: |
           dotnet tool install wix --global
           dotnet tool install Sanet.Tools.Wix.ComponentsUpdater --global
-          cd MagicalYatzyAUI\MagicalYatzyAUI.Desktop\.windows\wix
+          cd src/Avalonia\MagicalYatzy.Avalonia.Desktop\.windows\wix
           sanet-wix-tools MagicalYatzyComponents ..\..\bin\Release\publish
           wix build .\Package.wxs .\MagicalYatzyComponents.wxs .\Folders.wxs .\Package.en-us.wxl -o bin/MagicalYatzySetup
           cd bin
@@ -41,4 +41,4 @@ jobs:
           APPCENTER_ACCESS_TOKEN: ${{ secrets.APP_CENTER_TOKEN }}
         run: |
           npm install -g appcenter-cli
-          appcenter distribute groups publish -f MagicalYatzyAUI\MagicalYatzyAUI.Desktop\.windows\wix\bin\MagicalYatzySetup.msi -g Alpha --app anton.makarevich/Magical-Yatzy-Win --build-version 0.1 --build-number ${{ github.run_number }}
+          appcenter distribute groups publish -f src/Avalonia\MagicalYatzy.Avalonia.Desktop\.windows\wix\bin\MagicalYatzySetup.msi -g Alpha --app anton.makarevich/Magical-Yatzy-Win --build-version 0.1 --build-number ${{ github.run_number }}
