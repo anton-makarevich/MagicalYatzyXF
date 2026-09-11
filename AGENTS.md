@@ -40,6 +40,16 @@ Key conventions:
 - Adding a screen? Use the `add-view-viewmodel` skill. Sanet.MVVM framework questions? Use the `sanet-mvvm` skill.
 - Deep dive: `docs/architecture.md`.
 
+## Related Repositories
+
+Source code for in-house dependencies and reference implementations. All repos are checked out under a common parent folder locally, so they are readable at `../<repo>` — treat them as **read-only references** (never modify another repo from this workspace).
+
+| Repo | Local path | What it's for |
+|------|------------|---------------|
+| [Sanet.MVVM](https://github.com/anton-makarevich/Sanet.MVVM) | `../Sanet.MVVM` | Source of the `Sanet.MVVM.*` NuGet packages (base ViewModels/views, DI, navigation). Consult when framework behavior is unclear; the `sanet-mvvm` skill covers day-to-day usage. |
+| [MakaMek](https://github.com/anton-makarevich/MakaMek) | `../MakaMek` | Modern Avalonia app built with the same principles — the reference example for patterns used in this repo. |
+| [MagicalYatzyLegacy](https://github.com/anton-makarevich/MagicalYatzyLegacy) | `../MagicalYatzyLegacy` | All older MagicalYatzy versions (WP7, UWP, and older). Consult when porting or replicating legacy functionality. |
+
 ## Repository Hazards
 
 - `src/XF` and `src/Web` are **legacy archives** — not in any solution, not built, not covered by CI. Reference only; do not modify. Same for `tests/Web`.
