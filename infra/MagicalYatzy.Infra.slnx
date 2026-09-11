@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="MagicalYatzy.Infra.AzureLZ/MagicalYatzy.Infra.AzureLZ.csproj" />
+  <Project Path="MagicalYatzy.Infra.AzureResources/MagicalYatzy.Infra.AzureResources.csproj" />
+</Solution>

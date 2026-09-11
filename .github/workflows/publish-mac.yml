@@ -1,4 +1,4 @@
-﻿name: Publish Mac App
+name: Publish Mac App
 
 on:
   push:
@@ -13,15 +13,15 @@ jobs:
       TEAM_ID: 'Z8GJWJ4Q4E'
     steps:
       - name: Inject extra env vars
-        uses: FranzDiebold/github-env-vars-action@v2
+        uses: FranzDiebold/github-env-vars-action@v2.4.0
         
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
 
       - name: Set up .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '9.x'
+          dotnet-version: '9.0.x'
 
       - name: Setup Keychain
         env:
@@ -32,16 +32,16 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           NOTARY_TOOL_PASSWORD: ${{ secrets.NOTARY_TOOL_PASSWORD }}
         run:
-          sh MagicalYatzyAUI/MagicalYatzyAUI.Desktop/.macos/prepare_ci_cert.sh 
+          sh src/Avalonia/MagicalYatzy.Avalonia.Desktop/.macos/prepare_ci_cert.sh 
 
       - name: Build and publish
         run: |
-          cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop
+          cd src/Avalonia/MagicalYatzy.Avalonia.Desktop
           sh .macos/make-app.sh 
       
       - name: Sign
         run: |
-          cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop
+          cd src/Avalonia/MagicalYatzy.Avalonia.Desktop
           sh .macos/sign-app.sh 
           
       - name: Package
@@ -50,7 +50,7 @@ jobs:
           PACKAGE_ROOT: 'bin/app'
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
         run: |
-          cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop
+          cd src/Avalonia/MagicalYatzy.Avalonia.Desktop
           cp $INSTALLER_PLIST $PACKAGE_ROOT/Installer.plist
           cd $PACKAGE_ROOT
           pkgbuild --root . \
@@ -62,7 +62,7 @@ jobs:
           
       - name: Notarise app
         run: |
-          cd MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/app
+          cd src/Avalonia/MagicalYatzy.Avalonia.Desktop/bin/app
           xcrun notarytool submit "MagicalYatzy.pkg" --wait --keychain-profile "AC_PASSWORD"
           xcrun stapler staple "MagicalYatzy.pkg"
 
@@ -71,4 +71,4 @@ jobs:
           APPCENTER_ACCESS_TOKEN: ${{ secrets.APP_CENTER_TOKEN }}
         run: |
           npm install -g appcenter-cli
-          appcenter distribute groups publish -f MagicalYatzyAUI/MagicalYatzyAUI.Desktop/bin/app/MagicalYatzy.pkg -g Alpha --app anton.makarevich/Magical-Yatzy-Mac --build-version 0.1 --build-number ${{ github.run_number }}
+          appcenter distribute groups publish -f src/Avalonia/MagicalYatzy.Avalonia.Desktop/bin/app/MagicalYatzy.pkg -g Alpha --app anton.makarevich/Magical-Yatzy-Mac --build-version 0.1 --build-number ${{ github.run_number }}

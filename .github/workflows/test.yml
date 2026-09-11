@@ -12,26 +12,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 9.x
-
-      - name: Restore dependencies
-        run: |
-          dotnet restore MagicalYatzy/MagicalYatzy.csproj
-          dotnet restore MagicalYatzyDto/MagicalYatzyDto.csproj
+          dotnet-version: 9.0.x
 
       - name: Run DTO tests
-        run: dotnet test Tests/MagicalYatzyDtoTests/MagicalYatzyDtoTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute=GeneratedCodeAttribute /p:Include=[MagicalYatzy]*
+        run: dotnet test tests/MagicalYatzy.Dto.Tests/MagicalYatzy.Dto.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute=GeneratedCodeAttribute /p:Include=[MagicalYatzy]*
 
       - name: Upload DTO tests results
-        run: bash <(curl -s https://codecov.io/bash) -f "Tests/MagicalYatzyDtoTests/coverage.opencover.xml" -t ${{ secrets.CODECOV_TOKEN }}
+        run: bash <(curl -s https://codecov.io/bash) -f "tests/MagicalYatzy.Dto.Tests/coverage.opencover.xml" -t ${{ secrets.CODECOV_TOKEN }}
 
       - name: Run Core tests
-        run: dotnet test Tests/MagicalYatzyTests/MagicalYatzyTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute=GeneratedCodeAttribute /p:Include=[MagicalYatzy]*
+        run: dotnet test tests/MagicalYatzy.Core.Tests/MagicalYatzy.Core.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute=GeneratedCodeAttribute /p:Include=[MagicalYatzy]*
 
       - name: Upload Core tests results
-        run: bash <(curl -s https://codecov.io/bash) -f "Tests/MagicalYatzyTests/coverage.opencover.xml" -t ${{ secrets.CODECOV_TOKEN }}
+        run: bash <(curl -s https://codecov.io/bash) -f "tests/MagicalYatzy.Core.Tests/coverage.opencover.xml" -t ${{ secrets.CODECOV_TOKEN }}
