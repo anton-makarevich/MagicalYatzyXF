@@ -262,3 +262,13 @@ __pycache__/
 *.pyc
 *.bak
 *.old
+
+# AI Tools
+.qwen
+.ai
+.serena/memories
+opencode.json
+.agents/skills
+.claude/skills
+agent/skills
+skills-lock.json
