@@ -1,0 +1,21 @@
+[tools]
+"uv" = "0.12.0"
+
+[tasks.install-skills]
+description = "Installs all skills (local + shared) to .agents/skills via the skills.sh CLI"
+run = [
+  "npx -y skills add ./skills --dir .agents/skills -y",
+  "npx -y skills add https://github.com/anton-makarevich/MakaMek/tree/main/skills --skill sanet-mvvm --skill generate-unit-tests --skill navigate-docs --dir .agents/skills -y",
+  "npx -y skills add https://github.com/vercel-labs/skills --skill find-skills --dir .agents/skills -y",
+]
+
+[tasks.install-serena]
+description = "Installs the Serena MCP server via uv tool install"
+run = """
+uv tool install -p 3.13 serena-agent
+serena --version
+"""
+
+[tasks.update-serena]
+description = "Updates the Serena MCP server to the latest version"
+run = "uv tool upgrade -p 3.13 serena-agent"
