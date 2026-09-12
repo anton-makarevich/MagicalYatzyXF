@@ -55,7 +55,7 @@ Source code for in-house dependencies and reference implementations. All repos a
 - `src/XF` and `src/Web` are **legacy archives** — not in any solution, not built, not covered by CI. Reference only; do not modify. Same for `tests/Web`.
 - `libs/SanetLegacyEncryption` is a **binary-only** dependency referenced via HintPath — no source in this repo.
 - `infra/` is a separate Pulumi C# solution (net6.0) with its own README — not part of the app solution.
-- CI (`.github/workflows/`) triggers on `main` only; publish workflows also run on manual dispatch.
+- CI (`.github/workflows/`) triggers on `main` pushes, `v*` tag pushes, and manual dispatch; tag pushes also create a GitHub Release from the tag.
 
 ## Documentation
 

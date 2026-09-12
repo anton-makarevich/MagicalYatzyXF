@@ -8,6 +8,9 @@ on:
       - 'v*'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: macos-latest
@@ -21,11 +24,15 @@ jobs:
         with:
           global-json-file: global.json
 
-      - name: Extract version from Directory.Build.props
+      - name: Extract and validate version from Directory.Build.props
         id: extract_version
         shell: bash
         run: |
-          VERSION=$(grep -oP '(?<=<VersionPrefix>).*(?=</VersionPrefix>)' Directory.Build.props)
+          VERSION=$(sed -n 's:.*<VersionPrefix>\([^<]*\)</VersionPrefix>.*:\1:p' Directory.Build.props)
+          if [ "${{ github.ref_type }}" = "tag" ] && [ "${{ github.ref_name }}" != "v$VERSION" ]; then
+            echo "::error::Git tag ${{ github.ref_name }} does not match VersionPrefix v$VERSION"
+            exit 1
+          fi
           echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
           echo "Version extracted: $VERSION"
 

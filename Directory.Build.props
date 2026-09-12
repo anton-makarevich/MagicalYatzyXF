@@ -8,6 +8,15 @@
         <Company>Anton Makarevich</Company>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
+        <VersionPrefixMajor>$([System.Version]::Parse('$(VersionPrefix)').Major)</VersionPrefixMajor>
+        <VersionPrefixMinor>$([System.Version]::Parse('$(VersionPrefix)').Minor)</VersionPrefixMinor>
+        <VersionPrefixBuild>$([System.Version]::Parse('$(VersionPrefix)').Build)</VersionPrefixBuild>
         <StoreVersionCode>$([System.Convert]::ToInt32($([System.String]::Format('{0:0000}{1:00}{2:00}', $([System.Version]::Parse('$(VersionPrefix)').Major), $([System.Version]::Parse('$(VersionPrefix)').Minor), $([System.Version]::Parse('$(VersionPrefix)').Build)))))</StoreVersionCode>
     </PropertyGroup>
+
+    <Target Name="ValidateStoreVersionCodeWidths" BeforeTargets="PrepareForBuild"
+            Condition="$(VersionPrefixMajor) &gt; 9999 or $(VersionPrefixMinor) &gt; 99 or $(VersionPrefixBuild) &gt; 99">
+        <Error Code="MY0001"
+               Text="VersionPrefix '$(VersionPrefix)' has a component exceeding the positional width of StoreVersionCode (Major at most 9999, Minor at most 99, Build at most 99). Adjust the width layout in Directory.Build.props so StoreVersionCode stays monotonic and collision-free." />
+    </Target>
 </Project>
