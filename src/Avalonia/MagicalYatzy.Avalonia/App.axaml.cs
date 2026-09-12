@@ -58,6 +58,24 @@ public partial class App : Application
                 };
                 break;
             }
+            case IActivityApplicationLifetime activityLifetime:
+            {
+                if (activityLifetime is not ISingleViewApplicationLifetime androidSingleViewLifeTime)
+                {
+                    throw new Exception("Android SingleViewApplicationLifetime is not available");
+                }
+
+                var androidViewWrapper = new ContentControl();
+                navigationService = new SingleViewNavigationService(androidSingleViewLifeTime, androidViewWrapper, serviceProvider);
+                RegisterViews(navigationService);
+                viewModel = navigationService.GetViewModel<MainMenuViewModel>();
+                androidViewWrapper.Content = new MainMenuView
+                {
+                    ViewModel = viewModel
+                };
+                activityLifetime.MainViewFactory = () => androidViewWrapper;
+                break;
+            }
             case ISingleViewApplicationLifetime singleViewPlatform:
                 var mainViewWrapper = new ContentControl();
                 navigationService = new SingleViewNavigationService(singleViewPlatform, mainViewWrapper, serviceProvider);
