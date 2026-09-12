@@ -4,11 +4,11 @@ Guidance for AI coding agents working in this repository.
 
 ## Overview
 
-MagicalYatzy is a cross-platform Yatzy dice game: .NET 9, AvaloniaUI (Desktop, Android, iOS, Browser/WASM), MVVM via the Sanet.MVVM NuGet framework. It is a remake of an older WP7/UWP app. Default branch: `main`.
+MagicalYatzy is a cross-platform Yatzy dice game: .NET 10, AvaloniaUI (Desktop, Android, iOS, Browser/WASM), MVVM via the Sanet.MVVM NuGet framework. It is a remake of an older WP7/UWP app. Default branch: `main`.
 
 ## Build & Test Commands
 
-- .NET SDK is pinned in `global.json` (9.0.x); solutions use the `.slnx` format (recent SDK/IDE required).
+- .NET SDK is pinned in `global.json` (10.0.x); solutions use the `.slnx` format (recent SDK/IDE required).
 - Build the app solution: `dotnet build src/Avalonia/MagicalYatzy.Avalonia.slnx`
 - Mobile/WASM heads require workloads (once per machine), e.g.: `dotnet workload restore src/Avalonia/MagicalYatzy.Avalonia.Android/MagicalYatzy.Avalonia.Android.csproj`
 - Run all tests: `dotnet test tests/MagicalYatzy.Core.Tests/MagicalYatzy.Core.Tests.csproj`

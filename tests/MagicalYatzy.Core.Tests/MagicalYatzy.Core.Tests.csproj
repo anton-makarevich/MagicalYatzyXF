@@ -1,11 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
-
-    <LangVersion>13</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -45,3 +43,4 @@
     <None Remove="ModelTests\Game\PlayerTests.config" />
   </ItemGroup>
 </Project>
+

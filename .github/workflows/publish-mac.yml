@@ -21,7 +21,7 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '10.0.x'
 
       - name: Setup Keychain
         env:
@@ -72,3 +72,4 @@ jobs:
         run: |
           npm install -g appcenter-cli
           appcenter distribute groups publish -f src/Avalonia/MagicalYatzy.Avalonia.Desktop/bin/app/MagicalYatzy.pkg -g Alpha --app anton.makarevich/Magical-Yatzy-Mac --build-version 0.1 --build-number ${{ github.run_number }}
+
