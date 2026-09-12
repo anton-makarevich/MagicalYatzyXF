@@ -39,27 +39,3 @@ jobs:
       - name: Build and publish
         run: |
           dotnet publish src/Avalonia/MagicalYatzy.Avalonia.Desktop/MagicalYatzy.Avalonia.Desktop.csproj -c Release -r win-x64 -o src/Avalonia/MagicalYatzy.Avalonia.Desktop/bin/Release/publish
-
-      - name: Create installer
-        run: |
-          dotnet tool install wix --global
-          dotnet tool install Sanet.Tools.Wix.ComponentsUpdater --global
-          cd src/Avalonia/MagicalYatzy.Avalonia.Desktop/.windows/wix
-          sanet-wix-tools MagicalYatzyComponents ..\..\bin\Release\publish
-          wix build .\Package.wxs .\MagicalYatzyComponents.wxs .\Folders.wxs .\Package.en-us.wxl -o bin/MagicalYatzySetup
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: src/Avalonia/MagicalYatzy.Avalonia.Desktop/.windows/wix/bin/MagicalYatzySetup.msi
-          draft: false
-          prerelease: false
-          generate_release_notes: true
-
-      - name: Upload Installer as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: MagicalYatzy-Windows-${{ env.APP_VERSION }}
-          path: src/Avalonia/MagicalYatzy.Avalonia.Desktop/.windows/wix/bin/MagicalYatzySetup.msi
-          retention-days: 90
