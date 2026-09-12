@@ -8,9 +8,7 @@
         <ApplicationVersion>1</ApplicationVersion>
         <ApplicationDisplayVersion>0.1</ApplicationDisplayVersion>
         <AndroidPackageFormat>apk</AndroidPackageFormat>
-        <AndroidEnableProfiledAot>False</AndroidEnableProfiledAot>
         <RootNamespace>Sanet.MagicalYatzy.Avalonia.Android</RootNamespace>
-        <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -28,3 +26,4 @@
         <ProjectReference Include="..\MagicalYatzy.Avalonia\MagicalYatzy.Avalonia.csproj" />
     </ItemGroup>
 </Project>
+

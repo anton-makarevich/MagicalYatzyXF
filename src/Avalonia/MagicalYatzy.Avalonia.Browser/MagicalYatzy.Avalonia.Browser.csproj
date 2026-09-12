@@ -9,7 +9,6 @@
         <PublishTrimmed>false</PublishTrimmed>
         <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
         <AssemblyName>MagicalYatzy.Avalonia.Browser</AssemblyName>
-        <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -31,3 +30,4 @@
         <ProjectReference Include="..\MagicalYatzy.Avalonia\MagicalYatzy.Avalonia.csproj" />
     </ItemGroup>
 </Project>
+

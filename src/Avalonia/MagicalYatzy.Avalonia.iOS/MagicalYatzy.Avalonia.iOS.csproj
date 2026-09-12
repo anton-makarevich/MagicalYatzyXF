@@ -7,7 +7,6 @@
         <Nullable>enable</Nullable>
         <RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>
         <RootNamespace>Sanet.MagicalYatzy.Avalonia.iOS</RootNamespace>
-        <LangVersion>latest</LangVersion>
         <!-- These properties need to be set in order to run on a real iDevice -->
         <!--<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>-->
         <!--<CodesignKey></CodesignKey>-->
@@ -32,3 +31,4 @@
         <ProjectReference Include="..\MagicalYatzy.Avalonia\MagicalYatzy.Avalonia.csproj" />
     </ItemGroup>
 </Project>
+
