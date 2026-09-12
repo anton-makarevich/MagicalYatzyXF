@@ -7,7 +7,8 @@ run = [
   "npx -y skills add ./skills --dir .agents/skills -y",
   "npx -y skills add https://github.com/anton-makarevich/MakaMek/tree/main/skills --skill sanet-mvvm --skill generate-unit-tests --skill navigate-docs --dir .agents/skills -y",
   "npx -y skills add https://github.com/vercel-labs/skills --skill find-skills --dir .agents/skills -y",
-  "npx -y skills add https://github.com/mattpocock/skills --skill tdd --skill triage --skill writing-great-skills --dir .agents/skills -y",
+  "npx -y skills add https://github.com/mattpocock/skills --skill tdd --skill triage --dir .agents/skills -y",
+  "npx -y skills add https://github.com/anthropics/skills --skill skill-creator -y"
 ]
 
 [tasks.install-serena]

@@ -39,7 +39,7 @@ jobs:
       - name: Install Serena
         run: mise run install-serena
 
-      - name: Configure Serena for OpenCode
+      - name: Configure OpenCode MCP servers
         run: |
           cat > opencode.json << 'EOF'
           {
@@ -47,6 +47,11 @@ jobs:
               "serena": {
                 "type": "local",
                 "command": ["serena", "start-mcp-server", "--context=ide"],
+                "enabled": true
+              },
+              "avalonia-docs": {
+                "type": "remote",
+                "url": "https://docs-mcp.avaloniaui.net/mcp",
                 "enabled": true
               }
             }
