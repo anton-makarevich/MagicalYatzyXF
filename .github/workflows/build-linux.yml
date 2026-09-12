@@ -1,0 +1,57 @@
+name: Build Linux App
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Extract version from Directory.Build.props
+        id: extract_version
+        shell: bash
+        run: |
+          VERSION=$(grep -oP '(?<=<VersionPrefix>).*(?=</VersionPrefix>)' Directory.Build.props)
+          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Version extracted: $VERSION"
+
+      - name: Build and publish
+        run: |
+          dotnet publish src/Avalonia/MagicalYatzy.Avalonia.Desktop/MagicalYatzy.Avalonia.Desktop.csproj -c Release -r linux-x64 -o src/Avalonia/MagicalYatzy.Avalonia.Desktop/bin/Release/ubuntu/publish --self-contained
+
+      - name: Archive
+        run: |
+          cd src/Avalonia/MagicalYatzy.Avalonia.Desktop/bin/Release/ubuntu/publish
+          rm -f *.pdb
+          chmod 777 MagicalYatzy.Avalonia.Desktop
+          zip -r MagicalYatzy.zip .
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: src/Avalonia/MagicalYatzy.Avalonia.Desktop/bin/Release/ubuntu/publish/MagicalYatzy.zip
+          draft: false
+          prerelease: false
+          generate_release_notes: false
+
+      - name: Upload Archive as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MagicalYatzy-Linux-${{ env.APP_VERSION }}
+          path: src/Avalonia/MagicalYatzy.Avalonia.Desktop/bin/Release/ubuntu/publish/MagicalYatzy.zip
+          retention-days: 90

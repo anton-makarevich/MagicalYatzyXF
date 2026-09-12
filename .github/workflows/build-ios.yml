@@ -1,9 +1,11 @@
-name: Publish iOS App
+name: Build iOS App
 
 on:
   push:
     branches:
       - main
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 jobs:
@@ -11,16 +13,21 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - name: Inject extra env vars
-        uses: FranzDiebold/github-env-vars-action@v2.4.0
-        
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v5
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '10.0.x'
+          global-json-file: global.json
+
+      - name: Extract version from Directory.Build.props
+        id: extract_version
+        shell: bash
+        run: |
+          VERSION=$(grep -oP '(?<=<VersionPrefix>).*(?=</VersionPrefix>)' Directory.Build.props)
+          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Version extracted: $VERSION"
 
       - name: Setup Keychain
         env:
@@ -30,44 +37,43 @@ jobs:
           CERT_PASSWORD: ${{ secrets.CERT_PASSWORD }}
           APPLE_ID: ${{ secrets.APPLE_ID }}
         run: |
-          # Create a new keychain
           security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
-          # Set it as the default keychain
           security default-keychain -s build.keychain
-          # Modify keychain settings to keep it unlocked longer
           security set-keychain-settings -lut 21600 build.keychain
-          # Unlock the keychain so it can be used without an authorisation prompt
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
 
-          # Decode certificate to file
           echo "$APPLE_DISTRIBUTION_CERT" | base64 --decode > certificate.p12
-          
-          # Decode provisioning profile to file
           echo "$MY_PP_ADHOC" | base64 --decode > MagicalYatzy_AdHoc.mobileprovision
 
-          # Import into keychain
           security import certificate.p12 -k build.keychain -P "$CERT_PASSWORD" -A
-          
-          # Allow codesign to access keychain
           security set-key-partition-list -S apple-tool:,apple:,codesign:,pkgbuild:,productsign:, -s -k "$KEYCHAIN_PASSWORD" build.keychain
           security list-keychain -d user -s build.keychain
-          
-          # apply provisioning profile
+
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp MagicalYatzy_AdHoc.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles
-      
+
       - name: Build and publish
         run: |
           cd src/Avalonia/MagicalYatzy.Avalonia.iOS
           dotnet workload restore
           dotnet publish -c Release -r ios-arm64 --self-contained -o bin/Release/iOS/publish
-          cd bin/Release/iOS/publish
-          ls
 
-      - name: Upload to App Center
-        env:
-          APPCENTER_ACCESS_TOKEN: ${{ secrets.APP_CENTER_TOKEN }}
-        run: |
-          npm install -g appcenter-cli
-          appcenter distribute groups publish -f src/Avalonia/MagicalYatzy.Avalonia.iOS/bin/Release/iOS/publish/MagicalYatzy.Avalonia.iOS.ipa -g Alpha --app anton.makarevich/Magical-Yatzy-iOS --build-version 0.1 --build-number 0.1
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: src/Avalonia/MagicalYatzy.Avalonia.iOS/bin/Release/iOS/publish/MagicalYatzy.Avalonia.iOS.ipa
+          draft: false
+          prerelease: false
+          generate_release_notes: false
 
+      - name: Upload IPA as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MagicalYatzy-iOS-${{ env.APP_VERSION }}
+          path: src/Avalonia/MagicalYatzy.Avalonia.iOS/bin/Release/iOS/publish/MagicalYatzy.Avalonia.iOS.ipa
+          retention-days: 90
+
+      - name: Clean up keychain
+        if: ${{ always() }}
+        run: security delete-keychain build.keychain

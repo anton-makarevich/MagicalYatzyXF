@@ -27,37 +27,22 @@ Logic, ViewModels, DTOs — .NET 9
 ## Clients (AvaloniaUI)
 
 ### WASM
-[![Build SPA](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-wasm.yml/badge.svg)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-wasm.yml)
-
-[Try it here in the browser](https://magicalyatzystoragedev.z6.web.core.windows.net/)
+[![Build WASM](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/build-wasm.yml/badge.svg)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/build-wasm.yml)
 
 ### Android
-[![Publish Android App](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-android.yml/badge.svg?branch=develop)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-android.yml)
-
-[Download APK](https://install.appcenter.ms/users/anton.makarevich/apps/magical-yatzy-android/distribution_groups/alpha)
+[![Build Android](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/build-android.yml/badge.svg)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/build-android.yml)
 
 ### iOS
+[![Build iOS](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/build-ios.yml/badge.svg)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/build-ios.yml)
 
-[![Publish iOS App](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-ios.yml/badge.svg?branch=develop)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-ios.yml)
+### Windows
+[![Build Windows](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/build-windows.yml/badge.svg)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/build-windows.yml)
 
-[Download IPA](https://install.appcenter.ms/users/anton.makarevich/apps/magical-yatzy-ios/distribution_groups/alpha)
-(Contact me if you want to be added to the profile)
-
-### Windows     
-[![Publish Windows App](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-windows.yml/badge.svg)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-windows.yml)
-
-[Download installer](https://install.appcenter.ms/users/anton.makarevich/apps/magical-yatzy-win/distribution_groups/alpha)
-
-### Mac   
-[![Publish Mac App](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-mac.yml/badge.svg?branch=develop)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-mac.yml)
-
-[Download installer](https://install.appcenter.ms/users/anton.makarevich/apps/magical-yatzy-mac/distribution_groups/alpha)
+### Mac
+[![Build Mac](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/build-mac.yml/badge.svg)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/build-mac.yml)
 
 ### Linux
-
-[![Publish Linux App](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-linux.yml/badge.svg)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/publish-linux.yml)
-
-[Download archive](https://install.appcenter.ms/users/anton.makarevich/apps/magical-yatzy-linux/distribution_groups/alpha)
+[![Build Linux](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/build-linux.yml/badge.svg)](https://github.com/anton-makarevich/MagicalYatzyXF/actions/workflows/build-linux.yml)
 
 ## Archive
 

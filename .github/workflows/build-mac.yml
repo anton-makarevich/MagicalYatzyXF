@@ -1,9 +1,11 @@
-name: Publish Mac App
+name: Build Mac App
 
 on:
   push:
     branches:
       - main
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 jobs:
@@ -12,16 +14,21 @@ jobs:
     env:
       TEAM_ID: 'Z8GJWJ4Q4E'
     steps:
-      - name: Inject extra env vars
-        uses: FranzDiebold/github-env-vars-action@v2.4.0
-        
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v5
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '10.0.x'
+          global-json-file: global.json
+
+      - name: Extract version from Directory.Build.props
+        id: extract_version
+        shell: bash
+        run: |
+          VERSION=$(grep -oP '(?<=<VersionPrefix>).*(?=</VersionPrefix>)' Directory.Build.props)
+          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Version extracted: $VERSION"
 
       - name: Setup Keychain
         env:
@@ -32,18 +39,18 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           NOTARY_TOOL_PASSWORD: ${{ secrets.NOTARY_TOOL_PASSWORD }}
         run:
-          sh src/Avalonia/MagicalYatzy.Avalonia.Desktop/.macos/prepare_ci_cert.sh 
+          sh src/Avalonia/MagicalYatzy.Avalonia.Desktop/.macos/prepare_ci_cert.sh
 
       - name: Build and publish
         run: |
           cd src/Avalonia/MagicalYatzy.Avalonia.Desktop
-          sh .macos/make-app.sh 
-      
+          sh .macos/make-app.sh
+
       - name: Sign
         run: |
           cd src/Avalonia/MagicalYatzy.Avalonia.Desktop
-          sh .macos/sign-app.sh 
-          
+          sh .macos/sign-app.sh
+
       - name: Package
         env:
           INSTALLER_PLIST: '.macos/Installer.plist'
@@ -58,18 +65,30 @@ jobs:
                    --sign "Developer ID Installer: Anton Makarevich (Z8GJWJ4Q4E)" \
                    --filter .DS_Store \
                    --filter *.pkg \
-                   --install-location /Applications MagicalYatzy.pkg 
-          
+                   --install-location /Applications MagicalYatzy.pkg
+
       - name: Notarise app
         run: |
           cd src/Avalonia/MagicalYatzy.Avalonia.Desktop/bin/app
           xcrun notarytool submit "MagicalYatzy.pkg" --wait --keychain-profile "AC_PASSWORD"
           xcrun stapler staple "MagicalYatzy.pkg"
 
-      - name: Upload to App Center
-        env:
-          APPCENTER_ACCESS_TOKEN: ${{ secrets.APP_CENTER_TOKEN }}
-        run: |
-          npm install -g appcenter-cli
-          appcenter distribute groups publish -f src/Avalonia/MagicalYatzy.Avalonia.Desktop/bin/app/MagicalYatzy.pkg -g Alpha --app anton.makarevich/Magical-Yatzy-Mac --build-version 0.1 --build-number ${{ github.run_number }}
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: src/Avalonia/MagicalYatzy.Avalonia.Desktop/bin/app/MagicalYatzy.pkg
+          draft: false
+          prerelease: false
+          generate_release_notes: false
 
+      - name: Upload Installer as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MagicalYatzy-Mac-${{ env.APP_VERSION }}
+          path: src/Avalonia/MagicalYatzy.Avalonia.Desktop/bin/app/MagicalYatzy.pkg
+          retention-days: 90
+
+      - name: Clean up keychain
+        if: ${{ always() }}
+        run: security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
