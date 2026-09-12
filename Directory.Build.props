@@ -6,6 +6,7 @@
         <VersionPrefix>2.5.0</VersionPrefix>
         <Authors>Anton Makarevich</Authors>
         <Company>Anton Makarevich</Company>
+        <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <VersionPrefixMajor>$([System.Version]::Parse('$(VersionPrefix)').Major)</VersionPrefixMajor>

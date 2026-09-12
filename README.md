@@ -6,6 +6,10 @@ Now, I use it as a playground for anything I would like to try with AvaloniaUI.
 
 [![CodeFactor](https://www.codefactor.io/repository/github/anton-makarevich/magicalyatzyxf/badge)](https://www.codefactor.io/repository/github/anton-makarevich/magicalyatzyxf)
 
+## License
+
+This project is licensed under the GNU General Public License v3.0 — see [LICENSE](LICENSE).
+
 ## Repository layout
 
 | Path | Contents |
