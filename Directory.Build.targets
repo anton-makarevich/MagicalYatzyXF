@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <Target Name="StampBundleVersions" BeforeTargets="Build" Condition="'$(VersionPrefix)' != ''">
+    <ItemGroup>
+      <BundlePlist Include="$(MSBuildProjectDirectory)\Info.plist" />
+      <BundlePlist Include="$(MSBuildProjectDirectory)\.macos\Info.plist" />
+    </ItemGroup>
+
+    <XmlPeek Condition="Exists('%(BundlePlist.Identity)')"
+             XmlInputPath="%(BundlePlist.Identity)"
+             Query="/plist/dict/key[text()='CFBundleShortVersionString']/following-sibling::string[1]">
+      <Output TaskParameter="Result" PropertyName="CurrentShortVersion" />
+    </XmlPeek>
+    <XmlPoke Condition="Exists('%(BundlePlist.Identity)') and '$(CurrentShortVersion)' != '$(VersionPrefix)'"
+             XmlInputPath="%(BundlePlist.Identity)"
+             Query="/plist/dict/key[text()='CFBundleShortVersionString']/following-sibling::string[1]"
+             Value="$(VersionPrefix)" />
+
+    <XmlPeek Condition="Exists('%(BundlePlist.Identity)')"
+             XmlInputPath="%(BundlePlist.Identity)"
+             Query="/plist/dict/key[text()='CFBundleVersion']/following-sibling::string[1]">
+      <Output TaskParameter="Result" PropertyName="CurrentBundleVersion" />
+    </XmlPeek>
+    <XmlPoke Condition="Exists('%(BundlePlist.Identity)') and '$(CurrentBundleVersion)' != '$(StoreVersionCode)'"
+             XmlInputPath="%(BundlePlist.Identity)"
+             Query="/plist/dict/key[text()='CFBundleVersion']/following-sibling::string[1]"
+             Value="$(StoreVersionCode)" />
+  </Target>
+
+</Project>

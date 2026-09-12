@@ -5,8 +5,8 @@
         <SupportedOSPlatformVersion>24</SupportedOSPlatformVersion>
         <Nullable>enable</Nullable>
         <ApplicationId>nl.sanetby.magicalyatzy</ApplicationId>
-        <ApplicationVersion>1</ApplicationVersion>
-        <ApplicationDisplayVersion>0.1</ApplicationDisplayVersion>
+        <ApplicationVersion>$(StoreVersionCode)</ApplicationVersion>
+        <ApplicationDisplayVersion>$(VersionPrefix)</ApplicationDisplayVersion>
         <AndroidPackageFormat>apk</AndroidPackageFormat>
         <RootNamespace>Sanet.MagicalYatzy.Avalonia.Android</RootNamespace>
     </PropertyGroup>

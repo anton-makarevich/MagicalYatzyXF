@@ -9,7 +9,7 @@ MagicalYatzy is a cross-platform Yatzy dice game: .NET 10, AvaloniaUI (Desktop, 
 ## Build & Test Commands
 
 - .NET SDK is pinned in `global.json` (10.0.x); solutions use the `.slnx` format (recent SDK/IDE required).
-- Build the app solution: `dotnet build src/Avalonia/MagicalYatzy.Avalonia.slnx`
+- Build the app solution: `dotnet build MagicalYatzy.Avalonia.slnx`
 - Mobile/WASM heads require workloads (once per machine), e.g.: `dotnet workload restore src/Avalonia/MagicalYatzy.Avalonia.Android/MagicalYatzy.Avalonia.Android.csproj`
 - Run all tests: `dotnet test tests/MagicalYatzy.Core.Tests/MagicalYatzy.Core.Tests.csproj`
 - Run a subset: append `--filter "FullyQualifiedName~DiceTests"`
@@ -55,7 +55,7 @@ Source code for in-house dependencies and reference implementations. All repos a
 - `src/XF` and `src/Web` are **legacy archives** — not in any solution, not built, not covered by CI. Reference only; do not modify. Same for `tests/Web`.
 - `libs/SanetLegacyEncryption` is a **binary-only** dependency referenced via HintPath — no source in this repo.
 - `infra/` is a separate Pulumi C# solution (net6.0) with its own README — not part of the app solution.
-- CI (`.github/workflows/`) triggers on `main` only; publish workflows also run on manual dispatch.
+- CI (`.github/workflows/`) triggers on `main` pushes, `v*` tag pushes, and manual dispatch; tag pushes also create a GitHub Release from the tag.
 
 ## Documentation
 

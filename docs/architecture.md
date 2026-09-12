@@ -2,7 +2,7 @@
 
 ## Solutions
 
-- `src/Avalonia/MagicalYatzy.Avalonia.slnx` — the app: Core, Dto, shared Avalonia UI, 4 platform heads, Core tests.
+- `MagicalYatzy.Avalonia.slnx` — the app: Core, Dto, shared Avalonia UI, 4 platform heads, Core tests.
 - `infra/MagicalYatzy.Infra.slnx` — Azure infrastructure (Pulumi, net6.0), independent of the app.
 
 ## Layers

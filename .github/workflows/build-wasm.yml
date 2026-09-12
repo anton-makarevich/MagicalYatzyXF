@@ -1,0 +1,77 @@
+name: Build WASM App
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      configuration:
+        description: 'Build configuration (Release or Debug)'
+        required: true
+        default: 'Release'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build Job
+    env:
+      CONFIGURATION: ${{ github.event.inputs.configuration || 'Release' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Extract and validate version from Directory.Build.props
+        id: extract_version
+        shell: bash
+        run: |
+          VERSION=$(sed -n 's:.*<VersionPrefix>\([^<]*\)</VersionPrefix>.*:\1:p' Directory.Build.props)
+          if [ "${{ github.ref_type }}" = "tag" ] && [ "${{ github.ref_name }}" != "v$VERSION" ]; then
+            echo "::error::Git tag ${{ github.ref_name }} does not match VersionPrefix v$VERSION"
+            exit 1
+          fi
+          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Version extracted: $VERSION"
+
+      - name: Validate configuration
+        run: |
+          case "$CONFIGURATION" in
+            Release|Debug) echo "Configuration set to: $CONFIGURATION";;
+            *) echo "::error::Invalid configuration '$CONFIGURATION'; allowed values are Release and Debug."; exit 1;;
+          esac
+
+      - name: Build
+        run: |
+          cd src/Avalonia/MagicalYatzy.Avalonia.Browser
+          dotnet workload restore
+          dotnet workload repair
+          dotnet publish -c "$CONFIGURATION"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: src/Avalonia/MagicalYatzy.Avalonia.Browser/bin/${{ env.CONFIGURATION }}/net10.0-browser/publish/wwwroot/*
+          draft: false
+          prerelease: false
+          generate_release_notes: false
+
+      - name: Upload WASM as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MagicalYatzy-WASM-${{ env.APP_VERSION }}
+          path: src/Avalonia/MagicalYatzy.Avalonia.Browser/bin/${{ env.CONFIGURATION }}/net10.0-browser/publish/wwwroot
+          retention-days: 90
