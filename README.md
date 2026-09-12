@@ -12,7 +12,7 @@ Now, I use it as a playground for anything I would like to try with AvaloniaUI.
 |------|----------|
 | `src/MagicalYatzy.Core` | Game logic, ViewModels, services (.NET 9) |
 | `src/MagicalYatzy.Dto` | DTOs and API contracts |
-| `src/Avalonia` | AvaloniaUI clients (`MagicalYatzy.Avalonia.slnx`) |
+| `src/Avalonia` | AvaloniaUI clients |
 | `src/Web`, `src/XF` | legacy projects (see Archive) |
 | `tests/` | mirrors `src/`; Core and DTO tests are included in the Avalonia solution |
 | `infra/` | Pulumi landing zones for Azure (`MagicalYatzy.Infra.slnx`) |

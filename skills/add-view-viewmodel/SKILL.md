@@ -31,7 +31,7 @@ MagicalYatzy uses Sanet.MVVM viewmodel-first navigation. A new screen works only
 
 ## Verify
 
-- `dotnet build src/Avalonia/MagicalYatzy.Avalonia.slnx` compiles.
+- `dotnet build MagicalYatzy.Avalonia.slnx` compiles.
 - `dotnet run --project src/Avalonia/MagicalYatzy.Avalonia.Desktop` — navigate to the new screen, confirm it renders and binds.
 - Add ViewModel tests in `tests/MagicalYatzy.Core.Tests/ViewModels/` (use the `generate-unit-tests` skill).
 
