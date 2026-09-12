@@ -7,5 +7,7 @@
         <Authors>Anton Makarevich</Authors>
         <Company>Anton Makarevich</Company>
         <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+        <StoreVersionCode>$([System.Convert]::ToInt32($([System.String]::Format('{0:0000}{1:00}{2:00}', $([System.Version]::Parse('$(VersionPrefix)').Major), $([System.Version]::Parse('$(VersionPrefix)').Minor), $([System.Version]::Parse('$(VersionPrefix)').Build)))))</StoreVersionCode>
     </PropertyGroup>
 </Project>
