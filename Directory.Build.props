@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+    <PropertyGroup>
+        <Deterministic>true</Deterministic>
+        <ContinuousIntegrationBuild Condition="'$(ContinuousIntegrationBuild)' == '' and '$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+        <VersionPrefix>0.1.0</VersionPrefix>
+        <Authors>Anton Makarevich</Authors>
+        <Company>Anton Makarevich</Company>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+</Project>
