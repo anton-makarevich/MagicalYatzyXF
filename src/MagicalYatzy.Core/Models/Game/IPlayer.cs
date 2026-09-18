@@ -8,7 +8,7 @@ namespace Sanet.MagicalYatzy.Models.Game
     {
         bool AllNumericFilled { get; }
 
-        IReadOnlyList<IRollResult> Results { get; }
+        IReadOnlyList<IRollResult>? Results { get; }
 
         IReadOnlyList<Artifact> MagicalArtifactsForGame { get; }
         

@@ -129,7 +129,7 @@ namespace Sanet.MagicalYatzy.ViewModels
             if (!HasCurrentPlayer)
                 return;
 
-            if (CurrentPlayer.Player.Roll == 1 && CurrentPlayer.Player.Results.All(r => r.PossibleValue == 0))
+            if (CurrentPlayer.Player.Roll == 1 && (CurrentPlayer.Player.Results?.All(r => r.PossibleValue == 0) ?? false))
             {
                 if (CurrentPlayer.Player.IsHuman)
                 {

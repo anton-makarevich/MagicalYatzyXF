@@ -86,7 +86,7 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
         public int Total => _player.Total;
 
         public List<RollResultViewModel> Results =>
-            field ??= Player.Results
+            field ??= (Player.Results ?? new List<IRollResult>())
                 .Select(r => new RollResultViewModel(r,_localizationService)).ToList();
 
         public bool IsMyTurn => _player.IsMyTurn;
