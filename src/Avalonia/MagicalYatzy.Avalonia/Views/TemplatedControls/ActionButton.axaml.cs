@@ -1,5 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
+using Sanet.MagicalYatzy.Avalonia.Extensions;
 
 namespace Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls;
 
@@ -21,6 +23,13 @@ public class ActionButton : Button
     {
         get;
         private set => SetAndRaise(HasLabelProperty, ref field, value);
+    }
+
+    protected override void OnPointerPressed(PointerPressedEventArgs e)
+    {
+        base.OnPointerPressed(e);
+        if (IsEnabled)
+            _ = this.AnimateClick();
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

@@ -1,6 +1,7 @@
 ﻿using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input;
+using Sanet.MagicalYatzy.Avalonia.Extensions;
 
 namespace Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls;
 
@@ -31,5 +32,12 @@ public class MainMenuItem : TemplatedControl
     {
         get => GetValue(ImageSourceProperty);
         set => SetValue(ImageSourceProperty, value);
+    }
+
+    protected override void OnPointerPressed(PointerPressedEventArgs e)
+    {
+        base.OnPointerPressed(e);
+        if (IsEnabled)
+            _ = this.AnimateClick();
     }
 }

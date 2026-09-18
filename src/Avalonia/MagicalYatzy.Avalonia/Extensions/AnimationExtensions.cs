@@ -14,6 +14,60 @@ public static class AnimationExtensions
     private const double PressedScale = 0.5;
     private static readonly ConditionalWeakTable<Control, Task> RunningAnimations = new();
 
+    private static readonly Animation ShrinkAnimation = new()
+    {
+        Duration = TimeSpan.FromMilliseconds(200),
+        Easing = new QuadraticEaseIn(),
+        Children =
+        {
+            new KeyFrame
+            {
+                Cue = new Cue(0d),
+                Setters =
+                {
+                    new Setter { Property = ScaleTransform.ScaleXProperty, Value = 1.0 },
+                    new Setter { Property = ScaleTransform.ScaleYProperty, Value = 1.0 }
+                }
+            },
+            new KeyFrame
+            {
+                Cue = new Cue(1d),
+                Setters =
+                {
+                    new Setter { Property = ScaleTransform.ScaleXProperty, Value = PressedScale },
+                    new Setter { Property = ScaleTransform.ScaleYProperty, Value = PressedScale }
+                }
+            }
+        }
+    };
+
+    private static readonly Animation GrowAnimation = new()
+    {
+        Duration = TimeSpan.FromMilliseconds(200),
+        Easing = new QuadraticEaseOut(),
+        Children =
+        {
+            new KeyFrame
+            {
+                Cue = new Cue(0d),
+                Setters =
+                {
+                    new Setter { Property = ScaleTransform.ScaleXProperty, Value = PressedScale },
+                    new Setter { Property = ScaleTransform.ScaleYProperty, Value = PressedScale }
+                }
+            },
+            new KeyFrame
+            {
+                Cue = new Cue(1d),
+                Setters =
+                {
+                    new Setter { Property = ScaleTransform.ScaleXProperty, Value = 1.0 },
+                    new Setter { Property = ScaleTransform.ScaleYProperty, Value = 1.0 }
+                }
+            }
+        }
+    };
+
     public static async Task AnimateClick(this Control control)
     {
         if (RunningAnimations.TryGetValue(control, out var running) && !running.IsCompleted)
@@ -28,61 +82,8 @@ public static class AnimationExtensions
 
     private static async Task RunClickAnimation(ScaleTransform scaleTransform)
     {
-        var shrink = new Animation
-        {
-            Duration = TimeSpan.FromMilliseconds(200),
-            Easing = new QuadraticEaseIn(),
-            Children =
-            {
-                new KeyFrame
-                {
-                    Cue = new Cue(0d),
-                    Setters =
-                    {
-                        new Setter { Property = ScaleTransform.ScaleXProperty, Value = 1.0 },
-                        new Setter { Property = ScaleTransform.ScaleYProperty, Value = 1.0 }
-                    }
-                },
-                new KeyFrame
-                {
-                    Cue = new Cue(1d),
-                    Setters =
-                    {
-                        new Setter { Property = ScaleTransform.ScaleXProperty, Value = PressedScale },
-                        new Setter { Property = ScaleTransform.ScaleYProperty, Value = PressedScale }
-                    }
-                }
-            }
-        };
-        await shrink.RunAsync(scaleTransform);
-
-        var grow = new Animation
-        {
-            Duration = TimeSpan.FromMilliseconds(200),
-            Easing = new QuadraticEaseOut(),
-            Children =
-            {
-                new KeyFrame
-                {
-                    Cue = new Cue(0d),
-                    Setters =
-                    {
-                        new Setter { Property = ScaleTransform.ScaleXProperty, Value = PressedScale },
-                        new Setter { Property = ScaleTransform.ScaleYProperty, Value = PressedScale }
-                    }
-                },
-                new KeyFrame
-                {
-                    Cue = new Cue(1d),
-                    Setters =
-                    {
-                        new Setter { Property = ScaleTransform.ScaleXProperty, Value = 1.0 },
-                        new Setter { Property = ScaleTransform.ScaleYProperty, Value = 1.0 }
-                    }
-                }
-            }
-        };
-        await grow.RunAsync(scaleTransform);
+        await ShrinkAnimation.RunAsync(scaleTransform);
+        await GrowAnimation.RunAsync(scaleTransform);
     }
 
     private static ScaleTransform GetOrCreateScaleTransform(Control control)
