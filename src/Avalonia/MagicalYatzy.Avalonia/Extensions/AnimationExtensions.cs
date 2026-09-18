@@ -11,12 +11,13 @@ namespace Sanet.MagicalYatzy.Avalonia.Extensions;
 
 public static class AnimationExtensions
 {
-    private const double PressedScale = 0.5;
+    private const double PressedScale = 0.9;
+    private const int AnimationDurationMilliseconds = 200;
     private static readonly ConditionalWeakTable<Control, Task> RunningAnimations = new();
 
     private static readonly Animation ShrinkAnimation = new()
     {
-        Duration = TimeSpan.FromMilliseconds(200),
+        Duration = TimeSpan.FromMilliseconds(AnimationDurationMilliseconds),
         Easing = new QuadraticEaseIn(),
         Children =
         {
@@ -43,7 +44,7 @@ public static class AnimationExtensions
 
     private static readonly Animation GrowAnimation = new()
     {
-        Duration = TimeSpan.FromMilliseconds(200),
+        Duration = TimeSpan.FromMilliseconds(AnimationDurationMilliseconds),
         Easing = new QuadraticEaseOut(),
         Children =
         {
@@ -73,17 +74,17 @@ public static class AnimationExtensions
         if (RunningAnimations.TryGetValue(control, out var running) && !running.IsCompleted)
             return;
 
-        var scaleTransform = GetOrCreateScaleTransform(control);
-        var task = RunClickAnimation(scaleTransform);
+        GetOrCreateScaleTransform(control);
+        var task = RunClickAnimation(control);
         RunningAnimations.AddOrUpdate(control, task);
         await task;
         RunningAnimations.Remove(control);
     }
 
-    private static async Task RunClickAnimation(ScaleTransform scaleTransform)
+    private static async Task RunClickAnimation(Control control)
     {
-        await ShrinkAnimation.RunAsync(scaleTransform);
-        await GrowAnimation.RunAsync(scaleTransform);
+        await ShrinkAnimation.RunAsync(control);
+        await GrowAnimation.RunAsync(control);
     }
 
     private static ScaleTransform GetOrCreateScaleTransform(Control control)
