@@ -40,10 +40,10 @@ namespace Sanet.MagicalYatzy.Avalonia.Controls.Game
         private void OnDieRemoved(object? sender, Die e)
         {
             var dieImageToRemove = Children.FirstOrDefault(c => (c as DieImage)?.Die == e);
-            if (dieImageToRemove != null)
-            {
-                Children.Remove(dieImageToRemove);
-            }
+            if (dieImageToRemove == null) return;
+            if (dieImageToRemove is DieImage dieImage)
+                dieImage.Detach();
+            Children.Remove(dieImageToRemove);
         }
 
         private void OnDieAdded(object? sender, Die die)

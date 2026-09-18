@@ -16,6 +16,7 @@ public partial class GameViewWide : GameView
     protected override void InitDicePanel()
     {
         base.InitDicePanel();
+        if (DicePanelView == null) return;
         DicePanelView.SetValue(Grid.RowProperty, 1);
         DicePanelView.SetValue(Grid.ColumnProperty, 1);
         DicePanelView.SaveMargins = new Thickness(0, 0, 60, 80);
