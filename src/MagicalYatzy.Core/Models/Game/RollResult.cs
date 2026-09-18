@@ -5,9 +5,6 @@ namespace Sanet.MagicalYatzy.Models.Game
     public class RollResult : IRollResult
     {
         private readonly Rules _rule;
-        private int _value;
-        private bool _hasBonus;
-        private int _possibleValue;
 
         public RollResult(Scores score, Rules rule)
         {
@@ -23,9 +20,9 @@ namespace Sanet.MagicalYatzy.Models.Game
                     return false;
                 if (!new Rule(_rule).HasExtendedBonuses)
                     return false;
-                return ScoreType != Scores.Kniffel && _hasBonus;
+                return ScoreType != Scores.Kniffel && field;
             }
-            set => _hasBonus = value;
+            set;
         }
 
         public bool HasValue { get; private set; }
@@ -46,11 +43,11 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public int PossibleValue
         {
-            get => _possibleValue;
+            get;
             set
             {
-                if (value< 0 || value > MaxValue) return;
-                _possibleValue = value;
+                if (value < 0 || value > MaxValue) return;
+                field = value;
             }
         }
 
@@ -58,11 +55,11 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public int Value
         {
-            get => _value;
+            get;
             set
             {
-                if (value< 0 || value > MaxValue) return;
-                _value = value;
+                if (value < 0 || value > MaxValue) return;
+                field = value;
                 HasValue = true;
             }
         }

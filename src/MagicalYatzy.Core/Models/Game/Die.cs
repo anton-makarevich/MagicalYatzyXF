@@ -36,23 +36,12 @@ namespace Sanet.MagicalYatzy.Models.Game
         private const int Width = 72;
 
         //position
-        private int _posX;
-        private int _posY;
 
         //direction
         internal int DirectionX;
         internal int DirectionY;
 
-        private DieStatus _status = DieStatus.Stopped;
-
         private string _rotationString;
-
-        private int _frame;
-        private int _result = 1;
-
-        private float _opacity;
-
-        private string _imagePath;
 
         #endregion
 
@@ -62,21 +51,21 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         private int Frame
         {
-            get => _frame;
+            get;
             set
             {
-                _frame = value;
+                field = value;
 
-                if (_frame < 0)
-                    _frame += 36;
-                if (_frame > 35)
-                    _frame -= 36;
+                if (field < 0)
+                    field += 36;
+                if (field > 35)
+                    field -= 36;
             }
         }
 
         public int Result
         {
-            get => _result;
+            get;
             set
             {
                 if (value < MinDiceValue | value > MaxDiceValue)
@@ -84,26 +73,26 @@ namespace Sanet.MagicalYatzy.Models.Game
                     throw new Exception($"Unexpected value {value}. Should be in the range 1..6");
                 }
 
-                _result = value;
+                field = value;
             }
-        }
+        } = 1;
 
         internal int PosX
         {
-            get => _posX;
+            get;
             set
             {
-                _posX = value;
+                field = value;
 
-                if (_posX < 0)
+                if (field < 0)
                 {
-                    _posX = 0;
+                    field = 0;
                     BounceX();
                 }
-                
-                if (_dicePanel.Bounds.Width > Width && _dicePanel.Bounds.Width < _posX + Width)
+
+                if (_dicePanel.Bounds.Width > Width && _dicePanel.Bounds.Width < field + Width)
                 {
-                    _posX = (int) (_dicePanel.Bounds.Width) - Width;
+                    field = (int)(_dicePanel.Bounds.Width) - Width;
                     BounceX();
                 }
             }
@@ -111,20 +100,20 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         internal int PosY
         {
-            get => _posY;
+            get;
             set
             {
-                _posY = value;
+                field = value;
 
-                if (_posY < 0)
+                if (field < 0)
                 {
-                    _posY = 0;
+                    field = 0;
                     BounceY();
                 }
 
-                if (_dicePanel.Bounds.Height > Height && _dicePanel.Bounds.Height < _posY + Height)
+                if (_dicePanel.Bounds.Height > Height && _dicePanel.Bounds.Height < field + Height)
                 {
-                    _posY = (int) (_dicePanel.Bounds.Height) - Height;
+                    field = (int)(_dicePanel.Bounds.Height) - Height;
                     BounceY();
                 }
             }
@@ -134,26 +123,26 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         internal DieStatus Status
         {
-            get => _status;
+            get;
             set
             {
-                _status = value;
+                field = value;
                 if (value != DieStatus.Stopped) return;
                 DirectionX = 0;
                 DirectionY = 0;
             }
-        }
+        } = DieStatus.Stopped;
 
         public float Opacity
         {
-            get => _opacity;
-            private set => SetProperty(ref _opacity, value);
+            get;
+            private set => SetProperty(ref field, value);
         }
 
         public string ImagePath
         {
-            get => _imagePath;
-            private set => SetProperty(ref _imagePath, value);
+            get;
+            private set => SetProperty(ref field, value);
         }
 
         public bool IsNotRolling => Status == DieStatus.Stopped;

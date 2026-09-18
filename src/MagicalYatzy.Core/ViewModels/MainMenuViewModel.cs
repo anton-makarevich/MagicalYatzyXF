@@ -18,8 +18,6 @@ public class MainMenuViewModel : DicePanelViewModel
     private readonly IPlayerService _playerService;
     private readonly ILocalizationService _localizationService;
     private readonly IExternalNavigationService _externalNavigationService;
-    
-    private MainMenuActionViewModel _selectedMenuAction;
 
     public MainMenuViewModel(IDicePanel dicePanel,
         IExternalNavigationService externalNavigationService,
@@ -57,11 +55,11 @@ public class MainMenuViewModel : DicePanelViewModel
 
     public MainMenuActionViewModel SelectedMenuAction
     {
-        get => _selectedMenuAction;
+        get;
         set
         {
             value?.MenuAction.Execute(null);
-            SetProperty(ref _selectedMenuAction, value);
+            SetProperty(ref field, value);
         }
     }
 

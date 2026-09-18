@@ -14,10 +14,8 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
     {
         private readonly IPlayer _player;
         private readonly ILocalizationService _localizationService;
-        private bool _canBeDeleted = true;
-        private List<RollResultViewModel> _results;
 
-        public event EventHandler PlayerDeleted;
+        public event EventHandler? PlayerDeleted;
 
         public PlayerViewModel(IPlayer player, ILocalizationService localizationService)
         {
@@ -28,7 +26,13 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
         public string Name
         {
             get => _player.Name;
-            set => _player.Name = value;
+            set
+            {
+                if (_player.Name == value)
+                    return;
+                _player.Name = value;
+                NotifyPropertyChanged();
+            }
         }
 
         public string TypeName => _player.Type switch
@@ -62,14 +66,14 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
         public ICommand DeleteCommand => new SimpleCommand(() =>
         {
             if (CanBeDeleted)
-                PlayerDeleted?.Invoke(this, null);
+                PlayerDeleted?.Invoke(this, EventArgs.Empty);
         });
 
         public bool CanBeDeleted
         {
-            get => _canBeDeleted;
-            set => SetProperty(ref _canBeDeleted, value);
-        }
+            get;
+            set => SetProperty(ref field, value);
+        } = true;
 
         public IPlayer Player => _player;
 
@@ -82,10 +86,8 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
         public int Total => _player.Total;
 
         public List<RollResultViewModel> Results =>
-            Player.Results == null
-                ? null
-                : _results ??= Player.Results
-                    .Select(r => new RollResultViewModel(r,_localizationService)).ToList();
+            field ??= (Player.Results ?? new List<IRollResult>())
+                .Select(r => new RollResultViewModel(r,_localizationService)).ToList();
 
         public bool IsMyTurn => _player.IsMyTurn;
 

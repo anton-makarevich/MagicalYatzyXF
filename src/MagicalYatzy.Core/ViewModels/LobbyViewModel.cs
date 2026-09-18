@@ -17,8 +17,6 @@ public class LobbyViewModel: DicePanelViewModel
     public const int MaxPlayers = 4;
         
     private readonly IPlayerService _playerService;
-    private bool _canAddBot = true;
-    private bool _canAddHuman = true;
     private readonly IRulesService _rulesService;
     private readonly IGameService _gameService;
     private readonly ILocalizationService _localizationService;
@@ -57,15 +55,15 @@ public class LobbyViewModel: DicePanelViewModel
 
     public bool CanAddBot
     {
-        get => _canAddBot;
-        private set => SetProperty(ref _canAddBot, value);
-    }
+        get;
+        private set => SetProperty(ref field, value);
+    } = true;
 
     public bool CanAddHuman
     {
-        get => _canAddHuman;
-        private set => SetProperty(ref _canAddHuman, value);
-    }
+        get;
+        private set => SetProperty(ref field, value);
+    } = true;
 
     public ObservableCollection<RuleViewModel> Rules { get; } = new ObservableCollection<RuleViewModel>();
 

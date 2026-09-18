@@ -59,7 +59,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             ? 0 
             : Results.Where(r => r.HasValue).Select(r => r.Value).Sum() + (Results.Count(f=>f.HasBonus)*100);
 
-        public IReadOnlyList<IRollResult> Results { get; private set; }
+        public IReadOnlyList<IRollResult>? Results { get; private set; }
         
         public IReadOnlyList<Artifact> MagicalArtifactsForGame { get; private set; }
         
@@ -92,6 +92,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public void CheckRollResults(DieResult lastDiceResult, Rule rule)
         {
+            if (Results == null) return;
             foreach (var result in Results)
             {
                 if (result.HasValue) continue;

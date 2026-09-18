@@ -17,7 +17,7 @@ public partial class RollResultsPanel : UserControl
         AvaloniaXamlLoader.Load(this);
     }
     
-    public static readonly StyledProperty<Orientation> OrientationProperty = AvaloniaProperty.Register<GameButtons, Orientation>(
+    public static readonly StyledProperty<Orientation> OrientationProperty = AvaloniaProperty.Register<RollResultsPanel, Orientation>(
         nameof(Orientation));
 
     public Orientation Orientation

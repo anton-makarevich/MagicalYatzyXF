@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading;
 using Sanet.MagicalYatzy.Models.Chat;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
@@ -13,22 +14,20 @@ namespace Sanet.MagicalYatzy.Models.Game
     {
         public const int MaxRoll = 3;
         //sync object
-        private readonly object _syncRoot = new object();
+        private readonly Lock _syncRoot = new();
 
         private readonly IDiceGenerator _diceGenerator;
-        
-        private bool _isPlaying;
+
         private int[] _lastRollResults;
-        private List<int> _fixedRollResults = new List<int>();
-        private Queue<int> _thisTurnValues = new Queue<int>();
-        private bool _reRollMode;
-        private readonly Random _randomizer = new Random();
+        private List<int> _fixedRollResults = [];
+        private Queue<int> _thisTurnValues = new();
+        private readonly Random _randomizer = new();
         
         public YatzyGame(Rules rules, IDiceGenerator diceGenerator)
         {
             _diceGenerator = diceGenerator;
             Rules = new Rule(rules);
-            Players = new List<IPlayer>();
+            Players = [];
             GameId = Guid.NewGuid().ToString("N");
         }
 
@@ -70,10 +69,10 @@ namespace Sanet.MagicalYatzy.Models.Game
             get
             {
                 if (Players != null && !Players.Any(f => f.IsReady))
-                    _isPlaying = false;
-                return _isPlaying;
+                    field = false;
+                return field;
             }
-            set => _isPlaying = value;
+            set;
         }
 
         public int Roll
@@ -88,9 +87,9 @@ namespace Sanet.MagicalYatzy.Models.Game
             }
         }
         
-        public DieResult LastDiceResult => new DieResult() 
+        public DieResult LastDiceResult => new() 
         {
-            DiceResults = _lastRollResults?.ToList() ?? new List<int>()
+            DiceResults = _lastRollResults?.ToList() ?? []
         };
                 
         public int Round { get; private set; }
@@ -100,18 +99,18 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public bool ReRollMode //TODO can setter be private?
         {
-            get => _reRollMode;
+            get;
             set
             {
-                _reRollMode = value;
-                
+                field = value;
+
                 if (!value)
                     _thisTurnValues = new Queue<int>();
                 else
-                    _fixedRollResults = new List<int>();
+                    _fixedRollResults = [];
             }
         }
-        
+
         public Rule Rules { get; }
         #endregion
 
@@ -138,7 +137,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             //update players results on server
 #if SERVER
             result.Value = result.PossibleValue;
-            var cr =CurrentPlayer.Results.FirstOrDefault(f => f.ScoreType == result.ScoreType);
+            var cr =CurrentPlayer.Results?.FirstOrDefault(f => f.ScoreType == result.ScoreType);
             cr=  result;
             _roundTimer.Stop();
 #endif
@@ -177,7 +176,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public void DoTurn()
         {
-            _fixedRollResults = new List<int>();
+            _fixedRollResults = [];
             
             if (Rules.CurrentRule == Game.Rules.krMagic)
                 ReRollMode = false;
@@ -314,7 +313,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             //if current round is last
             if (Round == Rules.MaxRound)
             {
-                Players=Players.OrderByDescending(f => f.Total).ToList();
+                Players= [.. Players.OrderByDescending(f => f.Total)];
                 CurrentPlayer = Players.First();
                 IsPlaying = false;
                 foreach (var p in Players)
@@ -382,7 +381,7 @@ namespace Sanet.MagicalYatzy.Models.Game
 
                 for (var diceCounter = diceIndexToSet; diceCounter <= 4; diceCounter++)
                 {
-                    var diceValue = _diceGenerator.GetNextDiceResult(_fixedRollResults.ToArray());
+                    var diceValue = _diceGenerator.GetNextDiceResult([.. _fixedRollResults]);
 
                     _lastRollResults[diceCounter] = diceValue;
                     if (Rules.CurrentRule != Game.Rules.krMagic) continue;
@@ -423,7 +422,7 @@ namespace Sanet.MagicalYatzy.Models.Game
                     player.IsReady = true;
 #endif
                 }
-                Players = Players.OrderBy(f => f.SeatNo).ToList();
+                Players = [.. Players.OrderBy(f => f.SeatNo)];
                 CurrentPlayer = null;
                 
                 StartGame();
