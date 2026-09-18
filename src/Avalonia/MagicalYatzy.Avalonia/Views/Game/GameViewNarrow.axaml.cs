@@ -14,6 +14,7 @@ public partial class GameViewNarrow : GameView
     protected override void InitDicePanel()
     {
         base.InitDicePanel();
+        if (DicePanelView == null) return;
         DicePanelView.SetValue(Grid.ColumnProperty, 1);
         DicePanelView.SaveMargins = new Thickness(0, 0, 91, 61);
         PageGrid.Children.Insert(1, DicePanelView);

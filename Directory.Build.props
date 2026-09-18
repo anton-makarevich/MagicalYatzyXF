@@ -3,7 +3,7 @@
     <PropertyGroup>
         <Deterministic>true</Deterministic>
         <ContinuousIntegrationBuild Condition="'$(ContinuousIntegrationBuild)' == '' and '$(CI)' == 'true'">true</ContinuousIntegrationBuild>
-        <VersionPrefix>2.5.0</VersionPrefix>
+        <VersionPrefix>2.5.2</VersionPrefix>
         <Authors>Anton Makarevich</Authors>
         <Company>Anton Makarevich</Company>
         <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
