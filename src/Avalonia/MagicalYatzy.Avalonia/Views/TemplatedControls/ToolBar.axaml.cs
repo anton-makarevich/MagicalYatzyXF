@@ -61,6 +61,37 @@ public class ToolBar : TemplatedControl
         set => SetValue(LeftCommandProperty, value);
     }
 
-    public bool HasLeftButton => !string.IsNullOrEmpty(LeftIcon);
-    public bool HasRightButton => !string.IsNullOrEmpty(RightIcon);
+    public bool HasLeftButton
+    {
+        get => _hasLeftButton;
+        private set => SetAndRaise(HasLeftButtonProperty, ref _hasLeftButton, value);
+    }
+
+    public bool HasRightButton
+    {
+        get => _hasRightButton;
+        private set => SetAndRaise(HasRightButtonProperty, ref _hasRightButton, value);
+    }
+
+    private bool _hasLeftButton;
+    private bool _hasRightButton;
+
+    public static readonly DirectProperty<ToolBar, bool> HasLeftButtonProperty =
+        AvaloniaProperty.RegisterDirect<ToolBar, bool>(nameof(HasLeftButton), o => o.HasLeftButton);
+
+    public static readonly DirectProperty<ToolBar, bool> HasRightButtonProperty =
+        AvaloniaProperty.RegisterDirect<ToolBar, bool>(nameof(HasRightButton), o => o.HasRightButton);
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property == LeftIconProperty)
+        {
+            HasLeftButton = !string.IsNullOrEmpty(change.NewValue as string);
+        }
+        else if (change.Property == RightIconProperty)
+        {
+            HasRightButton = !string.IsNullOrEmpty(change.NewValue as string);
+        }
+    }
 }

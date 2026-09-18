@@ -3,12 +3,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
+             xmlns:fragments="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.Fragments"
              xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy.Core"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="viewModels:GameViewModel"
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.Fragments.GameButtons">
     <StackPanel
-        Orientation="{Binding Orientation, RelativeSource={RelativeSource Self}}">
+        Orientation="{Binding Orientation, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type fragments:GameButtons}}}">
         <templatedControls:ActionButton
             IsVisible="{Binding CanRoll}"
             Command="{Binding RollCommand}"

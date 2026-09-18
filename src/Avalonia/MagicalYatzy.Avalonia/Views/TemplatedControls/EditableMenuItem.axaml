@@ -18,7 +18,7 @@
                     <Image Source="{TemplateBinding ImageSource, Converter={StaticResource ImageNameConverter}}"
                            Margin="0,0,10,0"
                            Grid.RowSpan="2"/>
-                    <TextBox Text="{TemplateBinding Caption, Mode=TwoWay}"
+                    <TextBox Text="{Binding Caption, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                              BorderBrush="Transparent"
                              BorderThickness="0"
                              Classes="caption"
