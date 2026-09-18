@@ -18,7 +18,7 @@ namespace Sanet.MagicalYatzy.Models.Game
         private const int MaxAttemptsToFindDicePosition = 1000;
 
         #region Fields
-        private int _diceCount = 6;
+
         private Die _lastClickedDie;
 
         private readonly IGameSettingsService _gameSettingsService;
@@ -44,19 +44,20 @@ namespace Sanet.MagicalYatzy.Models.Game
         public bool PlaySound { get; set; }
         public DiceStyle PanelStyle { get; } = DiceStyle.Classic;
         public List<Die> Dice { get; set; } = new();
+
         /// <summary>
         /// Number of Dice in the Panel
         /// </summary>
         public int DiceCount
         {
-            get => _diceCount;
+            get;
             set
             {
-                _diceCount = value;
+                field = value;
 
                 GenerateDice();
             }
-        }
+        } = 6;
 
         /// <summary>
         /// Draws a Box Around the Die for Collision Debugging

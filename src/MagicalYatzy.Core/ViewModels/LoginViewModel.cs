@@ -13,9 +13,7 @@ namespace Sanet.MagicalYatzy.ViewModels
         private readonly IPlayerService _playerService;
         private readonly TaskCompletionSource<IPlayer?> _resultTaskCompletionSource = new();
 
-        private string _newUsername;
-        private string _newPassword;
-#endregion
+        #endregion
 
         public LoginViewModel(IPlayerService playerService)
         {
@@ -25,17 +23,17 @@ namespace Sanet.MagicalYatzy.ViewModels
         #region Properties
         public string NewUsername
         {
-            get { return _newUsername; }
+            get { return field; }
             set
             {
-                SetProperty(ref _newUsername, value);
+                SetProperty(ref field, value);
             }
         }
 
         public string NewPassword
         {
-            get { return _newPassword; }
-            set { SetProperty(ref _newPassword, value); }
+            get { return field; }
+            set { SetProperty(ref field, value); }
         }
         #endregion
 

@@ -22,8 +22,6 @@ namespace Sanet.MagicalYatzy.ViewModels
         private readonly ISoundsProvider _soundsProvider;
         private readonly ILocalizationService _localizationService;
 
-        private ObservableCollection<RollResultViewModel> _rollResults;
-
         public GameViewModel(
             IGameService gameService,
             IDicePanel dicePanel,
@@ -264,8 +262,8 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         public ObservableCollection<RollResultViewModel> RollResults
         {
-            get => _rollResults;
-            private set => SetProperty(ref _rollResults, value);
+            get;
+            private set => SetProperty(ref field, value);
         }
 
         public List<string> RollResultsLabels => Game.Rules.ScoresForRule

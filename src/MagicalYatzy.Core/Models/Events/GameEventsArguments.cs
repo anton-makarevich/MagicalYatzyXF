@@ -69,19 +69,18 @@ namespace Sanet.MagicalYatzy.Models.Events
     public class RollEventArgs : PlayerEventArgs
     {
         //new move order
-        int[] _value;
         public int[] Value
         {
             get
             {
-                return _value;
+                return field;
             }
         }
 
         public RollEventArgs(IPlayer player, int[] value)
             : base(player)
         {
-            _value = value;
+            Value = value;
         }
     }
 }

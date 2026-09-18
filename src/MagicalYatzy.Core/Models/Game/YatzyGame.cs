@@ -16,12 +16,10 @@ namespace Sanet.MagicalYatzy.Models.Game
         private readonly object _syncRoot = new object();
 
         private readonly IDiceGenerator _diceGenerator;
-        
-        private bool _isPlaying;
+
         private int[] _lastRollResults;
         private List<int> _fixedRollResults = new List<int>();
         private Queue<int> _thisTurnValues = new Queue<int>();
-        private bool _reRollMode;
         private readonly Random _randomizer = new Random();
         
         public YatzyGame(Rules rules, IDiceGenerator diceGenerator)
@@ -70,10 +68,10 @@ namespace Sanet.MagicalYatzy.Models.Game
             get
             {
                 if (Players != null && !Players.Any(f => f.IsReady))
-                    _isPlaying = false;
-                return _isPlaying;
+                    field = false;
+                return field;
             }
-            set => _isPlaying = value;
+            set;
         }
 
         public int Roll
@@ -100,18 +98,18 @@ namespace Sanet.MagicalYatzy.Models.Game
 
         public bool ReRollMode //TODO can setter be private?
         {
-            get => _reRollMode;
+            get;
             set
             {
-                _reRollMode = value;
-                
+                field = value;
+
                 if (!value)
                     _thisTurnValues = new Queue<int>();
                 else
                     _fixedRollResults = new List<int>();
             }
         }
-        
+
         public Rule Rules { get; }
         #endregion
 

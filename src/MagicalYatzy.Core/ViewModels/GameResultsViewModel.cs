@@ -16,7 +16,6 @@ namespace Sanet.MagicalYatzy.ViewModels
         private readonly IGameService _gameService;
         private readonly ILocalizationService _localizationService;
         private readonly IApiClient _apiClient;
-        private ObservableCollection<PlayerViewModel> _players;
 
         public GameResultsViewModel(
             IGameService gameService,
@@ -30,8 +29,8 @@ namespace Sanet.MagicalYatzy.ViewModels
 
         public ObservableCollection<PlayerViewModel> Players
         {
-            get => _players;
-            set => SetProperty(ref _players, value);
+            get;
+            set => SetProperty(ref field, value);
         }
 
         public ICommand RestartGameCommand => new SimpleCommand((async () =>

@@ -63,18 +63,15 @@ public class ToolBar : TemplatedControl
 
     public bool HasLeftButton
     {
-        get => _hasLeftButton;
-        private set => SetAndRaise(HasLeftButtonProperty, ref _hasLeftButton, value);
+        get;
+        private set => SetAndRaise(HasLeftButtonProperty, ref field, value);
     }
 
     public bool HasRightButton
     {
-        get => _hasRightButton;
-        private set => SetAndRaise(HasRightButtonProperty, ref _hasRightButton, value);
+        get;
+        private set => SetAndRaise(HasRightButtonProperty, ref field, value);
     }
-
-    private bool _hasLeftButton;
-    private bool _hasRightButton;
 
     public static readonly DirectProperty<ToolBar, bool> HasLeftButtonProperty =
         AvaloniaProperty.RegisterDirect<ToolBar, bool>(nameof(HasLeftButton), o => o.HasLeftButton);
