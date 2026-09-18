@@ -23,6 +23,8 @@ public class DieImage : Image
     {
         base.OnAttachedToVisualTree(e);
         Subscribe();
+        UpdateImage();
+        UpdatePosition();
     }
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
