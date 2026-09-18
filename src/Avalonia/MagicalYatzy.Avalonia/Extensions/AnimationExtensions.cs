@@ -1,51 +1,114 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using Avalonia;
+using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
+using Avalonia.Media;
+using Avalonia.Styling;
 
 namespace Sanet.MagicalYatzy.Avalonia.Extensions;
 
 public static class AnimationExtensions
 {
-    private static bool _isRunning;
+    private const double PressedScale = 0.5;
+    private static readonly ConditionalWeakTable<Control, Task> RunningAnimations = new();
 
     public static async Task AnimateClick(this Control control)
     {
-        if (_isRunning)
+        if (RunningAnimations.TryGetValue(control, out var running) && !running.IsCompleted)
             return;
 
-        _isRunning = true;
-        var size = new Size(300,250);
-        const double scale = 0.5;
-        var scaledSize = size * scale;
-        await control.ScaleTo(size, scaledSize, TimeSpan.FromMilliseconds(200), new QuadraticEaseIn());
-        await control.ScaleTo(scaledSize, size, TimeSpan.FromMilliseconds(200), new QuadraticEaseOut());
-        _isRunning = false;
+        var scaleTransform = GetOrCreateScaleTransform(control);
+        var task = RunClickAnimation(scaleTransform);
+        RunningAnimations.AddOrUpdate(control, task);
+        await task;
+        RunningAnimations.Remove(control);
     }
 
-    private static async Task ScaleTo(this Control control, Size  from, Size to, TimeSpan duration, Easing? easing = null)
+    private static async Task RunClickAnimation(ScaleTransform scaleTransform)
     {
-        easing ??= new LinearEasing();
-        
-        var framerate= TimeSpan.FromSeconds(1 / 60.0);
-        
-        var totalTicks = duration.TotalMilliseconds / framerate.TotalMilliseconds;
-        for (var currentTick = 0;currentTick<totalTicks; currentTick++)
+        var shrink = new Animation
         {
-            var progress = currentTick / totalTicks;
-            var currentSize = from + ((to - from) * easing.Ease(progress));
-     
-            // Calculate the new position of the top-left corner based on the center position
-            var newX = control.Bounds.X + ((control.Width - currentSize.Width) / 2.0);
-            var newY = control.Bounds.Y + ((control.Height - currentSize.Height) / 2.0);
+            Duration = TimeSpan.FromMilliseconds(200),
+            Easing = new QuadraticEaseIn(),
+            Children =
+            {
+                new KeyFrame
+                {
+                    Cue = new Cue(0d),
+                    Setters =
+                    {
+                        new Setter { Property = ScaleTransform.ScaleXProperty, Value = 1.0 },
+                        new Setter { Property = ScaleTransform.ScaleYProperty, Value = 1.0 }
+                    }
+                },
+                new KeyFrame
+                {
+                    Cue = new Cue(1d),
+                    Setters =
+                    {
+                        new Setter { Property = ScaleTransform.ScaleXProperty, Value = PressedScale },
+                        new Setter { Property = ScaleTransform.ScaleYProperty, Value = PressedScale }
+                    }
+                }
+            }
+        };
+        await shrink.RunAsync(scaleTransform);
 
-            // Update the width, height, and position of the control
-            control.Width = currentSize.Width;
-            control.Height = currentSize.Height;
-            control.SetValue(Canvas.LeftProperty, newX);
-            control.SetValue(Canvas.TopProperty, newY);
-            await Task.Delay(framerate);
+        var grow = new Animation
+        {
+            Duration = TimeSpan.FromMilliseconds(200),
+            Easing = new QuadraticEaseOut(),
+            Children =
+            {
+                new KeyFrame
+                {
+                    Cue = new Cue(0d),
+                    Setters =
+                    {
+                        new Setter { Property = ScaleTransform.ScaleXProperty, Value = PressedScale },
+                        new Setter { Property = ScaleTransform.ScaleYProperty, Value = PressedScale }
+                    }
+                },
+                new KeyFrame
+                {
+                    Cue = new Cue(1d),
+                    Setters =
+                    {
+                        new Setter { Property = ScaleTransform.ScaleXProperty, Value = 1.0 },
+                        new Setter { Property = ScaleTransform.ScaleYProperty, Value = 1.0 }
+                    }
+                }
+            }
+        };
+        await grow.RunAsync(scaleTransform);
+    }
+
+    private static ScaleTransform GetOrCreateScaleTransform(Control control)
+    {
+        if (control.RenderTransform is ScaleTransform scaleTransform)
+            return scaleTransform;
+
+        if (control.RenderTransform is TransformGroup group)
+        {
+            foreach (var transform in group.Children)
+            {
+                if (transform is ScaleTransform existing)
+                    return existing;
+            }
         }
+
+        scaleTransform = new ScaleTransform();
+        if (control.RenderTransform is TransformGroup existingGroup)
+        {
+            existingGroup.Children.Add(scaleTransform);
+        }
+        else
+        {
+            control.RenderTransform = scaleTransform;
+        }
+
+        return scaleTransform;
     }
 }
