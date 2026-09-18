@@ -82,7 +82,7 @@ namespace Sanet.MagicalYatzy.Models.Game
             Roll = 1;
             if (rule.CurrentRule == Rules.krMagic)
             {
-                MagicalArtifactsForGame = [.. AvailableMagicalArtifacts.Distinct()];
+                MagicalArtifactsForGame = AvailableMagicalArtifacts?.Distinct().ToList();
             }
 
             Results = rule.ScoresForRule.Select(score => new RollResult(score, rule.CurrentRule)).ToList();
