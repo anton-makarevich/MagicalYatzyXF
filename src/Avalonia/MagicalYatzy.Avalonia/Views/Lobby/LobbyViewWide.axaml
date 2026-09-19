@@ -24,12 +24,12 @@
                 <Style Selector="StackPanel#panesRoot">
                     <Setter Property="Orientation" Value="Horizontal"/>
                 </Style>
-                <Style Selector="StackPanel#panesRoot > StackPanel.pane">
+                <Style Selector="StackPanel#panesRoot > StackPanel.panel">
                     <Setter Property="Width" Value="600"/>
                 </Style>
             </ContainerQuery>
             <ContainerQuery Name="lobbyContainer" Query="max-width:720">
-                <Style Selector="StackPanel#panesRoot > StackPanel.pane">
+                <Style Selector="StackPanel#panesRoot > StackPanel.panel">
                     <Setter Property="MaxWidth" Value="600"/>
                 </Style>
             </ContainerQuery>
@@ -42,11 +42,11 @@
         />
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <StackPanel x:Name="panesRoot">
-                <StackPanel Classes="pane">
+                <StackPanel Classes="panel">
                     <Label Classes="caption" Content="{Binding PlayersTitle}"/>
                     <fragments:PlayersFragment/>
                 </StackPanel>
-                <StackPanel Classes="pane">
+                <StackPanel Classes="panel">
                     <Label Classes="caption" Content="{Binding RulesTitle}"/>
                     <fragments:RulesFragment/>
                 </StackPanel>

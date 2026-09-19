@@ -8,10 +8,6 @@
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.SettingsView"
              x:DataType="viewModels:SettingsViewModel">
     <UserControl.Styles>
-        <Style Selector="StackPanel.panel">
-            <Setter Property="Margin" Value="0,0,20,20"/>
-            <Setter Property="Spacing" Value="10"></Setter>
-        </Style>
         <Style Selector="StackPanel.middle-panel">
             <Setter Property="Margin" Value="0,0,0,10"/>
         </Style>
