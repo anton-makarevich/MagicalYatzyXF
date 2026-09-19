@@ -4,6 +4,8 @@
         <Deterministic>true</Deterministic>
         <ContinuousIntegrationBuild Condition="'$(ContinuousIntegrationBuild)' == '' and '$(CI)' == 'true'">true</ContinuousIntegrationBuild>
         <VersionPrefix>2.5.6</VersionPrefix>
+        <!-- Single source of truth for the Avalonia Developer Tools version (global 'avdt' tool and the Debug-only AvaloniaUI.DiagnosticsSupport package). Keep both in sync with the installed tool. -->
+        <AvaloniaDevToolsVersion>2.2.3</AvaloniaDevToolsVersion>
         <Authors>Anton Makarevich</Authors>
         <Company>Anton Makarevich</Company>
         <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
@@ -19,5 +21,10 @@
             Condition="$(VersionPrefixMajor) &gt; 9999 or $(VersionPrefixMinor) &gt; 99 or $(VersionPrefixBuild) &gt; 99">
         <Error Code="MY0001"
                Text="VersionPrefix '$(VersionPrefix)' has a component exceeding the positional width of StoreVersionCode (Major at most 9999, Minor at most 99, Build at most 99). Adjust the width layout in Directory.Build.props so StoreVersionCode stays monotonic and collision-free." />
+    </Target>
+
+    <!-- Invoked from `mise run install-devtools`; update||install keeps a missing/fresh global tool working. -->
+    <Target Name="InstallAvaloniaDevTools">
+        <Exec Command="dotnet tool update --global AvaloniaUI.DeveloperTools --version $(AvaloniaDevToolsVersion) || dotnet tool install --global AvaloniaUI.DeveloperTools --version $(AvaloniaDevToolsVersion)" />
     </Target>
 </Project>
