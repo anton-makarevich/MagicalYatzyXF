@@ -18,6 +18,9 @@
             <Style Selector="StackPanel#panesRoot">
                 <Setter Property="Orientation" Value="Vertical"/>
             </Style>
+            <Style Selector="ScrollViewer">
+                <Setter Property="Margin" Value="40,15"/>
+            </Style>
             <ContainerQuery Name="settingsContainer" Query="min-width:720">
                 <Style Selector="StackPanel#panesRoot">
                     <Setter Property="Orientation" Value="Horizontal"/>
@@ -43,7 +46,6 @@
              Grid.ColumnSpan="3"
          />
          <ScrollViewer
-             Margin="40,15"
              Grid.Row="1"
              HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
              <StackPanel x:Name="panesRoot">
