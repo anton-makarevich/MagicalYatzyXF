@@ -19,6 +19,9 @@
     <Grid x:Name="ControlGrid" RowDefinitions="Auto,*,Auto"
           Container.Name="settingsContainer" Container.Sizing="Width">
         <Grid.Styles>
+            <Style Selector="StackPanel#panesRoot">
+                <Setter Property="Orientation" Value="Vertical"/>
+            </Style>
             <ContainerQuery Name="settingsContainer" Query="min-width:720">
                 <Style Selector="StackPanel#panesRoot">
                     <Setter Property="Orientation" Value="Horizontal"/>
@@ -44,7 +47,7 @@
              Margin="60,20"
              Grid.Row="1"
              HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-             <StackPanel x:Name="panesRoot" Orientation="Vertical">
+             <StackPanel x:Name="panesRoot">
                  <StackPanel Classes="panel">
                      <Label 
                          Classes="caption"       

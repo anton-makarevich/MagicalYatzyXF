@@ -17,6 +17,9 @@
     <Grid Margin="0" RowDefinitions="Auto,*,Auto"
           Container.Name="lobbyContainer" Container.Sizing="Width">
         <Grid.Styles>
+            <Style Selector="StackPanel#panesRoot">
+                <Setter Property="Orientation" Value="Vertical"/>
+            </Style>
             <ContainerQuery Name="lobbyContainer" Query="min-width:720">
                 <Style Selector="StackPanel#panesRoot">
                     <Setter Property="Orientation" Value="Horizontal"/>
@@ -38,7 +41,7 @@
             HorizontalAlignment="Left"
         />
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <StackPanel x:Name="panesRoot" Orientation="Vertical">
+            <StackPanel x:Name="panesRoot">
                 <StackPanel Classes="pane">
                     <Label Classes="caption" Content="{Binding PlayersTitle}"/>
                     <fragments:PlayersFragment/>
