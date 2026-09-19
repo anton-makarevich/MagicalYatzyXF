@@ -53,7 +53,7 @@ jobs:
           dotnet publish -c Release -o bin/Release/android/publish
 
       - name: Create Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: src/Avalonia/MagicalYatzy.Avalonia.Android/bin/Release/android/publish/*-Signed.apk
