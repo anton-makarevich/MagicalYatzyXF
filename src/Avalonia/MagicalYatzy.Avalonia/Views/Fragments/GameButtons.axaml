@@ -9,7 +9,7 @@
              x:DataType="viewModels:GameViewModel"
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.Fragments.GameButtons">
     <StackPanel
-        Orientation="{Binding Orientation, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type fragments:GameButtons}}}">
+        Orientation="{Binding $parent[fragments:GameButtons].Orientation}">
         <templatedControls:ActionButton
             IsVisible="{Binding CanRoll}"
             Command="{Binding RollCommand}"

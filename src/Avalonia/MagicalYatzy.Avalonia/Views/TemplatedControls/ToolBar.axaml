@@ -10,7 +10,7 @@
                     <controls:ActionButton
                         Command="{TemplateBinding LeftCommand}"
                         ImageSource="{TemplateBinding LeftIcon}"
-                        IsVisible="{Binding HasLeftButton, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ToolBar}}}"
+                        IsVisible="{TemplateBinding HasLeftButton}"
                         />
                     <Label Grid.Column="1"
                            Classes="caption"
@@ -21,7 +21,7 @@
                         Grid.Column="2"
                         Command="{TemplateBinding RightCommand}"
                         ImageSource="{TemplateBinding RightIcon}"
-                        IsVisible="{Binding HasRightButton, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ToolBar}}}"/>
+                        IsVisible="{TemplateBinding HasRightButton}"/>
                 </Grid>
             </ControlTemplate>
         </Setter>

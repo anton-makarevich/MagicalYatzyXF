@@ -26,13 +26,13 @@
             Grid.Column="2"
             Grid.Row="1"
             Orientation="Vertical"
-            Width="60"
+            Width="{StaticResource GameButtonsWidth}"
             VerticalAlignment="Center"/>
         <fragments:RollResultsPanel 
             Grid.Row="2"
             Grid.Column="0"
             Grid.ColumnSpan="3"
-            Size="80"
+            Size="{StaticResource RollResultCellSize}"
             FontSize="32"
             Orientation="Horizontal"/>
     </Grid>

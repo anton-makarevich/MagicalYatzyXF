@@ -42,7 +42,7 @@
         >
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <cells:PlayerScoresCell MinWidth="50"/>
+                    <cells:PlayerScoresCell MinWidth="{StaticResource ProfilePicSizeValue}"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>
