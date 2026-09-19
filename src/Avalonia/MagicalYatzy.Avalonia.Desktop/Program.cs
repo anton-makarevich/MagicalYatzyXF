@@ -2,6 +2,9 @@
 using Avalonia;
 using MagicalYatzyAUI.Desktop.DependencyInjection;
 using Sanet.MVVM.DI.Avalonia.Extensions;
+#if DEBUG
+using AvaloniaUI.DiagnosticsSupport;
+#endif
 
 namespace Sanet.MagicalYatzy.Avalonia.Desktop;
 
@@ -20,5 +23,8 @@ class Program
             .UsePlatformDetect()
             .UseDependencyInjection(services=>services.RegisterDesktopServices())
             .WithInterFont()
+#if DEBUG
+            .WithDeveloperTools()
+#endif
             .LogToTrace();
 }

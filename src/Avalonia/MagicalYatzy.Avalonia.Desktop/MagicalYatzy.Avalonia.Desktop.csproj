@@ -17,6 +17,7 @@
 
     <ItemGroup>
         <PackageReference Include="Avalonia.Desktop" Version="12.1.2" />
+        <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.3" Condition="'$(Configuration)' == 'Debug'" />
         <PackageReference Include="Sanet.MVVM.DI.Avalonia" Version="1.7.1211" />
     </ItemGroup>
 
