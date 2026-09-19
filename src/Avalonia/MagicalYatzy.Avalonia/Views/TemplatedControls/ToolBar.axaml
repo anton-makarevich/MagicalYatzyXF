@@ -1,12 +1,8 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls">
-    <Design.PreviewWith>
-        <controls:ToolBar />
-    </Design.PreviewWith>
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls">
 
-    <Style Selector="controls|ToolBar">
-        <!-- Set Defaults -->
+    <ControlTheme x:Key="{x:Type controls:ToolBar}" TargetType="controls:ToolBar">
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid ColumnDefinitions="Auto,*,Auto"
@@ -29,5 +25,5 @@
                 </Grid>
             </ControlTemplate>
         </Setter>
-    </Style>
-</Styles>
+    </ControlTheme>
+</ResourceDictionary>

@@ -1,12 +1,8 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls">
-    <Design.PreviewWith>
-        <controls:ActionButton />
-    </Design.PreviewWith>
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls">
 
-    <Style Selector="controls|ActionButton">
-        <!-- Set Defaults -->
+    <ControlTheme x:Key="{x:Type controls:ActionButton}" TargetType="controls:ActionButton">
         <Setter Property="Template">
             <ControlTemplate>
                 <Button Background="Transparent"
@@ -36,5 +32,5 @@
                 </Button>
             </ControlTemplate>
         </Setter>
-    </Style>
-</Styles>
+    </ControlTheme>
+</ResourceDictionary>

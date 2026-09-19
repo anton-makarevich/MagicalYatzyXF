@@ -8,22 +8,20 @@
         <FluentTheme />
         
         <StyleInclude Source="Styles/AppStyles.axaml"/>
-        <StyleInclude Source="Views/TemplatedControls/MainMenuItem.axaml"/>
-        <StyleInclude Source="Views/TemplatedControls/ActionButton.axaml"/>
-        <StyleInclude Source="Views/TemplatedControls/EditableMenuItem.axaml"/>
-        <StyleInclude Source="Views/TemplatedControls/RollResultView.axaml"/>
-        <StyleInclude Source="Views/TemplatedControls/ToolBar.axaml"/>
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>
             <converters:ImageNameConverter x:Key="ImageNameConverter"/>
-            <converters:PanelWidthConverter x:Key="PanelWidthConverter"/>
-            <converters:StringUppercasedConverter x:Key="StringUppercasedConverter"/>    
-            <converters:AdaptiveOrientationConverter x:Key="AdaptiveOrientationConverter"/>    
-            <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>    
+            <converters:StringUppercasedConverter x:Key="StringUppercasedConverter"/>
+            <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
             <converters:ScoreToColorConverter x:Key="ScoreToColorConverter"/>    
             <ResourceDictionary.MergedDictionaries>
             <ResourceInclude Source="Resources/AppResources.axaml"/>
+            <ResourceInclude Source="Views/TemplatedControls/ActionButton.axaml"/>
+            <ResourceInclude Source="Views/TemplatedControls/MainMenuItem.axaml"/>
+            <ResourceInclude Source="Views/TemplatedControls/EditableMenuItem.axaml"/>
+            <ResourceInclude Source="Views/TemplatedControls/RollResultView.axaml"/>
+            <ResourceInclude Source="Views/TemplatedControls/ToolBar.axaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

@@ -14,7 +14,23 @@
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
     <viewModels:LobbyViewModel />
   </Design.DataContext>
-    <Grid Margin="0" RowDefinitions="Auto,*,Auto">
+    <Grid Margin="0" RowDefinitions="Auto,*,Auto"
+          Container.Name="lobbyContainer" Container.Sizing="Width">
+        <Grid.Styles>
+            <ContainerQuery Name="lobbyContainer" Query="min-width:720">
+                <Style Selector="StackPanel#panesRoot">
+                    <Setter Property="Orientation" Value="Horizontal"/>
+                </Style>
+                <Style Selector="StackPanel#panesRoot > StackPanel.pane">
+                    <Setter Property="Width" Value="600"/>
+                </Style>
+            </ContainerQuery>
+            <ContainerQuery Name="lobbyContainer" Query="max-width:720">
+                <Style Selector="StackPanel#panesRoot > StackPanel.pane">
+                    <Setter Property="MaxWidth" Value="600"/>
+                </Style>
+            </ContainerQuery>
+        </Grid.Styles>
         <templatedControls:ToolBar
             LeftCommand="{Binding BackCommand}"
             LeftIcon="{Binding BackImage}"
@@ -22,20 +38,12 @@
             HorizontalAlignment="Left"
         />
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <StackPanel Orientation="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}, 
-                        Path=Bounds.Size, 
-                        Converter={StaticResource AdaptiveOrientationConverter}}">
-                <StackPanel Orientation="Vertical" 
-                            Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=StackPanel},
-                            Path=Bounds.Size,
-                            Converter={StaticResource PanelWidthConverter}}">
+            <StackPanel x:Name="panesRoot" Orientation="Vertical">
+                <StackPanel Classes="pane">
                     <Label Classes="caption" Content="{Binding PlayersTitle}"/>
                     <fragments:PlayersFragment/>
                 </StackPanel>
-                <StackPanel Orientation="Vertical"
-                            Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=StackPanel},
-                            Path=Bounds.Size,
-                            Converter={StaticResource PanelWidthConverter}}">
+                <StackPanel Classes="pane">
                     <Label Classes="caption" Content="{Binding RulesTitle}"/>
                     <fragments:RulesFragment/>
                 </StackPanel>

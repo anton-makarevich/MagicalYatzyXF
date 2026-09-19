@@ -1,12 +1,8 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls">
-    <Design.PreviewWith>
-        <controls:EditableMenuItem />
-    </Design.PreviewWith>
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls">
 
-    <Style Selector="controls|EditableMenuItem">
-        <!-- Set Defaults -->
+    <ControlTheme x:Key="{x:Type controls:EditableMenuItem}" TargetType="controls:EditableMenuItem">
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid Height="{StaticResource MenuCellSize}" Background="Transparent" RowDefinitions="*,*">
@@ -31,5 +27,5 @@
                 </Grid>
             </ControlTemplate>
         </Setter>
-    </Style>
-</Styles>
+    </ControlTheme>
+</ResourceDictionary>
