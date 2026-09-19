@@ -70,7 +70,7 @@ jobs:
           generate_release_notes: false
 
       - name: Upload WASM as Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: MagicalYatzy-WASM-${{ env.APP_VERSION }}
           path: src/Avalonia/MagicalYatzy.Avalonia.Browser/bin/${{ env.CONFIGURATION }}/net10.0-browser/publish/wwwroot

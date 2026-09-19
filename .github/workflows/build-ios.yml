@@ -75,7 +75,7 @@ jobs:
           generate_release_notes: false
 
       - name: Upload IPA as Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: MagicalYatzy-iOS-${{ env.APP_VERSION }}
           path: src/Avalonia/MagicalYatzy.Avalonia.iOS/bin/Release/iOS/publish/MagicalYatzy.Avalonia.iOS.ipa
