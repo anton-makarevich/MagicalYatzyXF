@@ -23,6 +23,13 @@ MagicalYatzy is a cross-platform Yatzy dice game: .NET 10, AvaloniaUI (Desktop, 
 - UI projects have no unit tests by design — keep logic in Core ViewModels/Services.
 - Use the `generate-unit-tests` skill when writing tests.
 
+## Versioning (required for PRs)
+
+`Directory.Build.props` holds a single `<VersionPrefix>` for all packages. **Every PR that modifies files under `src/` must bump this version** — `pr-version-check.yml` fails the PR if the version is not greater than `main`. Bump it as part of your change.
+- The version should only be incremented once per PR
+- Test-only, docs-only, or infra-only PRs do not require a version bump.
+- Agents may only bump the **patch** segment (e.g. `2.5.4` → `2.5.5`). Never change Major or Minor without explicit human approval.
+
 ## Architecture
 
 Dependency flow: `Avalonia heads → MagicalYatzy.Avalonia (views) → MagicalYatzy.Core → MagicalYatzy.Dto`.
