@@ -8,15 +8,30 @@
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.SettingsView"
              x:DataType="viewModels:SettingsViewModel">
     <UserControl.Styles>
-        <Style Selector="StackPanel.panel">
-            <Setter Property="Margin" Value="0,0,20,20"/>
-            <Setter Property="Spacing" Value="10"></Setter>
-        </Style>
         <Style Selector="StackPanel.middle-panel">
             <Setter Property="Margin" Value="0,0,0,10"/>
         </Style>
     </UserControl.Styles>
-    <Grid x:Name="ControlGrid"  RowDefinitions="Auto,*,Auto">
+    <Grid x:Name="ControlGrid" RowDefinitions="Auto,*,Auto"
+          Container.Name="settingsContainer" Container.Sizing="Width">
+        <Grid.Styles>
+            <Style Selector="StackPanel#panesRoot">
+                <Setter Property="Orientation" Value="Vertical"/>
+            </Style>
+            <ContainerQuery Name="settingsContainer" Query="min-width:720">
+                <Style Selector="StackPanel#panesRoot">
+                    <Setter Property="Orientation" Value="Horizontal"/>
+                </Style>
+                <Style Selector="StackPanel#panesRoot > StackPanel.panel">
+                    <Setter Property="Width" Value="600"/>
+                </Style>
+            </ContainerQuery>
+            <ContainerQuery Name="settingsContainer" Query="max-width:720">
+                <Style Selector="StackPanel#panesRoot > StackPanel.panel">
+                    <Setter Property="MaxWidth" Value="600"/>
+                </Style>
+            </ContainerQuery>
+        </Grid.Styles>
         <templatedControls:ToolBar
              LeftCommand="{Binding BackCommand}"
              LeftIcon="{Binding BackImage}"
@@ -28,10 +43,7 @@
              Margin="60,20"
              Grid.Row="1"
              HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-             <StackPanel
-                 Orientation="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}, 
-                        Path=Bounds.Size, 
-                        Converter={StaticResource AdaptiveOrientationConverter}}">
+             <StackPanel x:Name="panesRoot">
                  <StackPanel Classes="panel">
                      <Label 
                          Classes="caption"       
