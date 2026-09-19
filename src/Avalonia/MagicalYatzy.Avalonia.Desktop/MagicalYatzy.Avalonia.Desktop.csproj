@@ -16,7 +16,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia.Desktop" Version="12.1.2" />
+        <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
+        <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Version="$(AvaloniaDevToolsVersion)" Condition="'$(Configuration)' == 'Debug'" />
         <PackageReference Include="Sanet.MVVM.DI.Avalonia" Version="1.7.1211" />
     </ItemGroup>
 
