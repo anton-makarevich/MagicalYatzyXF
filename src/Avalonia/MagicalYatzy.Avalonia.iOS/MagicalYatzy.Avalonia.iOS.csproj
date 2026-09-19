@@ -23,7 +23,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia.iOS" Version="12.1.2" />
+        <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
         <PackageReference Include="Sanet.MVVM.DI.Avalonia" Version="1.7.1211" />
     </ItemGroup>
 

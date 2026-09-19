@@ -6,6 +6,8 @@
         <VersionPrefix>2.5.6</VersionPrefix>
         <!-- Single source of truth for the Avalonia Developer Tools version (global 'avdt' tool and the Debug-only AvaloniaUI.DiagnosticsSupport package). Keep both in sync with the installed tool. -->
         <AvaloniaDevToolsVersion>2.2.3</AvaloniaDevToolsVersion>
+        <!-- Single source of truth for all core Avalonia packages (shared by all projects). -->
+        <AvaloniaVersion>12.1.2</AvaloniaVersion>
         <Authors>Anton Makarevich</Authors>
         <Company>Anton Makarevich</Company>
         <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
@@ -25,6 +27,6 @@
 
     <!-- Invoked from `mise run install-devtools`; update||install keeps a missing/fresh global tool working. -->
     <Target Name="InstallAvaloniaDevTools">
-        <Exec Command="dotnet tool update --global AvaloniaUI.DeveloperTools --version $(AvaloniaDevToolsVersion) || dotnet tool install --global AvaloniaUI.DeveloperTools --version $(AvaloniaDevToolsVersion)" />
+        <Exec Command="dotnet tool update --global AvaloniaUI.DeveloperTools --version $(AvaloniaDevToolsVersion) --allow-downgrade || dotnet tool install --global AvaloniaUI.DeveloperTools --version $(AvaloniaDevToolsVersion)" />
     </Target>
 </Project>
