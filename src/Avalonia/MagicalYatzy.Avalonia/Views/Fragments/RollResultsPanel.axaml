@@ -15,7 +15,7 @@
         <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
                 <StackPanel 
-                    Orientation="{Binding Orientation, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type fragments:RollResultsPanel}}}" 
+                    Orientation="{Binding $parent[fragments:RollResultsPanel].Orientation}" 
                     Spacing="2"/>
             </ItemsPanelTemplate>
         </ListBox.ItemsPanel>
@@ -23,7 +23,7 @@
             <DataTemplate>
                 <templatedControls:RollResultView 
                     Padding="0"
-                    ScoreFontSize="{Binding FontSize, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type fragments:RollResultsPanel}}}"
+                    ScoreFontSize="{Binding $parent[fragments:RollResultsPanel].FontSize}"
                     Background="{Binding ScoreType, Converter={StaticResource ScoreToColorConverter}}"
                     ScoreValue="{Binding PossibleValue}"
                     ScoreName="{Binding  Name}"/>
@@ -31,8 +31,8 @@
         </ListBox.ItemTemplate>
         <ListBox.Styles>
             <Style Selector="ListBoxItem">
-                <Setter Property="Width" Value="{Binding Size, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type fragments:RollResultsPanel}}}"/>
-                <Setter Property="Height" Value="{Binding Size, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type fragments:RollResultsPanel}}}"/>
+                <Setter Property="Width" Value="{Binding $parent[fragments:RollResultsPanel].Size}"/>
+                <Setter Property="Height" Value="{Binding $parent[fragments:RollResultsPanel].Size}"/>
                 <Setter Property="Padding" Value="0"/>
             </Style>
         </ListBox.Styles>

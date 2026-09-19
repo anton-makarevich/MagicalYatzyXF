@@ -11,6 +11,10 @@
         <Setter Property="Foreground" Value="{StaticResource SanetBlueColor}" />
         <Setter Property="FontSize" Value="22"/>
     </Style>
+    <Style Selector="TextBlock.caption">
+        <Setter Property="Foreground" Value="{StaticResource SanetBlueColor}" />
+        <Setter Property="FontSize" Value="22"/>
+    </Style>
     <Style Selector="TextBlock.description">
         <Setter Property="Foreground" Value="{StaticResource SanetBlueColor}" />
         <Setter Property="FontSize" Value="12"/>
@@ -23,7 +27,7 @@
 
     <Style Selector="TextBox">
         <Setter Property="Background" Value="{StaticResource SanetBlueColor}"/>
-        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Foreground" Value="{DynamicResource TextForegroundBrush}" />
     </Style>
     <Style Selector="TextBox.caption">
         <Setter Property="Foreground" Value="{StaticResource SanetBlueColor}" />
@@ -32,7 +36,7 @@
     </Style>
     <Style Selector="Button">
         <Setter Property="Background" Value="{StaticResource SanetBlueColor}"/>
-        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Foreground" Value="{DynamicResource TextForegroundBrush}" />
     </Style>
     <Style Selector="Image.toolbaritem">
         <Setter Property="Height" Value="{StaticResource ToolButtonSize}"/>

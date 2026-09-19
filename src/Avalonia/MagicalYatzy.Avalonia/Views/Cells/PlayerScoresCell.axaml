@@ -13,23 +13,24 @@
             Background="{Binding IsMyTurn,
                 Converter={StaticResource BoolToColorConverter},
                 ConverterParameter=SanetBlueColor}"
-            Foreground="White"
+            Foreground="{DynamicResource TextForegroundBrush}"
             TextTrimming="CharacterEllipsis"
-            Text="{Binding Name}"/>
+            Text="{Binding Name, FallbackValue='', TargetNullValue=''}"/>
         <ItemsControl 
-            ItemsSource="{Binding Results}"
+            ItemsSource="{Binding Results, FallbackValue={x:Null}}"
             VerticalAlignment = "Top"
             Background = "Transparent">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Label
+                    <TextBlock
                         Background="{Binding  HasValue,
                             Converter={StaticResource BoolToColorConverter},
                             ConverterParameter=SanetBlueColor}"
-                        Foreground="White"
+                        Foreground="{DynamicResource TextForegroundBrush}"
                         HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Center"
-                        Content="{Binding Value}"/>
+                        VerticalAlignment="Center"
+                        TextAlignment="Center"
+                        Text="{Binding Value, FallbackValue='', TargetNullValue=''}"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>
@@ -38,11 +39,11 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
-        <Label
+        <TextBlock
             Margin="0,2,0,0"
-            Foreground="White"
+            Foreground="{DynamicResource TextForegroundBrush}"
             FontSize="14"
             HorizontalAlignment="Center"
-            Content="{Binding Total}" />
+            Text="{Binding Total, FallbackValue='', TargetNullValue=''}" />
     </StackPanel>
 </UserControl>

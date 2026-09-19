@@ -23,7 +23,7 @@
                         </Border>
                         
                         <Label 
-                            IsVisible="{Binding HasLabel, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ActionButton}}}"
+                            IsVisible="{TemplateBinding HasLabel}"
                             Foreground="{TemplateBinding Foreground}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"

@@ -16,18 +16,18 @@
         Background="Transparent"
         RowDefinitions="*,Auto,*,Auto,*,Auto,*">
 
-        <Label
+        <TextBlock
             Grid.Row="1"
             Classes="caption"
             HorizontalAlignment="Center"
-            Content="{Binding Title, Converter={StaticResource StringUppercasedConverter}}"
+            Text="{Binding Title, Converter={StaticResource StringUppercasedConverter}, FallbackValue='', TargetNullValue=''}"
         />
         <ItemsControl
-            HorizontalAlignment="Center"
+            HorizontalAlignment="Stretch"
+            MaxWidth="340"
             VerticalAlignment="Center"
-            Width="340"
             Grid.Row="3"
-            ItemsSource="{Binding Players}"
+            ItemsSource="{Binding Players, FallbackValue={x:Null}}"
             Background = "Transparent">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
@@ -39,25 +39,26 @@
                         </Grid.ColumnDefinitions>
 
                         <Image
-                            Source="{Binding Image, Converter={StaticResource ImageNameConverter}}"
+                            Source="{Binding Image, Converter={StaticResource ImageNameConverter}, FallbackValue='', TargetNullValue=''}"
                             VerticalAlignment="Center"
                            Margin="0,0,10,0"
                            />
-                        <Label
+                        <TextBlock
                             Grid.Column="1"
                             MaxWidth="250"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
                             Classes="caption"
-                            Foreground="White"
-                            Content="{Binding Name}" />
-                        <Label
+                            TextTrimming="CharacterEllipsis"
+                            Foreground="{DynamicResource TextForegroundBrush}"
+                            Text="{Binding Name, FallbackValue='', TargetNullValue=''}" />
+                        <TextBlock
                             Grid.Column="2"
                             Classes="caption"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
-                            Foreground="White"
-                            Content="{Binding Total}" />
+                            Foreground="{DynamicResource TextForegroundBrush}"
+                            Text="{Binding Total, FallbackValue='', TargetNullValue=''}" />
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
@@ -74,12 +75,12 @@
             Spacing="10">
             <templatedControls:ActionButton
                 Command="{Binding RestartGameCommand}"
-                ImageSource="{Binding RestartImage}" 
-                Content="{Binding AgainLabel}"/>
+                ImageSource="{Binding RestartImage, FallbackValue='', TargetNullValue=''}" 
+                Content="{Binding AgainLabel, FallbackValue='', TargetNullValue=''}"/>
             <templatedControls:ActionButton
                 Command="{Binding CloseCommand}"
-                ImageSource="{Binding CloseImage}"
-                Content="{ Binding CloseButtonContent}"/>
+                ImageSource="{Binding CloseImage, FallbackValue='', TargetNullValue=''}"
+                Content="{Binding CloseButtonContent, FallbackValue='', TargetNullValue=''}"/>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -9,19 +9,18 @@
                     Margin="0"
                     Background="{TemplateBinding Background}"
                     RowDefinitions="*,Auto">
-                    <Label 
-                        Foreground="White"
+                    <TextBlock 
+                        Foreground="{DynamicResource TextForegroundBrush}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         FontSize="{TemplateBinding ScoreFontSize}"
-                        Content="{TemplateBinding ScoreValue}"/>
+                        Text="{TemplateBinding ScoreValue}"/>
                     <Border
-                        Background="Black"
-                        Opacity="0.2"
+                        Background="{DynamicResource ScrimBrush}"
                         Grid.Row="1"/>
                     <TextBlock
                         Grid.Row="1"
-                        Foreground="White"
+                        Foreground="{DynamicResource TextForegroundBrush}"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Center"
                         Margin="0,6,0,4"
