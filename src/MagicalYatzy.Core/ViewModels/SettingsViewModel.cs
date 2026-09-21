@@ -1,15 +1,21 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
-using Sanet.MagicalYatzy.Services.Localization;
+using Sanet.Localization;
 using Sanet.MagicalYatzy.ViewModels.Base;
 
 namespace Sanet.MagicalYatzy.ViewModels;
 
 public class SettingsViewModel : DicePanelViewModel
 {
+    private static readonly Dictionary<string, string> LanguageDisplayNames = new()
+    {
+        ["be"] = "беларуская",
+    };
+
     private readonly IGameSettingsService _gameSettingsService;
     private readonly ILocalizationService _localizationService;
 
@@ -22,32 +28,38 @@ public class SettingsViewModel : DicePanelViewModel
         _localizationService = localizationService;
 
         AvailableLanguages = new ObservableCollection<Language>(
-            _localizationService.Languages);
-    }     
+            _localizationService.Languages.Select(WithDisplayName));
+    }
+
+    private static Language WithDisplayName(Language language) =>
+        language with
+        {
+            Name = language.Name ?? LanguageDisplayNames.GetValueOrDefault(language.Code, language.Code)
+        };     
 
     #region bind props
 
-    public string Title => _localizationService.GetLocalizedString("SettingsCaptionText");
+    public string Title => _localizationService.GetString("SettingsCaptionText");
 
-    public string SettingsStyleCaption => _localizationService.GetLocalizedString("SettingsStyleCaptionText");
+    public string SettingsStyleCaption => _localizationService.GetString("SettingsStyleCaptionText");
 
-    public string AngleLowText => _localizationService.GetLocalizedString("AngLowText");
+    public string AngleLowText => _localizationService.GetString("AngLowText");
 
-    public string AngleHighText => _localizationService.GetLocalizedString("AngHighText");
+    public string AngleHighText => _localizationService.GetString("AngHighText");
 
-    public string AngleVeryHighText => _localizationService.GetLocalizedString("AngVeryHighText");
+    public string AngleVeryHighText => _localizationService.GetString("AngVeryHighText");
 
-    public string SettingsAngleCaption => _localizationService.GetLocalizedString("SettingsAngleCaptionText");
+    public string SettingsAngleCaption => _localizationService.GetString("SettingsAngleCaptionText");
 
-    public string SpeedSlow => _localizationService.GetLocalizedString("SpeedSlowText");
+    public string SpeedSlow => _localizationService.GetString("SpeedSlowText");
 
-    public string SpeedVerySlow => _localizationService.GetLocalizedString("SpeedVerySlowText");
+    public string SpeedVerySlow => _localizationService.GetString("SpeedVerySlowText");
 
-    public string SpeedFast => _localizationService.GetLocalizedString("SpeedFastText");
+    public string SpeedFast => _localizationService.GetString("SpeedFastText");
 
-    public string SpeedVeryFast => _localizationService.GetLocalizedString("SpeedVeryFastText");
+    public string SpeedVeryFast => _localizationService.GetString("SpeedVeryFastText");
 
-    public string SettingsSpeedCaption => _localizationService.GetLocalizedString("SettingsSpeedCaptionText");
+    public string SettingsSpeedCaption => _localizationService.GetString("SettingsSpeedCaptionText");
 
     public int DieAngle
     {
@@ -218,17 +230,18 @@ public class SettingsViewModel : DicePanelViewModel
             NotifyPropertyChanged();
         }
     }
-    public string SoundLabel => _localizationService.GetLocalizedString("SoundLabel");
-    public string OffContent => _localizationService.GetLocalizedString("OffContent");
-    public string OnContent => _localizationService.GetLocalizedString("OnContent");
-    public string LanguageLabel => _localizationService.GetLocalizedString("LanguageLabel");
+    public string SoundLabel => _localizationService.GetString("SoundLabel");
+    public string OffContent => _localizationService.GetString("OffContent");
+    public string OnContent => _localizationService.GetString("OnContent");
+    public string LanguageLabel => _localizationService.GetString("LanguageLabel");
     public string BackImage => "Back.png";
     
     public ObservableCollection<Language> AvailableLanguages { get; }
 
     public Language SelectedLanguage
     {
-        get => _localizationService.ActiveLanguage;
+        get => AvailableLanguages.FirstOrDefault(l => l.Code == _localizationService.ActiveLanguage.Code)
+               ?? _localizationService.ActiveLanguage;
         set
         {
             _localizationService.SetActiveLanguage(value);

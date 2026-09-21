@@ -1,7 +1,6 @@
-namespace Sanet.MagicalYatzy.Models.Game.DiceGenerator
+namespace Sanet.MagicalYatzy.Models.Game.DiceGenerator;
+
+public interface IDiceGenerator
 {
-    public interface IDiceGenerator
-    {
-        int GetNextDiceResult(int[] previousResults = null);
-    }
+    int GetNextDiceResult(int[] previousResults = null);
 }

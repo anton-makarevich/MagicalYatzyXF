@@ -1,9 +1,8 @@
-﻿namespace Sanet.MagicalYatzy.Models.Game
+﻿namespace Sanet.MagicalYatzy.Models.Game;
+
+public enum PlayerType
 {
-    public enum PlayerType
-    {
-        Local,
-        Network,
-        AI
-    }
+    Local,
+    Network,
+    AI
 }

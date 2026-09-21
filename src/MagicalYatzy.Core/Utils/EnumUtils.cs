@@ -1,11 +1,10 @@
 ﻿using System;
-namespace Sanet.MagicalYatzy.Utils
+namespace Sanet.MagicalYatzy.Utils;
+
+public static class EnumUtils
 {
-    public static class EnumUtils
+    public static T[] GetValues<T>()
     {
-        public static T[] GetValues<T>()
-        {
-            return (T[])Enum.GetValues(typeof(T));
-        }
+        return (T[])Enum.GetValues(typeof(T));
     }
 }

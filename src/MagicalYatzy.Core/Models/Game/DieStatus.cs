@@ -1,9 +1,8 @@
-﻿namespace Sanet.MagicalYatzy.Models.Game
+﻿namespace Sanet.MagicalYatzy.Models.Game;
+
+enum DieStatus
 {
-    enum DieStatus
-    {
-        Stopped = 0,
-        Rolling = 1,
-        Landing = 2
-    }
+    Stopped = 0,
+    Rolling = 1,
+    Landing = 2
 }

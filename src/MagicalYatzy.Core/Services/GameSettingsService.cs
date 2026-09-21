@@ -1,51 +1,50 @@
 ﻿using Sanet.MagicalYatzy.Models.Game;
 
-namespace Sanet.MagicalYatzy.Services
+namespace Sanet.MagicalYatzy.Services;
+
+public class GameSettingsService : IGameSettingsService
 {
-    public class GameSettingsService : IGameSettingsService
+    public DiceStyle DieStyle { get; set; }
+
+    public int DieAngle
     {
-        public DiceStyle DieStyle { get; set; }
-
-        public int DieAngle
+        get;
+        set
         {
-            get;
-            set
-            {
-                if (value < 0)
-                    value = 0;
-                if (value > 5)
-                    value = 5;
-                field = value;
-            }
-        } = 2;
+            if (value < 0)
+                value = 0;
+            if (value > 5)
+                value = 5;
+            field = value;
+        }
+    } = 2;
 
-        public int MaxRollLoop
+    public int MaxRollLoop
+    {
+        get;
+        set
         {
-            get;
-            set
-            {
-                if (value < 20)
-                    value = 20;
-                if (value > 150)
-                    value = 150;
-                field = value;
-            }
-        } = 100;
+            if (value < 20)
+                value = 20;
+            if (value > 150)
+                value = 150;
+            field = value;
+        }
+    } = 100;
 
-        public int DieSpeed
+    public int DieSpeed
+    {
+        get;
+        set
         {
-            get;
-            set
+            field = value switch
             {
-                field = value switch
-                {
-                    < (int)DiceSpeed.VeryFast => (int)DiceSpeed.VeryFast,
-                    > (int)DiceSpeed.VerySlow => (int)DiceSpeed.VerySlow,
-                    _ => value
-                };
-            }
-        } = (int)DiceSpeed.Fast;
+                < (int)DiceSpeed.VeryFast => (int)DiceSpeed.VeryFast,
+                > (int)DiceSpeed.VerySlow => (int)DiceSpeed.VerySlow,
+                _ => value
+            };
+        }
+    } = (int)DiceSpeed.Fast;
 
-        public bool IsSoundEnabled { get; set; }
-    }
+    public bool IsSoundEnabled { get; set; }
 }

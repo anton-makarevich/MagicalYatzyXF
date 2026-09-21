@@ -54,6 +54,7 @@ Source code for in-house dependencies and reference implementations. All repos a
 | Repo | Local path | What it's for |
 |------|------------|---------------|
 | [Sanet.MVVM](https://github.com/anton-makarevich/Sanet.MVVM) | `../Sanet.MVVM` | Source of the `Sanet.MVVM.*` NuGet packages (base ViewModels/views, DI, navigation). Consult when framework behavior is unclear; the `sanet-mvvm` skill covers day-to-day usage. |
+| [Sanet.Localization](https://github.com/anton-makarevich/Sanet.Localization) | `../Sanet.Localization` | Source of the `Sanet.Localization` NuGet package (`ILocalizationService`, culture-invariant resource localization engine). The app provides its own `.resx` resources; the engine lives in the library. |
 | [MakaMek](https://github.com/anton-makarevich/MakaMek) | `../MakaMek` | Modern Avalonia app built with the same principles — the reference example for patterns used in this repo. |
 | [MagicalYatzyLegacy](https://github.com/anton-makarevich/MagicalYatzyLegacy) | `../MagicalYatzyLegacy` | All older MagicalYatzy versions (WP7, UWP, and older). Consult when porting or replicating legacy functionality. |
 

@@ -1,9 +1,8 @@
-﻿namespace Sanet.MagicalYatzy.Services.Navigation
+﻿namespace Sanet.MagicalYatzy.Services.Navigation;
+
+public interface IExternalNavigationService
 {
-    public interface IExternalNavigationService
-    {
-        void OpenYatzyFBPage();
-        void RateApp();
-        void SendFeedback();
-    }
+    void OpenYatzyFBPage();
+    void RateApp();
+    void SendFeedback();
 }

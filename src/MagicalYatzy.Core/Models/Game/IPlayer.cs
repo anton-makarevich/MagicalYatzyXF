@@ -2,65 +2,64 @@
 using Sanet.MagicalYatzy.Models.Game.Ai;
 using Sanet.MagicalYatzy.Models.Game.Magical;
 
-namespace Sanet.MagicalYatzy.Models.Game
+namespace Sanet.MagicalYatzy.Models.Game;
+
+public interface IPlayer
 {
-    public interface IPlayer
-    {
-        bool AllNumericFilled { get; }
+    bool AllNumericFilled { get; }
 
-        IReadOnlyList<IRollResult>? Results { get; }
+    IReadOnlyList<IRollResult>? Results { get; }
 
-        IReadOnlyList<Artifact> MagicalArtifactsForGame { get; }
+    IReadOnlyList<Artifact> MagicalArtifactsForGame { get; }
         
-        IReadOnlyList<Artifact> AvailableMagicalArtifacts { get; set; }
+    IReadOnlyList<Artifact> AvailableMagicalArtifacts { get; set; }
 
-        bool CanBuy { get; }
+    bool CanBuy { get; }
 
-        ClientType Client { get; }
+    ClientType Client { get; }
 
-        bool HasPassword { get; }
+    bool HasPassword { get; }
 
-        bool IsBot { get; }
-        bool IsDefaultName { get; }
+    bool IsBot { get; }
+    bool IsDefaultName { get; }
 
-        bool IsHuman { get;  }
+    bool IsHuman { get;  }
 
-        bool IsMyTurn { get; set; }
+    bool IsMyTurn { get; set; }
 
-        bool IsReady { get; set; }
+    bool IsReady { get; set; }
 
-        string Language { get; set; }
+    string Language { get; set; }
 
-        int MaxRemainingNumeric { get; }
+    int MaxRemainingNumeric { get; }
 
-        string Name { get; set; }
+    string Name { get; set; }
 
-        string Password { get; set; }
+    string Password { get; set; }
 
-        string ProfileImage { get; set; }
+    string ProfileImage { get; set; }
 
-        int Roll { get; set; }
+    int Roll { get; set; }
 
-        int SeatNo { get; set; }
+    int SeatNo { get; set; }
 
-        int Total { get; }
+    int Total { get; }
 
-        int TotalNumeric { get; }
+    int TotalNumeric { get; }
 
-        PlayerType Type { get; }
-        string InGameId { get; }
-        DiceStyle SelectedStyle { get; set; }
-        IGameDecisionMaker DecisionMaker { get; }
+    PlayerType Type { get; }
+    string InGameId { get; }
+    DiceStyle SelectedStyle { get; set; }
+    IGameDecisionMaker DecisionMaker { get; }
 
-        void PrepareForGameStart(Rule rule);
+    void PrepareForGameStart(Rule rule);
         
-        IRollResult GetResultForScore(Scores score);
+    IRollResult GetResultForScore(Scores score);
 
-        void CheckRollResults(DieResult lastDiceResult, Rule rule);
-        void UseArtifact(Artifacts artifact);
+    void CheckRollResults(DieResult lastDiceResult, Rule rule);
+    void UseArtifact(Artifacts artifact);
 
-        bool IsScoreFilled(Scores score);
+    bool IsScoreFilled(Scores score);
 
-        bool CanUseArtifact(Artifacts artifact);
-    }
+    bool CanUseArtifact(Artifacts artifact);
 }

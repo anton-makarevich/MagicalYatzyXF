@@ -1,9 +1,8 @@
 using Sanet.MagicalYatzy.Models.Game;
 
-namespace Sanet.MagicalYatzy.Views
+namespace Sanet.MagicalYatzy.Views;
+
+public interface IDicePanelView
 {
-    public interface IDicePanelView
-    {
-        IDicePanel DicePanel { get; set; }
-    }
+    IDicePanel DicePanel { get; set; }
 }

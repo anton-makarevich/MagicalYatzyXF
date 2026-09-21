@@ -1,13 +1,12 @@
-﻿namespace Sanet.MagicalYatzy.Models
+﻿namespace Sanet.MagicalYatzy.Models;
+
+public enum ClientType
 {
-    public enum ClientType
-    {
-        WinRT,
-        WP,
-        WP7,
-        WP8,
-        VK,
-        iOS,
-        Android
-    }
+    WinRT,
+    WP,
+    WP7,
+    WP8,
+    VK,
+    iOS,
+    Android
 }

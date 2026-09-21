@@ -1,8 +1,7 @@
-namespace Sanet.MagicalYatzy.Dto.Models
+namespace Sanet.MagicalYatzy.Dto.Models;
+
+public class LoginModel
 {
-    public class LoginModel
-    {
-        public string PlayerName { get; set; } = "";
-        public string Password { get; set; } = "";
-    }
+    public string PlayerName { get; set; } = "";
+    public string Password { get; set; } = "";
 }

@@ -4,7 +4,7 @@ using NSubstitute;
 using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
-using Sanet.MagicalYatzy.Services.Localization;
+using Sanet.Localization;
 using Sanet.MagicalYatzy.ViewModels;
 using Xunit;
 
@@ -35,7 +35,7 @@ public class SettingsViewModelTests
         // Arrange
         const string expectedTitle = "SettingsCaptionText";
 
-        _localizationService.GetLocalizedString("SettingsCaptionText").Returns(expectedTitle);
+        _localizationService.GetString("SettingsCaptionText").Returns(expectedTitle);
 
         // Act
         var title = _sut.Title;
@@ -50,7 +50,7 @@ public class SettingsViewModelTests
         // Arrange
         const string expected = "Language";
 
-        _localizationService.GetLocalizedString("LanguageLabel").Returns(expected);
+        _localizationService.GetString("LanguageLabel").Returns(expected);
 
         // Act
         var language = _sut.LanguageLabel;
@@ -193,7 +193,7 @@ public class SettingsViewModelTests
         // Arrange
         const string expectedSoundLabel = "SoundLabel";
 
-        _localizationService.GetLocalizedString("SoundLabel").Returns(expectedSoundLabel);
+        _localizationService.GetString("SoundLabel").Returns(expectedSoundLabel);
 
         // Act
         var soundLabel = _sut.SoundLabel;
@@ -208,7 +208,7 @@ public class SettingsViewModelTests
         // Arrange
         const string expectedOffContent = "OffContent";
 
-        _localizationService.GetLocalizedString("OffContent").Returns(expectedOffContent);
+        _localizationService.GetString("OffContent").Returns(expectedOffContent);
 
         // Act
         var offContent = _sut.OffContent;
@@ -223,7 +223,7 @@ public class SettingsViewModelTests
         // Arrange
         const string expectedOnContent = "OnContent";
 
-        _localizationService.GetLocalizedString("OnContent").Returns(expectedOnContent);
+        _localizationService.GetString("OnContent").Returns(expectedOnContent);
 
         // Act
         var onContent = _sut.OnContent;
@@ -238,7 +238,7 @@ public class SettingsViewModelTests
         // Arrange
         const string expectedSettingsStyleCaption = "SettingsStyleCaptionText";
 
-        _localizationService.GetLocalizedString("SettingsStyleCaptionText").Returns(expectedSettingsStyleCaption);
+        _localizationService.GetString("SettingsStyleCaptionText").Returns(expectedSettingsStyleCaption);
 
         // Act
         var settingsStyleCaption = _sut.SettingsStyleCaption;
@@ -253,7 +253,7 @@ public class SettingsViewModelTests
         // Arrange
         const string expectedAngLowText = "AngLowText";
 
-        _localizationService.GetLocalizedString("AngLowText").Returns(expectedAngLowText);
+        _localizationService.GetString("AngLowText").Returns(expectedAngLowText);
 
         // Act
         var angLowText = _sut.AngleLowText;
@@ -268,7 +268,7 @@ public class SettingsViewModelTests
         // Arrange
         const string expectedAngHighText = "AngHighText";
 
-        _localizationService.GetLocalizedString("AngHighText").Returns(expectedAngHighText);
+        _localizationService.GetString("AngHighText").Returns(expectedAngHighText);
 
         // Act
         var angHighText = _sut.AngleHighText;
@@ -283,7 +283,7 @@ public class SettingsViewModelTests
         // Arrange
         const string expectedAngVeryHighText = "AngVeryHighText";
 
-        _localizationService.GetLocalizedString("AngVeryHighText").Returns(expectedAngVeryHighText);
+        _localizationService.GetString("AngVeryHighText").Returns(expectedAngVeryHighText);
 
         // Act
         var angVeryHighText = _sut.AngleVeryHighText;
@@ -298,7 +298,7 @@ public class SettingsViewModelTests
         // Arrange
         const string expectedSettingsAngleCaption = "SettingsAngleCaptionText";
 
-        _localizationService.GetLocalizedString("SettingsAngleCaptionText").Returns(expectedSettingsAngleCaption);
+        _localizationService.GetString("SettingsAngleCaptionText").Returns(expectedSettingsAngleCaption);
 
         // Act
         var settingsAngleCaption = _sut.SettingsAngleCaption;
@@ -313,7 +313,7 @@ public class SettingsViewModelTests
         // Arrange
         const string expectedSpeedSlow = "SpeedSlowText";
 
-        _localizationService.GetLocalizedString("SpeedSlowText").Returns(expectedSpeedSlow);
+        _localizationService.GetString("SpeedSlowText").Returns(expectedSpeedSlow);
 
         // Act
         var speedSlow = _sut.SpeedSlow;
@@ -328,7 +328,7 @@ public class SettingsViewModelTests
         // Arrange
         const string expectedSpeedVerySlow = "SpeedVerySlowText";
 
-        _localizationService.GetLocalizedString("SpeedVerySlowText").Returns(expectedSpeedVerySlow);
+        _localizationService.GetString("SpeedVerySlowText").Returns(expectedSpeedVerySlow);
 
         // Act
         var speedVerySlow = _sut.SpeedVerySlow;
@@ -343,7 +343,7 @@ public class SettingsViewModelTests
         // Arrange
         const string expectedSpeedFast = "SpeedFastText";
 
-        _localizationService.GetLocalizedString("SpeedFastText").Returns(expectedSpeedFast);
+        _localizationService.GetString("SpeedFastText").Returns(expectedSpeedFast);
 
         // Act
         var speedFast = _sut.SpeedFast;
@@ -358,7 +358,7 @@ public class SettingsViewModelTests
         // Arrange
         const string expectedSpeedVeryFast = "SpeedVeryFastText";
 
-        _localizationService.GetLocalizedString("SpeedVeryFastText").Returns(expectedSpeedVeryFast);
+        _localizationService.GetString("SpeedVeryFastText").Returns(expectedSpeedVeryFast);
 
         // Act
         var speedVeryFast = _sut.SpeedVeryFast;
@@ -418,7 +418,7 @@ public class SettingsViewModelTests
         // Arrange
         const string expectedSettingsSpeedCaption = "SettingsSpeedCaptionText";
 
-        _localizationService.GetLocalizedString("SettingsSpeedCaptionText").Returns(expectedSettingsSpeedCaption);
+        _localizationService.GetString("SettingsSpeedCaptionText").Returns(expectedSettingsSpeedCaption);
 
         // Act
         var settingsSpeedCaption = _sut.SettingsSpeedCaption;
@@ -688,7 +688,7 @@ public class SettingsViewModelTests
     }
     
     [Fact]
-    public void SelectedLanguage_ShouldReturnActiveLanguageCode_FromLocalizationService()
+    public void SelectedLanguage_ShouldReturnAvailableLanguage_MatchingActiveLanguageCode()
     {
         // Arrange
         var language  = new Language("en",false); // Example language code
@@ -698,7 +698,7 @@ public class SettingsViewModelTests
         var selectedLanguage = _sut.SelectedLanguage;
 
         // Assert
-        selectedLanguage.ShouldBe(language);
+        selectedLanguage.Code.ShouldBe("en");
     }
     
     [Fact]

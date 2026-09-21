@@ -1,10 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace Sanet.MagicalYatzy.Dto.Services
+namespace Sanet.MagicalYatzy.Dto.Services;
+
+public interface IWebService
 {
-    public interface IWebService
-    {
-        Task<T> GetAsync<T>(string url);
-        Task<T> PostAsync<T>(object requestModel, string url);
-    }
+    Task<T> GetAsync<T>(string url);
+    Task<T> PostAsync<T>(object requestModel, string url);
 }

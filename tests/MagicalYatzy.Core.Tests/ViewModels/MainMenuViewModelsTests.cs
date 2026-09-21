@@ -4,7 +4,7 @@ using NSubstitute;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Services.Game;
-using Sanet.MagicalYatzy.Services.Localization;
+using Sanet.Localization;
 using Sanet.MagicalYatzy.Services.Navigation;
 using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MVVM.Core.Services;
@@ -26,7 +26,7 @@ public class MainMenuViewModelsTests
     {
         var externalNavigationServiceMock = Substitute.For<ExternalNavigationService>();
         _localizationService = Substitute.For<ILocalizationService>();
-        _localizationService.GetLocalizedString("SettingsAction").Returns(Strings.SettingsAction);
+        _localizationService.GetString("SettingsAction").Returns(Strings.SettingsAction);
         _sut = new MainMenuViewModel(_dicePanelMock, externalNavigationServiceMock, _playerServiceMock, _localizationService);
     }
 
@@ -41,8 +41,8 @@ public class MainMenuViewModelsTests
     [Fact]
     public void MainMenuContainsNewLocalGameItem()
     {
-        _localizationService.GetLocalizedString("NewLocalGameAction").Returns(Strings.NewLocalGameAction);
-        _localizationService.GetLocalizedString("NewLocalGameDescription").Returns(Strings.NewLocalGameDescription);
+        _localizationService.GetString("NewLocalGameAction").Returns(Strings.NewLocalGameAction);
+        _localizationService.GetString("NewLocalGameDescription").Returns(Strings.NewLocalGameDescription);
         _sut.FillMainActions();
 
         var newLocalGameMenuItem = _sut.MenuActions.FirstOrDefault(mm => mm.Label == Strings.NewLocalGameAction);
@@ -54,7 +54,7 @@ public class MainMenuViewModelsTests
     [Fact]
     public void CallingNewLocalGameItemTriggersCorrespondingNavigationServiceMethod()
     {
-        _localizationService.GetLocalizedString("NewLocalGameAction").Returns(Strings.NewLocalGameAction);
+        _localizationService.GetString("NewLocalGameAction").Returns(Strings.NewLocalGameAction);
         _sut.SetNavigationService(_navigationServiceMock);
         _sut.FillMainActions();
 

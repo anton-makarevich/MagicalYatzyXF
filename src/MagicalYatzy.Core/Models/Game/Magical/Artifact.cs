@@ -1,19 +1,18 @@
-namespace Sanet.MagicalYatzy.Models.Game.Magical
+namespace Sanet.MagicalYatzy.Models.Game.Magical;
+
+public class Artifact
 {
-    public class Artifact
+    public Artifact(Artifacts type)
     {
-        public Artifact(Artifacts type)
-        {
-            Type = type;
-        }
+        Type = type;
+    }
 
-        public Artifacts Type { get; }
+    public Artifacts Type { get; }
 
-        public bool IsUsed { get; private set; }
+    public bool IsUsed { get; private set; }
 
-        public void Use()
-        {
-            IsUsed = true;
-        }
+    public void Use()
+    {
+        IsUsed = true;
     }
 }

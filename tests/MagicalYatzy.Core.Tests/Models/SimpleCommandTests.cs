@@ -1,16 +1,15 @@
 using Sanet.MagicalYatzy.Models;
 using Xunit;
 
-namespace MagicalYatzyTests.Models
+namespace MagicalYatzyTests.Models;
+
+public class SimpleCommandTests
 {
-    public class SimpleCommandTests
+    [Fact]
+    public void CanAlwaysBeExecuted()
     {
-        [Fact]
-        public void CanAlwaysBeExecuted()
-        {
-            var sut = new SimpleCommand(() => { });
+        var sut = new SimpleCommand(() => { });
             
-            Assert.True(sut.CanExecute(null));
-        }
+        Assert.True(sut.CanExecute(null));
     }
 }

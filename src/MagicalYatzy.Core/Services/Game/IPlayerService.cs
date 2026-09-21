@@ -3,22 +3,21 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 
-namespace Sanet.MagicalYatzy.Services.Game
+namespace Sanet.MagicalYatzy.Services.Game;
+
+public interface IPlayerService 
 {
-    public interface IPlayerService 
-    {
-        IReadOnlyList<IPlayer> Players { get; }
+    IReadOnlyList<IPlayer> Players { get; }
 
-        IPlayer CurrentPlayer { get; }
+    IPlayer CurrentPlayer { get; }
         
-        Task<IPlayer> LoginToFacebookAsync();
+    Task<IPlayer> LoginToFacebookAsync();
 
-        Task<IPlayer> LoginAsync(string newUsername, string newPassword);
+    Task<IPlayer> LoginAsync(string newUsername, string newPassword);
 
-        IPlayer CreateLocalPlayer(string defaultName, PlayerType type, List<string> playersForGame);
+    IPlayer CreateLocalPlayer(string defaultName, PlayerType type, List<string> playersForGame);
 
-        Task LoadPlayersAsync();
+    Task LoadPlayersAsync();
 
-        event EventHandler PlayersUpdated;
-    }
+    event EventHandler PlayersUpdated;
 }

@@ -9,7 +9,7 @@ using Sanet.MagicalYatzy.Models.Game.Ai;
 using Sanet.MagicalYatzy.Models.Game.Magical;
 using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Services.Game;
-using Sanet.MagicalYatzy.Services.Localization;
+using Sanet.Localization;
 using Sanet.MagicalYatzy.Services.Media;
 using Sanet.MagicalYatzy.Utils;
 using Sanet.MagicalYatzy.ViewModels;
@@ -550,7 +550,7 @@ public class GameViewModelTests
     {
         _sut.AttachHandlers();
         
-        _localizationService.GetLocalizedString("WaitForPlayersLabel").Returns(Strings.WaitForPlayersLabel);
+        _localizationService.GetString("WaitForPlayersLabel").Returns(Strings.WaitForPlayersLabel);
             
         Assert.Contains(Strings.WaitForPlayersLabel,_sut.Title);
     }
@@ -561,7 +561,7 @@ public class GameViewModelTests
         _sut.AttachHandlers();
         
         _gameService.CurrentLocalGame.CurrentPlayer.Returns(_humanPlayer);
-        _localizationService.GetLocalizedString("MoveLabel").Returns(Strings.MoveLabel);
+        _localizationService.GetString("MoveLabel").Returns(Strings.MoveLabel);
             
         _sut.Title.ShouldContain(Strings.MoveLabel);
     }
@@ -1026,8 +1026,8 @@ public class GameViewModelTests
     [Fact]
     public void PanelTitlesAreCorrect()
     {
-        _localizationService.GetLocalizedString("ResultsTableLabel").Returns(Strings.ResultsTableLabel);
-        _localizationService.GetLocalizedString("DiceBoardLabel").Returns(Strings.DiceBoardLabel);
+        _localizationService.GetString("ResultsTableLabel").Returns(Strings.ResultsTableLabel);
+        _localizationService.GetString("DiceBoardLabel").Returns(Strings.DiceBoardLabel);
         
         Assert.Equal(Strings.ResultsTableLabel.ToUpper(), _sut.ScoresTitle);
         Assert.Equal(Strings.DiceBoardLabel.ToUpper(), _sut.PanelTitle);
@@ -1424,7 +1424,7 @@ public class GameViewModelTests
     public void MagicRollButtonLabel_IsReturnedFromTheLocalizationService()
     {
         const string magicRoll = "Magic Roll";
-        _localizationService.GetLocalizedString("MagicRollLabel").Returns(magicRoll);
+        _localizationService.GetString("MagicRollLabel").Returns(magicRoll);
 
         var result = _sut.MagicRollLabel;
 
@@ -1435,7 +1435,7 @@ public class GameViewModelTests
     public void ManualSetButtonLabel_IsReturnedFromTheLocalizationService()
     {
         const string expected = "Manual Set";
-        _localizationService.GetLocalizedString("ManualSetLabel").Returns(expected);
+        _localizationService.GetString("ManualSetLabel").Returns(expected);
 
         var result = _sut.ManualSetLabel;
 
@@ -1446,7 +1446,7 @@ public class GameViewModelTests
     public void RollResetButtonLabel_IsReturnedFromTheLocalizationService()
     {
         const string expected = "Roll Reset";
-        _localizationService.GetLocalizedString("RollResetLabel").Returns(expected);
+        _localizationService.GetString("RollResetLabel").Returns(expected);
 
         var result = _sut.RollResetLabel;
 
@@ -1457,7 +1457,7 @@ public class GameViewModelTests
     public void TotalLabel_IsReturnedFromTheLocalizationService()
     {
         const string expected = "Total";
-        _localizationService.GetLocalizedString("PlayerTotalScoreLabel").Returns(expected);
+        _localizationService.GetString("PlayerTotalScoreLabel").Returns(expected);
 
         var result = _sut.TotalLabel;
 
@@ -1468,7 +1468,7 @@ public class GameViewModelTests
     public void TotalShortLabel_IsReturnedFromTheLocalizationService()
     {
         const string expected = "T!";
-        _localizationService.GetLocalizedString("TotalShort").Returns(expected);
+        _localizationService.GetString("TotalShort").Returns(expected);
 
         var result = _sut.TotalShortLabel;
 

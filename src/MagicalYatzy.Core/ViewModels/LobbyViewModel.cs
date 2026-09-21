@@ -7,7 +7,7 @@ using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using Sanet.MagicalYatzy.Services.Game;
-using Sanet.MagicalYatzy.Services.Localization;
+using Sanet.Localization;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 
 namespace Sanet.MagicalYatzy.ViewModels;
@@ -33,15 +33,15 @@ public class LobbyViewModel: DicePanelViewModel
         _localizationService = localizationService;
     }
 
-    public string PlayersTitle => _localizationService.GetLocalizedString("PlayersLabel").ToUpper();
+    public string PlayersTitle => _localizationService.GetString("PlayersLabel").ToUpper();
 
-    public string RulesTitle => _localizationService.GetLocalizedString("RulesLabel").ToUpper();
+    public string RulesTitle => _localizationService.GetString("RulesLabel").ToUpper();
         
-    public string StartTitle => _localizationService.GetLocalizedString("StartGameButton");
+    public string StartTitle => _localizationService.GetString("StartGameButton");
 
-    public string AddBotLabel => _localizationService.GetLocalizedString("AddBotLabel");
+    public string AddBotLabel => _localizationService.GetString("AddBotLabel");
         
-    public string AddPlayerLabel => _localizationService.GetLocalizedString("AddPlayerLabel");
+    public string AddPlayerLabel => _localizationService.GetString("AddPlayerLabel");
         
     public string AddBotImage => "AddBot.png";
         
@@ -194,7 +194,7 @@ public class LobbyViewModel: DicePanelViewModel
         if (!CanAddBot)
             return;
         var newBot = _playerService.CreateLocalPlayer(
-            _localizationService.GetLocalizedString("BotNameDefault"),
+            _localizationService.GetString("BotNameDefault"),
             PlayerType.AI, Players.Select(p => p.Name).ToList());
         
         AddPlayer(new PlayerViewModel(newBot, _localizationService));
@@ -205,7 +205,7 @@ public class LobbyViewModel: DicePanelViewModel
         if (!CanAddHuman)
             return;
         var player = _playerService.CreateLocalPlayer(
-            _localizationService.GetLocalizedString("PlayerNameDefault"),
+            _localizationService.GetString("PlayerNameDefault"),
             PlayerType.Local, Players.Select(p => p.Name).ToList());
         
         AddPlayer(new PlayerViewModel(player, _localizationService));

@@ -5,98 +5,97 @@ using System.Windows.Input;
 using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
-using Sanet.MagicalYatzy.Services.Localization;
+using Sanet.Localization;
 using Sanet.MVVM.Core.ViewModels;
 
-namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
+namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
+
+public class PlayerViewModel:BindableBase
 {
-    public class PlayerViewModel:BindableBase
+    private readonly IPlayer _player;
+    private readonly ILocalizationService _localizationService;
+
+    public event EventHandler? PlayerDeleted;
+
+    public PlayerViewModel(IPlayer player, ILocalizationService localizationService)
     {
-        private readonly IPlayer _player;
-        private readonly ILocalizationService _localizationService;
+        _player = player;
+        _localizationService = localizationService;
+    }
 
-        public event EventHandler? PlayerDeleted;
-
-        public PlayerViewModel(IPlayer player, ILocalizationService localizationService)
+    public string Name
+    {
+        get => _player.Name;
+        set
         {
-            _player = player;
-            _localizationService = localizationService;
+            if (_player.Name == value)
+                return;
+            _player.Name = value;
+            NotifyPropertyChanged();
         }
+    }
 
-        public string Name
+    public string TypeName => _player.Type switch
+    {
+        PlayerType.Local or PlayerType.Network => _localizationService.GetString("PlayerNameDefault"),
+        PlayerType.AI => _localizationService.GetString("BotNameDefault"),
+        _ => throw new ArgumentOutOfRangeException()
+    };
+
+    public string Image
+    {
+        get
         {
-            get => _player.Name;
-            set
+            if (!string.IsNullOrEmpty(_player.ProfileImage))
             {
-                if (_player.Name == value)
-                    return;
-                _player.Name = value;
-                NotifyPropertyChanged();
+                return _player.ProfileImage;
             }
-        }
 
-        public string TypeName => _player.Type switch
-        {
-            PlayerType.Local or PlayerType.Network => _localizationService.GetLocalizedString("PlayerNameDefault"),
-            PlayerType.AI => _localizationService.GetLocalizedString("BotNameDefault"),
-            _ => throw new ArgumentOutOfRangeException()
-        };
-
-        public string Image
-        {
-            get
+            return _player.Type switch
             {
-                if (!string.IsNullOrEmpty(_player.ProfileImage))
-                {
-                    return _player.ProfileImage;
-                }
-
-                return _player.Type switch
-                {
-                    PlayerType.Local => "SanetDice.png",
-                    PlayerType.Network => "SanetDice.png",
-                    PlayerType.AI => "BotPlayer.png",
-                    _ => throw new ArgumentOutOfRangeException()
-                };
-            }
+                PlayerType.Local => "SanetDice.png",
+                PlayerType.Network => "SanetDice.png",
+                PlayerType.AI => "BotPlayer.png",
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
+    }
 
-        public string DeleteImage => "Close.png";
-        public string DeleteCommandText => _localizationService.GetLocalizedString("DeletePlayerLabel");
-        public ICommand DeleteCommand => new SimpleCommand(() =>
-        {
-            if (CanBeDeleted)
-                PlayerDeleted?.Invoke(this, EventArgs.Empty);
-        });
+    public string DeleteImage => "Close.png";
+    public string DeleteCommandText => _localizationService.GetString("DeletePlayerLabel");
+    public ICommand DeleteCommand => new SimpleCommand(() =>
+    {
+        if (CanBeDeleted)
+            PlayerDeleted?.Invoke(this, EventArgs.Empty);
+    });
 
-        public bool CanBeDeleted
-        {
-            get;
-            set => SetProperty(ref field, value);
-        } = true;
+    public bool CanBeDeleted
+    {
+        get;
+        set => SetProperty(ref field, value);
+    } = true;
 
-        public IPlayer Player => _player;
+    public IPlayer Player => _player;
 
-        public void Refresh()
-        {
-            NotifyPropertyChanged(nameof(Results));
-            NotifyPropertyChanged(nameof(IsMyTurn));
-        }
+    public void Refresh()
+    {
+        NotifyPropertyChanged(nameof(Results));
+        NotifyPropertyChanged(nameof(IsMyTurn));
+    }
         
-        public int Total => _player.Total;
+    public int Total => _player.Total;
 
-        public List<RollResultViewModel> Results =>
-            field ??= (Player.Results ?? new List<IRollResult>())
-                .Select(r => new RollResultViewModel(r,_localizationService)).ToList();
+    public List<RollResultViewModel> Results =>
+        field ??= (Player.Results ?? new List<IRollResult>())
+            .Select(r => new RollResultViewModel(r,_localizationService)).ToList();
 
-        public bool IsMyTurn => _player.IsMyTurn;
+    public bool IsMyTurn => _player.IsMyTurn;
 
-        public void ApplyRollResult(RollResultEventArgs result)
-        {
-            var rollResult = Results.FirstOrDefault(f => f.ScoreType == result.ScoreType);
-            rollResult?.ApplyResult((result.Value,result.HasBonus));
+    public void ApplyRollResult(RollResultEventArgs result)
+    {
+        var rollResult = Results.FirstOrDefault(f => f.ScoreType == result.ScoreType);
+        rollResult?.ApplyResult((result.Value,result.HasBonus));
 
-            NotifyPropertyChanged(nameof(Total));
-        }
+        NotifyPropertyChanged(nameof(Total));
     }
 }

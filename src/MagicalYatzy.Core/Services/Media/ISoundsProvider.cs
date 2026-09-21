@@ -1,7 +1,6 @@
-namespace Sanet.MagicalYatzy.Services.Media
+namespace Sanet.MagicalYatzy.Services.Media;
+
+public interface ISoundsProvider
 {
-    public interface ISoundsProvider
-    {
-        void PlaySound(string sound);
-    }
+    void PlaySound(string sound);
 }

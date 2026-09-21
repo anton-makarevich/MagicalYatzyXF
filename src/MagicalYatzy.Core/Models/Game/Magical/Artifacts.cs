@@ -1,9 +1,8 @@
-namespace Sanet.MagicalYatzy.Models.Game.Magical
+namespace Sanet.MagicalYatzy.Models.Game.Magical;
+
+public enum Artifacts
 {
-    public enum Artifacts
-    {
-        RollReset,
-        ManualSet,
-        MagicalRoll
-    }
+    RollReset,
+    ManualSet,
+    MagicalRoll
 }

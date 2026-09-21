@@ -1,9 +1,8 @@
 using Sanet.MagicalYatzy.Dto.Models;
 
-namespace Sanet.MagicalYatzy.Dto.Requests
+namespace Sanet.MagicalYatzy.Dto.Requests;
+
+public class SaveScoreRequest
 {
-    public class SaveScoreRequest
-    {
-        public PlayerScore? Score { get; set; }
-    }
+    public PlayerScore? Score { get; set; }
 }

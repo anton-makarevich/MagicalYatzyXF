@@ -2,329 +2,328 @@ using System.Linq;
 using Sanet.MagicalYatzy.Models.Game;
 using Xunit;
 
-namespace MagicalYatzyTests.Models.Game
+namespace MagicalYatzyTests.Models.Game;
+
+public class RuleTests
 {
-    public class RuleTests
+    [Fact]
+    public void RuleHasTypePassedToConstructor()
     {
-        [Fact]
-        public void RuleHasTypePassedToConstructor()
-        {
-            const Rules ruleType = Rules.krMagic;
-            var sut = new Rule(ruleType);
+        const Rules ruleType = Rules.krMagic;
+        var sut = new Rule(ruleType);
             
-            Assert.Equal(ruleType, sut.CurrentRule);
-        }
+        Assert.Equal(ruleType, sut.CurrentRule);
+    }
 
-        [Fact]
-        public void ScoreForRulesReturnsNumericAndKniffelForBabyRules()
+    [Fact]
+    public void ScoreForRulesReturnsNumericAndKniffelForBabyRules()
+    {
+        var sut = new Rule(Rules.krBaby);
+        var babyScores = new []
         {
-            var sut = new Rule(Rules.krBaby);
-            var babyScores = new []
-            {
-                Scores.Ones,
-                Scores.Twos,
-                Scores.Threes,
-                Scores.Fours,
-                Scores.Fives,
-                Scores.Sixs,
-                Scores.Kniffel
-            };
+            Scores.Ones,
+            Scores.Twos,
+            Scores.Threes,
+            Scores.Fours,
+            Scores.Fives,
+            Scores.Sixs,
+            Scores.Kniffel
+        };
 
-            var scores = sut.ScoresForRule.ToList();
+        var scores = sut.ScoresForRule.ToList();
             
-            Assert.Equal(7, scores.Count);
+        Assert.Equal(7, scores.Count);
 
-            foreach (var babyScore in babyScores)
-            {
-                Assert.Contains(babyScore, scores);
-            }
-        }
-        
-        [Fact]
-        public void ScoreForRulesReturnsNumericPokerHandsAndKniffelForSimpleRules()
+        foreach (var babyScore in babyScores)
         {
-            var sut = new Rule(Rules.krSimple);
-            var simpleScores = new []
-            {
-                Scores.Ones,
-                Scores.Twos,
-                Scores.Threes,
-                Scores.Fours,
-                Scores.Fives,
-                Scores.Sixs,
-                Scores.ThreeOfAKind,
-                Scores.FourOfAKind,
-                Scores.FullHouse,
-                Scores.SmallStraight,
-                Scores.LargeStraight,
-                Scores.Chance,
-                Scores.Kniffel
-            };
+            Assert.Contains(babyScore, scores);
+        }
+    }
+        
+    [Fact]
+    public void ScoreForRulesReturnsNumericPokerHandsAndKniffelForSimpleRules()
+    {
+        var sut = new Rule(Rules.krSimple);
+        var simpleScores = new []
+        {
+            Scores.Ones,
+            Scores.Twos,
+            Scores.Threes,
+            Scores.Fours,
+            Scores.Fives,
+            Scores.Sixs,
+            Scores.ThreeOfAKind,
+            Scores.FourOfAKind,
+            Scores.FullHouse,
+            Scores.SmallStraight,
+            Scores.LargeStraight,
+            Scores.Chance,
+            Scores.Kniffel
+        };
 
-            var scores = sut.ScoresForRule.ToList();
+        var scores = sut.ScoresForRule.ToList();
             
-            Assert.Equal(13, scores.Count);
+        Assert.Equal(13, scores.Count);
 
-            foreach (var babyScore in simpleScores)
-            {
-                Assert.Contains(babyScore, scores);
-            }
-        }
-        
-        [Fact]
-        public void ScoreForRulesReturnsNumericBonusPokerHandsAndKniffelForExtendedRules()
+        foreach (var babyScore in simpleScores)
         {
-            var sut = new Rule(Rules.krExtended);
-            var extendedScores = new []
-            {
-                Scores.Ones,
-                Scores.Twos,
-                Scores.Threes,
-                Scores.Fours,
-                Scores.Fives,
-                Scores.Sixs,
-                Scores.Bonus,
-                Scores.ThreeOfAKind,
-                Scores.FourOfAKind,
-                Scores.FullHouse,
-                Scores.SmallStraight,
-                Scores.LargeStraight,
-                Scores.Chance,
-                Scores.Kniffel
-            };
+            Assert.Contains(babyScore, scores);
+        }
+    }
+        
+    [Fact]
+    public void ScoreForRulesReturnsNumericBonusPokerHandsAndKniffelForExtendedRules()
+    {
+        var sut = new Rule(Rules.krExtended);
+        var extendedScores = new []
+        {
+            Scores.Ones,
+            Scores.Twos,
+            Scores.Threes,
+            Scores.Fours,
+            Scores.Fives,
+            Scores.Sixs,
+            Scores.Bonus,
+            Scores.ThreeOfAKind,
+            Scores.FourOfAKind,
+            Scores.FullHouse,
+            Scores.SmallStraight,
+            Scores.LargeStraight,
+            Scores.Chance,
+            Scores.Kniffel
+        };
 
-            var scores = sut.ScoresForRule.ToList();
+        var scores = sut.ScoresForRule.ToList();
             
-            Assert.Equal(14, scores.Count);
+        Assert.Equal(14, scores.Count);
 
-            foreach (var babyScore in extendedScores)
-            {
-                Assert.Contains(babyScore, scores);
-            }
-        }
-        
-        [Fact]
-        public void ScoreForRulesReturnsNumericBonusPokerHandsAndKniffelForMagicRules()
+        foreach (var babyScore in extendedScores)
         {
-            var sut = new Rule(Rules.krMagic);
-            var magicScores = new []
-            {
-                Scores.Ones,
-                Scores.Twos,
-                Scores.Threes,
-                Scores.Fours,
-                Scores.Fives,
-                Scores.Sixs,
-                Scores.Bonus,
-                Scores.ThreeOfAKind,
-                Scores.FourOfAKind,
-                Scores.FullHouse,
-                Scores.SmallStraight,
-                Scores.LargeStraight,
-                Scores.Chance,
-                Scores.Kniffel
-            };
+            Assert.Contains(babyScore, scores);
+        }
+    }
+        
+    [Fact]
+    public void ScoreForRulesReturnsNumericBonusPokerHandsAndKniffelForMagicRules()
+    {
+        var sut = new Rule(Rules.krMagic);
+        var magicScores = new []
+        {
+            Scores.Ones,
+            Scores.Twos,
+            Scores.Threes,
+            Scores.Fours,
+            Scores.Fives,
+            Scores.Sixs,
+            Scores.Bonus,
+            Scores.ThreeOfAKind,
+            Scores.FourOfAKind,
+            Scores.FullHouse,
+            Scores.SmallStraight,
+            Scores.LargeStraight,
+            Scores.Chance,
+            Scores.Kniffel
+        };
 
-            var scores = sut.ScoresForRule.ToList();
+        var scores = sut.ScoresForRule.ToList();
             
-            Assert.Equal(14, scores.Count);
+        Assert.Equal(14, scores.Count);
 
-            foreach (var babyScore in magicScores)
-            {
-                Assert.Contains(babyScore, scores);
-            }
-        }
-        
-        [Fact]
-        public void ScoreForRulesReturnsNumericBonusPokerHandsAndKniffelForStandardRules()
+        foreach (var babyScore in magicScores)
         {
-            var sut = new Rule(Rules.krStandard);
-            var magicScores = new []
-            {
-                Scores.Ones,
-                Scores.Twos,
-                Scores.Threes,
-                Scores.Fours,
-                Scores.Fives,
-                Scores.Sixs,
-                Scores.Bonus,
-                Scores.ThreeOfAKind,
-                Scores.FourOfAKind,
-                Scores.FullHouse,
-                Scores.SmallStraight,
-                Scores.LargeStraight,
-                Scores.Chance,
-                Scores.Kniffel
-            };
+            Assert.Contains(babyScore, scores);
+        }
+    }
+        
+    [Fact]
+    public void ScoreForRulesReturnsNumericBonusPokerHandsAndKniffelForStandardRules()
+    {
+        var sut = new Rule(Rules.krStandard);
+        var magicScores = new []
+        {
+            Scores.Ones,
+            Scores.Twos,
+            Scores.Threes,
+            Scores.Fours,
+            Scores.Fives,
+            Scores.Sixs,
+            Scores.Bonus,
+            Scores.ThreeOfAKind,
+            Scores.FourOfAKind,
+            Scores.FullHouse,
+            Scores.SmallStraight,
+            Scores.LargeStraight,
+            Scores.Chance,
+            Scores.Kniffel
+        };
 
-            var scores = sut.ScoresForRule.ToList();
+        var scores = sut.ScoresForRule.ToList();
             
-            Assert.Equal(14, scores.Count);
+        Assert.Equal(14, scores.Count);
 
-            foreach (var babyScore in magicScores)
-            {
-                Assert.Contains(babyScore, scores);
-            }
-        }
-        
-        [Fact]
-        public void MaxRoundEqualToSevenForBabyRules()
+        foreach (var babyScore in magicScores)
         {
-            var sut = new Rule(Rules.krBaby);
-       
-            Assert.Equal(7, sut.MaxRound);
+            Assert.Contains(babyScore, scores);
         }
+    }
         
-        [Fact]
-        public void MaxRoundEqualToThirteenForSimpleRules()
-        {
-            var sut = new Rule(Rules.krSimple);
+    [Fact]
+    public void MaxRoundEqualToSevenForBabyRules()
+    {
+        var sut = new Rule(Rules.krBaby);
        
-            Assert.Equal(13, sut.MaxRound);
-        }
+        Assert.Equal(7, sut.MaxRound);
+    }
         
-        [Fact]
-        public void MaxRoundEqualToThirteenForStandardRules()
-        {
-            var sut = new Rule(Rules.krStandard);
+    [Fact]
+    public void MaxRoundEqualToThirteenForSimpleRules()
+    {
+        var sut = new Rule(Rules.krSimple);
        
-            Assert.Equal(13, sut.MaxRound);
-        }
+        Assert.Equal(13, sut.MaxRound);
+    }
         
-        [Fact]
-        public void MaxRoundEqualToThirteenForExtendedRules()
-        {
-            var sut = new Rule(Rules.krExtended);
+    [Fact]
+    public void MaxRoundEqualToThirteenForStandardRules()
+    {
+        var sut = new Rule(Rules.krStandard);
        
-            Assert.Equal(13, sut.MaxRound);
-        }
+        Assert.Equal(13, sut.MaxRound);
+    }
         
-        [Fact]
-        public void MaxRoundEqualToThirteenForMagicRules()
-        {
-            var sut = new Rule(Rules.krMagic);
+    [Fact]
+    public void MaxRoundEqualToThirteenForExtendedRules()
+    {
+        var sut = new Rule(Rules.krExtended);
        
-            Assert.Equal(13, sut.MaxRound);
-        }
+        Assert.Equal(13, sut.MaxRound);
+    }
         
-        [Fact]
-        public void DoesNotHaveExtendedBonusForBabyRules()
-        {
-            var sut = new Rule(Rules.krBaby);
+    [Fact]
+    public void MaxRoundEqualToThirteenForMagicRules()
+    {
+        var sut = new Rule(Rules.krMagic);
        
-            Assert.False(sut.HasExtendedBonuses);
-        }
+        Assert.Equal(13, sut.MaxRound);
+    }
         
-        [Fact]
-        public void DoesNotHaveExtendedBonusForSimpleRules()
-        {
-            var sut = new Rule(Rules.krSimple);
+    [Fact]
+    public void DoesNotHaveExtendedBonusForBabyRules()
+    {
+        var sut = new Rule(Rules.krBaby);
        
-            Assert.False(sut.HasExtendedBonuses);
-        }
+        Assert.False(sut.HasExtendedBonuses);
+    }
         
-        [Fact]
-        public void DoesNotHaveExtendedBonusForStandardRules()
-        {
-            var sut = new Rule(Rules.krStandard);
+    [Fact]
+    public void DoesNotHaveExtendedBonusForSimpleRules()
+    {
+        var sut = new Rule(Rules.krSimple);
        
-            Assert.False(sut.HasExtendedBonuses);
-        }
+        Assert.False(sut.HasExtendedBonuses);
+    }
         
-        [Fact]
-        public void HasExtendedBonusForExtendedRules()
-        {
-            var sut = new Rule(Rules.krExtended);
+    [Fact]
+    public void DoesNotHaveExtendedBonusForStandardRules()
+    {
+        var sut = new Rule(Rules.krStandard);
        
-            Assert.True(sut.HasExtendedBonuses);
-        }
+        Assert.False(sut.HasExtendedBonuses);
+    }
         
-        [Fact]
-        public void HasExtendedBonusForMagicRules()
-        {
-            var sut = new Rule(Rules.krMagic);
+    [Fact]
+    public void HasExtendedBonusForExtendedRules()
+    {
+        var sut = new Rule(Rules.krExtended);
        
-            Assert.True(sut.HasExtendedBonuses);
-        }
+        Assert.True(sut.HasExtendedBonuses);
+    }
         
-        [Fact]
-        public void DoesNotHaveStandardBonusForBabyRules()
-        {
-            var sut = new Rule(Rules.krBaby);
+    [Fact]
+    public void HasExtendedBonusForMagicRules()
+    {
+        var sut = new Rule(Rules.krMagic);
        
-            Assert.False(sut.HasStandardBonus);
-        }
+        Assert.True(sut.HasExtendedBonuses);
+    }
         
-        [Fact]
-        public void DoesNotHaveStandardBonusForSimpleRules()
-        {
-            var sut = new Rule(Rules.krSimple);
+    [Fact]
+    public void DoesNotHaveStandardBonusForBabyRules()
+    {
+        var sut = new Rule(Rules.krBaby);
        
-            Assert.False(sut.HasStandardBonus);
-        }
+        Assert.False(sut.HasStandardBonus);
+    }
         
-        [Fact]
-        public void HasStandardBonusForStandardRules()
-        {
-            var sut = new Rule(Rules.krStandard);
+    [Fact]
+    public void DoesNotHaveStandardBonusForSimpleRules()
+    {
+        var sut = new Rule(Rules.krSimple);
        
-            Assert.True(sut.HasStandardBonus);
-        }
+        Assert.False(sut.HasStandardBonus);
+    }
         
-        [Fact]
-        public void HasStandardBonusForExtendedRules()
-        {
-            var sut = new Rule(Rules.krExtended);
+    [Fact]
+    public void HasStandardBonusForStandardRules()
+    {
+        var sut = new Rule(Rules.krStandard);
        
-            Assert.True(sut.HasStandardBonus);
-        }
+        Assert.True(sut.HasStandardBonus);
+    }
         
-        [Fact]
-        public void HasStandardBonusForMagicRules()
-        {
-            var sut = new Rule(Rules.krMagic);
+    [Fact]
+    public void HasStandardBonusForExtendedRules()
+    {
+        var sut = new Rule(Rules.krExtended);
        
-            Assert.True(sut.HasStandardBonus);
-        }
+        Assert.True(sut.HasStandardBonus);
+    }
         
-        [Fact]
-        public void ReturnsScoreBStringForBabyRules()
-        {
-            var sut = new Rule(Rules.krBaby);
+    [Fact]
+    public void HasStandardBonusForMagicRules()
+    {
+        var sut = new Rule(Rules.krMagic);
        
-            Assert.Equal("ScoresB",sut.ToString());
-        }
+        Assert.True(sut.HasStandardBonus);
+    }
         
-        [Fact]
-        public void ReturnsScoreStringForSimpleRules()
-        {
-            var sut = new Rule(Rules.krSimple);
+    [Fact]
+    public void ReturnsScoreBStringForBabyRules()
+    {
+        var sut = new Rule(Rules.krBaby);
        
-            Assert.Equal("Scores",sut.ToString());
-        }
+        Assert.Equal("ScoresB",sut.ToString());
+    }
         
-        [Fact]
-        public void ReturnsScoreSStringForStandardRules()
-        {
-            var sut = new Rule(Rules.krStandard);
+    [Fact]
+    public void ReturnsScoreStringForSimpleRules()
+    {
+        var sut = new Rule(Rules.krSimple);
        
-            Assert.Equal("ScoresS",sut.ToString());
-        }
+        Assert.Equal("Scores",sut.ToString());
+    }
         
-        [Fact]
-        public void ReturnsScoreEStringForExtendedRules()
-        {
-            var sut = new Rule(Rules.krExtended);
+    [Fact]
+    public void ReturnsScoreSStringForStandardRules()
+    {
+        var sut = new Rule(Rules.krStandard);
        
-            Assert.Equal("ScoresE",sut.ToString());
-        }
+        Assert.Equal("ScoresS",sut.ToString());
+    }
         
-        [Fact]
-        public void ReturnsScoreMStringForMagicRules()
-        {
-            var sut = new Rule(Rules.krMagic);
+    [Fact]
+    public void ReturnsScoreEStringForExtendedRules()
+    {
+        var sut = new Rule(Rules.krExtended);
        
-            Assert.Equal("ScoresM",sut.ToString());
-        }
+        Assert.Equal("ScoresE",sut.ToString());
+    }
+        
+    [Fact]
+    public void ReturnsScoreMStringForMagicRules()
+    {
+        var sut = new Rule(Rules.krMagic);
+       
+        Assert.Equal("ScoresM",sut.ToString());
     }
 }

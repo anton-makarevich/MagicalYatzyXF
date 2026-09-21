@@ -1,9 +1,8 @@
-namespace Sanet.MagicalYatzy.Dto.ApiConfigs
+namespace Sanet.MagicalYatzy.Dto.ApiConfigs;
+
+public interface IApiConfig
 {
-    public interface IApiConfig
-    {
-        string BaseUrl { get; }
-        string VersionSuffix { get; }
-        string LoginResource { get; }
-    }
+    string BaseUrl { get; }
+    string VersionSuffix { get; }
+    string LoginResource { get; }
 }

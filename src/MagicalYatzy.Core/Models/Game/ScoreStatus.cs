@@ -1,9 +1,8 @@
-namespace Sanet.MagicalYatzy.Models.Game
+namespace Sanet.MagicalYatzy.Models.Game;
+
+public enum ScoreStatus
 {
-    public enum ScoreStatus
-    {
-        NoValue,
-        Value,
-        Bonus
-    }
+    NoValue,
+    Value,
+    Bonus
 }

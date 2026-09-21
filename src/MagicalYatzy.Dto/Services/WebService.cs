@@ -8,85 +8,84 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Sanet.MagicalYatzy.Dto.ApiConfigs;
 
-namespace Sanet.MagicalYatzy.Dto.Services
+namespace Sanet.MagicalYatzy.Dto.Services;
+
+public class WebService : IWebService
 {
-    public class WebService : IWebService
+    private const string JsonContentType = "application/json";
+    private readonly HttpClient _httpClient;
+
+    public WebService(IApiConfig config)
     {
-        private const string JsonContentType = "application/json";
-        private readonly HttpClient _httpClient;
-
-        public WebService(IApiConfig config)
+        _httpClient = new HttpClient
         {
-            _httpClient = new HttpClient
+            BaseAddress = new Uri(Path.Combine(config.BaseUrl,config.VersionSuffix)),
+            DefaultRequestHeaders =
             {
-                BaseAddress = new Uri(Path.Combine(config.BaseUrl,config.VersionSuffix)),
-                DefaultRequestHeaders =
+                Accept =
                 {
-                    Accept =
-                    {
-                        new MediaTypeWithQualityHeaderValue(JsonContentType)
-                    }
+                    new MediaTypeWithQualityHeaderValue(JsonContentType)
                 }
-            };
-        }
+            }
+        };
+    }
 
-        public async Task<T> GetAsync<T>(string url)
+    public async Task<T> GetAsync<T>(string url)
+    {
+        try
         {
-            try
+            var response = await SendRequest(HttpMethod.Get, url);
+            if (response.IsSuccessStatusCode)
             {
-                var response = await SendRequest(HttpMethod.Get, url);
-                if (response.IsSuccessStatusCode)
-                {
-                    return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(),
-                        new JsonSerializerSettings() { NullValueHandling = 0 });
-                }
+                return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(),
+                    new JsonSerializerSettings() { NullValueHandling = 0 });
+            }
 #nullable disable
-                return default;
-            }
-            catch
-            {
-                return default;
-            }
-#nullable enable
+            return default;
         }
-
-        public async Task<T> PostAsync<T>(object requestModel, string url)
+        catch
         {
-            try
+            return default;
+        }
+#nullable enable
+    }
+
+    public async Task<T> PostAsync<T>(object requestModel, string url)
+    {
+        try
+        {
+            var response = await SendRequest(HttpMethod.Post, url, requestModel);
+            if (response.IsSuccessStatusCode)
             {
-                var response = await SendRequest(HttpMethod.Post, url, requestModel);
-                if (response.IsSuccessStatusCode)
-                {
-                    return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(),
-                        new JsonSerializerSettings() { NullValueHandling = 0 });
-                }
+                return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(),
+                    new JsonSerializerSettings() { NullValueHandling = 0 });
+            }
 #nullable disable
-                return default;
-            }
-            catch
-            {
-                return default;
-            }
-#nullable enable
+            return default;
         }
-
-        private async Task<HttpResponseMessage> SendRequest(HttpMethod method, string url, object? content = null)
+        catch
         {
-            try
-            {
-                var request = new HttpRequestMessage(method, url);
+            return default;
+        }
+#nullable enable
+    }
 
-                if (content != null)
-                {
-                    request.Content = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, JsonContentType);
-                }
+    private async Task<HttpResponseMessage> SendRequest(HttpMethod method, string url, object? content = null)
+    {
+        try
+        {
+            var request = new HttpRequestMessage(method, url);
 
-                return await _httpClient.SendAsync(request);
-            }
-            catch
+            if (content != null)
             {
-                return new HttpResponseMessage(HttpStatusCode.ServiceUnavailable);
+                request.Content = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, JsonContentType);
             }
+
+            return await _httpClient.SendAsync(request);
+        }
+        catch
+        {
+            return new HttpResponseMessage(HttpStatusCode.ServiceUnavailable);
         }
     }
 }
