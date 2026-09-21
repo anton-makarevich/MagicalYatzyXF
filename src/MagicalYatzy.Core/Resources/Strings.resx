@@ -804,4 +804,7 @@
   <data name="LanguageLabel" xml:space="preserve">
     <value>Language</value>
   </data>
+  <data name="language_name" xml:space="preserve">
+    <value>English</value>
+  </data>
 </root>

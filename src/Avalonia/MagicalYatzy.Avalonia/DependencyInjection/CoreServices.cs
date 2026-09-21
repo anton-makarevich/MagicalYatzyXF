@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Sanet.Localization;
+using Sanet.Localization.Providers;
 using Sanet.MagicalYatzy.Avalonia.Services.Stubs;
 using Sanet.MagicalYatzy.Dto.ApiConfigs;
 using Sanet.MagicalYatzy.Dto.Services;
@@ -30,8 +31,9 @@ public static class CoreServices
         services.AddSingleton<IRulesService, RulesService>();
         services.AddSingleton<IDiceGenerator, RandomDiceGenerator>();
         services.AddLocalization(
-            typeof(ViewModels.Base.DicePanelViewModel).Assembly,
-            "Sanet.MagicalYatzy.Resources.Strings");
+            new EmbeddedResourcesProvider(
+                typeof(ViewModels.Base.DicePanelViewModel).Assembly,
+                "Sanet.MagicalYatzy.Resources.Strings"));
         services.AddSingleton<IStorageService, LocalJsonStorageService>();
         services.AddSingleton<ISoundsProvider, SoundsProviderStub>();
     }

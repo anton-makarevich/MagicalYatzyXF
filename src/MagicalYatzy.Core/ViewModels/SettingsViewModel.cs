@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Game;
@@ -11,11 +10,6 @@ namespace Sanet.MagicalYatzy.ViewModels;
 
 public class SettingsViewModel : DicePanelViewModel
 {
-    private static readonly Dictionary<string, string> LanguageDisplayNames = new()
-    {
-        ["be"] = "беларуская",
-    };
-
     private readonly IGameSettingsService _gameSettingsService;
     private readonly ILocalizationService _localizationService;
 
@@ -28,14 +22,8 @@ public class SettingsViewModel : DicePanelViewModel
         _localizationService = localizationService;
 
         AvailableLanguages = new ObservableCollection<Language>(
-            _localizationService.Languages.Select(WithDisplayName));
+            _localizationService.Languages);
     }
-
-    private static Language WithDisplayName(Language language) =>
-        language with
-        {
-            Name = language.Name ?? LanguageDisplayNames.GetValueOrDefault(language.Code, language.Code)
-        };     
 
     #region bind props
 
