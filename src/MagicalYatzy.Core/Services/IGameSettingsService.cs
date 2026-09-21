@@ -1,13 +1,12 @@
 ﻿using Sanet.MagicalYatzy.Models.Game;
 
-namespace Sanet.MagicalYatzy.Services
+namespace Sanet.MagicalYatzy.Services;
+
+public interface IGameSettingsService
 {
-    public interface IGameSettingsService
-    {
-        int DieAngle { get; set; }
-        DiceStyle DieStyle { get; set; }
-        int MaxRollLoop { get; set; }
-        int DieSpeed { get; set; }
-        bool IsSoundEnabled { get; set; }
-    }
+    int DieAngle { get; set; }
+    DiceStyle DieStyle { get; set; }
+    int MaxRollLoop { get; set; }
+    int DieSpeed { get; set; }
+    bool IsSoundEnabled { get; set; }
 }

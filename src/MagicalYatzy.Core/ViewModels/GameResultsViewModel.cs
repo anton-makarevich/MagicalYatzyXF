@@ -5,81 +5,80 @@ using System.Windows.Input;
 using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Services.Api;
 using Sanet.MagicalYatzy.Services.Game;
-using Sanet.MagicalYatzy.Services.Localization;
+using Sanet.Localization;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 using Sanet.MVVM.Core.ViewModels;
 
-namespace Sanet.MagicalYatzy.ViewModels
+namespace Sanet.MagicalYatzy.ViewModels;
+
+public class GameResultsViewModel:BaseViewModel
 {
-    public class GameResultsViewModel:BaseViewModel
+    private readonly IGameService _gameService;
+    private readonly ILocalizationService _localizationService;
+    private readonly IApiClient _apiClient;
+
+    public GameResultsViewModel(
+        IGameService gameService,
+        ILocalizationService localizationService,
+        IApiClient apiClient)
     {
-        private readonly IGameService _gameService;
-        private readonly ILocalizationService _localizationService;
-        private readonly IApiClient _apiClient;
+        _gameService = gameService;
+        _localizationService = localizationService;
+        _apiClient = apiClient;
+    }
 
-        public GameResultsViewModel(
-            IGameService gameService,
-            ILocalizationService localizationService,
-            IApiClient apiClient)
+    public ObservableCollection<PlayerViewModel> Players
+    {
+        get;
+        set => SetProperty(ref field, value);
+    }
+
+    public ICommand RestartGameCommand => new SimpleCommand((async () =>
+    {
+        var players = _gameService.CurrentLocalGame.Players;
+        var rule = _gameService.CurrentLocalGame.Rules.CurrentRule;
+        var game = await _gameService.CreateNewLocalGameAsync(rule);
+        foreach (var player in players)
         {
-            _gameService = gameService;
-            _localizationService = localizationService;
-            _apiClient = apiClient;
+            game.JoinGame(player);
         }
+        await NavigationService.NavigateToViewModelAsync<GameViewModel>();
+    }));
 
-        public ObservableCollection<PlayerViewModel> Players
-        {
-            get;
-            set => SetProperty(ref field, value);
-        }
+    public string RestartImage => "PlayAgain.png";
+    public string CloseImage => "Close.png";
 
-        public ICommand RestartGameCommand => new SimpleCommand((async () =>
-        {
-            var players = _gameService.CurrentLocalGame.Players;
-            var rule = _gameService.CurrentLocalGame.Rules.CurrentRule;
-            var game = await _gameService.CreateNewLocalGameAsync(rule);
-            foreach (var player in players)
-            {
-                game.JoinGame(player);
-            }
-            await NavigationService.NavigateToViewModelAsync<GameViewModel>();
-        }));
-
-        public string RestartImage => "PlayAgain.png";
-        public string CloseImage => "Close.png";
-
-        public ICommand CloseCommand => 
-            new SimpleCommand(async () => await NavigationService.NavigateToRootAsync());
+    public ICommand CloseCommand => 
+        new SimpleCommand(async () => await NavigationService.NavigateToRootAsync());
         
-        public string CloseButtonContent => _localizationService.GetLocalizedString("CloseButtonContent"); 
-        public string Title => _localizationService.GetLocalizedString("GameFinishedLabel");
-        public string AgainLabel => _localizationService.GetLocalizedString("AgainLabel");
+    public string CloseButtonContent => _localizationService.GetString("CloseButtonContent"); 
+    public string Title => _localizationService.GetString("GameFinishedLabel");
+    public string AgainLabel => _localizationService.GetString("AgainLabel");
 
-        public override void AttachHandlers()
+    public override void AttachHandlers()
+    {
+        base.AttachHandlers();
+
+        if (_gameService?.CurrentLocalGame?.Players == null
+            || _gameService.CurrentLocalGame.Players.Count == 0)
         {
-            base.AttachHandlers();
-
-            if (_gameService?.CurrentLocalGame?.Players == null
-                || _gameService.CurrentLocalGame.Players.Count == 0)
-            {
-                return;
-            }
-            
-            Players = new ObservableCollection<PlayerViewModel>(_gameService.CurrentLocalGame.Players.Select(p=>new PlayerViewModel(p, _localizationService)));
-#pragma warning disable 4014
-            SaveScoreAsync();
-#pragma warning restore 4014
+            return;
         }
+            
+        Players = new ObservableCollection<PlayerViewModel>(_gameService.CurrentLocalGame.Players.Select(p=>new PlayerViewModel(p, _localizationService)));
+#pragma warning disable 4014
+        SaveScoreAsync();
+#pragma warning restore 4014
+    }
 
-        private async Task SaveScoreAsync()                                           
+    private async Task SaveScoreAsync()                                           
+    {
+        foreach (var player in Players.Where(p => p.Player.IsHuman))
         {
-            foreach (var player in Players.Where(p => p.Player.IsHuman))
-            {
-                await _apiClient.SaveScoreAsync(
-                    player.Name,
-                    player.Total,
-                    _gameService.CurrentLocalGame.Rules.CurrentRule);
-            }
+            await _apiClient.SaveScoreAsync(
+                player.Name,
+                player.Total,
+                _gameService.CurrentLocalGame.Rules.CurrentRule);
         }
     }
 }

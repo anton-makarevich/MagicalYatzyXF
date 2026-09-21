@@ -2,85 +2,84 @@
 using Sanet.MagicalYatzy.Models.Game;
 using System;
 
-namespace Sanet.MagicalYatzy.Models.Events
+namespace Sanet.MagicalYatzy.Models.Events;
+
+/// <summary>
+/// Event arg when player changed
+/// </summary>
+public class PlayerEventArgs : EventArgs
 {
-    /// <summary>
-    /// Event arg when player changed
-    /// </summary>
-    public class PlayerEventArgs : EventArgs
-    {
-        public IPlayer Player { get; }
+    public IPlayer Player { get; }
 
-        public PlayerEventArgs(IPlayer player)
-        {
-            Player = player;
-        }
+    public PlayerEventArgs(IPlayer player)
+    {
+        Player = player;
     }
+}
     
-    /// <summary>
-    /// Event when move changed
-    /// </summary>
-    public class MoveEventArgs : PlayerEventArgs
-    {
-        //new move order
-        public int Move { get; }
+/// <summary>
+/// Event when move changed
+/// </summary>
+public class MoveEventArgs : PlayerEventArgs
+{
+    //new move order
+    public int Move { get; }
 
-        public MoveEventArgs(IPlayer player, int move)
-            : base(player)
-        {
-            Move = move;
-        }
+    public MoveEventArgs(IPlayer player, int move)
+        : base(player)
+    {
+        Move = move;
     }
+}
     
-    /// <summary>
-    /// Event when player fix (unfix) dice with value
-    /// </summary>
-    public class FixDiceEventArgs : PlayerEventArgs
+/// <summary>
+/// Event when player fix (unfix) dice with value
+/// </summary>
+public class FixDiceEventArgs : PlayerEventArgs
+{
+    //dice with value to fix
+    public int Value { get; }
+
+    //fix or unfix
+    public bool Isfixed { get; }
+
+    public FixDiceEventArgs(IPlayer player, int value, bool isfixed) : base(player)
     {
-        //dice with value to fix
-        public int Value { get; }
+        Value = value;
+        Isfixed = isfixed;
+    }
+}
 
-        //fix or unfix
-        public bool Isfixed { get; }
+/// <summary>
+/// Chat message event args
+/// </summary>
+public class ChatMessageEventArgs : EventArgs
+{
+    public ChatMessage Message { get; }
 
-        public FixDiceEventArgs(IPlayer player, int value, bool isfixed) : base(player)
+    public ChatMessageEventArgs(ChatMessage message)
+    {
+        Message = message;
+    }
+}
+
+/// <summary>
+/// Event when move changed
+/// </summary>
+public class RollEventArgs : PlayerEventArgs
+{
+    //new move order
+    public int[] Value
+    {
+        get
         {
-            Value = value;
-            Isfixed = isfixed;
+            return field;
         }
     }
 
-    /// <summary>
-    /// Chat message event args
-    /// </summary>
-    public class ChatMessageEventArgs : EventArgs
+    public RollEventArgs(IPlayer player, int[] value)
+        : base(player)
     {
-        public ChatMessage Message { get; }
-
-        public ChatMessageEventArgs(ChatMessage message)
-        {
-            Message = message;
-        }
-    }
-
-    /// <summary>
-    /// Event when move changed
-    /// </summary>
-    public class RollEventArgs : PlayerEventArgs
-    {
-        //new move order
-        public int[] Value
-        {
-            get
-            {
-                return field;
-            }
-        }
-
-        public RollEventArgs(IPlayer player, int[] value)
-            : base(player)
-        {
-            Value = value;
-        }
+        Value = value;
     }
 }

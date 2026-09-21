@@ -6,7 +6,7 @@ using NSubstitute;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services.Api;
 using Sanet.MagicalYatzy.Services.Game;
-using Sanet.MagicalYatzy.Services.Localization;
+using Sanet.Localization;
 using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MVVM.Core.Services;
 using Xunit;
@@ -138,7 +138,7 @@ public class GameResultsViewModelTests
     public void CloseButtonContent_HasValueReturnedByLocalizationService()
     {
         const string returnThis = "Close";
-        _localizationService.GetLocalizedString("CloseButtonContent").Returns(returnThis);
+        _localizationService.GetString("CloseButtonContent").Returns(returnThis);
         
         var result = _sut.CloseButtonContent;
 
@@ -149,7 +149,7 @@ public class GameResultsViewModelTests
     public void Title_HasValueReturnedByLocalizationService()
     {
         const string returnThis = "Title";
-        _localizationService.GetLocalizedString("GameFinishedLabel").Returns(returnThis);
+        _localizationService.GetString("GameFinishedLabel").Returns(returnThis);
         
         var result = _sut.Title;
 
@@ -160,7 +160,7 @@ public class GameResultsViewModelTests
     public void AgainLabel_HasValueReturnedByLocalizationService()
     {
         const string returnThis = "Again";
-        _localizationService.GetLocalizedString("AgainLabel").Returns(returnThis);
+        _localizationService.GetString("AgainLabel").Returns(returnThis);
         
         var result = _sut.AgainLabel;
 

@@ -2,43 +2,42 @@ using System;
 using System.Windows.Input;
 using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Game;
-using Sanet.MagicalYatzy.Services.Localization;
+using Sanet.Localization;
 using Sanet.MVVM.Core.ViewModels;
 
-namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers
+namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
+
+public class RuleViewModel: BindableBase
 {
-    public class RuleViewModel: BindableBase
+    private readonly ILocalizationService _localizationService;
+
+    public event EventHandler RuleSelected;
+
+    public RuleViewModel(Rules rule,
+        ILocalizationService localizationService)
     {
-        private readonly ILocalizationService _localizationService;
+        _localizationService = localizationService;
+        Rule = rule;
+    }
 
-        public event EventHandler RuleSelected;
+    public Rules Rule { get; }
 
-        public RuleViewModel(Rules rule,
-            ILocalizationService localizationService)
-        {
-            _localizationService = localizationService;
-            Rule = rule;
-        }
+    public string Name => _localizationService.GetString(Rule.ToString()).ToUpper();
 
-        public Rules Rule { get; }
+    public string ShortDescription => 
+        _localizationService.GetString(Rule.ToString() + "Short");
 
-        public string Name => _localizationService.GetLocalizedString(Rule.ToString()).ToUpper();
+    public bool IsSelected
+    {
+        get;
+        set => SetProperty(ref field, value);
+    }
 
-        public string ShortDescription => 
-            _localizationService.GetLocalizedString(Rule.ToString() + "Short");
+    public ICommand SelectRuleCommand => new SimpleCommand(SelectRule);
 
-        public bool IsSelected
-        {
-            get;
-            set => SetProperty(ref field, value);
-        }
-
-        public ICommand SelectRuleCommand => new SimpleCommand(SelectRule);
-
-        private void SelectRule()
-        {
-            if (!IsSelected)
-                RuleSelected?.Invoke(this,null);
-        }
+    private void SelectRule()
+    {
+        if (!IsSelected)
+            RuleSelected?.Invoke(this,null);
     }
 }

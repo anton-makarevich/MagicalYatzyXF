@@ -7,7 +7,7 @@ using Sanet.MagicalYatzy.Services.Game;
 using System.Windows.Input;
 using System.Threading.Tasks;
 using AsyncAwaitBestPractices.MVVM;
-using Sanet.MagicalYatzy.Services.Localization;
+using Sanet.Localization;
 using Sanet.MagicalYatzy.Services.Navigation;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 

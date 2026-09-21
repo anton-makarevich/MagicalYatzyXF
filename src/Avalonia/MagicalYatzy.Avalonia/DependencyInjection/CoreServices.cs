@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Sanet.Localization;
 using Sanet.MagicalYatzy.Avalonia.Services.Stubs;
 using Sanet.MagicalYatzy.Dto.ApiConfigs;
 using Sanet.MagicalYatzy.Dto.Services;
@@ -7,7 +8,6 @@ using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Api;
 using Sanet.MagicalYatzy.Services.Game;
-using Sanet.MagicalYatzy.Services.Localization;
 using Sanet.MagicalYatzy.Services.Media;
 using Sanet.MagicalYatzy.Services.Navigation;
 using Sanet.MagicalYatzy.Services.StorageService;
@@ -29,7 +29,9 @@ public static class CoreServices
         services.AddSingleton<IApiConfig, AzureDevConfig>();
         services.AddSingleton<IRulesService, RulesService>();
         services.AddSingleton<IDiceGenerator, RandomDiceGenerator>();
-        services.AddSingleton<ILocalizationService, GlobalizationInvariantLocalizationService>();
+        services.AddLocalization(
+            typeof(ViewModels.Base.DicePanelViewModel).Assembly,
+            "Sanet.MagicalYatzy.Resources.Strings");
         services.AddSingleton<IStorageService, LocalJsonStorageService>();
         services.AddSingleton<ISoundsProvider, SoundsProviderStub>();
     }

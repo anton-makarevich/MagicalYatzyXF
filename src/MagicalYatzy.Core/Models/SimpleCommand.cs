@@ -1,28 +1,27 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace Sanet.MagicalYatzy.Models
+namespace Sanet.MagicalYatzy.Models;
+
+public class SimpleCommand : ICommand
 {
-    public class SimpleCommand : ICommand
+    private readonly Action _execute;
+
+    public SimpleCommand(Action execute)
     {
-        private readonly Action _execute;
+        _execute = execute;
+        CanExecuteChanged?.Invoke(this, null);
+    }
 
-        public SimpleCommand(Action execute)
-        {
-            _execute = execute;
-            CanExecuteChanged?.Invoke(this, null);
-        }
+    public event EventHandler CanExecuteChanged;
 
-        public event EventHandler CanExecuteChanged;
+    public bool CanExecute(object parameter)
+    {
+        return true;
+    }
 
-        public bool CanExecute(object parameter)
-        {
-            return true;
-        }
-
-        public void Execute(object parameter)
-        {
-            _execute();
-        }
+    public void Execute(object parameter)
+    {
+        _execute();
     }
 }

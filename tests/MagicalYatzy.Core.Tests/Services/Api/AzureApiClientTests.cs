@@ -8,48 +8,47 @@ using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services.Api;
 using Xunit;
 
-namespace MagicalYatzyTests.Services.Api
+namespace MagicalYatzyTests.Services.Api;
+
+public class AzureApiClientTests
 {
-    public class AzureApiClientTests
+    private readonly IWebService _webServiceMock = Substitute.For<IWebService>();
+    private readonly AzureApiClient _sut;
+
+    public AzureApiClientTests()
     {
-        private readonly IWebService _webServiceMock = Substitute.For<IWebService>();
-        private readonly AzureApiClient _sut;
+        _sut = new AzureApiClient(_webServiceMock);
+    }
 
-        public AzureApiClientTests()
-        {
-            _sut = new AzureApiClient(_webServiceMock);
-        }
+    [Fact]
+    public async Task LoginAsyncMakesPostCallToWebService()
+    {
+        await _sut.LoginUserAsync("SomeName", "SomePassword");
 
-        [Fact]
-        public async Task LoginAsyncMakesPostCallToWebService()
-        {
-            await _sut.LoginUserAsync("SomeName", "SomePassword");
+        await _webServiceMock.Received().PostAsync<LoginResponse>(Arg.Any<LoginRequest>(), Arg.Any<string>());
+    }
 
-            await _webServiceMock.Received().PostAsync<LoginResponse>(Arg.Any<LoginRequest>(), Arg.Any<string>());
-        }
-
-        [Fact]
-        public async Task LoginAsyncReturnsPlayerReturnedByWebService()
-        {
-            const string playerName = "SomeName";
-            var responseSub = new LoginResponse() { Player = new LoginModel(){ PlayerName = playerName}};
-            _webServiceMock.PostAsync<LoginResponse>(null, "")
-                .ReturnsForAnyArgs(Task.FromResult<LoginResponse>(responseSub));
+    [Fact]
+    public async Task LoginAsyncReturnsPlayerReturnedByWebService()
+    {
+        const string playerName = "SomeName";
+        var responseSub = new LoginResponse() { Player = new LoginModel(){ PlayerName = playerName}};
+        _webServiceMock.PostAsync<LoginResponse>(null, "")
+            .ReturnsForAnyArgs(Task.FromResult<LoginResponse>(responseSub));
             
-            var player = await _sut.LoginUserAsync(playerName, "SomePassword");
-            Assert.Equal(playerName, player.Name);
-        }
+        var player = await _sut.LoginUserAsync(playerName, "SomePassword");
+        Assert.Equal(playerName, player.Name);
+    }
 
-        [Fact]
-        public async Task SaveScoreAsyncCallsWebServiceWithCorrespondingRequest()
-        {
-            const string playerName = "SomeName";
-            const int score = 123;
-            const Rules rule = Rules.krStandard;
+    [Fact]
+    public async Task SaveScoreAsyncCallsWebServiceWithCorrespondingRequest()
+    {
+        const string playerName = "SomeName";
+        const int score = 123;
+        const Rules rule = Rules.krStandard;
 
-            await _sut.SaveScoreAsync(playerName, score, rule);
+        await _sut.SaveScoreAsync(playerName, score, rule);
             
-            await _webServiceMock.Received().PostAsync<SaveScoreResponse>(Arg.Any<SaveScoreRequest>(), Arg.Any<string>());
-        }
+        await _webServiceMock.Received().PostAsync<SaveScoreResponse>(Arg.Any<SaveScoreRequest>(), Arg.Any<string>());
     }
 }

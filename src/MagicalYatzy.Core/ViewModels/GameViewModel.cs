@@ -9,408 +9,407 @@ using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.Magical;
 using Sanet.MagicalYatzy.Services.Game;
-using Sanet.MagicalYatzy.Services.Localization;
+using Sanet.Localization;
 using Sanet.MagicalYatzy.Services.Media;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 
-namespace Sanet.MagicalYatzy.ViewModels
+namespace Sanet.MagicalYatzy.ViewModels;
+
+public class GameViewModel : DicePanelViewModel
 {
-    public class GameViewModel : DicePanelViewModel
+    private readonly IGameService _gameService;
+    private readonly ISoundsProvider _soundsProvider;
+    private readonly ILocalizationService _localizationService;
+
+    public GameViewModel(
+        IGameService gameService,
+        IDicePanel dicePanel,
+        ISoundsProvider soundsProvider,
+        ILocalizationService localizationService) : base(dicePanel)
     {
-        private readonly IGameService _gameService;
-        private readonly ISoundsProvider _soundsProvider;
-        private readonly ILocalizationService _localizationService;
+        _gameService = gameService;
+        _soundsProvider = soundsProvider;
+        _localizationService = localizationService;
+    }
 
-        public GameViewModel(
-            IGameService gameService,
-            IDicePanel dicePanel,
-            ISoundsProvider soundsProvider,
-            ILocalizationService localizationService) : base(dicePanel)
-        {
-            _gameService = gameService;
-            _soundsProvider = soundsProvider;
-            _localizationService = localizationService;
-        }
+    public IGame Game => _gameService?.CurrentLocalGame;
 
-        public IGame Game => _gameService?.CurrentLocalGame;
+    private string LocalizedRollLabel => _localizationService.GetString("roll");
+    private string LocalizedWaitForPlayersLabel => _localizationService.GetString("WaitForPlayersLabel");
+    private string LocalizedMoveLabel => _localizationService.GetString("MoveLabel");
 
-        private string LocalizedRollLabel => _localizationService.GetLocalizedString("roll");
-        private string LocalizedWaitForPlayersLabel => _localizationService.GetLocalizedString("WaitForPlayersLabel");
-        private string LocalizedMoveLabel => _localizationService.GetLocalizedString("MoveLabel");
+    public string RollLabel =>
+        CurrentPlayer != null
+            ? $"{LocalizedRollLabel} {Game.Roll}"
+            : string.Empty;
 
-        public string RollLabel =>
-            CurrentPlayer != null
-                ? $"{LocalizedRollLabel} {Game.Roll}"
-                : string.Empty;
-
-        public bool CanFix => HasCurrentPlayer 
-                              && CurrentPlayer.Player.IsHuman 
-                              && CurrentPlayer.Player.Roll != 1;
+    public bool CanFix => HasCurrentPlayer 
+                          && CurrentPlayer.Player.IsHuman 
+                          && CurrentPlayer.Player.Roll != 1;
         
-        public string Title => (HasCurrentPlayer)
-            ? $"{LocalizedMoveLabel} {Game.Round}, {CurrentPlayer.Player.Name} {LocalizedRollLabel} {Game.Roll}"
-            : LocalizedWaitForPlayersLabel;
+    public string Title => (HasCurrentPlayer)
+        ? $"{LocalizedMoveLabel} {Game.Round}, {CurrentPlayer.Player.Name} {LocalizedRollLabel} {Game.Roll}"
+        : LocalizedWaitForPlayersLabel;
  
-        public PlayerViewModel CurrentPlayer => 
-            Game.CurrentPlayer == null 
-                ? null 
-                : Players.FirstOrDefault(f=>f.Player.InGameId==Game.CurrentPlayer.InGameId);
+    public PlayerViewModel CurrentPlayer => 
+        Game.CurrentPlayer == null 
+            ? null 
+            : Players.FirstOrDefault(f=>f.Player.InGameId==Game.CurrentPlayer.InGameId);
         
-        public bool IsMagicRollVisible => HasArtifact(Artifacts.MagicalRoll);
-        public bool IsRollResetVisible => HasArtifact(Artifacts.RollReset);
-        public bool IsManualSetVisible => HasArtifact(Artifacts.ManualSet);
+    public bool IsMagicRollVisible => HasArtifact(Artifacts.MagicalRoll);
+    public bool IsRollResetVisible => HasArtifact(Artifacts.RollReset);
+    public bool IsManualSetVisible => HasArtifact(Artifacts.ManualSet);
 
-        public string RollImage => "Roll.png";
-        public string MagicRollImage => "MagicRoll.png";
-        public string ManualSetImage => "ManualSet.png";
-        public string RollResetImage => "RollReset.png";
-        public string CloseImage => "Close.png";
+    public string RollImage => "Roll.png";
+    public string MagicRollImage => "MagicRoll.png";
+    public string ManualSetImage => "ManualSet.png";
+    public string RollResetImage => "RollReset.png";
+    public string CloseImage => "Close.png";
         
-        private bool HasArtifact(Artifacts artifactType)
-        {
-            if (Game.Rules.CurrentRule != Rules.krMagic)
-                return false;
+    private bool HasArtifact(Artifacts artifactType)
+    {
+        if (Game.Rules.CurrentRule != Rules.krMagic)
+            return false;
             
-            if (!CanRoll)
-                return false;
+        if (!CanRoll)
+            return false;
             
-            var artifact = CurrentPlayer.Player.MagicalArtifactsForGame
-                .FirstOrDefault(a=>a.Type == artifactType);
+        var artifact = CurrentPlayer.Player.MagicalArtifactsForGame
+            .FirstOrDefault(a=>a.Type == artifactType);
  
-            return artifact !=null
-                   && !artifact.IsUsed;
-        }
+        return artifact !=null
+               && !artifact.IsUsed;
+    }
 
-        public ObservableCollection<PlayerViewModel> Players { get; } = new ObservableCollection<PlayerViewModel>();
+    public ObservableCollection<PlayerViewModel> Players { get; } = new ObservableCollection<PlayerViewModel>();
         
-        public override void AttachHandlers()
+    public override void AttachHandlers()
+    {
+        base.AttachHandlers();
+            
+        foreach (var player in Game.Players)
         {
-            base.AttachHandlers();
-            
-            foreach (var player in Game.Players)
-            {
-                if ((player.IsHuman || player.IsBot) && !player.IsReady)
-                    Game.SetPlayerReady(player,true);
-                Players.Add(new PlayerViewModel(player, _localizationService));
-            }
-            
-            Game.DiceFixed += GameOnDiceFixed;
-            Game.DiceRolled += GameOnDiceRolled;
-            Game.PlayerLeft += GameOnPlayerLeft;
-            Game.DiceChanged += GameOnDiceChanged;
-            Game.PlayerReady += GameOnPlayerReady;
-            Game.TurnChanged += GameOnTurnChanged;
-            Game.GameFinished += GameOnGameFinished;
-            Game.PlayerJoined += GameOnPlayerJoined;
-            Game.StyleChanged += GameOnStyleChanged;
-            Game.ResultApplied += GameOnResultApplied;
-            Game.PlayerRerolled += GameOnPlayerRerolled;
-            Game.MagicRollUsed += GameOnMagicRollUsed;
-
-            DicePanel.RollEnded += DicePanelOnRollEnded;
-            DicePanel.DieFixed += DicePanelOnDieFixed;
-            
-            if (CurrentPlayer != null && CurrentPlayer.Player.IsBot)
-            {
-                Game.ReportRoll();
-            }
-            
-            RefreshGameStatus();
+            if ((player.IsHuman || player.IsBot) && !player.IsReady)
+                Game.SetPlayerReady(player,true);
+            Players.Add(new PlayerViewModel(player, _localizationService));
         }
+            
+        Game.DiceFixed += GameOnDiceFixed;
+        Game.DiceRolled += GameOnDiceRolled;
+        Game.PlayerLeft += GameOnPlayerLeft;
+        Game.DiceChanged += GameOnDiceChanged;
+        Game.PlayerReady += GameOnPlayerReady;
+        Game.TurnChanged += GameOnTurnChanged;
+        Game.GameFinished += GameOnGameFinished;
+        Game.PlayerJoined += GameOnPlayerJoined;
+        Game.StyleChanged += GameOnStyleChanged;
+        Game.ResultApplied += GameOnResultApplied;
+        Game.PlayerRerolled += GameOnPlayerRerolled;
+        Game.MagicRollUsed += GameOnMagicRollUsed;
 
-        private void DicePanelOnDieFixed(object sender, DiceFixedEventArgs e)
+        DicePanel.RollEnded += DicePanelOnRollEnded;
+        DicePanel.DieFixed += DicePanelOnDieFixed;
+            
+        if (CurrentPlayer != null && CurrentPlayer.Player.IsBot)
         {
-            Game.FixDice(e.Value,e.IsFixed);
+            Game.ReportRoll();
         }
+            
+        RefreshGameStatus();
+    }
 
-        private void DicePanelOnRollEnded(object sender, EventArgs e)
+    private void DicePanelOnDieFixed(object sender, DiceFixedEventArgs e)
+    {
+        Game.FixDice(e.Value,e.IsFixed);
+    }
+
+    private void DicePanelOnRollEnded(object sender, EventArgs e)
+    {
+        if (!HasCurrentPlayer)
+            return;
+
+        if (CurrentPlayer.Player.Roll == 1 && (CurrentPlayer.Player.Results?.All(r => r.PossibleValue == 0) ?? false))
         {
-            if (!HasCurrentPlayer)
-                return;
-
-            if (CurrentPlayer.Player.Roll == 1 && (CurrentPlayer.Player.Results?.All(r => r.PossibleValue == 0) ?? false))
-            {
-                if (CurrentPlayer.Player.IsHuman)
-                {
-                    NotifyPropertyChanged(nameof(CanRoll));
-                }
-
-                return;
-            }
-
             if (CurrentPlayer.Player.IsHuman)
             {
-                SetRollResults();
-            }
-            
-            //if bot
-            if (CurrentPlayer.Player.IsBot)
-            {
-                if (CurrentPlayer.Player.Roll == 3 || !CurrentPlayer.Player.DecisionMaker.NeedsToRollAgain())
-                    CurrentPlayer.Player.DecisionMaker.DecideFill(Game);
-                else
-                {
-                    CurrentPlayer.Player.DecisionMaker.FixDice(Game);
-                    if (Game.NumberOfFixedDice == 5)
-                        CurrentPlayer.Player.DecisionMaker.DecideFill(Game);
-                    else
-                        CurrentPlayer.Player.DecisionMaker.DecideRoll(Game, DicePanel);
-                }
+                NotifyPropertyChanged(nameof(CanRoll));
             }
 
-            RefreshGameStatus();
+            return;
         }
 
-        private void GameOnResultApplied(object sender, RollResultEventArgs e)
+        if (CurrentPlayer.Player.IsHuman)
         {
-            if (!HasCurrentPlayer)
-                return;
+            SetRollResults();
+        }
             
-            if (e.Value > 0 || e.HasBonus)
-            {
-                if (e.Value == 50 || e.HasBonus)
-                    _soundsProvider.PlaySound("fanfare");
-                else
-                    _soundsProvider.PlaySound("win");
-            }
+        //if bot
+        if (CurrentPlayer.Player.IsBot)
+        {
+            if (CurrentPlayer.Player.Roll == 3 || !CurrentPlayer.Player.DecisionMaker.NeedsToRollAgain())
+                CurrentPlayer.Player.DecisionMaker.DecideFill(Game);
             else
             {
-                _soundsProvider.PlaySound("wrong");
+                CurrentPlayer.Player.DecisionMaker.FixDice(Game);
+                if (Game.NumberOfFixedDice == 5)
+                    CurrentPlayer.Player.DecisionMaker.DecideFill(Game);
+                else
+                    CurrentPlayer.Player.DecisionMaker.DecideRoll(Game, DicePanel);
             }
-
-            CurrentPlayer.ApplyRollResult(e);
-            RefreshGameStatus();
-            RollResults = null;
         }
 
-        private void GameOnStyleChanged(object sender, PlayerEventArgs e)
-        {
-            if (!HasCurrentPlayer)
-                return;
-            CurrentPlayer.Player.SelectedStyle = e.Player.SelectedStyle;
-        }
+        RefreshGameStatus();
+    }
 
-        private void GameOnPlayerJoined(object sender, PlayerEventArgs e)
-        {
-            if (e?.Player != null)
-                Players.Add(new PlayerViewModel(e.Player, _localizationService));
-        }
-
-        private async void GameOnGameFinished(object sender, EventArgs e)
-        {
-            await NavigationService.NavigateToViewModelAsync<GameResultsViewModel>();
-        }
-
-        private void GameOnTurnChanged(object sender, MoveEventArgs e)
-        {
-            DicePanel.UnfixAll();
-
-            if (CurrentPlayer.Player.IsBot)
-            {
-                Game.ReportRoll();
-            }
+    private void GameOnResultApplied(object sender, RollResultEventArgs e)
+    {
+        if (!HasCurrentPlayer)
+            return;
             
-            RefreshGameStatus();
+        if (e.Value > 0 || e.HasBonus)
+        {
+            if (e.Value == 50 || e.HasBonus)
+                _soundsProvider.PlaySound("fanfare");
+            else
+                _soundsProvider.PlaySound("win");
+        }
+        else
+        {
+            _soundsProvider.PlaySound("wrong");
         }
 
-        private void GameOnPlayerReady(object sender, PlayerEventArgs e)
+        CurrentPlayer.ApplyRollResult(e);
+        RefreshGameStatus();
+        RollResults = null;
+    }
+
+    private void GameOnStyleChanged(object sender, PlayerEventArgs e)
+    {
+        if (!HasCurrentPlayer)
+            return;
+        CurrentPlayer.Player.SelectedStyle = e.Player.SelectedStyle;
+    }
+
+    private void GameOnPlayerJoined(object sender, PlayerEventArgs e)
+    {
+        if (e?.Player != null)
+            Players.Add(new PlayerViewModel(e.Player, _localizationService));
+    }
+
+    private async void GameOnGameFinished(object sender, EventArgs e)
+    {
+        await NavigationService.NavigateToViewModelAsync<GameResultsViewModel>();
+    }
+
+    private void GameOnTurnChanged(object sender, MoveEventArgs e)
+    {
+        DicePanel.UnfixAll();
+
+        if (CurrentPlayer.Player.IsBot)
         {
-            var playerViewModel = Players.FirstOrDefault(f => f.Player.InGameId == e.Player.InGameId);
-            if (playerViewModel!=null)
-                playerViewModel.Player.IsReady = e.Player.IsReady;        
+            Game.ReportRoll();
         }
-
-        private void GameOnDiceChanged(object sender, RollEventArgs e)
-        {
-            if (!HasCurrentPlayer)
-                return;
-            _soundsProvider.PlaySound("magic");
-            CurrentPlayer.Player.CheckRollResults(new DieResult() { DiceResults = e.Value.ToList() }, Game.Rules);
-            CurrentPlayer.Player.UseArtifact(Artifacts.ManualSet);
-            if (e.Player.InGameId == CurrentPlayer.Player.InGameId && CurrentPlayer.Player.IsHuman)
-            {
-                SetRollResults();
-            }
-            RefreshGameStatus();
-        }
-
-        private void SetRollResults()
-        {
-            RollResults = new ObservableCollection<RollResultViewModel>(CurrentPlayer.Results
-                .Where(f => !f.HasValue && f.ScoreType != Scores.Bonus));
-        }
-
-        private void GameOnPlayerRerolled(object sender, PlayerEventArgs e)
-        {
-            if (!HasCurrentPlayer)
-                return;
-            _soundsProvider.PlaySound("magic");
-            CurrentPlayer.Player.UseArtifact(Artifacts.RollReset);
-            RollResults = null;
-            RefreshGameStatus();            
-        }
-
-        private void GameOnMagicRollUsed(object sender, PlayerEventArgs e)
-        {
-            if (!HasCurrentPlayer)
-                return;
-            _soundsProvider.PlaySound("magic");
-            CurrentPlayer.Player.UseArtifact(Artifacts.MagicalRoll);
-            RefreshGameStatus();
-        }
-
-        public ObservableCollection<RollResultViewModel> RollResults
-        {
-            get;
-            private set => SetProperty(ref field, value);
-        }
-
-        public List<string> RollResultsLabels => Game.Rules.ScoresForRule
-            .Select(score => new RollResult(score,Game.Rules.CurrentRule))
-            .Select(s => _localizationService.GetLocalizedString(s.ScoreType.ToString())).ToList();
-
-        public List<string> RollResultsShortLabels => Game.Rules.ScoresForRule
-            .Select(score => new RollResult(score,Game.Rules.CurrentRule))
-            .Select(s => _localizationService.GetLocalizedString($"{s.ScoreType}Short")).ToList();
-
-        public bool HasCurrentPlayer => CurrentPlayer != null;
-        
-        public bool CanRoll => HasCurrentPlayer
-                               && CurrentPlayer.Player.IsHuman
-                               && !DicePanel.IsRolling
-                               && CurrentPlayer.Player.Roll > 0
-                               && CurrentPlayer.Player.Roll <= YatzyGame.MaxRoll;
-
-        public string ScoresTitle => _localizationService.GetLocalizedString("ResultsTableLabel").ToUpper();
-        public string PanelTitle => _localizationService.GetLocalizedString("DiceBoardLabel").ToUpper();
-
-        public ICommand RollCommand => new SimpleCommand(() =>
-        {
-            if (CanRoll)
-            {
-                Game?.ReportRoll();
-            }
-        });
-
-        public ICommand MagicRollCommand => new SimpleCommand(() =>
-        {
-            if (IsMagicRollVisible)
-            {
-                Game?.ReportMagicRoll();
-            }
-        });
-
-        public ICommand ManualSetCommand => new SimpleCommand(() =>
-        {
-            if (IsManualSetVisible)
-            {
-                DicePanel.ManualSetMode = true;
-            }
-        });
-
-        public ICommand RollResetCommand => new SimpleCommand(() =>
-        {
-            if (IsRollResetVisible)
-            {
-                Game?.ResetRolls();
-            }
-        });
-
-        public string MagicRollLabel => GetGameButtonLabel();
-        public string ManualSetLabel => GetGameButtonLabel();
-        public string RollResetLabel => GetGameButtonLabel();
-        public string TotalLabel => _localizationService.GetLocalizedString("PlayerTotalScoreLabel");
-        public string TotalShortLabel => _localizationService.GetLocalizedString("TotalShort");
-        
-        public RollResultViewModel SelectedRollResult
-        {
-            get => null;
-            set
-            {
-                if (value?.RollResult != null)
-                {
-                    ApplyRollResult(value.RollResult);
-                }
-            }
-        }
-
-        private string GetGameButtonLabel([CallerMemberName] string propertyName = "")
-        {
-            return _localizationService?.GetLocalizedString(propertyName);
-        }
-        
-        private void GameOnPlayerLeft(object sender, PlayerEventArgs e)
-        {
-            var playerVm = Players.FirstOrDefault(p => p.Player.InGameId == e.Player.InGameId);
-            Players.Remove(playerVm);
-        }
-
-        private void GameOnDiceRolled(object sender, RollEventArgs e)
-        {
-            while (!DicePanel.IsRolling)
-            {
-                DicePanel.RollDice(e.Value.ToList());
-            }
-
-            RollResults = null;
-            CurrentPlayer.Player.CheckRollResults(new DieResult(){ DiceResults = e.Value.ToList()},Game.Rules );
-            RefreshGameStatus();
-        }
-
-        private void GameOnDiceFixed(object sender, FixDiceEventArgs e)
-        {
-            if (!CurrentPlayer.Player.IsHuman)
-                DicePanel.FixDice(e.Value,e.Isfixed);        
-        }
-
-        public void ApplyRollResult(IRollResult rollResult)
-        {
-            Game.ApplyScore(rollResult);
-        }
-
-        public override void DetachHandlers()
-        {
-            base.DetachHandlers();
             
-            Players.Clear();
-            
-            Game.DiceFixed -= GameOnDiceFixed;
-            Game.DiceRolled -= GameOnDiceRolled;
-            Game.PlayerLeft -= GameOnPlayerLeft;
-            Game.DiceChanged -= GameOnDiceChanged;
-            Game.PlayerReady -= GameOnPlayerReady;
-            Game.TurnChanged -= GameOnTurnChanged;
-            Game.GameFinished -= GameOnGameFinished;
-            Game.PlayerJoined -= GameOnPlayerJoined;
-            Game.StyleChanged -= GameOnStyleChanged;
-            Game.ResultApplied -= GameOnResultApplied;            
-            Game.PlayerRerolled -= GameOnPlayerRerolled;
-            Game.MagicRollUsed -= GameOnMagicRollUsed;
+        RefreshGameStatus();
+    }
 
-            DicePanel.RollEnded -= DicePanelOnRollEnded;
-            DicePanel.DieFixed -= DicePanelOnDieFixed;
-        }
+    private void GameOnPlayerReady(object sender, PlayerEventArgs e)
+    {
+        var playerViewModel = Players.FirstOrDefault(f => f.Player.InGameId == e.Player.InGameId);
+        if (playerViewModel!=null)
+            playerViewModel.Player.IsReady = e.Player.IsReady;        
+    }
 
-        private void RefreshGameStatus()
+    private void GameOnDiceChanged(object sender, RollEventArgs e)
+    {
+        if (!HasCurrentPlayer)
+            return;
+        _soundsProvider.PlaySound("magic");
+        CurrentPlayer.Player.CheckRollResults(new DieResult() { DiceResults = e.Value.ToList() }, Game.Rules);
+        CurrentPlayer.Player.UseArtifact(Artifacts.ManualSet);
+        if (e.Player.InGameId == CurrentPlayer.Player.InGameId && CurrentPlayer.Player.IsHuman)
         {
-            DicePanel.ClickToFix = CanFix;
-
-            NotifyPropertyChanged(nameof(CurrentPlayer));
-            NotifyPropertyChanged(nameof(RollLabel));
-            NotifyPropertyChanged(nameof(CanRoll));
-            NotifyPropertyChanged(nameof(Title));
-
-            if (HasCurrentPlayer)
-            {
-                foreach (var pw in Players)
-                    pw.Refresh();
-            }
-
-            if (Game.Rules.CurrentRule != Rules.krMagic) return;
-            NotifyPropertyChanged(nameof(IsMagicRollVisible));
-            NotifyPropertyChanged(nameof(IsManualSetVisible));
-            NotifyPropertyChanged(nameof(IsRollResetVisible));
+            SetRollResults();
         }
+        RefreshGameStatus();
+    }
+
+    private void SetRollResults()
+    {
+        RollResults = new ObservableCollection<RollResultViewModel>(CurrentPlayer.Results
+            .Where(f => !f.HasValue && f.ScoreType != Scores.Bonus));
+    }
+
+    private void GameOnPlayerRerolled(object sender, PlayerEventArgs e)
+    {
+        if (!HasCurrentPlayer)
+            return;
+        _soundsProvider.PlaySound("magic");
+        CurrentPlayer.Player.UseArtifact(Artifacts.RollReset);
+        RollResults = null;
+        RefreshGameStatus();            
+    }
+
+    private void GameOnMagicRollUsed(object sender, PlayerEventArgs e)
+    {
+        if (!HasCurrentPlayer)
+            return;
+        _soundsProvider.PlaySound("magic");
+        CurrentPlayer.Player.UseArtifact(Artifacts.MagicalRoll);
+        RefreshGameStatus();
+    }
+
+    public ObservableCollection<RollResultViewModel> RollResults
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
+    public List<string> RollResultsLabels => Game.Rules.ScoresForRule
+        .Select(score => new RollResult(score,Game.Rules.CurrentRule))
+        .Select(s => _localizationService.GetString(s.ScoreType.ToString())).ToList();
+
+    public List<string> RollResultsShortLabels => Game.Rules.ScoresForRule
+        .Select(score => new RollResult(score,Game.Rules.CurrentRule))
+        .Select(s => _localizationService.GetString($"{s.ScoreType}Short")).ToList();
+
+    public bool HasCurrentPlayer => CurrentPlayer != null;
+        
+    public bool CanRoll => HasCurrentPlayer
+                           && CurrentPlayer.Player.IsHuman
+                           && !DicePanel.IsRolling
+                           && CurrentPlayer.Player.Roll > 0
+                           && CurrentPlayer.Player.Roll <= YatzyGame.MaxRoll;
+
+    public string ScoresTitle => _localizationService.GetString("ResultsTableLabel").ToUpper();
+    public string PanelTitle => _localizationService.GetString("DiceBoardLabel").ToUpper();
+
+    public ICommand RollCommand => new SimpleCommand(() =>
+    {
+        if (CanRoll)
+        {
+            Game?.ReportRoll();
+        }
+    });
+
+    public ICommand MagicRollCommand => new SimpleCommand(() =>
+    {
+        if (IsMagicRollVisible)
+        {
+            Game?.ReportMagicRoll();
+        }
+    });
+
+    public ICommand ManualSetCommand => new SimpleCommand(() =>
+    {
+        if (IsManualSetVisible)
+        {
+            DicePanel.ManualSetMode = true;
+        }
+    });
+
+    public ICommand RollResetCommand => new SimpleCommand(() =>
+    {
+        if (IsRollResetVisible)
+        {
+            Game?.ResetRolls();
+        }
+    });
+
+    public string MagicRollLabel => GetGameButtonLabel();
+    public string ManualSetLabel => GetGameButtonLabel();
+    public string RollResetLabel => GetGameButtonLabel();
+    public string TotalLabel => _localizationService.GetString("PlayerTotalScoreLabel");
+    public string TotalShortLabel => _localizationService.GetString("TotalShort");
+        
+    public RollResultViewModel SelectedRollResult
+    {
+        get => null;
+        set
+        {
+            if (value?.RollResult != null)
+            {
+                ApplyRollResult(value.RollResult);
+            }
+        }
+    }
+
+    private string GetGameButtonLabel([CallerMemberName] string propertyName = "")
+    {
+        return _localizationService?.GetString(propertyName);
+    }
+        
+    private void GameOnPlayerLeft(object sender, PlayerEventArgs e)
+    {
+        var playerVm = Players.FirstOrDefault(p => p.Player.InGameId == e.Player.InGameId);
+        Players.Remove(playerVm);
+    }
+
+    private void GameOnDiceRolled(object sender, RollEventArgs e)
+    {
+        while (!DicePanel.IsRolling)
+        {
+            DicePanel.RollDice(e.Value.ToList());
+        }
+
+        RollResults = null;
+        CurrentPlayer.Player.CheckRollResults(new DieResult(){ DiceResults = e.Value.ToList()},Game.Rules );
+        RefreshGameStatus();
+    }
+
+    private void GameOnDiceFixed(object sender, FixDiceEventArgs e)
+    {
+        if (!CurrentPlayer.Player.IsHuman)
+            DicePanel.FixDice(e.Value,e.Isfixed);        
+    }
+
+    public void ApplyRollResult(IRollResult rollResult)
+    {
+        Game.ApplyScore(rollResult);
+    }
+
+    public override void DetachHandlers()
+    {
+        base.DetachHandlers();
+            
+        Players.Clear();
+            
+        Game.DiceFixed -= GameOnDiceFixed;
+        Game.DiceRolled -= GameOnDiceRolled;
+        Game.PlayerLeft -= GameOnPlayerLeft;
+        Game.DiceChanged -= GameOnDiceChanged;
+        Game.PlayerReady -= GameOnPlayerReady;
+        Game.TurnChanged -= GameOnTurnChanged;
+        Game.GameFinished -= GameOnGameFinished;
+        Game.PlayerJoined -= GameOnPlayerJoined;
+        Game.StyleChanged -= GameOnStyleChanged;
+        Game.ResultApplied -= GameOnResultApplied;            
+        Game.PlayerRerolled -= GameOnPlayerRerolled;
+        Game.MagicRollUsed -= GameOnMagicRollUsed;
+
+        DicePanel.RollEnded -= DicePanelOnRollEnded;
+        DicePanel.DieFixed -= DicePanelOnDieFixed;
+    }
+
+    private void RefreshGameStatus()
+    {
+        DicePanel.ClickToFix = CanFix;
+
+        NotifyPropertyChanged(nameof(CurrentPlayer));
+        NotifyPropertyChanged(nameof(RollLabel));
+        NotifyPropertyChanged(nameof(CanRoll));
+        NotifyPropertyChanged(nameof(Title));
+
+        if (HasCurrentPlayer)
+        {
+            foreach (var pw in Players)
+                pw.Refresh();
+        }
+
+        if (Game.Rules.CurrentRule != Rules.krMagic) return;
+        NotifyPropertyChanged(nameof(IsMagicRollVisible));
+        NotifyPropertyChanged(nameof(IsManualSetVisible));
+        NotifyPropertyChanged(nameof(IsRollResetVisible));
     }
 }

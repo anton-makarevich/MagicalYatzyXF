@@ -1,46 +1,46 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MagicalYatzy.Core.Tests.Services.Game;
 using MagicalYatzyTests.Services.Game;
 using Sanet.MagicalYatzy.Extensions;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services.Api;
 using Xunit;
 
-namespace MagicalYatzyTests.Services.Api
+namespace MagicalYatzyTests.Services.Api;
+
+public class LegacyWcfApiClientTests
 {
-    public class LegacyWcfApiClientTests
+    private readonly LegacyWcfClient _sut;
+
+    public LegacyWcfApiClientTests()
     {
-        private readonly LegacyWcfClient _sut;
+        _sut = new LegacyWcfClient();
+    }
 
-        public LegacyWcfApiClientTests()
-        {
-            _sut = new LegacyWcfClient();
-        }
+    [Fact(Skip = "Legacy")]
+    public async Task LoginCallReturnsUserForValidCreds()
+    {
+        var player = await _sut.LoginUserAsync(PlayerServiceTests.TestUserName, PlayerServiceTests.TestUserPassword);
 
-        [Fact(Skip = "Legacy")]
-        public async Task LoginCallReturnsUserForValidCreds()
-        {
-            var player = await _sut.LoginUserAsync(PlayerServiceTests.TestUserName, PlayerServiceTests.TestUserPassword);
+        Assert.NotNull(player);
+        Assert.Equal(PlayerServiceTests.TestUserName, player.Name);
+        Assert.NotEqual(PlayerServiceTests.TestUserPassword, player.Password);
+        Assert.Equal(PlayerServiceTests.TestUserPassword, player.Password?.Decrypt(33));
+    }
 
-            Assert.NotNull(player);
-            Assert.Equal(PlayerServiceTests.TestUserName, player.Name);
-            Assert.NotEqual(PlayerServiceTests.TestUserPassword, player.Password);
-            Assert.Equal(PlayerServiceTests.TestUserPassword, player.Password?.Decrypt(33));
-        }
+    [Fact(Skip = "Legacy")]
+    public async Task FailingLoginCallReturnsNullForWrongPassword()
+    {
+        var player = await _sut.LoginUserAsync(PlayerServiceTests.TestUserName, "wrongpassword");
 
-        [Fact(Skip = "Legacy")]
-        public async Task FailingLoginCallReturnsNullForWrongPassword()
-        {
-            var player = await _sut.LoginUserAsync(PlayerServiceTests.TestUserName, "wrongpassword");
+        Assert.Null(player);
+    }
 
-            Assert.Null(player);
-        }
-
-        [Fact]
-        public async Task SaveScoreIsNotImplemented()
-        {
-            await Assert.ThrowsAsync<NotImplementedException>(
-                () => _sut.SaveScoreAsync("", 0, Rules.krBaby));
-        }
+    [Fact]
+    public async Task SaveScoreIsNotImplemented()
+    {
+        await Assert.ThrowsAsync<NotImplementedException>(
+            () => _sut.SaveScoreAsync("", 0, Rules.krBaby));
     }
 }

@@ -1,9 +1,8 @@
-﻿namespace Sanet.MagicalYatzy.Models.Game
+﻿namespace Sanet.MagicalYatzy.Models.Game;
+
+public enum DiceStyle
 {
-    public enum DiceStyle
-    {
-        Classic,
-        Blue,
-        Red
-    }
+    Classic,
+    Blue,
+    Red
 }

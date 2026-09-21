@@ -1,67 +1,66 @@
 using Sanet.MagicalYatzy.Models.Game.Extensions;
 
-namespace Sanet.MagicalYatzy.Models.Game
+namespace Sanet.MagicalYatzy.Models.Game;
+
+public class RollResult : IRollResult
 {
-    public class RollResult : IRollResult
+    private readonly Rules _rule;
+
+    public RollResult(Scores score, Rules rule)
     {
-        private readonly Rules _rule;
+        _rule = rule;
+        ScoreType = score;
+    }
 
-        public RollResult(Scores score, Rules rule)
+    public bool HasBonus
+    {
+        get
         {
-            _rule = rule;
-            ScoreType = score;
+            if (!HasValue)
+                return false;
+            if (!new Rule(_rule).HasExtendedBonuses)
+                return false;
+            return ScoreType != Scores.Kniffel && field;
         }
+        set;
+    }
 
-        public bool HasBonus
-        {
-            get
-            {
-                if (!HasValue)
-                    return false;
-                if (!new Rule(_rule).HasExtendedBonuses)
-                    return false;
-                return ScoreType != Scores.Kniffel && field;
-            }
-            set;
-        }
+    public bool HasValue { get; private set; }
+    public bool IsMaxPossibleValue => !HasValue && PossibleValue == MaxValue && PossibleValue != 0;
 
-        public bool HasValue { get; private set; }
-        public bool IsMaxPossibleValue => !HasValue && PossibleValue == MaxValue && PossibleValue != 0;
-
-        public ScoreStatus Status =>
-            (HasBonus) 
-                ? ScoreStatus.Bonus 
-                : (HasValue) 
-                    ? ScoreStatus.Value 
-                    : ScoreStatus.NoValue;
+    public ScoreStatus Status =>
+        (HasBonus) 
+            ? ScoreStatus.Bonus 
+            : (HasValue) 
+                ? ScoreStatus.Value 
+                : ScoreStatus.NoValue;
         
-        public bool IsNumeric => ScoreType.IsNumeric();
+    public bool IsNumeric => ScoreType.IsNumeric();
 
-        public bool IsZeroValue => HasValue && Value == 0;
+    public bool IsZeroValue => HasValue && Value == 0;
 
-        public int MaxValue => ScoreType.GetMaxValue();
+    public int MaxValue => ScoreType.GetMaxValue();
 
-        public int PossibleValue
+    public int PossibleValue
+    {
+        get;
+        set
         {
-            get;
-            set
-            {
-                if (value < 0 || value > MaxValue) return;
-                field = value;
-            }
+            if (value < 0 || value > MaxValue) return;
+            field = value;
         }
+    }
 
-        public Scores ScoreType { get; }
+    public Scores ScoreType { get; }
 
-        public int Value
+    public int Value
+    {
+        get;
+        set
         {
-            get;
-            set
-            {
-                if (value < 0 || value > MaxValue) return;
-                field = value;
-                HasValue = true;
-            }
+            if (value < 0 || value > MaxValue) return;
+            field = value;
+            HasValue = true;
         }
     }
 }

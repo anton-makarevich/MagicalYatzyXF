@@ -1,11 +1,10 @@
-﻿namespace Sanet.MagicalYatzy.Models.Game
+﻿namespace Sanet.MagicalYatzy.Models.Game;
+
+public enum Rules
 {
-    public enum Rules
-    {
-        krBaby = 0,
-        krSimple = 1,
-        krStandard = 2,
-        krExtended = 3,
-        krMagic = 4
-    }
+    krBaby = 0,
+    krSimple = 1,
+    krStandard = 2,
+    krExtended = 3,
+    krMagic = 4
 }

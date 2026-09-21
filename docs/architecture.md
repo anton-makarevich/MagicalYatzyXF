@@ -15,7 +15,7 @@ Root namespace `Sanet.MagicalYatzy`. No UI dependencies.
 
 - `Models/Game` — game domain: `YatzyGame`, `DicePanel`, `Die`, rules and scoring, `Ai/BotDecisionMaker`, `IDiceGenerator` with `RandomDiceGenerator` (dice randomness is injectable for tests). Dice animation frames are embedded PNG resources in this project.
 - `ViewModels` — all screen ViewModels. All inherit `Base/DicePanelViewModel` (which extends Sanet.MVVM `BaseViewModel` and exposes the shared `IDicePanel`). `ObservableWrappers/` holds UI-facing wrappers around models (e.g. `PlayerViewModel`).
-- `Services` — `Api` (`AzureApiClient`, `LegacyWcfClient`), `Game` (`GameService`, `PlayerService`, `RulesService`, `GameSettingsService`), `Localization` (`GlobalizationInvariantLocalizationService` over `Resources/Strings.resx`), `Storage` (`LocalJsonStorageService`), `Navigation` (`IExternalNavigationService`), `Media` (`ISoundsProvider`).
+- `Services` — `Api` (`AzureApiClient`, `LegacyWcfClient`), `Game` (`GameService`, `PlayerService`, `RulesService`, `GameSettingsService`), `Storage` (`LocalJsonStorageService`), `Navigation` (`IExternalNavigationService`), `Media` (`ISoundsProvider`). Localization is provided by the `Sanet.Localization` NuGet package.
 
 ### MagicalYatzy.Dto (`src/MagicalYatzy.Dto`, net10.0, nullable enabled)
 

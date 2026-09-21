@@ -4,37 +4,36 @@ using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services.StorageService;
 using Xunit;
 
-namespace MagicalYatzyTests.Services
+namespace MagicalYatzyTests.Services;
+
+public class LocalJsonStorageServiceTests
 {
-    public class LocalJsonStorageServiceTests
+    [Fact]
+    public async Task StorageServiceLoadsSavedPlayers()
     {
-        [Fact]
-        public async Task StorageServiceLoadsSavedPlayers()
+        // Arrange
+        var sut = new LocalJsonStorageService();
+
+        var playersToSave = new List<IPlayer>
         {
-            // Arrange
-            var sut = new LocalJsonStorageService();
+            new Player{ Name = "Player 1", Password = "1234"},
+            new Player{ Name = "Player 2", Password = "1234"}
+        };
 
-            var playersToSave = new List<IPlayer>
-            {
-                new Player{ Name = "Player 1", Password = "1234"},
-                new Player{ Name = "Player 2", Password = "1234"}
-            };
+        // Act
+        await sut.SavePlayersAsync(playersToSave);
+        var loadedPlayers = await sut.LoadPlayersAsync();
 
-            // Act
-            await sut.SavePlayersAsync(playersToSave);
-            var loadedPlayers = await sut.LoadPlayersAsync();
+        //Assert
+        Assert.Equal(playersToSave, loadedPlayers);
+    }
 
-            //Assert
-            Assert.Equal(playersToSave, loadedPlayers);
-        }
-
-        [Fact]
-        public async Task LoadPlayersReturnsNullIfFileDoesNotExist()
-        {
-            var sut = new LocalJsonStorageService();
-            var result = await sut.LoadPlayersAsync("some.path");
+    [Fact]
+    public async Task LoadPlayersReturnsNullIfFileDoesNotExist()
+    {
+        var sut = new LocalJsonStorageService();
+        var result = await sut.LoadPlayersAsync("some.path");
             
-            Assert.Null(result);
-        }
+        Assert.Null(result);
     }
 }

@@ -29,6 +29,12 @@ MagicalYatzy uses Sanet.MVVM viewmodel-first navigation. A new screen works only
    - Single: `navigationService.RegisterViews(typeof(<Name>View), typeof(<Name>ViewModel));`
    - Pair: register the Narrow view inside `if (IsMobile())` and the Wide view in the `else` branch.
 
+## Localized strings
+
+- Localization comes from the `Sanet.Localization` NuGet package (`ILocalizationService`). ViewModels resolve strings via constructor-injected `ILocalizationService.GetString(key)` and expose them as bound properties (e.g. `public string Title => _localizationService.GetString("SettingsCaptionText");`). The app owns its `.resx` resources in `src/MagicalYatzy.Core/Resources/`.
+- Views bind already-localized values; use converters such as `StringUppercasedConverter` only for display formatting.
+- The legacy XF markup-extension / service-locator pattern for strings is not used and must not be reintroduced.
+
 ## Verify
 
 - `dotnet build MagicalYatzy.Avalonia.slnx` compiles.
