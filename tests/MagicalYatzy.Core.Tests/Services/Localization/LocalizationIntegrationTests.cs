@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Shouldly;
 using Sanet.Localization;
+using Sanet.Localization.Providers;
 using Xunit;
 
 namespace MagicalYatzyTests.Services.Localization;
@@ -13,9 +14,10 @@ public class LocalizationIntegrationTests
     {
         var coreAssembly = Assembly.GetAssembly(typeof(Sanet.MagicalYatzy.ViewModels.Base.DicePanelViewModel))
                           ?? throw new InvalidOperationException("Core assembly not found");
-        return new ResourceLocalizationService(
-            coreAssembly,
-            "Sanet.MagicalYatzy.Resources.Strings");
+        return new LocalizationService(
+            new EmbeddedResourcesProvider(
+                coreAssembly,
+                "Sanet.MagicalYatzy.Resources.Strings"));
     }
 
     [Fact]
