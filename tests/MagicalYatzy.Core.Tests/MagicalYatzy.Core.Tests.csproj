@@ -31,6 +31,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\MagicalYatzy.Dto\MagicalYatzy.Dto.csproj" />
     <ProjectReference Include="..\..\src\MagicalYatzy.Core\MagicalYatzy.Core.csproj" />
+    <ProjectReference Include="..\..\src\Avalonia\MagicalYatzy.Avalonia\MagicalYatzy.Avalonia.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="SanetLegacyEncryption">
@@ -43,4 +44,3 @@
     <None Remove="ModelTests\Game\PlayerTests.config" />
   </ItemGroup>
 </Project>
-
