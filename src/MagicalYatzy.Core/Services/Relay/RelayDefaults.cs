@@ -1,29 +1,16 @@
-using System.Linq;
-using System.Reflection;
-
 namespace Sanet.MagicalYatzy.Services.Relay;
 
 /// <summary>
-/// Build-time initial values for relay settings. These values are embedded in the client assembly
-/// and can be extracted; they are defaults, not a secure way to store secrets.
+/// Build-time initial values for relay settings. The values are compiled into the client assembly
+/// and can be extracted; they are defaults, not a secure way to store secrets. They arrive via the
+/// RelayBaseUrl/RelayApiKey MSBuild properties, emitted as constants in a generated partial
+/// (see RelayDefaults.targets) — no reflection.
 /// </summary>
-public static class RelayDefaults
+public static partial class RelayDefaults
 {
     private const string DefaultBaseUrl = "http://localhost:8080";
 
-    public static readonly string BaseUrl = GetMetadataValue("RelayBaseUrl") is { } baseUrl
-                                            && !string.IsNullOrWhiteSpace(baseUrl)
-        ? baseUrl
-        : DefaultBaseUrl;
+    public static string BaseUrl => BuildTimeBaseUrl ?? DefaultBaseUrl;
 
-    public static readonly string ApiKey = GetMetadataValue("RelayApiKey") is { } apiKey
-                                           && !string.IsNullOrWhiteSpace(apiKey)
-        ? apiKey
-        : string.Empty;
-
-    private static string? GetMetadataValue(string key) =>
-        typeof(RelayDefaults).Assembly
-            .GetCustomAttributes<AssemblyMetadataAttribute>()
-            .FirstOrDefault(attribute => attribute.Key == key)
-            ?.Value;
+    public static string ApiKey => BuildTimeApiKey ?? string.Empty;
 }

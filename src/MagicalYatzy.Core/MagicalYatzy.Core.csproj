@@ -345,16 +345,7 @@
     <PackageReference Include="System.ServiceModel.Security" Version="4.5.3" /> -->
   </ItemGroup>
 
-  <ItemGroup>
-    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
-      <_Parameter1>RelayBaseUrl</_Parameter1>
-      <_Parameter2>$(RelayBaseUrl)</_Parameter2>
-    </AssemblyAttribute>
-    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
-      <_Parameter1>RelayApiKey</_Parameter1>
-      <_Parameter2>$(RelayApiKey)</_Parameter2>
-    </AssemblyAttribute>
-  </ItemGroup>
+  <Import Project="RelayDefaults.targets" />
 
   <ItemGroup>
     <Compile Update="Resources\Strings.Designer.cs">
