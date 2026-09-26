@@ -3,7 +3,8 @@
     <PropertyGroup>
         <Deterministic>true</Deterministic>
         <ContinuousIntegrationBuild Condition="'$(ContinuousIntegrationBuild)' == '' and '$(CI)' == 'true'">true</ContinuousIntegrationBuild>
-        <VersionPrefix>2.6.0</VersionPrefix>
+        <VersionPrefix>2.6.2</VersionPrefix>
+        <!-- Relay defaults are compiled into the Core assembly as constants (see src\MagicalYatzy.Core\RelayDefaults.targets); they are extractable and must not be treated as secrets. Pass -p:RelayBaseUrl=... and -p:RelayApiKey=... at build time. When not passed, RelayDefaults falls back to http://localhost:8080 and an empty API key. -->
         <!-- Single source of truth for the Avalonia Developer Tools version (global 'avdt' tool and the Debug-only AvaloniaUI.DiagnosticsSupport package). Keep both in sync with the installed tool. -->
         <AvaloniaDevToolsVersion>2.2.3</AvaloniaDevToolsVersion>
         <!-- Single source of truth for all core Avalonia packages (shared by all projects). -->
