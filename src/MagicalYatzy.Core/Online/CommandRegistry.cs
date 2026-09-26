@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Sanet.MagicalYatzy.Online.Commands;
 using Sanet.Transport;
 
@@ -15,10 +15,9 @@ namespace Sanet.MagicalYatzy.Online;
 /// </summary>
 public sealed class CommandRegistry
 {
-    private static readonly JsonSerializerSettings SerializerSettings = new()
+    private static readonly JsonSerializerOptions SerializerOptions = new()
     {
-        NullValueHandling = NullValueHandling.Ignore,
-        Converters = { new StringEnumConverter() }
+        Converters = { new JsonStringEnumConverter() }
     };
 
     /// <summary>
@@ -43,7 +42,7 @@ public sealed class CommandRegistry
     /// </summary>
     public TransportMessage ToTransportMessage(OnlineMessage message, Guid sourceId)
     {
-        var payload = JsonConvert.SerializeObject(message, message.GetType(), SerializerSettings);
+        var payload = JsonSerializer.Serialize(message, message.GetType(), SerializerOptions);
         return new TransportMessage
         {
             MessageType = message.MessageType,
@@ -67,7 +66,7 @@ public sealed class CommandRegistry
 
         try
         {
-            return JsonConvert.DeserializeObject(message.Payload, type, SerializerSettings) as OnlineMessage;
+            return JsonSerializer.Deserialize(message.Payload, type, SerializerOptions) as OnlineMessage;
         }
         catch (JsonException)
         {
