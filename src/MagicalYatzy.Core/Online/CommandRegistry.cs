@@ -54,12 +54,12 @@ public sealed class CommandRegistry
 
     /// <summary>
     /// Deserializes a transport message back to an online message. Returns <c>null</c> (rather than
-    /// throwing) for an unknown discriminator or an invalid payload.
+    /// throwing) for an unknown discriminator, a missing payload or an invalid payload.
     /// </summary>
     public OnlineMessage? TryDeserialize(TransportMessage message)
     {
         var type = GetType(message.MessageType);
-        if (type == null)
+        if (type == null || message.Payload == null)
         {
             return null;
         }

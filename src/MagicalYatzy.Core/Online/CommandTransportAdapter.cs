@@ -19,6 +19,7 @@ public sealed class CommandTransportAdapter : IDisposable
     private readonly List<ITransportPublisher> _publishers = [];
     private readonly Dictionary<ITransportPublisher, Action<TransportConnectionState>> _connectionStateHandlers = [];
     private readonly Dictionary<ITransportPublisher, TransportConnectionState> _publisherStates = [];
+    private readonly List<Action> _pendingNotifications = [];
 
     private Action<OnlineMessage>? _onMessageReceived;
     private bool _isInitialized;
@@ -88,6 +89,8 @@ public sealed class CommandTransportAdapter : IDisposable
                 SubscribeMessage(publisher);
             }
         }
+
+        FlushPendingNotifications();
     }
 
     /// <summary>
@@ -152,6 +155,8 @@ public sealed class CommandTransportAdapter : IDisposable
         {
             RaiseHostDisconnected();
         }
+
+        FlushPendingNotifications();
     }
 
     /// <summary>
@@ -240,6 +245,8 @@ public sealed class CommandTransportAdapter : IDisposable
                 _publisherStates[publisher] = state;
                 RecomputeAggregateState();
             }
+
+            FlushPendingNotifications();
         }
 
         publisher.ConnectionStateChanged += Handler;
@@ -259,7 +266,12 @@ public sealed class CommandTransportAdapter : IDisposable
 
         var previous = _connectionState;
         _connectionState = newState;
-        ConnectionStateChanged?.Invoke(newState);
+
+        var connectionStateChanged = ConnectionStateChanged;
+        if (connectionStateChanged != null)
+        {
+            _pendingNotifications.Add(() => connectionStateChanged(newState));
+        }
 
         var reachedTerminal = newState == TransportConnectionState.Disconnected
             || newState == TransportConnectionState.Closed;
@@ -308,6 +320,31 @@ public sealed class CommandTransportAdapter : IDisposable
         }
 
         _hostDisconnectedRaised = true;
-        HostDisconnected?.Invoke();
+
+        var hostDisconnected = HostDisconnected;
+        if (hostDisconnected != null)
+        {
+            _pendingNotifications.Add(hostDisconnected);
+        }
+    }
+
+    private void FlushPendingNotifications()
+    {
+        Action[] notifications;
+        lock (_syncLock)
+        {
+            if (_pendingNotifications.Count == 0)
+            {
+                return;
+            }
+
+            notifications = _pendingNotifications.ToArray();
+            _pendingNotifications.Clear();
+        }
+
+        foreach (var notification in notifications)
+        {
+            notification();
+        }
     }
 }

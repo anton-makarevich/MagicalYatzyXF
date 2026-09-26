@@ -28,6 +28,11 @@ public class CommandTransportAdapterTests
         return (adapter, publisher);
     }
 
+    private static bool CanReadStateFromAnotherThreadWhileNotifying(CommandTransportAdapter adapter)
+    {
+        return Task.Run(() => adapter.ConnectionState).Wait(TimeSpan.FromSeconds(5));
+    }
+
     [Fact]
     public async Task ClientCommand_DispatchesToOtherAdapter()
     {
@@ -211,6 +216,34 @@ public class CommandTransportAdapterTests
         adapter.NotifyHostDisconnected();
 
         count.ShouldBe(1);
+    }
+
+    [Fact]
+    public void ConnectionStateChanged_IsRaisedOutsideTheLock()
+    {
+        var (adapter, publisher) = CreateAdapter();
+
+        var readFromAnotherThread = true;
+        adapter.ConnectionStateChanged += _ =>
+            readFromAnotherThread = CanReadStateFromAnotherThreadWhileNotifying(adapter);
+
+        publisher.SetConnectionState(TransportConnectionState.Disconnected);
+
+        readFromAnotherThread.ShouldBeTrue();
+    }
+
+    [Fact]
+    public void HostDisconnected_IsRaisedOutsideTheLock()
+    {
+        var (adapter, _) = CreateAdapter();
+
+        var readFromAnotherThread = true;
+        adapter.HostDisconnected += () =>
+            readFromAnotherThread = CanReadStateFromAnotherThreadWhileNotifying(adapter);
+
+        adapter.NotifyHostDisconnected();
+
+        readFromAnotherThread.ShouldBeTrue();
     }
 
     [Fact]

@@ -134,6 +134,22 @@ public class CommandRegistryTests
     }
 
     [Fact]
+    public void NullPayload_ReturnsNull()
+    {
+        var registry = new CommandRegistry();
+        var message = new TransportMessage
+        {
+            MessageType = nameof(RollCommand),
+            SourceId = Guid.NewGuid(),
+            Payload = null!
+        };
+
+        OnlineMessage? deserialized = null;
+        Should.NotThrow(() => deserialized = registry.TryDeserialize(message));
+        deserialized.ShouldBeNull();
+    }
+
+    [Fact]
     public void GameState_PreservesDuplicateFixedDiceAndUnfilledZeroScore()
     {
         var registry = new CommandRegistry();
