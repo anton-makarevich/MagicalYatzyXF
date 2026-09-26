@@ -4,8 +4,8 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Sanet.MagicalYatzy.Dto.ApiConfigs;
 
 namespace Sanet.MagicalYatzy.Dto.Services;
@@ -13,6 +13,10 @@ namespace Sanet.MagicalYatzy.Dto.Services;
 public class WebService : IWebService
 {
     private const string JsonContentType = "application/json";
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true
+    };
     private readonly HttpClient _httpClient;
 
     public WebService(IApiConfig config)
@@ -37,8 +41,7 @@ public class WebService : IWebService
             var response = await SendRequest(HttpMethod.Get, url);
             if (response.IsSuccessStatusCode)
             {
-                return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(),
-                    new JsonSerializerSettings() { NullValueHandling = 0 });
+                return JsonSerializer.Deserialize<T>(await response.Content.ReadAsStringAsync(), JsonOptions);
             }
 #nullable disable
             return default;
@@ -57,8 +60,7 @@ public class WebService : IWebService
             var response = await SendRequest(HttpMethod.Post, url, requestModel);
             if (response.IsSuccessStatusCode)
             {
-                return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(),
-                    new JsonSerializerSettings() { NullValueHandling = 0 });
+                return JsonSerializer.Deserialize<T>(await response.Content.ReadAsStringAsync(), JsonOptions);
             }
 #nullable disable
             return default;
@@ -78,7 +80,7 @@ public class WebService : IWebService
 
             if (content != null)
             {
-                request.Content = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, JsonContentType);
+                request.Content = new StringContent(JsonSerializer.Serialize(content, content.GetType(), JsonOptions), Encoding.UTF8, JsonContentType);
             }
 
             return await _httpClient.SendAsync(request);

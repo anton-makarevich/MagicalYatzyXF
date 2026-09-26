@@ -334,7 +334,6 @@
   <ItemGroup>
     <PackageReference Include="AsyncAwaitBestPractices" Version="10.0.0" />
     <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="10.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="Sanet.Localization" Version="0.2.0" />
     <PackageReference Include="Sanet.MVVM.Core" Version="1.7.0" />
     <PackageReference Include="Sanet.Transport.SignalR.Client" Version="1.7.0" />
@@ -364,6 +363,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MagicalYatzy.Dto\MagicalYatzy.Dto.csproj" />
+    <ProjectReference Include="..\MagicalYatzy.Core.SourceGenerators\MagicalYatzy.Core.SourceGenerators.csproj"
+                      OutputItemType="Analyzer"
+                      ReferenceOutputAssembly="false" />
     <Reference Include="SanetLegacyEncryption">
       <HintPath>..\..\libs\SanetLegacyEncryption\netstandard2.0\SanetLegacyEncryption.dll</HintPath>
     </Reference>
