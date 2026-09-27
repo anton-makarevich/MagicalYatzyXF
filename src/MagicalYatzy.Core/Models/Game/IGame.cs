@@ -24,6 +24,11 @@ public interface IGame
     void FixAllDice(int value, bool isFixed);
     void FixDice(int value, bool isfixed);
     int NumberOfFixedDice { get; }
+
+    /// <summary>
+    /// A copy of the currently fixed dice face values, duplicates preserved.
+    /// </summary>
+    System.Collections.Generic.IReadOnlyList<int> FixedRollResults { get; }
     event EventHandler GameFinished;
     string GameId { get; }
     bool IsDiceFixed(int value);

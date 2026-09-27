@@ -15,6 +15,11 @@ public sealed class FakeTransportPublisher : ITransportPublisher
     private Action<TransportMessage>? _onMessageReceived;
     private TransportConnectionState _connectionState = TransportConnectionState.Connected;
 
+    /// <summary>
+    /// Number of times <see cref="DisposeAsync"/> was called.
+    /// </summary>
+    public int DisposeCount { get; private set; }
+
     public TransportConnectionState ConnectionState => _connectionState;
 
     public event Action<TransportConnectionState>? ConnectionStateChanged;
@@ -62,6 +67,7 @@ public sealed class FakeTransportPublisher : ITransportPublisher
 
     public ValueTask DisposeAsync()
     {
+        DisposeCount++;
         _room = null;
         _onMessageReceived = null;
         return ValueTask.CompletedTask;

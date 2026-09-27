@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Sanet.MagicalYatzy.Avalonia.DependencyInjection;
+using Sanet.MagicalYatzy.Online;
 using Sanet.MagicalYatzy.Services.Relay;
 using Sanet.Transport.SignalR.Client.Relay;
 using Shouldly;
@@ -23,11 +24,23 @@ public class CoreServicesTests
             .Lifetime.ShouldBe(ServiceLifetime.Singleton);
         services.Single(descriptor => descriptor.ServiceType == typeof(IRelayRoomClient))
             .Lifetime.ShouldBe(ServiceLifetime.Singleton);
+        services.Single(descriptor => descriptor.ServiceType == typeof(IRelayPublisherProvider))
+            .Lifetime.ShouldBe(ServiceLifetime.Singleton);
+        services.Single(descriptor => descriptor.ServiceType == typeof(CommandRegistry))
+            .Lifetime.ShouldBe(ServiceLifetime.Singleton);
+        services.Single(descriptor => descriptor.ServiceType == typeof(IOnlineHostSession))
+            .Lifetime.ShouldBe(ServiceLifetime.Transient);
 
         await using var serviceProvider = services.BuildServiceProvider();
         var relayClient = serviceProvider.GetRequiredService<IRelayRoomClient>();
         relayClient.ShouldBeOfType<RelayRoomClient>();
         serviceProvider.GetRequiredService<IRelayRoomClient>().ShouldBeSameAs(relayClient);
+
+        var hostSession = serviceProvider.GetRequiredService<IOnlineHostSession>();
+        hostSession.ShouldBeOfType<OnlineHostSession>();
+        var secondHostSession = serviceProvider.GetRequiredService<IOnlineHostSession>();
+        secondHostSession.ShouldBeOfType<OnlineHostSession>();
+        secondHostSession.ShouldNotBeSameAs(hostSession);
 
         var settings = serviceProvider.GetRequiredService<IRelaySettings>();
         settings.BaseUrl = "https://updated.example.test";

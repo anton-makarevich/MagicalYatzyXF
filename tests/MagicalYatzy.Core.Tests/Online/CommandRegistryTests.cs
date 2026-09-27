@@ -30,7 +30,13 @@ public class CommandRegistryTests
         yield return [new LeaveGameCommand { PlayerId = "p1" }];
         yield return [new RequestGameStateCommand { PlayerId = "p1" }];
 
+        yield return [new JoinGameCommand { PlayerId = "join-request-1", Name = "Bob" }];
         yield return [new PlayerJoinedBroadcast { PlayerId = "p1", Name = "Alice", SeatNo = 1, Type = PlayerType.Network }
+        ];
+        yield return [new PlayerJoinedBroadcast
+        {
+            PlayerId = "p2", Name = "Bob", SeatNo = 1, Type = PlayerType.Network, JoinRequestId = "join-request-1"
+        }
         ];
         yield return [new PlayerLeftBroadcast { PlayerId = "p1" }];
         yield return [new PlayerReadyBroadcast { PlayerId = "p1", IsReady = true }];
