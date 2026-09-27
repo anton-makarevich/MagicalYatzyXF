@@ -19,7 +19,8 @@ namespace Sanet.MagicalYatzy.Models.Game;
 /// for the current roll (e.g. via <see cref="IPlayer.CheckRollResults"/>)
 /// as no ViewModel does it here. Values left from an earlier turn are dropped
 /// when a turn starts, so a turn without a roll is auto-filled with zero.
-/// Scores that are not on the current player's sheet are rejected.
+/// Scores that are not on the current player's sheet, or that are already
+/// filled, are rejected.
 /// </remarks>
 public class YatzyServerGame : YatzyGame, IDisposable
 {
@@ -51,9 +52,11 @@ public class YatzyServerGame : YatzyGame, IDisposable
     {
         lock (_syncRoot)
         {
-            //a score that is not on the current player's sheet can never be
-            //committed, so applying it would advance the turn without changing state
-            if (FindSheetResult(result) == null)
+            //a score that is not on the current player's sheet, or that is already
+            //filled, can never be committed, so applying it would advance the turn
+            //without changing state
+            var target = FindSheetResult(result);
+            if (target == null || target.HasValue)
                 return;
 
             base.ApplyScore(result);

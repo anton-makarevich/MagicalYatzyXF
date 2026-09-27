@@ -210,6 +210,29 @@ public class YatzyServerGameTests : IDisposable
     }
 
     [Fact]
+    public void ServerGameRejectsScoreThatIsAlreadyFilledOnCurrentPlayerSheet()
+    {
+        const Rules rule = Rules.krSimple;
+        _sut = new YatzyServerGame(rule, new RandomDiceGenerator()) { RoundTimeout = TimeSpan.Zero };
+        var player = new Player(PlayerType.Local);
+        StartGame(player);
+        var appliedResults = new List<RollResultEventArgs>();
+        _sut.ResultApplied += (_, args) => appliedResults.Add(args);
+        var turnChangedCount = 0;
+        _sut.TurnChanged += (_, _) => turnChangedCount++;
+        var filledResult = player.Results!.First(f => f.ScoreType == Scores.Ones);
+        filledResult.Value = 3;
+
+        //same score type, but a fresh unfilled instance carrying a different value
+        filledResult.PossibleValue = 5;
+        _sut.ApplyScore(filledResult);
+
+        appliedResults.ShouldBeEmpty();
+        turnChangedCount.ShouldBe(0);
+        filledResult.Value.ShouldBe(3);
+    }
+
+    [Fact]
     public async Task ServerGameRoundTimeoutWithoutRollCommitsZeroAfterRollInEarlierTurn()
     {
         const Rules rule = Rules.krSimple;
