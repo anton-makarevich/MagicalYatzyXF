@@ -10,11 +10,12 @@ using Sanet.MagicalYatzy.Models.Game.Magical;
 
 namespace Sanet.MagicalYatzy.Models.Game;
 
-public class YatzyGame: IGame
+public class YatzyGame : IGame
 {
     public const int MaxRoll = 3;
+
     //sync object
-    private readonly Lock _syncRoot = new();
+    protected readonly Lock _syncRoot = new();
 
     private readonly IDiceGenerator _diceGenerator;
 
@@ -22,7 +23,8 @@ public class YatzyGame: IGame
     private List<int> _fixedRollResults = [];
     private Queue<int> _thisTurnValues = new();
     private readonly Random _randomizer = new();
-        
+    private bool _resultsNeedReset;
+
     public YatzyGame(Rules rules, IDiceGenerator diceGenerator)
     {
         _diceGenerator = diceGenerator;
@@ -31,11 +33,12 @@ public class YatzyGame: IGame
         GameId = Guid.NewGuid().ToString("N");
     }
 
-    public YatzyGame():this(Game.Rules.krExtended, new RandomDiceGenerator())
+    public YatzyGame() : this(Game.Rules.krExtended, new RandomDiceGenerator())
     {
     }
-        
+
     #region Events
+
     public event EventHandler GameUpdated;
     public event EventHandler<PlayerEventArgs> PlayerLeft;
     public event EventHandler<RollEventArgs> DiceChanged;
@@ -45,23 +48,24 @@ public class YatzyGame: IGame
     public event EventHandler<PlayerEventArgs> PlayerRerolled;
     public event EventHandler<PlayerEventArgs> MagicRollUsed;
     public event EventHandler<PlayerEventArgs> StyleChanged;
-        
+
     public event EventHandler GameFinished;
-        
+
     public event EventHandler<MoveEventArgs> TurnChanged;
     public event EventHandler<ChatMessageEventArgs> ChatMessageSent;
-        
+
     public event EventHandler<PlayerEventArgs> PlayerJoined;
-        
+
     public event EventHandler<RollResultEventArgs> ResultApplied;
+
     #endregion
 
     #region Properties
 
-    public IPlayer CurrentPlayer { get; private set; } 
-        
+    public IPlayer CurrentPlayer { get; private set; }
+
     public string GameId { get; }
-        
+
     public int NumberOfFixedDice => _fixedRollResults?.Count ?? 0;
 
     public bool IsPlaying
@@ -86,12 +90,12 @@ public class YatzyGame: IGame
             return (roll <= MaxRoll) ? roll : MaxRoll;
         }
     }
-        
-    public DieResult LastDiceResult => new() 
+
+    public DieResult LastDiceResult => new()
     {
         DiceResults = _lastRollResults?.ToList() ?? []
     };
-                
+
     public int Round { get; private set; }
 
     public List<IPlayer> Players { get; private set; }
@@ -112,35 +116,34 @@ public class YatzyGame: IGame
     }
 
     public Rule Rules { get; }
+
     #endregion
 
     #region Methods
 
-    public void ApplyScore(IRollResult result)
+    public virtual void ApplyScore(IRollResult result)
     {
+        StopTurnTimer();
         var hasBonus = false;
         //check for kniffel bonus
         if (Rules.HasExtendedBonuses && result.ScoreType != Scores.Kniffel)
         {
             //check if already have kniffel
             var kniffelResult = CurrentPlayer.GetResultForScore(Scores.Kniffel);
-            hasBonus = (LastDiceResult.YatzyFiveOfAKindScore() == 50 
-                        && kniffelResult.Value==kniffelResult.MaxValue);
+            hasBonus = (LastDiceResult.YatzyFiveOfAKindScore() == 50
+                        && kniffelResult.Value == kniffelResult.MaxValue);
         }
+
+        //commit result to the sheet first, so subscribers of ResultApplied
+        //always observe the already-committed state
+        CommitResult(result, result.PossibleValue, hasBonus);
         //sending result to everyone
         ResultApplied?.Invoke(
             this,
-            new RollResultEventArgs(CurrentPlayer, 
+            new RollResultEventArgs(CurrentPlayer,
                 result.PossibleValue,
                 result.ScoreType,
                 hasBonus));
-        //update players results on server
-#if SERVER
-            result.Value = result.PossibleValue;
-            var cr =CurrentPlayer.Results?.FirstOrDefault(f => f.ScoreType == result.ScoreType);
-            cr=  result;
-            _roundTimer.Stop();
-#endif
         //check for numeric bonus and apply it
         if (Rules.HasStandardBonus)
         {
@@ -154,10 +157,9 @@ public class YatzyGame: IGame
                 && (result.IsNumeric && !bonusResult.HasValue))
             {
                 var possibleValue = (totalNumericScore > 62) ? bonusResult.MaxValue : 0;
-                ResultApplied?.Invoke(this, new RollResultEventArgs(CurrentPlayer, possibleValue, bonusResult.ScoreType, false));
-#if SERVER
-                    bonusResult.Value = bonusResult.PossibleValue;
-#endif
+                CommitResult(bonusResult, possibleValue, false);
+                ResultApplied?.Invoke(this,
+                    new RollResultEventArgs(CurrentPlayer, possibleValue, bonusResult.ScoreType, false));
             }
         }
 
@@ -166,7 +168,7 @@ public class YatzyGame: IGame
 
     public void ChangeStyle(IPlayer player, DiceStyle style)
     {
-        if (player==null)
+        if (player == null)
             return;
         player = Players.FirstOrDefault(f => f.InGameId == player.InGameId);
         if (player == null) return;
@@ -174,10 +176,11 @@ public class YatzyGame: IGame
         StyleChanged?.Invoke(null, new PlayerEventArgs(player));
     }
 
-    public void DoTurn()
+    public virtual void DoTurn()
     {
         _fixedRollResults = [];
-            
+        StopTurnTimer();
+
         if (Rules.CurrentRule == Game.Rules.krMagic)
             ReRollMode = false;
         //if we have current player - round is continuing, so selecting next
@@ -188,24 +191,24 @@ public class YatzyGame: IGame
             //if player left we can't just take next - need to check to the last possible place
             currentSeatNo = CurrentPlayer.SeatNo + 1;
         }
+
         for (var seatNo = currentSeatNo; seatNo < 5; seatNo++)
         {
             CurrentPlayer = Players.Where(f => f.IsReady).FirstOrDefault(f => f.SeatNo == seatNo);
             if (CurrentPlayer != null)
                 break;
         }
+
         //if current player is null then all players are done in this round - start next
         if (CurrentPlayer == null)
         {
             NextTurn();
             return;
         }
+
         CurrentPlayer.IsMyTurn = true;
 
-#if SERVER
-            _roundTimer.Stop();
-            _roundTimer.Start();
-#endif
+        StartTurnTimer();
         //report to all that player changed
         TurnChanged?.Invoke(this, new MoveEventArgs(CurrentPlayer, Round));
     }
@@ -259,7 +262,7 @@ public class YatzyGame: IGame
     {
         return _fixedRollResults.Contains(value);
     }
-        
+
     public void JoinGame(IPlayer player)
     {
         lock (_syncRoot)
@@ -269,13 +272,12 @@ public class YatzyGame: IGame
             {
                 IsPlaying = false;
                 Round = 1;
-#if SERVER
-                    _roundTimer.Stop();
-#endif
+                StopTurnTimer();
             }
+
             while (Players.FirstOrDefault(f => f.SeatNo == seat) != null)
                 seat++;
-               
+
             player.SeatNo = seat;
             player.PrepareForGameStart(Rules);
             Players.Add(player);
@@ -310,21 +312,23 @@ public class YatzyGame: IGame
         {
             player.Roll = 1;
         }
+
         //if current round is last
         if (Round == Rules.MaxRound)
         {
-            Players= [.. Players.OrderByDescending(f => f.Total)];
+            Players = [.. Players.OrderByDescending(f => f.Total)];
             CurrentPlayer = Players.First();
             IsPlaying = false;
             foreach (var p in Players)
             {
-                SetPlayerReady(p,false);
+                SetPlayerReady(p, false);
             }
 
+            StopTurnTimer();
+            //scores of the finished game are still on the sheets
+            //and have to be reset before the next game starts
+            _resultsNeedReset = true;
             GameFinished?.Invoke(this, null);
-#if SERVER
-                    RestartGame();
-#endif
         }
         else
         {
@@ -333,7 +337,7 @@ public class YatzyGame: IGame
             DoTurn();
         }
     }
-        
+
     public void ReportMagicRoll()
     {
         if (Rules.CurrentRule != Game.Rules.krMagic)
@@ -346,14 +350,14 @@ public class YatzyGame: IGame
             //set magic value
             //1) check how many free hands we have
             var freeHands = Rule.PokerHands.Where(score => !CurrentPlayer.GetResultForScore(score).HasValue).ToList();
-            if (freeHands.Count==0)
+            if (freeHands.Count == 0)
                 ReportRoll(); //no available hands - just roll
             else
             {
                 _lastRollResults = freeHands[_randomizer.Next(freeHands.Count)].GetMagicResults();
 
                 MagicRollUsed?.Invoke(this, new PlayerEventArgs(CurrentPlayer));
-                    
+
                 foreach (var result in _lastRollResults)
                     _thisTurnValues.Enqueue(result);
                 DiceRolled?.Invoke(this, new RollEventArgs(CurrentPlayer, _lastRollResults));
@@ -367,13 +371,14 @@ public class YatzyGame: IGame
         {
             if (CurrentPlayer == null || CurrentPlayer.Roll > MaxRoll)
                 return;
-                
+
             var diceIndexToSet = 0;
             _lastRollResults = new int[5];
             for (var diceCounter = diceIndexToSet; diceCounter < _fixedRollResults.Count; diceCounter++)
             {
                 _lastRollResults[diceCounter] = _fixedRollResults[diceCounter];
             }
+
             diceIndexToSet = _fixedRollResults.Count;
 
             if (!ReRollMode)
@@ -387,15 +392,15 @@ public class YatzyGame: IGame
                 if (Rules.CurrentRule != Game.Rules.krMagic) continue;
                 if (!ReRollMode)
                     _thisTurnValues.Enqueue(diceValue);
-                else if (_thisTurnValues.Count>0)
-                    _lastRollResults[diceCounter]=_thisTurnValues.Dequeue();
+                else if (_thisTurnValues.Count > 0)
+                    _lastRollResults[diceCounter] = _thisTurnValues.Dequeue();
             }
 
             DiceRolled?.Invoke(this, new RollEventArgs(CurrentPlayer, _lastRollResults));
             CurrentPlayer.Roll++;
         }
     }
-        
+
     public void ResetRolls()
     {
         CurrentPlayer.Roll = 1;
@@ -410,42 +415,39 @@ public class YatzyGame: IGame
             IsPlaying = false;
             Round = 1;
 
-            for (var playerIndex = 0; playerIndex<NumberOfPlayers; playerIndex++)
+            for (var playerIndex = 0; playerIndex < NumberOfPlayers; playerIndex++)
             {
                 var player = Players[playerIndex];
-                player.Roll = 1;
-                player.SeatNo=playerIndex-1;
-                if (player.SeatNo < 0 )
+                player.SeatNo = playerIndex - 1;
+                if (player.SeatNo < 0)
                     player.SeatNo = NumberOfPlayers - 1;
-                player.PrepareForGameStart(Rules);
-#if !SERVER
-                player.IsReady = true;
-#endif
+                SetPlayerReadyForRestart(player);
             }
+
+            ResetResultsForNewGame();
             Players = [.. Players.OrderBy(f => f.SeatNo)];
             CurrentPlayer = null;
-                
+
             StartGame();
         }
     }
-        
+
     public void LeaveGame(IPlayer player)
     {
         player = Players.FirstOrDefault(f => f.InGameId == player.InGameId);
         if (player == null)
             return;
 
-        Players.Remove((Player) player);
+        Players.Remove((Player)player);
 
         PlayerLeft?.Invoke(null, new PlayerEventArgs(player));
         if (CurrentPlayer != null && CurrentPlayer.InGameId == player.InGameId && IsPlaying)
         {
-#if SERVER
-                _roundTimer.Stop();
-#endif
+            StopTurnTimer();
             DoTurn();
             return;
         }
+
         StartGame();
     }
 
@@ -454,12 +456,12 @@ public class YatzyGame: IGame
         // allows to join during the first round
         if (IsPlaying && Round > 1)
             isReady = false;
-        var previousPlayer=Players.FirstOrDefault(f => f.InGameId == player.InGameId);
+        var previousPlayer = Players.FirstOrDefault(f => f.InGameId == player.InGameId);
         if (previousPlayer == null) return;
         previousPlayer.IsReady = isReady;
         PlayerReady?.Invoke(null, new PlayerEventArgs(previousPlayer));
         if (!isReady) return;
-            
+
         StartGame();
     }
 
@@ -467,8 +469,9 @@ public class YatzyGame: IGame
     {
         ChatMessageSent?.Invoke(this, new ChatMessageEventArgs(message));
     }
-    #endregion    
-        
+
+    #endregion
+
     private void StartGame()
     {
         lock (_syncRoot)
@@ -480,6 +483,11 @@ public class YatzyGame: IGame
 
             if (!isEveryoneReady) return;
 
+            //a new game always starts with empty sheets, no matter whether
+            //it was started by restart or by players reporting readiness again
+            if (_resultsNeedReset)
+                ResetResultsForNewGame();
+
             ReorderSeats();
             CurrentPlayer = null;
             Round = 1;
@@ -490,7 +498,7 @@ public class YatzyGame: IGame
             DoTurn();
         }
     }
-        
+
     private void ReorderSeats()
     {
         var seat = 0;
@@ -499,5 +507,50 @@ public class YatzyGame: IGame
             player.SeatNo = seat;
             seat++;
         }
+    }
+
+    private void ResetResultsForNewGame()
+    {
+        foreach (var player in Players)
+        {
+            player.Roll = 1;
+            player.PrepareForGameStart(Rules);
+        }
+        _resultsNeedReset = false;
+    }
+
+    /// <summary>
+    /// Commits an applied result to the current player's score sheet.
+    /// No-op in local games where the attached ViewModel commits values;
+    /// <see cref="YatzyServerGame"/> overrides it to commit on the game side.
+    /// </summary>
+    protected virtual void CommitResult(IRollResult result, int value, bool hasBonus)
+    {
+    }
+
+    /// <summary>
+    /// Starts the round timer for the current player's turn.
+    /// No-op in local games; <see cref="YatzyServerGame"/> overrides it
+    /// to enforce the round timeout.
+    /// </summary>
+    protected virtual void StartTurnTimer()
+    {
+    }
+
+    /// <summary>
+    /// Stops the round timer and invalidates any pending round timeout.
+    /// No-op in local games.
+    /// </summary>
+    protected virtual void StopTurnTimer()
+    {
+    }
+
+    /// <summary>
+    /// Marks a player as ready during restart. Local games auto-ready players;
+    /// server games keep ready-gating until every player reports readiness again.
+    /// </summary>
+    protected virtual void SetPlayerReadyForRestart(IPlayer player)
+    {
+        player.IsReady = true;
     }
 }
