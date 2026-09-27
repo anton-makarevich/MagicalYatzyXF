@@ -134,6 +134,9 @@ public class YatzyGame : IGame
                         && kniffelResult.Value == kniffelResult.MaxValue);
         }
 
+        //commit result to the sheet first, so subscribers of ResultApplied
+        //always observe the already-committed state
+        CommitResult(result, result.PossibleValue, hasBonus);
         //sending result to everyone
         ResultApplied?.Invoke(
             this,
@@ -141,7 +144,6 @@ public class YatzyGame : IGame
                 result.PossibleValue,
                 result.ScoreType,
                 hasBonus));
-        CommitResult(result, result.PossibleValue, hasBonus);
         //check for numeric bonus and apply it
         if (Rules.HasStandardBonus)
         {
@@ -155,9 +157,9 @@ public class YatzyGame : IGame
                 && (result.IsNumeric && !bonusResult.HasValue))
             {
                 var possibleValue = (totalNumericScore > 62) ? bonusResult.MaxValue : 0;
+                CommitResult(bonusResult, possibleValue, false);
                 ResultApplied?.Invoke(this,
                     new RollResultEventArgs(CurrentPlayer, possibleValue, bonusResult.ScoreType, false));
-                CommitResult(bonusResult, possibleValue, false);
             }
         }
 
