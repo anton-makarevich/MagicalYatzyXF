@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
+using Sanet.MagicalYatzy.Models.Game.Magical;
 using Sanet.MagicalYatzy.Online.Commands;
 using Sanet.MagicalYatzy.Online.Commands.Client;
 using Sanet.MagicalYatzy.Online.Commands.Server;
@@ -142,7 +143,7 @@ public sealed class OnlineHostSession : IOnlineHostSession
         catch (OperationCanceledException)
         {
             // cancellation still tears down everything created so far, then propagates
-            await CleanupAndFailAsync("Hosting was cancelled.", cancellationToken);
+            await CleanupAndFailAsync("Hosting was cancelled.");
             throw;
         }
         catch (Exception exception)
@@ -152,7 +153,7 @@ public sealed class OnlineHostSession : IOnlineHostSession
     }
 
     private async Task<OnlineHostResult> CleanupAndFailAsync(
-        string error, CancellationToken cancellationToken = default)
+        string error)
     {
         if (_publisher != null)
         {
@@ -172,14 +173,26 @@ public sealed class OnlineHostSession : IOnlineHostSession
             _publisher = null;
         }
 
-        UnsubscribeGameEvents();
-        _sessionToken = null;
-        HostPlayer = null;
-        _game?.Dispose();
-        _game = null;
-        _adapter.Dispose();
+        // Tear down under the dispatch gate so no in-flight dispatch can be mutating the game
+        // while its events are detached and the game is disposed. The wait is deliberately not
+        // cancellable: the cancellation path calls this with an already-cancelled token, and
+        // teardown must still run.
+        await _dispatchGate.WaitAsync();
+        try
+        {
+            UnsubscribeGameEvents();
+            _sessionToken = null;
+            HostPlayer = null;
+            _game?.Dispose();
+            _game = null;
+            _adapter.Dispose();
 
-        return OnlineHostResult.Failed(_roomCode, error);
+            return OnlineHostResult.Failed(_roomCode, error);
+        }
+        finally
+        {
+            _dispatchGate.Release();
+        }
     }
 
     public async ValueTask DisposeAsync()
@@ -206,13 +219,24 @@ public sealed class OnlineHostSession : IOnlineHostSession
             _publisher = null;
         }
 
-        UnsubscribeGameEvents();
-        _game?.Dispose();
-        _game = null;
-        HostPlayer = null;
-        _sessionToken = null;
-        _adapter.Dispose();
-        _publishChain = Task.CompletedTask;
+        // Tear down under the dispatch gate so no in-flight dispatch can be mutating the game
+        // while its events are detached and the game is disposed. _isDisposed already stops new
+        // dispatches from entering.
+        await _dispatchGate.WaitAsync();
+        try
+        {
+            UnsubscribeGameEvents();
+            _game?.Dispose();
+            _game = null;
+            HostPlayer = null;
+            _sessionToken = null;
+            _adapter.Dispose();
+            _publishChain = Task.CompletedTask;
+        }
+        finally
+        {
+            _dispatchGate.Release();
+        }
     }
 
     #endregion
@@ -304,7 +328,15 @@ public sealed class OnlineHostSession : IOnlineHostSession
                     _game.ReportMagicRoll();
                     break;
                 case ResetRollsCommand:
-                    _game.ResetRolls();
+                    // Rolling back is a magic-rule artifact: the server enforces what the
+                    // client UI hides, and consumes the artifact so it cannot be reused.
+                    if (_game.Rules.CurrentRule is Rules.krMagic
+                        && player.CanUseArtifact(Artifacts.RollReset))
+                    {
+                        _game.ResetRolls();
+                        player.UseArtifact(Artifacts.RollReset);
+                    }
+
                     break;
                 case FixDiceCommand fixDice when _hasRolled:
                     _game.FixDice(fixDice.Value, fixDice.IsFixed);
