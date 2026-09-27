@@ -17,7 +17,9 @@ namespace Sanet.MagicalYatzy.Models.Game;
 /// caller's thread; subscribers must marshal to their own context as needed.
 /// A server host must also refresh <see cref="IRollResult.PossibleValue"/>
 /// for the current roll (e.g. via <see cref="IPlayer.CheckRollResults"/>)
-/// as no ViewModel does it here.
+/// as no ViewModel does it here. Values left from an earlier turn are dropped
+/// when a turn starts, so a turn without a roll is auto-filled with zero.
+/// Scores that are not on the current player's sheet are rejected.
 /// </remarks>
 public class YatzyServerGame : YatzyGame, IDisposable
 {
@@ -39,17 +41,30 @@ public class YatzyServerGame : YatzyGame, IDisposable
     {
     }
 
+    public override void DoTurn()
+    {
+        ClearPossibleValues();
+        base.DoTurn();
+    }
+
     public override void ApplyScore(IRollResult result)
     {
         lock (_syncRoot)
         {
+            //a score that is not on the current player's sheet can never be
+            //committed, so applying it would advance the turn without changing state
+            if (FindSheetResult(result) == null)
+                return;
+
             base.ApplyScore(result);
         }
     }
 
     protected override void CommitResult(IRollResult result, int value, bool hasBonus)
     {
-        var target = CurrentPlayer?.Results?.FirstOrDefault(f => f.ScoreType == result.ScoreType) ?? result;
+        var target = FindSheetResult(result);
+        if (target == null)
+            return;
         target.Value = value;
         target.HasBonus = hasBonus;
     }
@@ -97,6 +112,32 @@ public class YatzyServerGame : YatzyGame, IDisposable
             if (openResult != null)
                 ApplyScore(openResult);
         }
+    }
+
+    /// <summary>
+    /// Drops values computed for a previous turn, so a turn without a roll
+    /// can only be auto-filled with zero. A server host refreshes values of the
+    /// current roll itself (see <see cref="IPlayer.CheckRollResults"/>).
+    /// </summary>
+    private void ClearPossibleValues()
+    {
+        foreach (var player in Players)
+        {
+            if (player.Results == null)
+                continue;
+            foreach (var result in player.Results)
+            {
+                if (!result.HasValue)
+                    result.PossibleValue = 0;
+            }
+        }
+    }
+
+    private IRollResult? FindSheetResult(IRollResult? result)
+    {
+        return result == null
+            ? null
+            : CurrentPlayer?.Results?.FirstOrDefault(f => f.ScoreType == result.ScoreType);
     }
 
     public bool IsDisposed { get; private set; }

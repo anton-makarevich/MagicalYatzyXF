@@ -187,6 +187,81 @@ public class YatzyServerGameTests : IDisposable
     }
 
     [Fact]
+    public void ServerGameRejectsScoreThatIsNotOnCurrentPlayerSheet()
+    {
+        const Rules rule = Rules.krSimple;
+        _sut = new YatzyServerGame(rule, new RandomDiceGenerator()) { RoundTimeout = TimeSpan.Zero };
+        var player = new Player(PlayerType.Local);
+        StartGame(player);
+        var appliedResults = new List<RollResultEventArgs>();
+        _sut.ResultApplied += (_, args) => appliedResults.Add(args);
+        var turnChangedCount = 0;
+        _sut.TurnChanged += (_, _) => turnChangedCount++;
+        //krSimple has no bonus score
+        var detachedResult = new RollResult(Scores.Bonus, rule) { PossibleValue = 35 };
+
+        _sut.ApplyScore(detachedResult);
+
+        appliedResults.ShouldBeEmpty();
+        turnChangedCount.ShouldBe(0);
+        player.Results!.ShouldAllBe(f => !f.HasValue);
+        detachedResult.HasValue.ShouldBeFalse();
+        detachedResult.Value.ShouldBe(0);
+    }
+
+    [Fact]
+    public async Task ServerGameRoundTimeoutWithoutRollCommitsZeroAfterRollInEarlierTurn()
+    {
+        const Rules rule = Rules.krSimple;
+        var diceGenerator = Substitute.For<IDiceGenerator>();
+        diceGenerator.GetNextDiceResult().ReturnsForAnyArgs(2);
+        _sut = new YatzyServerGame(rule, diceGenerator) { RoundTimeout = TimeSpan.FromMilliseconds(200) };
+        var player = new Player(PlayerType.Local);
+        StartGame(player);
+        //host refreshes values of the current roll, as a server host does
+        _sut.ReportRoll();
+        player.CheckRollResults(_sut.LastDiceResult, _sut.Rules);
+        var twosResult = player.Results!.First(f => f.ScoreType == Scores.Twos);
+        twosResult.PossibleValue.ShouldBe(10);
+        var twosApplied = new TaskCompletionSource();
+        _sut.ResultApplied += (_, e) =>
+        {
+            if (e.ScoreType == Scores.Twos)
+                twosApplied.TrySetResult();
+        };
+
+        //ends the turn, the same player starts the next one without rolling
+        _sut.ApplyScore(player.Results!.First(f => f.ScoreType == Scores.Ones));
+
+        var completed = await Task.WhenAny(twosApplied.Task, Task.Delay(5000));
+        completed.ShouldBe(twosApplied.Task);
+
+        twosResult.HasValue.ShouldBeTrue();
+        twosResult.Value.ShouldBe(0);
+    }
+
+    [Fact]
+    public void NewGameAfterFinishedGameResetsResultsWithoutExplicitRestart()
+    {
+        const Rules rule = Rules.krBaby;
+        _sut = new YatzyServerGame(rule, new RandomDiceGenerator()) { RoundTimeout = TimeSpan.Zero };
+        var player = new Player(PlayerType.Local);
+        StartGame(player);
+        foreach (var result in player.Results!.ToList())
+            _sut.ApplyScore(result);
+
+        _sut.IsPlaying.ShouldBeFalse();
+        player.Results!.ShouldAllBe(f => f.HasValue);
+
+        //new game is started by readiness alone
+        _sut.SetPlayerReady(player, true);
+
+        _sut.IsPlaying.ShouldBeTrue();
+        _sut.Round.ShouldBe(1);
+        player.Results.ShouldAllBe(f => !f.HasValue);
+    }
+
+    [Fact]
     public void ServerGameRestartDoesNotAutoReadyPlayersUntilAllReportReadiness()
     {
         var player1 = new Player(PlayerType.Local);

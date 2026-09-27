@@ -23,6 +23,7 @@ public class YatzyGame : IGame
     private List<int> _fixedRollResults = [];
     private Queue<int> _thisTurnValues = new();
     private readonly Random _randomizer = new();
+    private bool _resultsNeedReset;
 
     public YatzyGame(Rules rules, IDiceGenerator diceGenerator)
     {
@@ -173,7 +174,7 @@ public class YatzyGame : IGame
         StyleChanged?.Invoke(null, new PlayerEventArgs(player));
     }
 
-    public void DoTurn()
+    public virtual void DoTurn()
     {
         _fixedRollResults = [];
         StopTurnTimer();
@@ -322,6 +323,9 @@ public class YatzyGame : IGame
             }
 
             StopTurnTimer();
+            //scores of the finished game are still on the sheets
+            //and have to be reset before the next game starts
+            _resultsNeedReset = true;
             GameFinished?.Invoke(this, null);
         }
         else
@@ -412,14 +416,13 @@ public class YatzyGame : IGame
             for (var playerIndex = 0; playerIndex < NumberOfPlayers; playerIndex++)
             {
                 var player = Players[playerIndex];
-                player.Roll = 1;
                 player.SeatNo = playerIndex - 1;
                 if (player.SeatNo < 0)
                     player.SeatNo = NumberOfPlayers - 1;
-                player.PrepareForGameStart(Rules);
                 SetPlayerReadyForRestart(player);
             }
 
+            ResetResultsForNewGame();
             Players = [.. Players.OrderBy(f => f.SeatNo)];
             CurrentPlayer = null;
 
@@ -478,6 +481,11 @@ public class YatzyGame : IGame
 
             if (!isEveryoneReady) return;
 
+            //a new game always starts with empty sheets, no matter whether
+            //it was started by restart or by players reporting readiness again
+            if (_resultsNeedReset)
+                ResetResultsForNewGame();
+
             ReorderSeats();
             CurrentPlayer = null;
             Round = 1;
@@ -497,6 +505,16 @@ public class YatzyGame : IGame
             player.SeatNo = seat;
             seat++;
         }
+    }
+
+    private void ResetResultsForNewGame()
+    {
+        foreach (var player in Players)
+        {
+            player.Roll = 1;
+            player.PrepareForGameStart(Rules);
+        }
+        _resultsNeedReset = false;
     }
 
     /// <summary>
