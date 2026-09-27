@@ -567,6 +567,24 @@ public class YatzyGameTests
     }
 
     [Fact]
+    public void FixedRollResultsReturnsCopyPreservingDuplicates()
+    {
+        const int valueToFix = 4;
+        RollDiceToHaveValue(valueToFix, 2);
+
+        _sut.FixDice(valueToFix, true);
+        _sut.FixDice(valueToFix, true);
+
+        _sut.FixedRollResults.ShouldBe(new[] { valueToFix, valueToFix });
+
+        var snapshot = _sut.FixedRollResults;
+        _sut.FixDice(valueToFix, false);
+        snapshot.Count.ShouldBe(2);
+        _sut.FixDice(valueToFix, false);
+        Assert.Empty(_sut.FixedRollResults);
+    }
+
+    [Fact]
     public void FixAllDiceFixesOrUnfixesAllDiceOfSpecifiedValueInLastRollResultAndInvokesEventForEveryFix()
     {
         const int valueToFix = 4;

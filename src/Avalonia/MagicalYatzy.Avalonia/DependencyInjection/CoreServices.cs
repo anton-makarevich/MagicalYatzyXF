@@ -30,6 +30,9 @@ public static class CoreServices
         services.AddSingleton<IGameSettingsService, GameSettingsService>();
         services.AddSingleton<IRelaySettings, RelaySettings>();
         services.AddSingleton<IRelayHubConfigurationProvider, RelaySettingsHubConfigurationProvider>();
+        services.AddSingleton<IRelayPublisherProvider, RelayPublisherProvider>();
+        services.AddSingleton<Online.CommandRegistry>();
+        services.AddTransient<Online.IOnlineHostSession, Online.OnlineHostSession>();
         services.AddSingleton<IRelayRoomClient>(serviceProvider => new RelayRoomClient(
             new HttpClient(),
             serviceProvider.GetRequiredService<IRelayHubConfigurationProvider>(),

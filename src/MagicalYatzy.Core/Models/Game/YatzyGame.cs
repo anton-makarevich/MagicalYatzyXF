@@ -68,6 +68,13 @@ public class YatzyGame : IGame
 
     public int NumberOfFixedDice => _fixedRollResults?.Count ?? 0;
 
+    /// <summary>
+    /// A copy of the currently fixed dice face values. Duplicates are preserved, so the
+    /// collection is a multiset suitable for state snapshots.
+    /// </summary>
+    public IReadOnlyList<int> FixedRollResults =>
+        _fixedRollResults?.ToList() ?? [];
+
     public bool IsPlaying
     {
         get
