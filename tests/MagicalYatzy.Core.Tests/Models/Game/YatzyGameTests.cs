@@ -9,9 +9,10 @@ using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
 using Sanet.MagicalYatzy.Models.Game.Extensions;
 using Sanet.MagicalYatzy.Models.Game.Magical;
 using Sanet.MagicalYatzy.Utils;
+using Shouldly;
 using Xunit;
 
-namespace MagicalYatzyTests.Models.Game;
+namespace MagicalYatzy.Core.Tests.Models.Game;
 
 public class YatzyGameTests
 {
@@ -21,11 +22,11 @@ public class YatzyGameTests
     {
         _sut = new YatzyGame();
     }
-        
+
     private void StartGame(IPlayer player)
     {
         _sut.JoinGame(player);
-        _sut.SetPlayerReady(player,true);
+        _sut.SetPlayerReady(player, true);
     }
 
     private void RollDiceToHaveValue(int requiredValue, int requiredNumberOfValues)
@@ -41,9 +42,10 @@ public class YatzyGameTests
 
             foreach (var player in _sut.Players)
             {
-                _sut.SetPlayerReady(player,true);
+                _sut.SetPlayerReady(player, true);
             }
         }
+
         _sut.DiceRolled += (sender, args) => { numberOfValues = args.Value.Count(f => f == requiredValue); };
         do
         {
@@ -52,11 +54,11 @@ public class YatzyGameTests
             _sut.ReportRoll();
         } while (numberOfValues != requiredNumberOfValues);
     }
-        
+
     [Fact]
     public void DefaultGameRuleIsExtended()
     {
-        Assert.Equal(Rules.krExtended,_sut.Rules.CurrentRule);
+        Assert.Equal(Rules.krExtended, _sut.Rules.CurrentRule);
     }
 
     [Fact]
@@ -67,7 +69,7 @@ public class YatzyGameTests
         foreach (var rule in allRules)
         {
             var sut = new YatzyGame(rule, Substitute.For<IDiceGenerator>());
-            Assert.Equal(rule,sut.Rules.CurrentRule);
+            Assert.Equal(rule, sut.Rules.CurrentRule);
         }
     }
 
@@ -75,7 +77,7 @@ public class YatzyGameTests
     public void PlayersAreInitialisedWhenGameIsConstructed()
     {
         Assert.NotNull(_sut.Players);
-            
+
         var sut = new YatzyGame(Rules.krBaby, Substitute.For<IDiceGenerator>());
         Assert.NotNull(sut.Players);
     }
@@ -85,7 +87,7 @@ public class YatzyGameTests
     {
         Assert.NotNull(_sut.GameId);
         Assert.NotEmpty(_sut.GameId);
-            
+
         var sut = new YatzyGame(Rules.krBaby, Substitute.For<IDiceGenerator>());
         Assert.NotNull(sut.GameId);
         Assert.NotEmpty(sut.GameId);
@@ -100,14 +102,14 @@ public class YatzyGameTests
     [Fact]
     public void OneIsDefaultRollValue()
     {
-        Assert.Equal(1,_sut.Roll);
+        Assert.Equal(1, _sut.Roll);
     }
 
     [Fact]
     public void DefaultLastDiceResultHasEmptyResults()
     {
         Assert.NotNull(_sut.LastDiceResult?.DiceResults);
-        Assert.Empty(_sut.LastDiceResult?.DiceResults);
+        Assert.Empty(_sut.LastDiceResult.DiceResults);
     }
 
     [Fact]
@@ -119,7 +121,7 @@ public class YatzyGameTests
     [Fact]
     public void ByDefaultThereAreNoPlayers()
     {
-        Assert.Equal(0,_sut.NumberOfPlayers);
+        Assert.Equal(0, _sut.NumberOfPlayers);
     }
 
     [Fact]
@@ -127,7 +129,7 @@ public class YatzyGameTests
     {
         Assert.Equal(0, _sut.NumberOfFixedDice);
     }
-        
+
     [Fact]
     public void ApplyingScoreInvokesResultAppliedEventForResultOnlyIfResultIsNotNumeric()
     {
@@ -137,17 +139,17 @@ public class YatzyGameTests
         var resultAppliedCount = 0;
         RollResultEventArgs appliedResult = null;
         var result = new RollResult(Scores.SmallStraight, Rules.krSimple);
-            
+
         _sut.ResultApplied += (sender, args) =>
         {
             resultAppliedCount++;
             appliedResult = args;
         };
-            
+
         _sut.ApplyScore(result);
-            
-        Assert.Equal(1,resultAppliedCount);
-        Assert.Equal(result.ScoreType,appliedResult.ScoreType);
+
+        Assert.Equal(1, resultAppliedCount);
+        Assert.Equal(result.ScoreType, appliedResult?.ScoreType);
     }
 
     [Fact]
@@ -161,7 +163,7 @@ public class YatzyGameTests
         player.IsReady.Returns(true);
         player.InGameId.Returns("0");
         var results = new List<RollResult>();
-        foreach (var score in  EnumUtils.GetValues<Scores>())
+        foreach (var score in EnumUtils.GetValues<Scores>())
         {
             var result = new RollResult(score, rule);
             if (score != scoreToAdd && score != Scores.Bonus)
@@ -173,20 +175,17 @@ public class YatzyGameTests
         StartGame(player);
         var appliedResults = new List<RollResultEventArgs>();
         var resultToAdd = new RollResult(scoreToAdd, rule);
-            
-        _sut.ResultApplied += (sender, args) =>
-        {
-            appliedResults.Add(args);
-        };
-            
+
+        _sut.ResultApplied += (sender, args) => { appliedResults.Add(args); };
+
         _sut.ApplyScore(resultToAdd);
         var bonusResult = appliedResults.LastOrDefault();
-        Assert.Equal(2,appliedResults.Count);
+        Assert.Equal(2, appliedResults.Count);
         Assert.Equal(resultToAdd.ScoreType, appliedResults.FirstOrDefault()?.ScoreType);
         Assert.Equal(Scores.Bonus, bonusResult?.ScoreType);
-        Assert.Equal(35,bonusResult?.Value);
+        Assert.Equal(35, bonusResult?.Value);
     }
-        
+
     [Fact]
     public void DoesNotInvokeResultAppliedEventForBonusIfBonusIsAlreadyFilled()
     {
@@ -196,7 +195,7 @@ public class YatzyGameTests
         player.IsReady.Returns(true);
         player.InGameId.Returns("0");
         var results = new List<RollResult>();
-        foreach (var score in  EnumUtils.GetValues<Scores>())
+        foreach (var score in EnumUtils.GetValues<Scores>())
         {
             var result = new RollResult(score, rule);
             if (score != scoreToAdd)
@@ -208,18 +207,15 @@ public class YatzyGameTests
         StartGame(player);
         var appliedResults = new List<RollResultEventArgs>();
         var resultToAdd = new RollResult(scoreToAdd, rule);
-            
-        _sut.ResultApplied += (sender, args) =>
-        {
-            appliedResults.Add(args);
-        };
-            
+
+        _sut.ResultApplied += (sender, args) => { appliedResults.Add(args); };
+
         _sut.ApplyScore(resultToAdd);
-            
+
         Assert.Single(appliedResults);
-        Assert.Equal(resultToAdd.ScoreType,appliedResults.FirstOrDefault()?.ScoreType);
+        Assert.Equal(resultToAdd.ScoreType, appliedResults.FirstOrDefault()?.ScoreType);
     }
-        
+
     [Fact]
     public void InvokesResultAppliedEventForBonusIfNotAllNumericAreFilledButNumericScoreIsEnoughForBonus()
     {
@@ -231,7 +227,7 @@ public class YatzyGameTests
         player.InGameId.Returns("0");
         player.TotalNumeric.Returns(65);
         var results = new List<RollResult>();
-        foreach (var score in  EnumUtils.GetValues<Scores>())
+        foreach (var score in EnumUtils.GetValues<Scores>())
         {
             var result = new RollResult(score, rule);
             if (!result.IsNumeric && score != Scores.Bonus)
@@ -243,21 +239,18 @@ public class YatzyGameTests
         StartGame(player);
         var appliedResults = new List<RollResultEventArgs>();
         var resultToAdd = new RollResult(scoreToAdd, rule);
-            
-        _sut.ResultApplied += (sender, args) =>
-        {
-            appliedResults.Add(args);
-        };
-            
+
+        _sut.ResultApplied += (sender, args) => { appliedResults.Add(args); };
+
         _sut.ApplyScore(resultToAdd);
-            
+
         var bonusResult = appliedResults.LastOrDefault();
-        Assert.Equal(2,appliedResults.Count);
-        Assert.Equal(resultToAdd.ScoreType,appliedResults.FirstOrDefault()?.ScoreType);
+        Assert.Equal(2, appliedResults.Count);
+        Assert.Equal(resultToAdd.ScoreType, appliedResults.FirstOrDefault()?.ScoreType);
         Assert.Equal(Scores.Bonus, bonusResult?.ScoreType);
-        Assert.Equal(35,bonusResult?.Value);
+        Assert.Equal(35, bonusResult?.Value);
     }
-        
+
     [Fact]
     public void ApplyingScoreDoesNotInvokesResultAppliedEventForBonusIfRuleDoesNotHaveBonus()
     {
@@ -268,7 +261,7 @@ public class YatzyGameTests
         player.IsReady.Returns(true);
         player.InGameId.Returns("0");
         var results = new List<RollResult>();
-        foreach (var score in  EnumUtils.GetValues<Scores>())
+        foreach (var score in EnumUtils.GetValues<Scores>())
         {
             var result = new RollResult(score, rule);
             if (score != scoreToAdd && score != Scores.Bonus)
@@ -280,18 +273,15 @@ public class YatzyGameTests
         StartGame(player);
         var appliedResults = new List<RollResultEventArgs>();
         var resultToAdd = new RollResult(scoreToAdd, rule);
-            
-        _sut.ResultApplied += (sender, args) =>
-        {
-            appliedResults.Add(args);
-        };
-            
+
+        _sut.ResultApplied += (sender, args) => { appliedResults.Add(args); };
+
         _sut.ApplyScore(resultToAdd);
-            
+
         Assert.Single(appliedResults);
-        Assert.Equal(resultToAdd.ScoreType,appliedResults.FirstOrDefault()?.ScoreType);
+        Assert.Equal(resultToAdd.ScoreType, appliedResults.FirstOrDefault()?.ScoreType);
     }
-        
+
     [Fact]
     public void ApplyingScoreDoesNotInvokesResultAppliedEventForBonusIfNotAllNumericAreFilled()
     {
@@ -302,7 +292,7 @@ public class YatzyGameTests
         player.IsReady.Returns(true);
         player.InGameId.Returns("0");
         var results = new List<RollResult>();
-        foreach (var score in  EnumUtils.GetValues<Scores>())
+        foreach (var score in EnumUtils.GetValues<Scores>())
         {
             var result = new RollResult(score, rule);
             if (!result.IsNumeric && score != Scores.Bonus)
@@ -314,18 +304,15 @@ public class YatzyGameTests
         StartGame(player);
         var appliedResults = new List<RollResultEventArgs>();
         var resultToAdd = new RollResult(scoreToAdd, rule);
-            
-        _sut.ResultApplied += (sender, args) =>
-        {
-            appliedResults.Add(args);
-        };
-            
+
+        _sut.ResultApplied += (sender, args) => { appliedResults.Add(args); };
+
         _sut.ApplyScore(resultToAdd);
-            
+
         Assert.Single(appliedResults);
-        Assert.Equal(resultToAdd.ScoreType,appliedResults.FirstOrDefault()?.ScoreType);
+        Assert.Equal(resultToAdd.ScoreType, appliedResults.FirstOrDefault()?.ScoreType);
     }
-        
+
     [Fact]
     public void ApplyingScoreAddsKniffelBonusWhenApplicable()
     {
@@ -348,19 +335,16 @@ public class YatzyGameTests
         var resultToAdd = Substitute.For<IRollResult>();
         resultToAdd.PossibleValue.Returns(5);
         resultToAdd.ScoreType.Returns(scoreToAdd);
-            
-        _sut.ResultApplied += (sender, args) =>
-        {
-            appliedResults.Add(args);
-        };
-            
+
+        _sut.ResultApplied += (sender, args) => { appliedResults.Add(args); };
+
         _sut.ApplyScore(resultToAdd);
-            
+
         Assert.Single(appliedResults);
-        Assert.Equal(resultToAdd.ScoreType,appliedResults.FirstOrDefault()?.ScoreType);
+        Assert.Equal(resultToAdd.ScoreType, appliedResults.FirstOrDefault()?.ScoreType);
         Assert.True(appliedResults.FirstOrDefault()?.HasBonus);
     }
-        
+
     [Fact]
     public void ApplyingScoreDoesNotAddKniffelBonusWhenKniffelItselfIsNotFilled()
     {
@@ -383,19 +367,16 @@ public class YatzyGameTests
         var resultToAdd = Substitute.For<IRollResult>();
         resultToAdd.PossibleValue.Returns(5);
         resultToAdd.ScoreType.Returns(scoreToAdd);
-            
-        _sut.ResultApplied += (sender, args) =>
-        {
-            appliedResults.Add(args);
-        };
-            
+
+        _sut.ResultApplied += (sender, args) => { appliedResults.Add(args); };
+
         _sut.ApplyScore(resultToAdd);
-            
+
         Assert.Single(appliedResults);
-        Assert.Equal(resultToAdd.ScoreType,appliedResults.FirstOrDefault()?.ScoreType);
+        Assert.Equal(resultToAdd.ScoreType, appliedResults.FirstOrDefault()?.ScoreType);
         Assert.False(appliedResults.FirstOrDefault()?.HasBonus);
     }
-        
+
     [Fact]
     public void ApplyingScoreDoesNotAddKniffelBonusWhenRuleDoesNotSupportExtendedBonus()
     {
@@ -418,19 +399,16 @@ public class YatzyGameTests
         var resultToAdd = Substitute.For<IRollResult>();
         resultToAdd.PossibleValue.Returns(5);
         resultToAdd.ScoreType.Returns(scoreToAdd);
-            
-        _sut.ResultApplied += (sender, args) =>
-        {
-            appliedResults.Add(args);
-        };
-            
+
+        _sut.ResultApplied += (sender, args) => { appliedResults.Add(args); };
+
         _sut.ApplyScore(resultToAdd);
-            
+
         Assert.Single(appliedResults);
-        Assert.Equal(resultToAdd.ScoreType,appliedResults.FirstOrDefault()?.ScoreType);
+        Assert.Equal(resultToAdd.ScoreType, appliedResults.FirstOrDefault()?.ScoreType);
         Assert.False(appliedResults.FirstOrDefault()?.HasBonus);
     }
-        
+
     [Fact]
     public void ApplyingScoreDoesNotAddKniffelBonusWhenRollValueIsNotKniffel()
     {
@@ -441,7 +419,7 @@ public class YatzyGameTests
         diceGenerator.GetNextDiceResult().ReturnsForAnyArgs(info =>
         {
             i++;
-            return i-1;
+            return i - 1;
         });
         _sut = new YatzyGame(rule, diceGenerator);
         var player = Substitute.For<IPlayer>();
@@ -458,16 +436,13 @@ public class YatzyGameTests
         var resultToAdd = Substitute.For<IRollResult>();
         resultToAdd.PossibleValue.Returns(5);
         resultToAdd.ScoreType.Returns(scoreToAdd);
-            
-        _sut.ResultApplied += (sender, args) =>
-        {
-            appliedResults.Add(args);
-        };
-            
+
+        _sut.ResultApplied += (sender, args) => { appliedResults.Add(args); };
+
         _sut.ApplyScore(resultToAdd);
-            
+
         Assert.Single(appliedResults);
-        Assert.Equal(resultToAdd.ScoreType,appliedResults.FirstOrDefault()?.ScoreType);
+        Assert.Equal(resultToAdd.ScoreType, appliedResults.FirstOrDefault()?.ScoreType);
         Assert.False(appliedResults.FirstOrDefault()?.HasBonus);
     }
 
@@ -482,7 +457,7 @@ public class YatzyGameTests
             playerAddedCount++;
             joinedPlayer = args.Player as Player;
         };
-            
+
         _sut.JoinGame(player);
 
         Assert.Single(_sut.Players);
@@ -495,10 +470,10 @@ public class YatzyGameTests
     {
         var player1 = new Player();
         var player2 = new Player();
-            
+
         _sut.JoinGame(player1);
         _sut.JoinGame(player2);
-            
+
         Assert.Equal(0, player1.SeatNo);
         Assert.Equal(1, player2.SeatNo);
     }
@@ -514,9 +489,9 @@ public class YatzyGameTests
             playerReadyCount++;
             readyPlayer = args.Player as Player;
         };
-            
+
         _sut.JoinGame(player);
-        _sut.SetPlayerReady(player,true);
+        _sut.SetPlayerReady(player, true);
 
         Assert.Equal(1, playerReadyCount);
         Assert.True(player.IsReady);
@@ -527,19 +502,16 @@ public class YatzyGameTests
     public void SettingAllPlayersReadyShouldStartGameAndFireUpdateGameEvent()
     {
         var player = new Player();
-            
+
         var gameUpdatedCount = 0;
-        _sut.GameUpdated += (sender, args) =>
-        {
-            gameUpdatedCount++;
-        };
-            
+        _sut.GameUpdated += (sender, args) => { gameUpdatedCount++; };
+
         _sut.JoinGame(player);
-        _sut.SetPlayerReady(player,true);
+        _sut.SetPlayerReady(player, true);
 
         Assert.Equal(1, gameUpdatedCount);
         Assert.True(_sut.IsPlaying);
-        Assert.Equal(1,_sut.Round);
+        Assert.Equal(1, _sut.Round);
     }
 
     [Fact]
@@ -549,19 +521,19 @@ public class YatzyGameTests
         var player2 = new Player();
 
         Player currentPlayer = null;
-            
+
         var turnChangedCount = 0;
         _sut.TurnChanged += (sender, args) =>
         {
             turnChangedCount++;
             currentPlayer = args.Player as Player;
-            Assert.Equal(1,args.Move);
+            Assert.Equal(1, args.Move);
         };
-            
+
         _sut.JoinGame(player1);
         _sut.JoinGame(player2);
-        _sut.SetPlayerReady(player1,true);
-        _sut.SetPlayerReady(player2,true);
+        _sut.SetPlayerReady(player1, true);
+        _sut.SetPlayerReady(player2, true);
 
         Assert.Equal(1, turnChangedCount);
         Assert.NotNull(_sut.CurrentPlayer);
@@ -575,25 +547,25 @@ public class YatzyGameTests
     {
         const DiceStyle initialStyle = DiceStyle.Classic;
         const DiceStyle nextStyle = DiceStyle.Blue;
-            
-        var player = new Player{ SelectedStyle = initialStyle};
+
+        var player = new Player { SelectedStyle = initialStyle };
         Player updatedPlayer = null;
-            
+
         var styleChangedCount = 0;
         _sut.StyleChanged += (sender, args) =>
         {
             styleChangedCount++;
             updatedPlayer = args.Player as Player;
         };
-            
+
         _sut.JoinGame(player);
         _sut.ChangeStyle(player, nextStyle);
 
         Assert.Equal(1, styleChangedCount);
         Assert.Equal(player, updatedPlayer);
-        Assert.Equal(nextStyle,player.SelectedStyle);
+        Assert.Equal(nextStyle, player.SelectedStyle);
     }
-        
+
     [Fact]
     public void FixAllDiceFixesOrUnfixesAllDiceOfSpecifiedValueInLastRollResultAndInvokesEventForEveryFix()
     {
@@ -602,22 +574,22 @@ public class YatzyGameTests
         var expectedValue = true;
         const int requiredNumberOfValues = 2;
         RollDiceToHaveValue(valueToFix, requiredNumberOfValues);
-            
+
         _sut.DiceFixed += (sender, args) =>
         {
             diceFixedCount++;
             Assert.Equal(valueToFix, args.Value);
             // ReSharper disable once AccessToModifiedClosure
-            Assert.Equal(expectedValue,args.Isfixed);
+            Assert.Equal(expectedValue, args.Isfixed);
         };
-            
-        _sut.FixAllDice(valueToFix,true);
+
+        _sut.FixAllDice(valueToFix, true);
         expectedValue = false;
-        _sut.FixAllDice(valueToFix,false);
-            
-        Assert.Equal(requiredNumberOfValues*2, diceFixedCount);
+        _sut.FixAllDice(valueToFix, false);
+
+        Assert.Equal(requiredNumberOfValues * 2, diceFixedCount);
     }
-        
+
     [Fact]
     public void FixDiceFixesOrUnfixesSingleDiceOfSpecifiedValueInLastRollResultAndInvokesEvent()
     {
@@ -631,17 +603,17 @@ public class YatzyGameTests
             diceFixedCount++;
             Assert.Equal(valueToFix, args.Value);
             // ReSharper disable once AccessToModifiedClosure
-            Assert.Equal(expectedValue,args.Isfixed);
+            Assert.Equal(expectedValue, args.Isfixed);
         };
-            
-        _sut.FixDice(valueToFix,true);
+
+        _sut.FixDice(valueToFix, true);
         Assert.True(_sut.IsDiceFixed(valueToFix));
         expectedValue = false;
-        _sut.FixDice(valueToFix,false);
-            
+        _sut.FixDice(valueToFix, false);
+
         Assert.Equal(2, diceFixedCount);
     }
-        
+
     [Fact]
     public void ManualChangeReplacesValueWhenItIsFixed()
     {
@@ -651,20 +623,20 @@ public class YatzyGameTests
         var diceChangedCount = 0;
 
         _sut.DiceChanged += (sender, args) => { diceChangedCount++; };
-            
+
         RollDiceToHaveValue(valueToChange, 2);
         _sut.FixDice(valueToChange, true);
 
         var newValuesBefore = _sut.LastDiceResult.NumDiceOf(valueToChangeTo);
-        _sut.ManualChange(valueToChange,valueToChangeTo, true);
-            
+        _sut.ManualChange(valueToChange, valueToChangeTo, true);
+
         Assert.False(_sut.IsDiceFixed(valueToChange));
         Assert.True(_sut.IsDiceFixed(valueToChangeTo));
-        Assert.Equal(1,_sut.LastDiceResult.NumDiceOf(valueToChange));
-        Assert.Equal(newValuesBefore+1,_sut.LastDiceResult.NumDiceOf(valueToChangeTo));
-        Assert.Equal(1,diceChangedCount);
+        Assert.Equal(1, _sut.LastDiceResult.NumDiceOf(valueToChange));
+        Assert.Equal(newValuesBefore + 1, _sut.LastDiceResult.NumDiceOf(valueToChangeTo));
+        Assert.Equal(1, diceChangedCount);
     }
-        
+
     [Fact]
     public void ManualChangeWorksOnlyForMagicRules()
     {
@@ -674,20 +646,20 @@ public class YatzyGameTests
         var diceChangedCount = 0;
 
         _sut.DiceChanged += (sender, args) => { diceChangedCount++; };
-            
+
         RollDiceToHaveValue(valueToChange, 2);
         _sut.FixDice(valueToChange, true);
 
         var newValuesBefore = _sut.LastDiceResult.NumDiceOf(valueToChangeTo);
-        _sut.ManualChange(valueToChange,valueToChangeTo, true);
-            
+        _sut.ManualChange(valueToChange, valueToChangeTo, true);
+
         Assert.True(_sut.IsDiceFixed(valueToChange));
         Assert.False(_sut.IsDiceFixed(valueToChangeTo));
-        Assert.Equal(2,_sut.LastDiceResult.NumDiceOf(valueToChange));
-        Assert.Equal(newValuesBefore,_sut.LastDiceResult.NumDiceOf(valueToChangeTo));
-        Assert.Equal(0,diceChangedCount);
+        Assert.Equal(2, _sut.LastDiceResult.NumDiceOf(valueToChange));
+        Assert.Equal(newValuesBefore, _sut.LastDiceResult.NumDiceOf(valueToChangeTo));
+        Assert.Equal(0, diceChangedCount);
     }
-        
+
     [Fact]
     public void ManualChangeReplacesValueWhenItIsNotFixed()
     {
@@ -697,20 +669,20 @@ public class YatzyGameTests
         var diceChangedCount = 0;
 
         _sut.DiceChanged += (sender, args) => { diceChangedCount++; };
-            
+
         RollDiceToHaveValue(valueToChange, 2);
         _sut.FixDice(valueToChange, true);
-            
+
         var newValuesBefore = _sut.LastDiceResult.NumDiceOf(valueToChangeTo);
-        _sut.ManualChange(valueToChange,valueToChangeTo, false);
-            
+        _sut.ManualChange(valueToChange, valueToChangeTo, false);
+
         Assert.True(_sut.IsDiceFixed(valueToChange));
         Assert.False(_sut.IsDiceFixed(valueToChangeTo));
-        Assert.Equal(1,_sut.LastDiceResult.NumDiceOf(valueToChange));
-        Assert.Equal(newValuesBefore+1,_sut.LastDiceResult.NumDiceOf(valueToChangeTo));
-        Assert.Equal(1,diceChangedCount);
+        Assert.Equal(1, _sut.LastDiceResult.NumDiceOf(valueToChange));
+        Assert.Equal(newValuesBefore + 1, _sut.LastDiceResult.NumDiceOf(valueToChangeTo));
+        Assert.Equal(1, diceChangedCount);
     }
-        
+
     [Fact]
     public void ManualChangeDoesNotReplacesValueWhenItIsNotInResult()
     {
@@ -720,15 +692,15 @@ public class YatzyGameTests
         var diceChangedCount = 0;
 
         _sut.DiceChanged += (sender, args) => { diceChangedCount++; };
-            
+
         RollDiceToHaveValue(valueToChange, 0);
-            
+
         var newValuesBefore = _sut.LastDiceResult.NumDiceOf(valueToChangeTo);
-        _sut.ManualChange(valueToChange,valueToChangeTo, false);
-            
-        Assert.Equal(0,_sut.LastDiceResult.NumDiceOf(valueToChange));
-        Assert.Equal(newValuesBefore,_sut.LastDiceResult.NumDiceOf(valueToChangeTo));
-        Assert.Equal(0,diceChangedCount);
+        _sut.ManualChange(valueToChange, valueToChangeTo, false);
+
+        Assert.Equal(0, _sut.LastDiceResult.NumDiceOf(valueToChange));
+        Assert.Equal(newValuesBefore, _sut.LastDiceResult.NumDiceOf(valueToChangeTo));
+        Assert.Equal(0, diceChangedCount);
     }
 
     [Fact]
@@ -736,10 +708,10 @@ public class YatzyGameTests
     {
         var player = new Player();
         _sut.JoinGame(player);
-        _sut.SetPlayerReady(player,true);
+        _sut.SetPlayerReady(player, true);
         var magicalRollsUsedCount = 0;
         _sut.MagicRollUsed += (sender, args) => { magicalRollsUsedCount++; };
-            
+
         _sut.ReportMagicRoll();
 
         var result = _sut.LastDiceResult;
@@ -749,22 +721,22 @@ public class YatzyGameTests
                           result.YatzySmallStraightScore() > 0 ||
                           result.YatzyLargeStraightScore() > 0 ||
                           result.YatzyFiveOfAKindScore() > 0;
-            
+
         Assert.False(isPokerHand);
         Assert.Equal(0, magicalRollsUsedCount);
     }
-        
+
     [Fact]
     public void MagicalRollDoesNotSetAnyOfEmptyPokerHandsIfPlayerDoesNotHaveArtifacts()
     {
         _sut = new YatzyGame(Rules.krMagic, Substitute.For<IDiceGenerator>());
-            
+
         var player = new Player();
         _sut.JoinGame(player);
-        _sut.SetPlayerReady(player,true);
+        _sut.SetPlayerReady(player, true);
         var magicalRollsUsedCount = 0;
         _sut.MagicRollUsed += (sender, args) => { magicalRollsUsedCount++; };
-            
+
         _sut.ReportMagicRoll();
 
         var result = _sut.LastDiceResult;
@@ -774,11 +746,11 @@ public class YatzyGameTests
                           result.YatzySmallStraightScore() > 0 ||
                           result.YatzyLargeStraightScore() > 0 ||
                           result.YatzyFiveOfAKindScore() > 0;
-            
+
         Assert.False(isPokerHand);
         Assert.Equal(0, magicalRollsUsedCount);
     }
-        
+
     [Fact]
     public void MagicalRollSetsAnyOfEmptyPokerHandsAndFiresEvent()
     {
@@ -786,13 +758,13 @@ public class YatzyGameTests
 
         var player = new Player
         {
-            AvailableMagicalArtifacts = new List<Artifact> {new Artifact(Artifacts.MagicalRoll)}
+            AvailableMagicalArtifacts = new List<Artifact> { new Artifact(Artifacts.MagicalRoll) }
         };
         _sut.JoinGame(player);
-        _sut.SetPlayerReady(player,true);
+        _sut.SetPlayerReady(player, true);
         var magicalRollsUsedCount = 0;
         _sut.MagicRollUsed += (sender, args) => { magicalRollsUsedCount++; };
-            
+
         _sut.ReportMagicRoll();
 
         var result = _sut.LastDiceResult;
@@ -802,11 +774,11 @@ public class YatzyGameTests
                           result.YatzySmallStraightScore() > 0 ||
                           result.YatzyLargeStraightScore() > 0 ||
                           result.YatzyFiveOfAKindScore() > 0;
-            
+
         Assert.True(isPokerHand);
         Assert.Equal(1, magicalRollsUsedCount);
     }
-        
+
     [Fact]
     public void MagicalRollInitializeStandartRollIfAllPokerHandsAreOccupied()
     {
@@ -814,22 +786,22 @@ public class YatzyGameTests
 
         var player = new Player
         {
-            AvailableMagicalArtifacts = new List<Artifact> {new Artifact(Artifacts.MagicalRoll)}
+            AvailableMagicalArtifacts = new List<Artifact> { new Artifact(Artifacts.MagicalRoll) }
         };
-            
+
         _sut.JoinGame(player);
-        _sut.SetPlayerReady(player,true);
+        _sut.SetPlayerReady(player, true);
         foreach (var score in Rule.PokerHands)
         {
             // ReSharper disable once PossibleNullReferenceException
             player.Results.FirstOrDefault(f => f.ScoreType == score).Value = 1;
         }
-            
+
         var magicalRollsUsedCount = 0;
         var standardRollCount = 0;
         _sut.MagicRollUsed += (sender, args) => { magicalRollsUsedCount++; };
         _sut.DiceRolled += (sender, args) => { standardRollCount++; };
-            
+
         _sut.ReportMagicRoll();
 
         Assert.Equal(0, magicalRollsUsedCount);
@@ -843,10 +815,10 @@ public class YatzyGameTests
         _sut.JoinGame(player);
         _sut.SetPlayerReady(player, true);
         player.Roll = 2;
-            
+
         _sut.ResetRolls();
         Assert.True(_sut.ReRollMode);
-        Assert.Equal(1,player.Roll);
+        Assert.Equal(1, player.Roll);
     }
 
     [Fact]
@@ -855,19 +827,16 @@ public class YatzyGameTests
         var player = new Player();
         _sut.JoinGame(player);
         player.Roll = 2;
-            
+
         var gameUpdatedCount = 0;
-        _sut.GameUpdated += (sender, args) =>
-        {
-            gameUpdatedCount++;
-        };
-            
+        _sut.GameUpdated += (sender, args) => { gameUpdatedCount++; };
+
         _sut.RestartGame();
-        Assert.Equal(1,player.Roll);
+        Assert.Equal(1, player.Roll);
         Assert.Equal(1, gameUpdatedCount);
         Assert.True(player.IsReady);
     }
-        
+
     [Fact]
     public void RestartGameMovesPlayersAroundTable()
     {
@@ -877,20 +846,20 @@ public class YatzyGameTests
         _sut.JoinGame(player1);
         _sut.JoinGame(player2);
         _sut.JoinGame(player3);
-            
+
         _sut.RestartGame();
-            
-        Assert.Equal(2,player1.SeatNo);
-        Assert.Equal(0,player2.SeatNo);
-        Assert.Equal(1,player3.SeatNo);
+
+        Assert.Equal(2, player1.SeatNo);
+        Assert.Equal(0, player2.SeatNo);
+        Assert.Equal(1, player3.SeatNo);
     }
-        
+
     [Fact]
     public void LeavePlayerRemovesPlayerAndFiresEvent()
     {
         var player1 = new Player();
         var player2 = new Player();
-            
+
         _sut.JoinGame(player1);
         _sut.JoinGame(player2);
 
@@ -900,56 +869,50 @@ public class YatzyGameTests
         {
             playerLeftCount++;
             Assert.Equal(player2, args.Player);
-        }; 
-            
+        };
+
         _sut.LeaveGame(player2);
-            
+
         Assert.Equal(1, playerLeftCount);
     }
-        
+
     [Fact]
     public void LeavePlayerDoesNotStartGameIfRemainingPlayersAreNotReady()
     {
         var player1 = new Player();
         var player2 = new Player();
-            
+
         _sut.JoinGame(player1);
         _sut.JoinGame(player2);
-            
+
         _sut.SetPlayerReady(player2, true);
-            
+
         var gameUpdatedCount = 0;
 
-        _sut.GameUpdated += (sender, args) =>
-        {
-            gameUpdatedCount++;
-        };
+        _sut.GameUpdated += (sender, args) => { gameUpdatedCount++; };
 
         _sut.LeaveGame(player2);
-            
+
         Assert.Equal(0, gameUpdatedCount);
     }
-        
+
     [Fact]
     public void LeavePlayerStartsGameIfRemainingPlayersAreReady()
     {
         var player1 = new Player();
         var player2 = new Player();
-            
+
         _sut.JoinGame(player1);
         _sut.JoinGame(player2);
-            
+
         _sut.SetPlayerReady(player1, true);
-            
+
         var gameUpdatedCount = 0;
 
-        _sut.GameUpdated += (sender, args) =>
-        {
-            gameUpdatedCount++;
-        };
+        _sut.GameUpdated += (sender, args) => { gameUpdatedCount++; };
 
         _sut.LeaveGame(player2);
-            
+
         Assert.Equal(1, gameUpdatedCount);
     }
 
@@ -963,7 +926,7 @@ public class YatzyGameTests
             chatMessageCalled++;
             Assert.Equal(message, args.Message);
         };
-            
+
         _sut.SendChatMessage(message);
 
         Assert.Equal(1, chatMessageCalled);
@@ -973,18 +936,18 @@ public class YatzyGameTests
     public void NextTurnResetsPlayersRolls()
     {
         var player1 = new Player();
-        var player2 = new Player();           
+        var player2 = new Player();
         _sut.JoinGame(player1);
         _sut.JoinGame(player2);
         _sut.SetPlayerReady(player1, true);
         _sut.SetPlayerReady(player2, true);
         player1.Roll = 2;
         player2.Roll = 3;
-            
+
         _sut.NextTurn();
-            
-        Assert.Equal(1,player1.Roll);
-        Assert.Equal(1,player2.Roll);
+
+        Assert.Equal(1, player1.Roll);
+        Assert.Equal(1, player2.Roll);
     }
 
     [Fact]
@@ -993,12 +956,12 @@ public class YatzyGameTests
         var player1 = new Player();
         _sut.JoinGame(player1);
         _sut.SetPlayerReady(player1, true);
-            
+
         _sut.ReportRoll();
-            
+
         Assert.Equal(2, player1.Roll);
     }
-        
+
     [Fact]
     public void ReportRollInvolvesDiceRolledEvent()
     {
@@ -1006,15 +969,15 @@ public class YatzyGameTests
         var diceRolledInvokedTimes = 0;
         _sut.JoinGame(player1);
         _sut.SetPlayerReady(player1, true);
-        _sut.DiceRolled += (sender, args) => { diceRolledInvokedTimes++; }; 
-            
+        _sut.DiceRolled += (sender, args) => { diceRolledInvokedTimes++; };
+
         player1.Roll = 3;
-            
+
         _sut.ReportRoll();
-            
-        Assert.Equal(1,diceRolledInvokedTimes);
+
+        Assert.Equal(1, diceRolledInvokedTimes);
     }
-        
+
     [Fact]
     public void ReportRollDoesNotRollDicesIfMaxAmountOfRollsIsReached()
     {
@@ -1022,13 +985,13 @@ public class YatzyGameTests
         var diceRolledInvokedTimes = 0;
         _sut.JoinGame(player1);
         _sut.SetPlayerReady(player1, true);
-        _sut.DiceRolled += (sender, args) => { diceRolledInvokedTimes++; }; 
-            
+        _sut.DiceRolled += (sender, args) => { diceRolledInvokedTimes++; };
+
         player1.Roll = 4;
-            
+
         _sut.ReportRoll();
-            
-        Assert.Equal(0,diceRolledInvokedTimes);
+
+        Assert.Equal(0, diceRolledInvokedTimes);
     }
 
     [Fact]
@@ -1037,46 +1000,46 @@ public class YatzyGameTests
         var player1 = new Player();
         _sut.JoinGame(player1);
         _sut.SetPlayerReady(player1, true);
-            
+
         player1.Roll = 1;
         Assert.Equal(1, _sut.Roll);
-            
+
         player1.Roll = 2;
         Assert.Equal(2, _sut.Roll);
-            
+
         player1.Roll = 3;
         Assert.Equal(3, _sut.Roll);
-            
+
         player1.Roll = -1;
         Assert.Equal(1, _sut.Roll);
-            
+
         player1.Roll = 4;
         Assert.Equal(3, _sut.Roll);
     }
-        
+
     [Fact]
     public void RollIsEqualToCurrentPlayersRoll()
     {
         var player1 = new Player();
         _sut.JoinGame(player1);
         _sut.SetPlayerReady(player1, true);
-            
+
         var player2 = new Player();
         _sut.JoinGame(player2);
         _sut.SetPlayerReady(player2, true);
-            
+
         player1.Roll = 1;
         Assert.Equal(1, _sut.Roll);
-            
+
         player1.Roll = 2;
         Assert.Equal(2, _sut.Roll);
-            
+
         player2.Roll = 3;
         Assert.Equal(2, _sut.Roll);
-            
+
         player1.Roll = -1;
         Assert.Equal(1, _sut.Roll);
-            
+
         player2.Roll = 3;
         Assert.Equal(1, _sut.Roll);
     }
@@ -1085,24 +1048,24 @@ public class YatzyGameTests
     public void PassingNullPlayerToChangeStyleDoesNotInvokeStyleChangedEvent()
     {
         var styleChangedTimes = 0;
-        _sut.StyleChanged += (sender, args) => { styleChangedTimes++;};
-            
+        _sut.StyleChanged += (sender, args) => { styleChangedTimes++; };
+
         _sut.ChangeStyle(null, DiceStyle.Red);
-            
-        Assert.Equal(0,styleChangedTimes);
+
+        Assert.Equal(0, styleChangedTimes);
     }
 
     [Fact]
     public void NextTurnOnLastRoundInvokesGameFinishedEvent()
     {
         var gameFinishedTimes = 0;
-        _sut.GameFinished += (sender, args) => { gameFinishedTimes++;};
+        _sut.GameFinished += (sender, args) => { gameFinishedTimes++; };
         var player = new Player();
         _sut.JoinGame(player);
 
         _sut.NextTurn();
-            
-        Assert.Equal(1,gameFinishedTimes);
+
+        Assert.Equal(1, gameFinishedTimes);
     }
 
     [Fact]
@@ -1110,19 +1073,19 @@ public class YatzyGameTests
     {
         var player = new Player();
         _sut.JoinGame(player);
-        _sut.SetPlayerReady(player,true);
+        _sut.SetPlayerReady(player, true);
         _sut.ReportRoll();
         var diceToFix = _sut.LastDiceResult.DiceResults.Take(3).ToList();
         foreach (var dice in diceToFix)
         {
-            _sut.FixDice(dice,true);
+            _sut.FixDice(dice, true);
         }
-            
+
         _sut.ReportRoll();
 
         for (var index = 0; index < 3; index++)
         {
-            Assert.Equal(diceToFix[index],_sut.LastDiceResult.DiceResults[index]);
+            Assert.Equal(diceToFix[index], _sut.LastDiceResult.DiceResults[index]);
         }
     }
 
@@ -1132,36 +1095,36 @@ public class YatzyGameTests
         var player = new Player();
         _sut = new YatzyGame(Rules.krMagic, new RandomDiceGenerator());
         _sut.JoinGame(player);
-        _sut.SetPlayerReady(player,true);
+        _sut.SetPlayerReady(player, true);
         _sut.ReportRoll();
         var lastResults = _sut.LastDiceResult.DiceResults;
         _sut.ReRollMode = true;
-            
+
         _sut.ReportRoll();
 
         for (var index = 0; index < lastResults.Count; index++)
         {
-            Assert.Equal(lastResults[index],_sut.LastDiceResult.DiceResults[index]);
+            Assert.Equal(lastResults[index], _sut.LastDiceResult.DiceResults[index]);
         }
     }
-        
+
     [Fact]
     public void ReRollModeProducesTheSameValuesAsPreviousRollNotTheFirstRoll()
     {
         var player = new Player();
         _sut = new YatzyGame(Rules.krMagic, new RandomDiceGenerator());
         _sut.JoinGame(player);
-        _sut.SetPlayerReady(player,true);
+        _sut.SetPlayerReady(player, true);
         _sut.ReportRoll();
         _sut.ReportRoll();
         var lastResults = _sut.LastDiceResult.DiceResults;
         _sut.ReRollMode = true;
-            
+
         _sut.ReportRoll();
 
         for (var index = 0; index < lastResults.Count; index++)
         {
-            Assert.Equal(lastResults[index],_sut.LastDiceResult.DiceResults[index]);
+            Assert.Equal(lastResults[index], _sut.LastDiceResult.DiceResults[index]);
         }
     }
 
@@ -1169,32 +1132,32 @@ public class YatzyGameTests
     public void LeavePlayerDoesNotInvokeCorrespondingEventIfPlayerArgumentIsNotInTheGame()
     {
         var playerLeftTimes = 0;
-        _sut.PlayerLeft += (sender, args) => { playerLeftTimes++;};
+        _sut.PlayerLeft += (sender, args) => { playerLeftTimes++; };
         var player = new Player();
         _sut.JoinGame(player);
-            
+
         _sut.LeaveGame(new Player());
-            
-        Assert.Equal(0,playerLeftTimes);
+
+        Assert.Equal(0, playerLeftTimes);
     }
-        
+
     [Fact]
     public void SetPlayerReadyDoesNotSetPlayerReadyIfGameIsAlreadyRunning()
     {
         var playerReadyTimes = 0;
         var gameUpdatedTimes = 0;
-        _sut.PlayerReady += (sender, args) => { playerReadyTimes++;};
+        _sut.PlayerReady += (sender, args) => { playerReadyTimes++; };
         var player = new Player();
         _sut.JoinGame(player);
-        _sut.SetPlayerReady(player,true);
+        _sut.SetPlayerReady(player, true);
         _sut.NextTurn();
         _sut.GameUpdated += (sender, args) => { gameUpdatedTimes++; };
         var player2 = new Player();
         _sut.JoinGame(player2);
-        _sut.SetPlayerReady(player2,true);
-            
-        Assert.Equal(2,playerReadyTimes);
-        Assert.Equal(0,gameUpdatedTimes);
+        _sut.SetPlayerReady(player2, true);
+
+        Assert.Equal(2, playerReadyTimes);
+        Assert.Equal(0, gameUpdatedTimes);
     }
 
     [Fact]
@@ -1204,13 +1167,33 @@ public class YatzyGameTests
         var player2 = new Player();
         _sut.JoinGame(player1);
         _sut.JoinGame(player2);
-        _sut.SetPlayerReady(player1,true);
-        _sut.SetPlayerReady(player2,true);
+        _sut.SetPlayerReady(player1, true);
+        _sut.SetPlayerReady(player2, true);
         var turnChangedTimes = 0;
-        _sut.TurnChanged += (sender, args) => { turnChangedTimes++;};
-            
+        _sut.TurnChanged += (sender, args) => { turnChangedTimes++; };
+
         _sut.LeaveGame(player1);
-            
-        Assert.Equal(1,turnChangedTimes);
+
+        Assert.Equal(1, turnChangedTimes);
+    }
+
+    [Fact]
+    public void ApplyingScoreDoesNotSetResultValueInLocalGame()
+    {
+        const Scores scoreToAdd = Scores.Ones;
+        const Rules rule = Rules.krStandard;
+        var player = Substitute.For<IPlayer>();
+        player.IsReady.Returns(true);
+        player.InGameId.Returns("0");
+        var results = new List<RollResult>();
+        foreach (var score in EnumUtils.GetValues<Scores>())
+            results.Add(new RollResult(score, rule));
+        player.Results.Returns(results);
+        StartGame(player);
+
+        _sut.ApplyScore(new RollResult(scoreToAdd, rule) { PossibleValue = 5 });
+
+        var onesResult = results.First(f => f.ScoreType == scoreToAdd);
+        onesResult.HasValue.ShouldBeFalse();
     }
 }
