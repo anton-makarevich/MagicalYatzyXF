@@ -77,6 +77,12 @@ public class Player: IPlayer
 
     public IGameDecisionMaker DecisionMaker { get; }
 
+    /// <summary>
+    /// Prepares the seat for a new game: fresh roll counter, score sheet and artifacts. The
+    /// in-game id is a seat identity, not a game identity, so it is assigned once and preserved
+    /// for the lifetime of the player instance - the online protocol addresses every command by
+    /// it and clients keep addressing their own seat with the id received at join time.
+    /// </summary>
     public void PrepareForGameStart(Rule rule)
     {
         Roll = 1;
@@ -86,7 +92,10 @@ public class Player: IPlayer
         }
 
         Results = rule.ScoresForRule.Select(score => new RollResult(score, rule.CurrentRule)).ToList();
-        InGameId = Guid.NewGuid().ToString("N");
+        if (string.IsNullOrEmpty(InGameId))
+        {
+            InGameId = Guid.NewGuid().ToString("N");
+        }
         IsMyTurn = false;
     }
 

@@ -99,6 +99,19 @@ public class PlayerTests
     }
 
     [Fact]
+    public void PrepareForGameKeepsTheInGameIdItAlreadyHas()
+    {
+        _sut.PrepareForGameStart(new Rule(Rules.krMagic));
+        var inGameId = _sut.InGameId;
+
+        // the in-game id is a seat identity: the online protocol addresses commands by it, so a
+        // player that starts the next game in the same room must keep the id clients know
+        _sut.PrepareForGameStart(new Rule(Rules.krMagic));
+
+        Assert.Equal(inGameId, _sut.InGameId);
+    }
+
+    [Fact]
     public void ReturnsResultForRequestedScore()
     {
         _sut.PrepareForGameStart(new Rule(Rules.krMagic));
