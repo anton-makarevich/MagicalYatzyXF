@@ -101,7 +101,18 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
 
     public string Title => _localizationService.GetString("NewOnlineGameAction");
     public string PlayersTitle => _localizationService.GetString("PlayersLabel");
-    public string CurrentPlayerName => _playerService.CurrentPlayer?.Name;
+    public string CurrentPlayerName
+    {
+        get => _playerService.CurrentPlayer?.Name;
+        set
+        {
+            var player = _playerService.CurrentPlayer;
+            if (player == null || player.Name == value)
+                return;
+            player.Name = value;
+            NotifyPropertyChanged();
+        }
+    }
     public string CurrentPlayerTypeName => _playerService.CurrentPlayer?.Type == PlayerType.AI
         ? _localizationService.GetString("BotNameDefault")
         : _localizationService.GetString("PlayerNameDefault");

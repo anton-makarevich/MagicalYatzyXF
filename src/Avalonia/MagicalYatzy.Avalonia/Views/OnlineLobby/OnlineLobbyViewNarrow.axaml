@@ -15,7 +15,7 @@
                 <ScrollViewer>
                         <StackPanel Spacing="12">
                         <templatedControls:EditableMenuItem
-                            Caption="{Binding CurrentPlayerName}"
+                            Caption="{Binding CurrentPlayerName, Mode=TwoWay}"
                             Description="{Binding CurrentPlayerTypeName}"
                             ImageSource="{Binding CurrentPlayerImage}" />
                         <ToggleSwitch IsVisible="{Binding IsModeSelectionVisible}"

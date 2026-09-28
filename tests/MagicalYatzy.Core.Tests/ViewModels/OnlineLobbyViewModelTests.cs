@@ -76,4 +76,22 @@ public sealed class OnlineLobbyViewModelTests
 
         _sut.IsRulesEditable.ShouldBeTrue();
     }
+
+    [Fact]
+    public void CurrentPlayerName_EditWritesThroughAndSurvivesModeSwitch()
+    {
+        var player = Substitute.For<IPlayer>();
+        player.Name.Returns("Original");
+        _players.CurrentPlayer.Returns(player);
+
+        _sut.CurrentPlayerName = "Renamed";
+
+        player.Name.ShouldBe("Renamed");
+
+        _sut.SelectHostCommand.Execute(null);
+        _sut.SelectJoinCommand.Execute(null);
+
+        _sut.CurrentPlayerName.ShouldBe("Renamed");
+        player.Name.ShouldBe("Renamed");
+    }
 }

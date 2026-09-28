@@ -15,7 +15,7 @@
                 <Grid Grid.Column="0" RowDefinitions="Auto,Auto,*" VerticalAlignment="Top">
                     <StackPanel Spacing="8">
                         <templatedControls:EditableMenuItem
-                            Caption="{Binding CurrentPlayerName}"
+                            Caption="{Binding CurrentPlayerName, Mode=TwoWay}"
                             Description="{Binding CurrentPlayerTypeName}"
                             ImageSource="{Binding CurrentPlayerImage}" />
                         <ToggleSwitch IsVisible="{Binding IsModeSelectionVisible}"
