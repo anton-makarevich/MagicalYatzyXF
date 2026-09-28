@@ -90,6 +90,44 @@ public class Player: IPlayer
         IsMyTurn = false;
     }
 
+    /// <summary>
+    /// Restores the seat from a game-state snapshot without the side effects of
+    /// <see cref="PrepareForGameStart"/>: keeps the server-assigned id (no new id is generated),
+    /// rebuilds the score sheet for the rule and restores the artifacts with their used state.
+    /// A committed zero stays committed (<paramref name="scores"/> carries its own HasValue flag);
+    /// <see cref="Roll"/> and ready state are not touched by this method.
+    /// </summary>
+    public void RestoreFromSnapshot(
+        string inGameId,
+        Rule rule,
+        IEnumerable<(Scores ScoreType, int Value, bool HasValue, bool HasBonus)> scores,
+        IEnumerable<(Artifacts Type, bool IsUsed)> artifacts)
+    {
+        InGameId = inGameId;
+        Results = rule.ScoresForRule
+            .Select(score => new RollResult(score, rule.CurrentRule))
+            .ToList();
+        foreach (var (scoreType, value, hasValue, hasBonus) in scores)
+        {
+            var result = GetResultForScore(scoreType);
+            if (result == null)
+                continue;
+            if (hasValue)
+                result.Value = value;
+            result.HasBonus = hasBonus;
+        }
+
+        MagicalArtifactsForGame = artifacts
+            .Select(a =>
+            {
+                var artifact = new Artifact(a.Type);
+                if (a.IsUsed)
+                    artifact.Use();
+                return artifact;
+            })
+            .ToList();
+    }
+
     public void CheckRollResults(DieResult lastDiceResult, Rule rule)
     {
         if (Results == null) return;
