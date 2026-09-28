@@ -362,8 +362,10 @@ public sealed class OnlineClientSession : IOnlineClientSession
             return;
         }
 
-        GameEnded?.Invoke(reason);
+        // End the projection first so a GameEnded subscriber already sees the game torn down:
+        // IsPlaying false, the synthesized GameFinished raised and the reason available.
         _game?.EndGameLocally();
+        GameEnded?.Invoke(reason);
     }
 
     #endregion
