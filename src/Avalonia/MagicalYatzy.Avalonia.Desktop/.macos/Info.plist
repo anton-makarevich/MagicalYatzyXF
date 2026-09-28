@@ -6,9 +6,9 @@
     <key>CFBundleIdentifier</key>
     <string>by.sanet.MagicalYatzy</string>
     <key>CFBundleShortVersionString</key>
-    <string>2.6.7</string>
+    <string>2.6.8</string>
     <key>CFBundleVersion</key>
-    <string>20607</string>
+    <string>20608</string>
     <key>LSMinimumSystemVersion</key>
     <string>10.15</string>
     <key>CFBundleDevelopmentRegion</key>

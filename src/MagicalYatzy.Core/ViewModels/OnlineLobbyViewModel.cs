@@ -50,6 +50,7 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
     private OnlineLobbyState _state = OnlineLobbyState.ChooseMode;
     private string _joinCode = string.Empty;
     private string? _failureMessage;
+    private bool _isCreateMode = true;
 
     public OnlineLobbyViewModel(
         IDicePanel dicePanel,
@@ -67,18 +68,20 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
         _clientSessionFactory = clientSessionFactory;
         _clipboardService = clipboardService;
 
-        SelectHostCommand = new SimpleCommand(() => ChangeState(OnlineLobbyState.HostSetup));
-        SelectJoinCommand = new SimpleCommand(() => ChangeState(OnlineLobbyState.JoinSetup));
+        SelectHostCommand = new SimpleCommand(() => SetMode(true));
+        SelectJoinCommand = new SimpleCommand(() => SetMode(false));
         CreateRoomCommand = new AsyncCommand(CreateRoomAsync);
         CopyCodeCommand = new AsyncCommand(() => _clipboardService.SetTextAsync(RoomCode ?? string.Empty));
         JoinCommand = new AsyncCommand(JoinAsync);
         ReadyCommand = new SimpleCommand(Ready);
         StartGameCommand = new SimpleCommand(StartGame);
+        AddBotCommand = new SimpleCommand(() => { });
+        AddHumanCommand = new SimpleCommand(() => { });
     }
 
     public ObservableCollection<RuleViewModel> Rules { get; } = new();
 
-    public ObservableCollection<OnlinePlayerViewModel> Players { get; } = new();
+    public ObservableCollection<PlayerViewModel> Players { get; } = new();
 
     public ICommand SelectHostCommand { get; }
     public ICommand SelectJoinCommand { get; }
@@ -87,6 +90,8 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
     public ICommand JoinCommand { get; }
     public ICommand ReadyCommand { get; }
     public ICommand StartGameCommand { get; }
+    public ICommand AddBotCommand { get; }
+    public ICommand AddHumanCommand { get; }
 
     public OnlineLobbyState State
     {
@@ -95,7 +100,14 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
     }
 
     public string Title => _localizationService.GetString("NewOnlineGameAction");
+    public string PlayersTitle => _localizationService.GetString("PlayersLabel");
     public string CurrentPlayerName => _playerService.CurrentPlayer?.Name;
+    public string CurrentPlayerTypeName => _playerService.CurrentPlayer?.Type == PlayerType.AI
+        ? _localizationService.GetString("BotNameDefault")
+        : _localizationService.GetString("PlayerNameDefault");
+    public string CurrentPlayerImage => string.IsNullOrEmpty(_playerService.CurrentPlayer?.ProfileImage)
+        ? "SanetDice.png"
+        : _playerService.CurrentPlayer.ProfileImage;
     public string HostGameLabel => _localizationService.GetString("HostGameLabel");
     public string JoinGameLabel => _localizationService.GetString("JoinGameLabel");
     public string RulesTitle => _localizationService.GetString("RulesLabel");
@@ -106,6 +118,18 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
     public string InvalidRoomCodeMessage => _localizationService.GetString("InvalidRoomCodeMessage");
     public string ReadyLabel => _localizationService.GetString("ReadyLabel");
     public string StartLabel => _localizationService.GetString("StartGameButton");
+    public string BackImage => "Back.png";
+
+    public bool IsCreateMode
+    {
+        get => _isCreateMode;
+        set => SetMode(value);
+    }
+
+    public bool IsModeSelectionVisible => State is OnlineLobbyState.ChooseMode
+        or OnlineLobbyState.HostSetup
+        or OnlineLobbyState.JoinSetup
+        or OnlineLobbyState.Failed;
 
     public string? RoomCode { get; private set; }
 
@@ -120,7 +144,7 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
         }
     }
 
-    public RuleViewModel? SelectedRule
+    public RuleViewModel SelectedRule
     {
         get => Rules.FirstOrDefault(rule => rule.IsSelected);
         set
@@ -136,6 +160,20 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
     public bool IsJoinCodeInvalid => !string.IsNullOrWhiteSpace(JoinCode) && !CanJoin;
 
     public bool CanCreate => State == OnlineLobbyState.HostSetup;
+
+    public bool CanAddBot => false;
+
+    public bool CanAddHuman => false;
+
+    public string AddBotLabel => string.Empty;
+
+    public string AddPlayerLabel => string.Empty;
+
+    public string AddBotImage => string.Empty;
+
+    public string AddPlayerImage => string.Empty;
+
+    public bool IsRulesEditable => State == OnlineLobbyState.HostSetup;
 
     public bool CanCopyCode => State == OnlineLobbyState.Hosting && !string.IsNullOrEmpty(RoomCode);
 
@@ -192,9 +230,20 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
         State = state;
         if (state != OnlineLobbyState.Failed)
             _failureMessage = null;
-        if (state == OnlineLobbyState.HostSetup)
+        if (state is OnlineLobbyState.HostSetup or OnlineLobbyState.JoinSetup)
             LoadRules();
         NotifyStateChanged();
+    }
+
+    private void SetMode(bool createMode)
+    {
+        if (_isCreateMode != createMode)
+        {
+            _isCreateMode = createMode;
+            NotifyPropertyChanged(nameof(IsCreateMode));
+        }
+
+        ChangeState(createMode ? OnlineLobbyState.HostSetup : OnlineLobbyState.JoinSetup);
     }
 
     private void LoadRules()
@@ -271,6 +320,7 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
             RoomCode = result.RoomCode ?? roomCode;
             SubscribeToGame(session.Game);
             RebuildPlayers(session.Game);
+            SelectedRule = Rules.FirstOrDefault(rule => rule.Rule == session.Game.Rules.CurrentRule);
             ChangeState(OnlineLobbyState.Joined);
             NotifyPropertyChanged(nameof(RoomCode));
         }
@@ -364,11 +414,11 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
         Players.Clear();
         foreach (var player in game.Players)
         {
-            Players.Add(new OnlinePlayerViewModel(
-                player.Name,
-                player.IsReady,
-                player.InGameId == hostPlayerId,
-                player.InGameId == localPlayerId));
+            var playerViewModel = new PlayerViewModel(player, _localizationService)
+            {
+                CanBeDeleted = false
+            };
+            Players.Add(playerViewModel);
         }
 
         NotifyStateChanged();
@@ -426,5 +476,9 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
         NotifyPropertyChanged(nameof(CanCopyCode));
         NotifyPropertyChanged(nameof(CanStartGame));
         NotifyPropertyChanged(nameof(CanReady));
+        NotifyPropertyChanged(nameof(IsModeSelectionVisible));
+        NotifyPropertyChanged(nameof(CurrentPlayerName));
+        NotifyPropertyChanged(nameof(CurrentPlayerTypeName));
+        NotifyPropertyChanged(nameof(CurrentPlayerImage));
     }
 }

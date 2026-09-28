@@ -12,7 +12,7 @@ using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 
 namespace Sanet.MagicalYatzy.ViewModels;
 
-public class LobbyViewModel: DicePanelViewModel
+public class LobbyViewModel: DicePanelViewModel, ILobbyViewModel
 {
     public const int MaxPlayers = 4;
         
@@ -170,6 +170,8 @@ public class LobbyViewModel: DicePanelViewModel
         get => Rules.FirstOrDefault(r => r.IsSelected);
         set => SelectRule(value?.Rule);
     }
+
+    public bool IsRulesEditable => true;
 
     public bool CanStartGame => Rules.FirstOrDefault(f => f.IsSelected) != null && Players.Any();
 

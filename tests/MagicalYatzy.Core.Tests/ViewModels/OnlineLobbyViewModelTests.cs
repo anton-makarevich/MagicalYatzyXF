@@ -64,11 +64,12 @@ public sealed class OnlineLobbyViewModelTests
     }
 
     [Fact]
-    public void JoinMode_DoesNotLoadHostRules()
+    public void JoinMode_LoadsRulesButKeepsThemReadOnly()
     {
         _sut.SelectJoinCommand.Execute(null);
 
         _sut.State.ShouldBe(OnlineLobbyState.JoinSetup);
-        _sut.Rules.ShouldBeEmpty();
+        _sut.Rules.Count.ShouldBe(2);
+        _sut.IsRulesEditable.ShouldBeFalse();
     }
 }
