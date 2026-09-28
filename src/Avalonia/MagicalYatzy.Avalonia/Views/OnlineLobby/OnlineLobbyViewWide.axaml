@@ -35,7 +35,7 @@
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Column="1" RowDefinitions="Auto,*" VerticalAlignment="Top">
-                    <Label Content="{Binding RulesTitle}" Classes="caption" HorizontalAlignment="Center" />
+                    <Label Content="{Binding RulesTitle}" Classes="caption" HorizontalAlignment="Left" />
                     <ListBox Grid.Row="1"
                              ItemsSource="{Binding Rules}"
                              SelectedItem="{Binding SelectedRule}"
@@ -53,10 +53,10 @@
             </Grid>
         </ScrollViewer>
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8">
-            <Button Content="{Binding CreateRoomLabel}" Command="{Binding CreateRoomCommand}" IsVisible="{Binding IsHostSetup}" />
-            <Button Content="{Binding JoinGameLabel}" Command="{Binding JoinCommand}" IsVisible="{Binding IsJoinSetup}" IsEnabled="{Binding CanJoin}" />
-            <Button Content="{Binding ReadyLabel}" Command="{Binding ReadyCommand}" IsVisible="{Binding CanReady}" />
-            <Button Content="{Binding StartLabel}" Command="{Binding StartGameCommand}" IsVisible="{Binding CanStartGame}" />
+            <templatedControls:ActionButton Content="{Binding CreateRoomLabel}" Command="{Binding CreateRoomCommand}" IsVisible="{Binding IsHostSetup}" ImageSource="{Binding StartImage}" />
+            <templatedControls:ActionButton Content="{Binding JoinGameLabel}" Command="{Binding JoinCommand}" IsVisible="{Binding IsJoinSetup}" IsEnabled="{Binding CanJoin}" ImageSource="{Binding StartImage}" />
+            <templatedControls:ActionButton Content="{Binding ReadyLabel}" Command="{Binding ReadyCommand}" IsVisible="{Binding CanReady}" ImageSource="{Binding StartImage}" />
+            <templatedControls:ActionButton Content="{Binding StartLabel}" Command="{Binding StartGameCommand}" IsVisible="{Binding CanStartGame}" ImageSource="{Binding StartImage}" />
         </StackPanel>
     </Grid>
 </UserControl>

@@ -110,7 +110,7 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
         : _playerService.CurrentPlayer.ProfileImage;
     public string HostGameLabel => _localizationService.GetString("HostGameLabel");
     public string JoinGameLabel => _localizationService.GetString("JoinGameLabel");
-    public string RulesTitle => _localizationService.GetString("RulesLabel");
+    public string RulesTitle => _localizationService.GetString("RulesLabel").ToUpper();
     public string CreateRoomLabel => _localizationService.GetString("CreateRoomLabel");
     public string RoomCodeLabel => _localizationService.GetString("RoomCodeLabel");
     public string CopyCodeLabel => _localizationService.GetString("CopyCodeLabel");
@@ -118,6 +118,7 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
     public string InvalidRoomCodeMessage => _localizationService.GetString("InvalidRoomCodeMessage");
     public string ReadyLabel => _localizationService.GetString("ReadyLabel");
     public string StartLabel => _localizationService.GetString("StartGameButton");
+    public string StartImage => "Start.png";
     public string BackImage => "Back.png";
 
     public bool IsCreateMode
