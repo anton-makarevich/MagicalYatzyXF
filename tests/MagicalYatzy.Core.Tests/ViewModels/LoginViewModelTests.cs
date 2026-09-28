@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using MagicalYatzy.Core.Tests.Services.Game;
-using MagicalYatzyTests.Services.Game;
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services.Game;
@@ -8,7 +7,7 @@ using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MVVM.Core.Services;
 using Xunit;
 
-namespace MagicalYatzyTests.ViewModels;
+namespace MagicalYatzy.Core.Tests.ViewModels;
 
 public class LoginViewModelTests
 {

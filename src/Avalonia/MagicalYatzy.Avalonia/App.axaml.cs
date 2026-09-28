@@ -8,6 +8,7 @@ using Sanet.MagicalYatzy.Avalonia.DependencyInjection;
 using Sanet.MagicalYatzy.Avalonia.Views;
 using Sanet.MagicalYatzy.Avalonia.Views.Game;
 using Sanet.MagicalYatzy.Avalonia.Views.Lobby;
+using Sanet.MagicalYatzy.Avalonia.Views.OnlineLobby;
 using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MVVM.Core.Services;
 using Sanet.MVVM.Navigation.Avalonia.Services;
@@ -24,7 +25,8 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        if (Resources[MVVM.DI.Avalonia.Extensions.AppBuilderExtensions.ServiceCollectionResourceKey] is not IServiceCollection services)
+        if (Resources[MVVM.DI.Avalonia.Extensions.AppBuilderExtensions.ServiceCollectionResourceKey] is not
+            IServiceCollection services)
         {
             throw new Exception("Game services are not initialized");
         }
@@ -38,7 +40,7 @@ public partial class App : Application
         services.RegisterViewModels();
 
         var serviceProvider = services.BuildServiceProvider();
-       
+
         INavigationService navigationService;
 
         MainMenuViewModel? viewModel;
@@ -66,7 +68,8 @@ public partial class App : Application
                 }
 
                 var androidViewWrapper = new ContentControl();
-                navigationService = new SingleViewNavigationService(androidSingleViewLifeTime, androidViewWrapper, serviceProvider);
+                navigationService =
+                    new SingleViewNavigationService(androidSingleViewLifeTime, androidViewWrapper, serviceProvider);
                 RegisterViews(navigationService);
                 viewModel = navigationService.GetViewModel<MainMenuViewModel>();
                 androidViewWrapper.Content = new MainMenuView
@@ -78,9 +81,10 @@ public partial class App : Application
             }
             case ISingleViewApplicationLifetime singleViewPlatform:
                 var mainViewWrapper = new ContentControl();
-                navigationService = new SingleViewNavigationService(singleViewPlatform, mainViewWrapper, serviceProvider);
+                navigationService =
+                    new SingleViewNavigationService(singleViewPlatform, mainViewWrapper, serviceProvider);
                 RegisterViews(navigationService);
-                viewModel = navigationService.GetViewModel<MainMenuViewModel>(); 
+                viewModel = navigationService.GetViewModel<MainMenuViewModel>();
                 mainViewWrapper.Content = new MainMenuView
                 {
                     ViewModel = viewModel
@@ -99,11 +103,13 @@ public partial class App : Application
         if (IsMobile())
         {
             navigationService.RegisterViews(typeof(LobbyViewNarrow), typeof(LobbyViewModel));
+            navigationService.RegisterViews(typeof(OnlineLobbyViewNarrow), typeof(OnlineLobbyViewModel));
             navigationService.RegisterViews(typeof(GameViewNarrow), typeof(GameViewModel));
         }
         else
         {
             navigationService.RegisterViews(typeof(LobbyViewWide), typeof(LobbyViewModel));
+            navigationService.RegisterViews(typeof(OnlineLobbyViewWide), typeof(OnlineLobbyViewModel));
             navigationService.RegisterViews(typeof(GameViewWide), typeof(GameViewModel));
         }
     }

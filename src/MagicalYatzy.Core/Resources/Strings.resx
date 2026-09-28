@@ -241,6 +241,36 @@
   <data name="NewOnlineGameDescription" xml:space="preserve">
     <value>Invite friends and play with them over Internet</value>
   </data>
+  <data name="HostGameLabel" xml:space="preserve">
+    <value>Host game</value>
+  </data>
+  <data name="JoinGameLabel" xml:space="preserve">
+    <value>Join game</value>
+  </data>
+  <data name="CreateRoomLabel" xml:space="preserve">
+    <value>Create room</value>
+  </data>
+  <data name="RoomCodeLabel" xml:space="preserve">
+    <value>Room code</value>
+  </data>
+  <data name="CopyCodeLabel" xml:space="preserve">
+    <value>Copy code</value>
+  </data>
+  <data name="EnterRoomCodePlaceholder" xml:space="preserve">
+    <value>Enter room code</value>
+  </data>
+  <data name="InvalidRoomCodeMessage" xml:space="preserve">
+    <value>Enter six letters or digits</value>
+  </data>
+  <data name="WaitingForPlayersMessage" xml:space="preserve">
+    <value>Waiting for players</value>
+  </data>
+  <data name="WaitingForHostMessage" xml:space="preserve">
+    <value>Waiting for host</value>
+  </data>
+  <data name="GameStartedMessage" xml:space="preserve">
+    <value>Game started</value>
+  </data>
   <data name="SettingsAction" xml:space="preserve">
     <value>Settings</value>
   </data>

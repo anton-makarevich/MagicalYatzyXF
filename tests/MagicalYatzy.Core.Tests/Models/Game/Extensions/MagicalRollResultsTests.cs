@@ -4,7 +4,7 @@ using Sanet.MagicalYatzy.Models.Game.Extensions;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace MagicalYatzyTests.Models.Game.Extensions;
+namespace MagicalYatzy.Core.Tests.Models.Game.Extensions;
 
 public class MagicalRollResults
 {

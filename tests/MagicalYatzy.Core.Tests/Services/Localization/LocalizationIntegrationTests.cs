@@ -1,12 +1,12 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using Shouldly;
 using Sanet.Localization;
 using Sanet.Localization.Providers;
+using Shouldly;
 using Xunit;
 
-namespace MagicalYatzyTests.Services.Localization;
+namespace MagicalYatzy.Core.Tests.Services.Localization;
 
 public class LocalizationIntegrationTests
 {

@@ -2,7 +2,7 @@ using Sanet.MagicalYatzy.Services.Relay;
 using Shouldly;
 using Xunit;
 
-namespace MagicalYatzyTests.Services.Relay;
+namespace MagicalYatzy.Core.Tests.Services.Relay;
 
 public class RelaySettingsTests
 {

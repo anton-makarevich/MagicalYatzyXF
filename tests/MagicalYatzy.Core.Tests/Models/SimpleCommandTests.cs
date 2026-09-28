@@ -1,7 +1,7 @@
 using Sanet.MagicalYatzy.Models;
 using Xunit;
 
-namespace MagicalYatzyTests.Models;
+namespace MagicalYatzy.Core.Tests.Models;
 
 public class SimpleCommandTests
 {

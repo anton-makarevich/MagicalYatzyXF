@@ -1,7 +1,7 @@
 ﻿using Sanet.MagicalYatzy.Models.Common;
 using Xunit;
 
-namespace MagicalYatzyTests.Models.Common;
+namespace MagicalYatzy.Core.Tests.Models.Common;
 
 public class PointTests
 {

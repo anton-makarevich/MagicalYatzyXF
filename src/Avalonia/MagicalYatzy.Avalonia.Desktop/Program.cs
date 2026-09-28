@@ -1,6 +1,6 @@
 ﻿using System;
 using Avalonia;
-using MagicalYatzyAUI.Desktop.DependencyInjection;
+using Sanet.MagicalYatzy.Avalonia.Desktop.DependencyInjection;
 using Sanet.MVVM.DI.Avalonia.Extensions;
 #if DEBUG
 using AvaloniaUI.DiagnosticsSupport;

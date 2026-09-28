@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
-using Shouldly;
 using NSubstitute;
+using Sanet.Localization;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
-using Sanet.Localization;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
+using Shouldly;
 using Xunit;
 
-namespace MagicalYatzyTests.ViewModels.ObservableWrappers;
+namespace MagicalYatzy.Core.Tests.ViewModels.ObservableWrappers;
 
 public class PlayerViewModelTests
 {

@@ -8,7 +8,7 @@ using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services.Api;
 using Xunit;
 
-namespace MagicalYatzyTests.Services.Api;
+namespace MagicalYatzy.Core.Tests.Services.Api;
 
 public class AzureApiClientTests
 {

@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Shouldly;
 using NSubstitute;
+using Sanet.Localization;
 using Sanet.MagicalYatzy.Models.Events;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.Ai;
 using Sanet.MagicalYatzy.Models.Game.Magical;
 using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Services.Game;
-using Sanet.Localization;
 using Sanet.MagicalYatzy.Services.Media;
 using Sanet.MagicalYatzy.Utils;
 using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 using Sanet.MVVM.Core.Services;
+using Shouldly;
 using Xunit;
 
-namespace MagicalYatzyTests.ViewModels;
+namespace MagicalYatzy.Core.Tests.ViewModels;
 
 public class GameViewModelTests
 {

@@ -3,7 +3,7 @@ using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.Ai.Extensions;
 using Xunit;
 
-namespace MagicalYatzyTests.Models.Game.Ai.Extensions;
+namespace MagicalYatzy.Core.Tests.Models.Game.Ai.Extensions;
 
 public class AiHelpersTests
 {

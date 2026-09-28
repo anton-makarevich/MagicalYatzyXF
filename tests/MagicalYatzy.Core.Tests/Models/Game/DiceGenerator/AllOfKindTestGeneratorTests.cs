@@ -1,7 +1,7 @@
 ﻿using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
 using Xunit;
 
-namespace MagicalYatzyTests.Models.Game.DiceGenerator;
+namespace MagicalYatzy.Core.Tests.Models.Game.DiceGenerator;
 
 public class AllOfKindTestGeneratorTests
 {

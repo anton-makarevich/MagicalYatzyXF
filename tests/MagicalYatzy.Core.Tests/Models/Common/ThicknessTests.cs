@@ -1,7 +1,8 @@
-﻿using Shouldly;
-using Sanet.MagicalYatzy.Models.Common;
+﻿using Sanet.MagicalYatzy.Models.Common;
+using Shouldly;
 using Xunit;
-namespace MagicalYatzyTests.Models.Common;
+
+namespace MagicalYatzy.Core.Tests.Models.Common;
 
 public class ThicknessTests
 {

@@ -5,7 +5,7 @@ using Sanet.MagicalYatzy.Models.Game.Extensions;
 using Sanet.MagicalYatzy.Utils;
 using Xunit;
 
-namespace MagicalYatzyTests.Models.Game.Extensions;
+namespace MagicalYatzy.Core.Tests.Models.Game.Extensions;
 
 public class ScoreHelpersTests
 {

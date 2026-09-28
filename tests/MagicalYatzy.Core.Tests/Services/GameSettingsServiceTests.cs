@@ -1,9 +1,9 @@
-﻿using Shouldly;
-using Sanet.MagicalYatzy.Models.Game;
+﻿using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
+using Shouldly;
 using Xunit;
 
-namespace MagicalYatzyTests.Services;
+namespace MagicalYatzy.Core.Tests.Services;
 
 public class GameSettingsServiceTests
 {

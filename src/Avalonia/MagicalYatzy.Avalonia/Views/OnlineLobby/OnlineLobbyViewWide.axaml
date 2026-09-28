@@ -1,0 +1,63 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy.Core"
+             xmlns:wrappers="clr-namespace:Sanet.MagicalYatzy.ViewModels.ObservableWrappers;assembly=MagicalYatzy.Core"
+             x:Class="Sanet.MagicalYatzy.Avalonia.Views.OnlineLobby.OnlineLobbyViewWide"
+             x:DataType="viewModels:OnlineLobbyViewModel">
+    <Grid Margin="24" RowDefinitions="Auto,*,Auto" ColumnDefinitions="*,*" ColumnSpacing="24">
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding Title}" FontSize="28" HorizontalAlignment="Center" Margin="0,8" />
+        <ScrollViewer Grid.Row="1" Grid.Column="0">
+            <StackPanel Spacing="12">
+                <StackPanel IsVisible="{Binding IsChooseMode}" Spacing="8">
+                    <Button Content="{Binding HostGameLabel}" Command="{Binding SelectHostCommand}" />
+                    <Button Content="{Binding JoinGameLabel}" Command="{Binding SelectJoinCommand}" />
+                </StackPanel>
+                <StackPanel IsVisible="{Binding IsHostSetup}" Spacing="8">
+                    <TextBlock Text="Rules" FontWeight="Bold" />
+                    <ItemsControl ItemsSource="{Binding Rules}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="wrappers:RuleViewModel">
+                                <Button Content="{Binding Name}" Command="{Binding SelectRuleCommand}" HorizontalAlignment="Stretch" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Button Content="{Binding CreateRoomLabel}" Command="{Binding CreateRoomCommand}" />
+                </StackPanel>
+                <StackPanel IsVisible="{Binding IsJoinSetup}" Spacing="8">
+                    <TextBox Text="{Binding JoinCode}" PlaceholderText="{Binding EnterRoomCodePlaceholder}" />
+                    <TextBlock Text="{Binding InvalidRoomCodeMessage}" IsVisible="{Binding IsJoinCodeInvalid}" />
+                    <Button Content="{Binding JoinGameLabel}" Command="{Binding JoinCommand}" IsEnabled="{Binding CanJoin}" />
+                </StackPanel>
+                <StackPanel IsVisible="{Binding IsHosting}" Spacing="8">
+                    <TextBlock Text="{Binding RoomCodeLabel}" FontWeight="Bold" />
+                    <TextBlock Text="{Binding RoomCode}" FontSize="30" />
+                    <Button Content="{Binding CopyCodeLabel}" Command="{Binding CopyCodeCommand}" />
+                </StackPanel>
+                <StackPanel IsVisible="{Binding IsJoined}" Spacing="8">
+                    <TextBlock Text="{Binding RoomCodeLabel}" FontWeight="Bold" />
+                    <TextBlock Text="{Binding RoomCode}" FontSize="30" />
+                </StackPanel>
+                <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap" />
+            </StackPanel>
+        </ScrollViewer>
+        <ScrollViewer Grid.Row="1" Grid.Column="1">
+            <StackPanel Spacing="8">
+                <TextBlock Text="Players" FontWeight="Bold" />
+                <ItemsControl ItemsSource="{Binding Players}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="viewModels:OnlinePlayerViewModel">
+                            <Grid ColumnDefinitions="*,Auto" Margin="4">
+                                <TextBlock Text="{Binding Name}" />
+                                <TextBlock Grid.Column="1" Text="{Binding IsReady}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8">
+            <Button Content="{Binding ReadyLabel}" Command="{Binding ReadyCommand}" IsVisible="{Binding CanReady}" />
+            <Button Content="{Binding StartLabel}" Command="{Binding StartGameCommand}" IsVisible="{Binding CanStartGame}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

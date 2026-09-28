@@ -10,7 +10,7 @@ using Sanet.MagicalYatzy.Models.Game.Magical;
 using Sanet.MagicalYatzy.Utils;
 using Xunit;
 
-namespace MagicalYatzyTests.Models.Game.Ai;
+namespace MagicalYatzy.Core.Tests.Models.Game.Ai;
 
 public class BotDecisionMakerTests
 {

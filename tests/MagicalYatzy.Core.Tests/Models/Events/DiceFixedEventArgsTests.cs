@@ -1,7 +1,7 @@
 using Sanet.MagicalYatzy.Models.Events;
 using Xunit;
 
-namespace MagicalYatzyTests.Models.Events;
+namespace MagicalYatzy.Core.Tests.Models.Events;
 
 public class DiceFixedEventArgsTests
 {

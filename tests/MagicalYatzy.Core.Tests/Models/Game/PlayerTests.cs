@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Shouldly;
 using Sanet.MagicalYatzy.Extensions;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.Magical;
 using Sanet.MagicalYatzy.Utils;
+using Shouldly;
 using Xunit;
 
-namespace MagicalYatzyTests.Models.Game;
+namespace MagicalYatzy.Core.Tests.Models.Game;
 
 public class PlayerTests
 {

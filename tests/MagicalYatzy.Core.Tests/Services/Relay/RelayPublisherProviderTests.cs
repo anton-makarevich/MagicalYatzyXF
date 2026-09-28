@@ -7,7 +7,7 @@ using Sanet.Transport.SignalR.Client.Relay;
 using Shouldly;
 using Xunit;
 
-namespace MagicalYatzyTests.Services.Relay;
+namespace MagicalYatzy.Core.Tests.Services.Relay;
 
 public class RelayPublisherProviderTests
 {

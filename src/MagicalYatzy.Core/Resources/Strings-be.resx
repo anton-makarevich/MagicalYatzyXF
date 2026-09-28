@@ -447,6 +447,36 @@
   <data name="NewOnlineGameDescription" xml:space="preserve">
     <value>Гульня з іншымі людзьмі праз інтэрнэт</value>
   </data>
+  <data name="HostGameLabel" xml:space="preserve">
+    <value>Стварыць гульню</value>
+  </data>
+  <data name="JoinGameLabel" xml:space="preserve">
+    <value>Далучыцца да гульні</value>
+  </data>
+  <data name="CreateRoomLabel" xml:space="preserve">
+    <value>Стварыць пакой</value>
+  </data>
+  <data name="RoomCodeLabel" xml:space="preserve">
+    <value>Код пакоя</value>
+  </data>
+  <data name="CopyCodeLabel" xml:space="preserve">
+    <value>Скапіяваць код</value>
+  </data>
+  <data name="EnterRoomCodePlaceholder" xml:space="preserve">
+    <value>Увядзіце код пакоя</value>
+  </data>
+  <data name="InvalidRoomCodeMessage" xml:space="preserve">
+    <value>Увядзіце шэсць літар або лічбаў</value>
+  </data>
+  <data name="WaitingForPlayersMessage" xml:space="preserve">
+    <value>Чакаем гульцоў</value>
+  </data>
+  <data name="WaitingForHostMessage" xml:space="preserve">
+    <value>Чакаем вядучага</value>
+  </data>
+  <data name="GameStartedMessage" xml:space="preserve">
+    <value>Гульня пачалася</value>
+  </data>
   <data name="NewsDescription" xml:space="preserve">
     <value>Чыталка RSS стужак для навін з Беларусі. Усе вашыя навіны сабраны ў адным месцы. У нас навіны з асноўных навінавых сайтаў Беларусі, а магчыма іх будзе яшчэ больш :)</value>
   </data>

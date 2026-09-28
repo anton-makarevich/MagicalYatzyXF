@@ -6,7 +6,7 @@ using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
 using Xunit;
 
-namespace MagicalYatzyTests.Models.Game;
+namespace MagicalYatzy.Core.Tests.Models.Game;
 
 public class DicePanelTests
 {

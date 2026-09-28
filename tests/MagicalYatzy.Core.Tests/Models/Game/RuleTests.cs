@@ -2,7 +2,7 @@ using System.Linq;
 using Sanet.MagicalYatzy.Models.Game;
 using Xunit;
 
-namespace MagicalYatzyTests.Models.Game;
+namespace MagicalYatzy.Core.Tests.Models.Game;
 
 public class RuleTests
 {

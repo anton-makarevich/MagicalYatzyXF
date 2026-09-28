@@ -1,11 +1,11 @@
 using NSubstitute;
+using Sanet.Localization;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Resources;
-using Sanet.Localization;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 using Xunit;
 
-namespace MagicalYatzyTests.ViewModels.ObservableWrappers;
+namespace MagicalYatzy.Core.Tests.ViewModels.ObservableWrappers;
 
 public class RollResultViewModelTest
 {
