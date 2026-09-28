@@ -71,5 +71,9 @@ public sealed class OnlineLobbyViewModelTests
         _sut.State.ShouldBe(OnlineLobbyState.JoinSetup);
         _sut.Rules.Count.ShouldBe(2);
         _sut.IsRulesEditable.ShouldBeFalse();
+
+        _sut.SelectHostCommand.Execute(null);
+
+        _sut.IsRulesEditable.ShouldBeTrue();
     }
 }

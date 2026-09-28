@@ -35,7 +35,7 @@
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Column="1" RowDefinitions="Auto,*" VerticalAlignment="Top">
-                    <TextBlock Text="{Binding RulesTitle}" Classes="caption" HorizontalAlignment="Center" />
+                    <Label Content="{Binding RulesTitle}" Classes="caption" HorizontalAlignment="Center" />
                     <ListBox Grid.Row="1"
                              ItemsSource="{Binding Rules}"
                              SelectedItem="{Binding SelectedRule}"

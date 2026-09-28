@@ -476,6 +476,7 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
         NotifyPropertyChanged(nameof(CanCopyCode));
         NotifyPropertyChanged(nameof(CanStartGame));
         NotifyPropertyChanged(nameof(CanReady));
+        NotifyPropertyChanged(nameof(IsRulesEditable));
         NotifyPropertyChanged(nameof(IsModeSelectionVisible));
         NotifyPropertyChanged(nameof(CurrentPlayerName));
         NotifyPropertyChanged(nameof(CurrentPlayerTypeName));
