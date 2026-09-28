@@ -214,7 +214,7 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
         base.AttachHandlers();
         _synchronizationContext = SynchronizationContext.Current;
         _lifetimeCancellation.TryReset();
-        ChangeState(OnlineLobbyState.ChooseMode);
+        SetMode(true);
     }
 
     public override void DetachHandlers()

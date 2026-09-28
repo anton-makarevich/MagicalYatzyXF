@@ -2,7 +2,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy.Core"
              xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
-             xmlns:fragments="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.Fragments"
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.OnlineLobby.OnlineLobbyViewNarrow"
              x:DataType="viewModels:OnlineLobbyViewModel">
     <Grid Margin="10,0,0,5" RowDefinitions="Auto,*,Auto">
@@ -37,7 +36,18 @@
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="{Binding RulesTitle}">
-                <fragments:RulesFragment />
+                <ListBox ItemsSource="{Binding Rules}"
+                         SelectedItem="{Binding SelectedRule}"
+                         IsEnabled="{Binding IsRulesEditable}"
+                         Background="Transparent">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <templatedControls:MainMenuItem
+                                Caption="{Binding Name}"
+                                Description="{Binding ShortDescription}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </TabItem>
         </TabControl>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8">
