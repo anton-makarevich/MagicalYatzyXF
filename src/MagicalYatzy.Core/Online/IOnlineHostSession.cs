@@ -32,4 +32,10 @@ public interface IOnlineHostSession : IAsyncDisposable
     /// guards as transport commands; targets the host seat only.
     /// </summary>
     void SubmitLocalCommand(OnlineMessage command);
+
+    /// <summary>
+    /// Restarts the authoritative game for the same roster and tells every client to
+    /// re-synchronise from a fresh snapshot. No-op before hosting starts or after disposal.
+    /// </summary>
+    Task RestartGameAsync();
 }

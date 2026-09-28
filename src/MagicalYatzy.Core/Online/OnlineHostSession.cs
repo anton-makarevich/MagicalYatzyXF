@@ -248,6 +248,37 @@ public sealed class OnlineHostSession : IOnlineHostSession
         _ = DispatchAsync(command, isLocal: true);
     }
 
+    /// <summary>
+    /// Restarts the authoritative game for every seat, keeping the same roster. The new game is
+    /// announced with <see cref="GameRestartedBroadcast"/>, so each client discards its previous
+    /// projection and re-synchronises from a fresh snapshot instead of keeping stale scores.
+    /// Shares the dispatch gate with commands, so a restart never interleaves with an in-flight
+    /// command; no-ops when the session is not hosting.
+    /// </summary>
+    public async Task RestartGameAsync()
+    {
+        if (_isDisposed)
+        {
+            return;
+        }
+
+        await _dispatchGate.WaitAsync();
+        try
+        {
+            if (_isDisposed || _game == null)
+            {
+                return;
+            }
+
+            _game.RestartGame();
+            EnqueuePublish(new GameRestartedBroadcast());
+        }
+        finally
+        {
+            _dispatchGate.Release();
+        }
+    }
+
     private void OnMessageReceived(OnlineMessage message)
     {
         _ = DispatchAsync(message, isLocal: false);

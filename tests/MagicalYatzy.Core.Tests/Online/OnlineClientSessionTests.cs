@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MagicalYatzy.Core.Tests.Online.Fakes;
+using MagicalYatzy.Core.Tests.Online.Harness;
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
@@ -111,24 +112,6 @@ public class OnlineClientSessionTests
         var result = await guest.JoinAsync(RoomCode);
         result.Success.ShouldBeTrue(result.Error ?? $"{playerName} join failed");
         return guest;
-    }
-
-    private sealed class GameEventRecorder
-    {
-        public int TurnChanged;
-        public int DiceRolled;
-        public int ResultApplied;
-        public int GameFinished;
-
-        public static GameEventRecorder Attach(ClientYatzyGame game)
-        {
-            var recorder = new GameEventRecorder();
-            game.TurnChanged += (_, _) => Interlocked.Increment(ref recorder.TurnChanged);
-            game.DiceRolled += (_, _) => Interlocked.Increment(ref recorder.DiceRolled);
-            game.ResultApplied += (_, _) => Interlocked.Increment(ref recorder.ResultApplied);
-            game.GameFinished += (_, _) => Interlocked.Increment(ref recorder.GameFinished);
-            return recorder;
-        }
     }
 
     [Fact]

@@ -315,6 +315,28 @@ public class YatzyServerGameTests : IDisposable
     }
 
     [Fact]
+    public void ServerGameRestartKeepsThePlayerIdsSoOnlineCommandsStayAddressable()
+    {
+        var player1 = new Player(PlayerType.Local);
+        var player2 = new Player(PlayerType.Local);
+        StartGame(player1);
+        StartGame(player2);
+        var playerIds = _sut.Players.Select(f => f.InGameId).ToList();
+
+        _sut.RestartGame();
+
+        // seats rotate, but the ids a client knows must survive: the same seat is still
+        // addressable with the id it received when it joined
+        _sut.Players.Select(f => f.InGameId).OrderBy(f => f)
+            .ShouldBe(playerIds.OrderBy(f => f));
+        // readiness is dropped, so the new game waits for every player to report it again
+        _sut.IsPlaying.ShouldBeFalse();
+        _sut.Players.ShouldAllBe(f => !f.IsReady);
+        _sut.SetPlayerReady(player2, true);
+        _sut.IsPlaying.ShouldBeFalse();
+    }
+
+    [Fact]
     public async Task ServerGameRoundTimeoutAutoFillsFirstOpenScoreAndAdvancesTurn()
     {
         _sut = new YatzyServerGame { RoundTimeout = TimeSpan.FromMilliseconds(200) };

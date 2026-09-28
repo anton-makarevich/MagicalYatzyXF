@@ -74,7 +74,9 @@ public class YatzyServerGame : YatzyGame, IDisposable
 
     protected override void SetPlayerReadyForRestart(IPlayer player)
     {
-        // no auto-ready: server players must report readiness again after restart
+        // server players must report readiness again after restart. Leaving a player that was
+        // ready mid-game would make the game start itself again right after the restart.
+        player.IsReady = false;
     }
 
     protected override void StartTurnTimer()

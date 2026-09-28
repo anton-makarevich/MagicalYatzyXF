@@ -476,6 +476,85 @@ public class OnlineHostSessionTests
             .ShouldBe(1);
     }
 
+    [Fact]
+    public async Task RestartResetsTheGameAndTellsGuestsToResynchronize()
+    {
+        var publisher = new FakeTransportPublisher();
+        SetupDeterministicDice(1, 2, 3, 4, 5);
+        _playerService.CurrentPlayer.Returns(new Player(PlayerType.Local, "Host"));
+        await using var sut = await HostAsync(publisher);
+        var listener = CreateGuest();
+        listener.Attach(_room);
+        var hostId = sut.HostPlayer!.InGameId;
+
+        sut.SubmitLocalCommand(new ReadyCommand { PlayerId = hostId, IsReady = true });
+        await WaitFor(() => listener.Any<TurnChangedBroadcast>(b => b.PlayerId == hostId));
+        sut.SubmitLocalCommand(new RollCommand { PlayerId = hostId });
+        await WaitFor(() => listener.Any<DiceRolledBroadcast>(_ => true));
+        sut.SubmitLocalCommand(new ApplyScoreCommand { PlayerId = hostId, ScoreType = Scores.Ones });
+        await WaitFor(() => listener.Any<ScoreAppliedBroadcast>(b => b.PlayerId == hostId));
+
+        await sut.RestartGameAsync();
+
+        // guests are told to rebuild from a snapshot instead of keeping their projection
+        await WaitFor(() => listener.Any<GameRestartedBroadcast>(_ => true));
+        sut.Game!.Round.ShouldBe(1);
+        sut.Game.IsPlaying.ShouldBeFalse();
+        sut.Game.Players.ShouldHaveSingleItem();
+        sut.Game.Players.Single().Results!.ShouldAllBe(r => !r.HasValue);
+        sut.Game.Players.Single().IsReady.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task RestartKeepsTheRosterAndTheSeatIdsSoGuestsStayAddressable()
+    {
+        var publisher = new FakeTransportPublisher();
+        _playerService.CurrentPlayer.Returns(new Player(PlayerType.Local, "Host"));
+        await using var sut = await HostAsync(publisher);
+        var listener = CreateGuest();
+        listener.Attach(_room);
+        await listener.Send(new JoinGameCommand { PlayerId = "join-1", Name = "Guest" });
+        var guestId = await WaitForGuestIdAsync(listener);
+
+        await sut.RestartGameAsync();
+
+        await WaitFor(() => listener.Any<GameRestartedBroadcast>(_ => true));
+        // the roster survives with its seat ids, and every seat rotates one step
+        sut.Game!.Players.Select(p => p.InGameId)
+            .ShouldBe(new[] { guestId, sut.HostPlayer!.InGameId });
+        sut.Game.Players.Select(p => p.SeatNo).ShouldBe(new[] { 0, 1 });
+        // the roster is unready again and still waiting for a new set of ready signals
+        sut.Game.Players.ShouldAllBe(p => !p.IsReady);
+
+        // a guest that still knows its seat id can ready up for the new game
+        await listener.Send(new ReadyCommand { PlayerId = guestId, IsReady = true });
+        await WaitFor(() => listener.Any<PlayerReadyBroadcast>(b => b.PlayerId == guestId));
+        sut.Game.Players.Single(p => p.InGameId == guestId).IsReady.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task RestartBeforeHostingOrAfterDisposalIsANoOp()
+    {
+        var publisher = new FakeTransportPublisher();
+        _playerService.CurrentPlayer.Returns(new Player(PlayerType.Local, "Host"));
+        var sut = new OnlineHostSession(
+            _relayRoomClient,
+            _publisherProvider,
+            _playerService,
+            _diceGenerator,
+            new CommandRegistry());
+
+        await sut.RestartGameAsync();
+        sut.Game.ShouldBeNull();
+
+        SetupSuccessfulRelayCalls(publisher);
+        var result = await sut.HostAsync(Rules.krExtended);
+        result.Success.ShouldBeTrue(result.Error ?? "hosting failed");
+        await sut.DisposeAsync();
+        await sut.RestartGameAsync();
+        sut.Game.ShouldBeNull();
+    }
+
     private static async Task<string> WaitForGuestIdAsync(Guest guest)
     {
         await WaitFor(() => guest.Any<PlayerJoinedBroadcast>(_ => true));
