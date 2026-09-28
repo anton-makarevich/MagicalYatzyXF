@@ -33,6 +33,7 @@ public static class CoreServices
         services.AddSingleton<IRelayPublisherProvider, RelayPublisherProvider>();
         services.AddSingleton<Online.CommandRegistry>();
         services.AddTransient<Online.IOnlineHostSession, Online.OnlineHostSession>();
+        services.AddTransient<Online.IOnlineClientSession, Online.OnlineClientSession>();
         services.AddSingleton<IRelayRoomClient>(serviceProvider => new RelayRoomClient(
             new HttpClient(),
             serviceProvider.GetRequiredService<IRelayHubConfigurationProvider>(),
