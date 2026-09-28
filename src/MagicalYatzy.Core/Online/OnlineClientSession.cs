@@ -182,6 +182,9 @@ public sealed class OnlineClientSession : IOnlineClientSession
         try
         {
             _adapter.Dispose();
+            // the adapter cannot be reinitialized, so the session is spent after a failed join -
+            // a later JoinAsync fails immediately instead of joining a room it can never use
+            _isDisposed = true;
             _game = null;
             LocalPlayer = null;
             _localPlayerId = null;
@@ -326,7 +329,29 @@ public sealed class OnlineClientSession : IOnlineClientSession
 
     private void OnAdapterHostDisconnected()
     {
-        OnGameEnded(GameEndReason.HostDisconnected);
+        _ = OnGameEndedOnDisconnectAsync();
+    }
+
+    /// <summary>
+    /// Ends the game on transport loss under the receive gate, so disconnect handling cannot
+    /// interleave with <see cref="ProcessMessageAsync"/> mutating the projection.
+    /// </summary>
+    private async Task OnGameEndedOnDisconnectAsync()
+    {
+        await _receiveGate.WaitAsync();
+        try
+        {
+            if (_isDisposed)
+            {
+                return;
+            }
+
+            OnGameEnded(GameEndReason.HostDisconnected);
+        }
+        finally
+        {
+            _receiveGate.Release();
+        }
     }
 
     private void OnGameEnded(GameEndReason reason)

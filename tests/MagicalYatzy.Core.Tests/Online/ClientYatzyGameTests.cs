@@ -571,6 +571,63 @@ public class ClientYatzyGameTests
     }
 
     [Fact]
+    public void RestartSnapshot_HydrationAllowsTheNextGameToFinishAgain()
+    {
+        var sut = CreateSut();
+        sut.Hydrate(CreateHydratedState());
+        var finished = 0;
+        sut.GameFinished += (_, _) => finished++;
+        var standings = new List<PlayerStanding>
+        {
+            new() { PlayerId = LocalPlayerId, Total = 200 }
+        };
+
+        sut.ApplyBroadcast(new GameFinishedBroadcast { Standings = standings });
+
+        // the host answers a restart with a fresh snapshot
+        sut.Hydrate(CreateHydratedState());
+
+        sut.ApplyBroadcast(new GameFinishedBroadcast { Standings = standings });
+
+        finished.ShouldBe(2);
+    }
+
+    [Fact]
+    public void Hydration_DropsAMagicRollPairingStartedBeforeTheSnapshot()
+    {
+        var sut = CreateSut();
+        var state = CreateHydratedState(rule: Rules.krMagic);
+        state.Players[1] = CreatePlayerState(
+            LocalPlayerId,
+            artifacts: [new ArtifactState { Type = Artifacts.MagicalRoll, IsUsed = false }]);
+        sut.Hydrate(state);
+
+        // the magic-roll broadcast is lost to a snapshot taken in between; its paired
+        // DiceRolledBroadcast must consume a roll again
+        sut.ApplyBroadcast(new MagicRollUsedBroadcast { PlayerId = LocalPlayerId, Values = [1, 1, 1, 1, 1] });
+        sut.Hydrate(state);
+        sut.ApplyBroadcast(new DiceRolledBroadcast { PlayerId = LocalPlayerId, Values = [1, 1, 1, 1, 1] });
+
+        sut.CurrentPlayer!.Roll.ShouldBe(2);
+    }
+
+    [Fact]
+    public void TurnChangedBroadcast_ResetsTheIncomingPlayersRoll()
+    {
+        var sut = CreateSut();
+        var state = CreateHydratedState(currentPlayerId: LocalPlayerId);
+        state.Players[1] = CreatePlayerState(LocalPlayerId, roll: 3);
+        sut.Hydrate(state);
+        sut.CurrentPlayer!.Roll.ShouldBe(3);
+
+        // the same seat takes the turn again after the host reset every roll counter
+        sut.ApplyBroadcast(new TurnChangedBroadcast { PlayerId = LocalPlayerId, Round = 2 });
+
+        sut.CurrentPlayer.Roll.ShouldBe(1);
+        sut.Roll.ShouldBe(1);
+    }
+
+    [Fact]
     public void TurnIntents_SendCommandsWithLocalPlayerIdWhenLocalPlayerHoldsTurn()
     {
         var sut = CreateSut();

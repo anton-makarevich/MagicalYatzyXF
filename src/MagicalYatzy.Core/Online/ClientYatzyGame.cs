@@ -125,6 +125,11 @@ public sealed class ClientYatzyGame : IGame
         ReRollMode = state.ReRollMode;
         _lastDiceValues = state.LastDiceValues.ToArray();
         _fixedRollResults = state.FixedDiceValues.ToList();
+        // A snapshot is the resynchronization point (the host answers a restart with one), so any
+        // prior game is over: a later finish must be raised again and a magic-roll pairing started
+        // before the snapshot is abandoned.
+        _isFinished = false;
+        _magicRollPending = false;
 
         var restored = new List<IPlayer>();
         foreach (var playerState in state.Players)
@@ -304,6 +309,9 @@ public sealed class ClientYatzyGame : IGame
         IsPlaying = true;
         _fixedRollResults = [];
         _magicRollPending = false;
+        // Local consequences of YatzyGame.NextTurn: the incoming player's roll counter is back to
+        // one (the host resets every seat before it hands out the new turn).
+        player.Roll = 1;
         ClearPossibleValues();
         foreach (var seatedPlayer in _players)
         {

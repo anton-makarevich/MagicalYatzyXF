@@ -422,6 +422,29 @@ public class OnlineClientSessionTests
     }
 
     [Fact]
+    public async Task JoinAfterAFailedJoinFailsImmediatelyAsDisposed()
+    {
+        SetupRelayCalls();
+        _relayRoomClient.Join(RoomCode, Arg.Any<string?>(), Arg.Any<CancellationToken>())
+            .Returns(_ => Task.FromResult(RoomSessionResult.Failed(
+                new RelayClientError(RelayClientErrorCode.Unknown, "room not found"))));
+
+        var guest = CreateGuestSession("Guest1");
+        var first = await guest.JoinAsync(RoomCode);
+        first.Success.ShouldBeFalse();
+
+        // the spent transport adapter can never carry a second join, so the session refuses it
+        // instead of joining a room it can never receive from
+        SetupRelayCalls();
+        var second = await guest.JoinAsync(RoomCode);
+
+        second.Success.ShouldBeFalse();
+        second.Error?.ShouldContain("disposed");
+        await _publisherProvider.DidNotReceive().Create(
+            Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
     public async Task DisposedGuestSessionFailsJoin()
     {
         SetupRelayCalls();
