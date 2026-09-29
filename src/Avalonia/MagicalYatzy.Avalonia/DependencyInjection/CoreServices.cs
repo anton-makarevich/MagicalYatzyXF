@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Sanet.Localization;
@@ -34,6 +35,11 @@ public static class CoreServices
         services.AddSingleton<Online.CommandRegistry>();
         services.AddTransient<Online.IOnlineHostSession, Online.OnlineHostSession>();
         services.AddTransient<Online.IOnlineClientSession, Online.OnlineClientSession>();
+        services.AddTransient<Func<Online.IOnlineHostSession>>(serviceProvider =>
+            () => serviceProvider.GetRequiredService<Online.IOnlineHostSession>());
+        services.AddTransient<Func<Online.IOnlineClientSession>>(serviceProvider =>
+            () => serviceProvider.GetRequiredService<Online.IOnlineClientSession>());
+        services.AddSingleton<IClipboardService, Services.ClipboardService>();
         services.AddSingleton<IRelayRoomClient>(serviceProvider => new RelayRoomClient(
             new HttpClient(),
             serviceProvider.GetRequiredService<IRelayHubConfigurationProvider>(),
@@ -57,6 +63,7 @@ public static class CoreServices
         services.AddTransient<MainMenuViewModel, MainMenuViewModel>();
         services.AddTransient<SettingsViewModel, SettingsViewModel>();
         services.AddTransient<LobbyViewModel, LobbyViewModel>();
+        services.AddTransient<OnlineLobbyViewModel, OnlineLobbyViewModel>();
         services.AddTransient<GameViewModel, GameViewModel>();
         services.AddTransient<GameResultsViewModel, GameResultsViewModel>();
     }

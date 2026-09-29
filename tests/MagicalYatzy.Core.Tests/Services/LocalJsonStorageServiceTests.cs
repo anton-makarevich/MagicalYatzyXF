@@ -4,7 +4,7 @@ using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services.StorageService;
 using Xunit;
 
-namespace MagicalYatzyTests.Services;
+namespace MagicalYatzy.Core.Tests.Services;
 
 public class LocalJsonStorageServiceTests
 {

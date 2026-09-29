@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
-using Shouldly;
 using NSubstitute;
-using Sanet.MagicalYatzy.Models;
+using Sanet.Localization;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
-using Sanet.Localization;
 using Sanet.MagicalYatzy.ViewModels;
+using Shouldly;
 using Xunit;
 
-namespace MagicalYatzyTests.ViewModels;
+namespace MagicalYatzy.Core.Tests.ViewModels;
 
 public class SettingsViewModelTests
 {

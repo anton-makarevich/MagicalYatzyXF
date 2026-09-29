@@ -69,24 +69,28 @@ public class MainMenuViewModel : DicePanelViewModel
     public void FillMainActions()
     {
         NotifyPropertyChanged(nameof(MenuActions));
-        MenuActions = new List<MainMenuActionViewModel>
-        {
+        MenuActions =
+        [
             new(new MainMenuAction(
                     "NewOnlineGameAction",
                     "NewOnlineGameDescription",
                     "OnlineGame.png",
-                    new SimpleCommand(() =>
+                    new AsyncCommand(async () =>
                     {
-                        /*_navigationService.NavigateToPage(AppPages.OnlineLobbyPage);*/
+                        await NavigationService.NavigateToViewModelAsync<OnlineLobbyViewModel>();
                     })),
                 _localizationService),
+
             new(new MainMenuAction(
                     "NewLocalGameAction",
                     "NewLocalGameDescription",
                     "SanetDice.png",
-                    new AsyncCommand(
-                        async () => { await NavigationService.NavigateToViewModelAsync<LobbyViewModel>(); })),
+                    new AsyncCommand(async () =>
+                    {
+                        await NavigationService.NavigateToViewModelAsync<LobbyViewModel>();
+                    })),
                 _localizationService),
+
             new(new MainMenuAction(
                     "SettingsAction",
                     "SettingsDescription",
@@ -96,6 +100,7 @@ public class MainMenuViewModel : DicePanelViewModel
                         await NavigationService.NavigateToViewModelAsync<SettingsViewModel>();
                     })),
                 _localizationService),
+
             new MainMenuActionViewModel(new MainMenuAction(
                     "LeaderboardAction",
                     "LeaderboardDescription",
@@ -105,6 +110,7 @@ public class MainMenuViewModel : DicePanelViewModel
                         /*_navigationService.NavigateToPage(AppPages.LeaderboardPage);*/
                     })),
                 _localizationService),
+
             new(new MainMenuAction(
                     "AboutAction",
                     "AboutDescription",
@@ -114,7 +120,7 @@ public class MainMenuViewModel : DicePanelViewModel
                         /*_navigationService.NavigateToPage(AppPages.AboutPage);*/
                     })),
                 _localizationService)
-        };
+        ];
     }
     public void FillSecondaryActions()
     {

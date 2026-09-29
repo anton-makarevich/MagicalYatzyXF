@@ -1,11 +1,10 @@
-using Foundation;
 using Avalonia;
 using Avalonia.iOS;
-using Sanet.MagicalYatzy.Avalonia;
+using Foundation;
 using Sanet.MagicalYatzy.Avalonia.iOS.DependencyInjection;
 using Sanet.MVVM.DI.Avalonia.Extensions;
 
-namespace MagicalYatzyAUI.iOS;
+namespace Sanet.MagicalYatzy.Avalonia.iOS;
 
 // The UIApplicationDelegate for the application. This class is responsible for launching the 
 // User Interface of the application, as well as listening (and optionally responding) to 

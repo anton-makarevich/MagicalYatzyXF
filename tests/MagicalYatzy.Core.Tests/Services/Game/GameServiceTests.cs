@@ -4,7 +4,7 @@ using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
 using Sanet.MagicalYatzy.Services.Game;
 using Xunit;
 
-namespace MagicalYatzyTests.Services.Game;
+namespace MagicalYatzy.Core.Tests.Services.Game;
 
 public class GameServiceTests
 {

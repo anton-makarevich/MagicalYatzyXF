@@ -285,6 +285,66 @@ namespace Sanet.MagicalYatzy.Resources {
                 return ResourceManager.GetString("NewOnlineGameDescription", resourceCulture);
             }
         }
+
+        public static string HostGameLabel {
+            get {
+                return ResourceManager.GetString("HostGameLabel", resourceCulture);
+            }
+        }
+
+        public static string JoinGameLabel {
+            get {
+                return ResourceManager.GetString("JoinGameLabel", resourceCulture);
+            }
+        }
+
+        public static string CreateRoomLabel {
+            get {
+                return ResourceManager.GetString("CreateRoomLabel", resourceCulture);
+            }
+        }
+
+        public static string RoomCodeLabel {
+            get {
+                return ResourceManager.GetString("RoomCodeLabel", resourceCulture);
+            }
+        }
+
+        public static string CopyCodeLabel {
+            get {
+                return ResourceManager.GetString("CopyCodeLabel", resourceCulture);
+            }
+        }
+
+        public static string EnterRoomCodePlaceholder {
+            get {
+                return ResourceManager.GetString("EnterRoomCodePlaceholder", resourceCulture);
+            }
+        }
+
+        public static string InvalidRoomCodeMessage {
+            get {
+                return ResourceManager.GetString("InvalidRoomCodeMessage", resourceCulture);
+            }
+        }
+
+        public static string WaitingForPlayersMessage {
+            get {
+                return ResourceManager.GetString("WaitingForPlayersMessage", resourceCulture);
+            }
+        }
+
+        public static string WaitingForHostMessage {
+            get {
+                return ResourceManager.GetString("WaitingForHostMessage", resourceCulture);
+            }
+        }
+
+        public static string GameStartedMessage {
+            get {
+                return ResourceManager.GetString("GameStartedMessage", resourceCulture);
+            }
+        }
         
         public static string SettingsAction {
             get {

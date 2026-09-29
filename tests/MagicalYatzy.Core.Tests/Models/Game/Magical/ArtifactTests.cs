@@ -1,7 +1,7 @@
 using Sanet.MagicalYatzy.Models.Game.Magical;
 using Xunit;
 
-namespace MagicalYatzyTests.Models.Game.Magical;
+namespace MagicalYatzy.Core.Tests.Models.Game.Magical;
 
 public class ArtifactTests
 {

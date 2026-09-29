@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MagicalYatzy.Core.Tests.Services.Game;
-using MagicalYatzyTests.Services.Game;
 using Sanet.MagicalYatzy.Extensions;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services.Api;
 using Xunit;
 
-namespace MagicalYatzyTests.Services.Api;
+namespace MagicalYatzy.Core.Tests.Services.Api;
 
 public class LegacyWcfApiClientTests
 {

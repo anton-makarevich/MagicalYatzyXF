@@ -1,6 +1,6 @@
 using UIKit;
 
-namespace MagicalYatzyAUI.iOS;
+namespace Sanet.MagicalYatzy.Avalonia.iOS;
 
 public class Application
 {

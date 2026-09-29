@@ -1,7 +1,7 @@
 using Sanet.MagicalYatzy.Models.Chat;
 using Xunit;
 
-namespace MagicalYatzyTests.Models.Chat;
+namespace MagicalYatzy.Core.Tests.Models.Chat;
 
 public class ChatMessageTests
 {

@@ -4,7 +4,7 @@ using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Utils;
 using Xunit;
 
-namespace MagicalYatzyTests.Services.Game;
+namespace MagicalYatzy.Core.Tests.Services.Game;
 
 public class RulesServiceTests
 {

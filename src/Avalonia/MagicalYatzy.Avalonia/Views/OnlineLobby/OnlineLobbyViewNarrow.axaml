@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy.Core"
+             xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
+             x:Class="Sanet.MagicalYatzy.Avalonia.Views.OnlineLobby.OnlineLobbyViewNarrow"
+             x:DataType="viewModels:OnlineLobbyViewModel">
+    <Grid Margin="10,0,0,5" RowDefinitions="Auto,*,Auto">
+        <templatedControls:ToolBar Grid.Row="0"
+            LeftCommand="{Binding BackCommand}"
+            LeftIcon="{Binding BackImage}"
+            Title="{Binding Title}"
+            TitleAlignment="Center" />
+        <TabControl Grid.Row="1" TabStripPlacement="Bottom">
+            <TabItem Header="{Binding PlayersTitle}">
+                <ScrollViewer>
+                        <StackPanel Spacing="12">
+                        <templatedControls:EditableMenuItem
+                            Caption="{Binding CurrentPlayerName, Mode=TwoWay}"
+                            Description="{Binding CurrentPlayerTypeName}"
+                            ImageSource="{Binding CurrentPlayerImage}" />
+                        <ToggleSwitch IsVisible="{Binding IsModeSelectionVisible}"
+                                      IsChecked="{Binding IsCreateMode, Mode=TwoWay}"
+                                      OnContent="{Binding HostGameLabel}"
+                                      OffContent="{Binding JoinGameLabel}" />
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="{Binding RoomCodeLabel}" FontWeight="Bold" />
+                            <TextBlock Text="{Binding RoomCode}" FontSize="28" HorizontalAlignment="Center" />
+                            <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap" />
+                            <TextBox IsVisible="{Binding IsJoinSetup}"
+                                     Text="{Binding JoinCode}"
+                                     PlaceholderText="{Binding EnterRoomCodePlaceholder}" />
+                            <TextBlock Text="{Binding InvalidRoomCodeMessage}" IsVisible="{Binding IsJoinCodeInvalid}" />
+                            <Button Content="{Binding CopyCodeLabel}" Command="{Binding CopyCodeCommand}" IsVisible="{Binding IsHosting}" />
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="{Binding RulesTitle}">
+                <ListBox ItemsSource="{Binding Rules}"
+                         SelectedItem="{Binding SelectedRule}"
+                         IsEnabled="{Binding IsRulesEditable}"
+                         Background="Transparent">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <templatedControls:MainMenuItem
+                                Caption="{Binding Name}"
+                                Description="{Binding ShortDescription}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+        </TabControl>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8">
+            <templatedControls:ActionButton Content="{Binding CreateRoomLabel}" Command="{Binding CreateRoomCommand}" IsVisible="{Binding IsHostSetup}" ImageSource="{Binding StartImage}" />
+            <templatedControls:ActionButton Content="{Binding JoinGameLabel}" Command="{Binding JoinCommand}" IsVisible="{Binding IsJoinSetup}" IsEnabled="{Binding CanJoin}" ImageSource="{Binding StartImage}" />
+            <templatedControls:ActionButton Content="{Binding ReadyLabel}" Command="{Binding ReadyCommand}" IsVisible="{Binding CanReady}" ImageSource="{Binding StartImage}" />
+            <templatedControls:ActionButton Content="{Binding StartLabel}" Command="{Binding StartGameCommand}" IsVisible="{Binding CanStartGame}" ImageSource="{Binding StartImage}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

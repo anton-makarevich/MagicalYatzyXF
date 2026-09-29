@@ -5,12 +5,13 @@
              xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy.Core"
              xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="viewModels:LobbyViewModel"
+              x:DataType="viewModels:ILobbyViewModel"
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.Fragments.RulesFragment">
     <ListBox
         x:Name="RulesList"
         ItemsSource="{Binding Rules}"
         SelectedItem="{Binding SelectedRule}"
+        IsEnabled="{Binding IsRulesEditable}"
         Background = "Transparent">
         <ListBox.ItemTemplate>
             <DataTemplate>

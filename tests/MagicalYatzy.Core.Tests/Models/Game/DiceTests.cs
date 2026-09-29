@@ -1,13 +1,13 @@
 ﻿using System;
-using Shouldly;
 using NSubstitute;
 using Sanet.MagicalYatzy.Models.Common;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
 using Sanet.MagicalYatzy.Services;
+using Shouldly;
 using Xunit;
 
-namespace MagicalYatzyTests.Models.Game;
+namespace MagicalYatzy.Core.Tests.Models.Game;
 
 public class DiceTests
 {

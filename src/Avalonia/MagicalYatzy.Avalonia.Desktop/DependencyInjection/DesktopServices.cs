@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace MagicalYatzyAUI.Desktop.DependencyInjection;
+namespace Sanet.MagicalYatzy.Avalonia.Desktop.DependencyInjection;
 
 public static class DesktopServices
 {

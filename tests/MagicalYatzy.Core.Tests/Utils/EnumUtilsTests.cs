@@ -1,7 +1,7 @@
 ﻿using Sanet.MagicalYatzy.Utils;
 using Xunit;
 
-namespace MagicalYatzyTests.Utils;
+namespace MagicalYatzy.Core.Tests.Utils;
 
 public class EnumUtilsTests
 {

@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Shouldly;
 using NSubstitute;
+using Sanet.Localization;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Models.Game.DiceGenerator;
 using Sanet.MagicalYatzy.Resources;
 using Sanet.MagicalYatzy.Services.Game;
-using Sanet.Localization;
 using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 using Sanet.MVVM.Core.Services;
+using Shouldly;
 using Xunit;
 
-namespace MagicalYatzyTests.ViewModels;
+namespace MagicalYatzy.Core.Tests.ViewModels;
 
 public class LobbyViewModelTests
 {
