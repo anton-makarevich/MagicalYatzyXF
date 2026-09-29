@@ -42,7 +42,7 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
     private readonly Func<IOnlineHostSession> _hostSessionFactory;
     private readonly Func<IOnlineClientSession> _clientSessionFactory;
     private readonly IClipboardService _clipboardService;
-    private readonly CancellationTokenSource _lifetimeCancellation = new();
+    private CancellationTokenSource _lifetimeCancellation = new();
 
     private IOnlineHostSession? _hostSession;
     private IOnlineClientSession? _clientSession;
@@ -225,13 +225,14 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
     {
         base.AttachHandlers();
         _synchronizationContext = SynchronizationContext.Current;
-        _lifetimeCancellation.TryReset();
+        _lifetimeCancellation = new CancellationTokenSource();
         SetMode(true);
     }
 
     public override void DetachHandlers()
     {
         _lifetimeCancellation.Cancel();
+        _lifetimeCancellation.Dispose();
         UnsubscribeFromGame();
         _ = DisposeSessionAsync();
         base.DetachHandlers();

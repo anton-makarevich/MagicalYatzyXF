@@ -1,4 +1,7 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
+using AsyncAwaitBestPractices.MVVM;
 using NSubstitute;
 using Sanet.Localization;
 using Sanet.MagicalYatzy.Models.Game;
@@ -94,4 +97,76 @@ public sealed class OnlineLobbyViewModelTests
         _sut.CurrentPlayerName.ShouldBe("Renamed");
         player.Name.ShouldBe("Renamed");
     }
+
+    [Fact]
+    public async Task ReattachedViewModel_HostsWithANonCancelledToken()
+    {
+        var hostSession = Substitute.For<IOnlineHostSession>();
+        CancellationToken? hostToken = null;
+        hostSession
+            .HostAsync(Arg.Any<Rules>(), Arg.Do<CancellationToken>(token => hostToken = token))
+            .Returns(OnlineHostResult.Succeeded("ABC123"));
+        var sut = CreateViewModel(() => hostSession, () => Substitute.For<IOnlineClientSession>());
+
+        sut.AttachHandlers();
+        sut.DetachHandlers();
+        sut.AttachHandlers();
+
+        await ((IAsyncCommand) sut.CreateRoomCommand).ExecuteAsync();
+
+        hostToken.ShouldNotBeNull();
+        hostToken.Value.IsCancellationRequested.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task ReattachedViewModel_JoinsWithANonCancelledToken()
+    {
+        var clientSession = Substitute.For<IOnlineClientSession>();
+        CancellationToken? joinToken = null;
+        clientSession
+            .JoinAsync(Arg.Any<string>(), Arg.Do<CancellationToken>(token => joinToken = token))
+            .Returns(OnlineClientResult.Succeeded("ABC123"));
+        var sut = CreateViewModel(() => Substitute.For<IOnlineHostSession>(), () => clientSession);
+
+        sut.AttachHandlers();
+        sut.DetachHandlers();
+        sut.AttachHandlers();
+        sut.JoinCode = "ABC123";
+
+        await ((IAsyncCommand) sut.JoinCommand).ExecuteAsync();
+
+        joinToken.ShouldNotBeNull();
+        joinToken.Value.IsCancellationRequested.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task DetachedViewModel_CancelsTheHostingToken()
+    {
+        var hostSession = Substitute.For<IOnlineHostSession>();
+        CancellationToken? hostToken = null;
+        hostSession
+            .HostAsync(Arg.Any<Rules>(), Arg.Do<CancellationToken>(token => hostToken = token))
+            .Returns(OnlineHostResult.Succeeded("ABC123"));
+        var sut = CreateViewModel(() => hostSession, () => Substitute.For<IOnlineClientSession>());
+
+        sut.AttachHandlers();
+        await ((IAsyncCommand) sut.CreateRoomCommand).ExecuteAsync();
+
+        sut.DetachHandlers();
+
+        hostToken.ShouldNotBeNull();
+        hostToken.Value.IsCancellationRequested.ShouldBeTrue();
+    }
+
+    private OnlineLobbyViewModel CreateViewModel(
+        Func<IOnlineHostSession> hostSessionFactory,
+        Func<IOnlineClientSession> clientSessionFactory) =>
+        new(
+            Substitute.For<IDicePanel>(),
+            _localization,
+            _rules,
+            _players,
+            hostSessionFactory,
+            clientSessionFactory,
+            _clipboard);
 }
