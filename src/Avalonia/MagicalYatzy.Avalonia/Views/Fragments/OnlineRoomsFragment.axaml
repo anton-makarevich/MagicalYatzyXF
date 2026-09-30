@@ -13,7 +13,8 @@
             <Label Content="{Binding RoomsTitle}" Classes="caption" HorizontalAlignment="Left" />
             <templatedControls:ActionButton Grid.Column="1"
                 Content="{Binding RefreshRoomsLabel}"
-                Command="{Binding RefreshRoomsCommand}" />
+                Command="{Binding RefreshRoomsCommand}"
+                IsEnabled="{Binding !IsRoomsLoading}" />
         </Grid>
         <ProgressBar IsIndeterminate="True"
                      Classes="description"

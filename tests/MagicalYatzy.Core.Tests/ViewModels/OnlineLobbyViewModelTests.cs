@@ -229,6 +229,55 @@ public sealed class OnlineLobbyViewModelTests
         await clientSession.DidNotReceive().JoinAsync(Arg.Any<string>(), Arg.Any<CancellationToken>());
     }
 
+    [Fact]
+    public async Task RefreshWhileAnotherRefreshIsRunning_IsIgnored()
+    {
+        var tcs = new TaskCompletionSource<RelayRoomListResult>();
+        _roomLister.ListRoomsAsync(Arg.Any<CancellationToken>())
+            .Returns(tcs.Task);
+        var sut = CreateViewModel(
+            () => Substitute.For<IOnlineHostSession>(),
+            () => Substitute.For<IOnlineClientSession>());
+        sut.AttachHandlers();
+        await Task.Yield();
+        sut.IsRoomsLoading.ShouldBeTrue();
+
+        await ((IAsyncCommand) sut.RefreshRoomsCommand).ExecuteAsync();
+
+        _roomLister.ReceivedCalls().Count().ShouldBe(1);
+        tcs.SetResult(RelayRoomListResult.Succeeded([new RelayRoomInfo("AAA111", 1, Rules.krSimple)]));
+        await WaitForRooms(sut, 1);
+        sut.IsRoomsLoading.ShouldBeFalse();
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task FailedListingWithMissingError_ShowsLocalizedUnavailableMessage(string? error)
+    {
+        _localization.GetString("RoomsUnavailableMessage").Returns("unavailable");
+        _roomLister.ListRoomsAsync(Arg.Any<CancellationToken>())
+            .Returns(RelayRoomListResult.Failed(error));
+        var sut = CreateViewModel(
+            () => Substitute.For<IOnlineHostSession>(),
+            () => Substitute.For<IOnlineClientSession>());
+        sut.AttachHandlers();
+
+        await WaitForError(sut);
+
+        sut.RoomsErrorMessage.ShouldBe("unavailable");
+    }
+
+    private static async Task WaitForError(OnlineLobbyViewModel sut)
+    {
+        var limit = DateTime.UtcNow + TimeSpan.FromSeconds(5);
+        while (sut.RoomsErrorMessage == null && DateTime.UtcNow < limit)
+            await Task.Delay(10);
+
+        sut.RoomsErrorMessage.ShouldNotBeNull();
+    }
+
     private static async Task WaitForRooms(OnlineLobbyViewModel sut, int expected)
     {
         var limit = DateTime.UtcNow + TimeSpan.FromSeconds(5);

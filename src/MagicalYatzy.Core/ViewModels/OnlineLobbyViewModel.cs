@@ -292,6 +292,11 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
 
     private async Task RefreshRoomsAsync(CancellationToken cancellationToken)
     {
+        // Concurrent loads are never started: guard any trigger (attach, join mode, refresh button)
+        // so a slower earlier listing can never replace a newer one or hide the loading state.
+        if (IsRoomsLoading)
+            return;
+
         IsRoomsLoading = true;
 
         RelayRoomListResult? result = null;
@@ -332,7 +337,9 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
 
         RoomsErrorMessage = result.Success
             ? null
-            : result.Error ?? _localizationService.GetString("RoomsUnavailableMessage");
+            : string.IsNullOrWhiteSpace(result.Error)
+                ? _localizationService.GetString("RoomsUnavailableMessage")
+                : result.Error;
 
         RebuildRooms(result.Rooms);
 
