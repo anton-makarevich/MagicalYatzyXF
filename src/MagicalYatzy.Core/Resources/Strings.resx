@@ -844,7 +844,7 @@
     <value>Refresh</value>
   </data>
   <data name="NoRoomsMessage" xml:space="preserve">
-    <value>No open rooms right now. Host a game or pull to refresh later.</value>
+    <value>No open rooms right now. Host a game or refresh later.</value>
   </data>
   <data name="RoomsUnavailableMessage" xml:space="preserve">
     <value>Could not load the list of rooms.</value>
