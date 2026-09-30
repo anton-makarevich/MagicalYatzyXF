@@ -14,6 +14,7 @@ using Sanet.MagicalYatzy.Online.Commands.Server;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Services.Relay;
 using Sanet.Transport;
+using Sanet.Transport.Relay.Contracts;
 using Sanet.Transport.SignalR.Client.Relay;
 using Shouldly;
 using Xunit;
@@ -64,9 +65,9 @@ public class OnlineHostSessionTests
 
     private void SetupSuccessfulRelayCalls(FakeTransportPublisher publisher)
     {
-        _relayRoomClient.Create(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+        _relayRoomClient.Create(Arg.Any<RoomGameInfo>(), Arg.Any<CancellationToken>(), Arg.Any<RelayClientOptions>())
             .Returns(_ => Task.FromResult(RoomSessionResult.Succeeded(
-                "ABC123", "session-token", "Host", Guid.NewGuid(), Guid.NewGuid())));
+                "ABC123", "session-token", "Host", Guid.NewGuid(), TestGameInfo.Create())));
         _relayRoomClient.GetRelayTicket("ABC123", "session-token", Arg.Any<CancellationToken>())
             .Returns(_ => Task.FromResult(RelayTicketResult.Succeeded(
                 "relay-ticket", DateTimeOffset.UtcNow.AddMinutes(10))));
@@ -120,7 +121,7 @@ public class OnlineHostSessionTests
 
         Received.InOrder(() =>
         {
-            _relayRoomClient.Create(Arg.Any<Guid>(), Arg.Any<CancellationToken>());
+            _relayRoomClient.Create(Arg.Any<RoomGameInfo>(), Arg.Any<CancellationToken>(), Arg.Any<RelayClientOptions>());
             _relayRoomClient.GetRelayTicket("ABC123", "session-token", Arg.Any<CancellationToken>());
             _publisherProvider.Create("ABC123", "relay-ticket", Arg.Any<CancellationToken>());
             _relayRoomClient.Ready("ABC123", "session-token", Arg.Any<CancellationToken>());
@@ -128,9 +129,46 @@ public class OnlineHostSessionTests
     }
 
     [Fact]
+    public async Task HostReportsGameIdVersionHostInstanceAndRuleMetadata()
+    {
+        var publisher = new FakeTransportPublisher();
+        _playerService.CurrentPlayer.Returns(new Player(PlayerType.Local, "Host"));
+        await using var sut = await HostAsync(publisher, Rules.krMagic);
+
+        await _relayRoomClient.Received(1).Create(
+            Arg.Is<RoomGameInfo>(info =>
+                info.Id == "magical-yatzy"
+                && !info.HostId.Equals(Guid.Empty)
+                && !string.IsNullOrWhiteSpace(info.Version)
+                && info.Metadata != null
+                && info.Metadata["rules"] == "krMagic"),
+            Arg.Any<CancellationToken>(),
+            Arg.Any<RelayClientOptions>());
+    }
+
+    [Theory]
+    [InlineData("krMagic", Rules.krMagic)]
+    [InlineData("krStandard", Rules.krStandard)]
+    [InlineData("KRSTANDARD", Rules.krStandard)]
+    [InlineData("not-a-rule", null)]
+    [InlineData(null, null)]
+    public void RuleMetadataIsReadBackFromTheHubContract(string? reported, Rules? expected)
+    {
+        var metadata = reported == null
+            ? null
+            : new Dictionary<string, string> { ["rules"] = reported };
+
+        var parsed = OnlineGameInfo.TryGetRule(metadata, out var rule);
+
+        parsed.ShouldBe(expected.HasValue);
+        if (expected.HasValue)
+            rule.ShouldBe(expected.Value);
+    }
+
+    [Fact]
     public async Task HostFailsWhenCreateIsRejected()
     {
-        _relayRoomClient.Create(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+        _relayRoomClient.Create(Arg.Any<RoomGameInfo>(), Arg.Any<CancellationToken>(), Arg.Any<RelayClientOptions>())
             .Returns(_ => Task.FromResult(RoomSessionResult.Failed(
                 new RelayClientError(RelayClientErrorCode.Unknown, "hub down"))));
         _playerService.CurrentPlayer.Returns(new Player(PlayerType.Local, "Host"));

@@ -810,4 +810,25 @@
   <data name="language_name" xml:space="preserve">
     <value>беларуская</value>
   </data>
+  <data name="RoomsLabel" xml:space="preserve">
+    <value>Адкрытыя кірыні</value>
+  </data>
+  <data name="RefreshRoomsLabel" xml:space="preserve">
+    <value>Абнавіць</value>
+  </data>
+  <data name="NoRoomsMessage" xml:space="preserve">
+    <value>Зараз няма адкрытых кірань. Стварыце гульню або абнавіце пазней.</value>
+  </data>
+  <data name="RoomsUnavailableMessage" xml:space="preserve">
+    <value>Не ўдалося загрузіць спіс кірань.</value>
+  </data>
+  <data name="RoomFullMessage" xml:space="preserve">
+    <value>Кірыня поўная</value>
+  </data>
+  <data name="RoomPlayersFormat" xml:space="preserve">
+    <value>{0}/{1} гульцаў</value>
+  </data>
+  <data name="UnknownRulesLabel" xml:space="preserve">
+    <value>Невядомыя правілы</value>
+  </data>
 </root>

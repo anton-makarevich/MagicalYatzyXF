@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy.Core"
+             xmlns:fragments="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.Fragments"
              xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.OnlineLobby.OnlineLobbyViewNarrow"
              x:DataType="viewModels:OnlineLobbyViewModel">
@@ -32,6 +33,7 @@
                             <TextBlock Text="{Binding InvalidRoomCodeMessage}" IsVisible="{Binding IsJoinCodeInvalid}" />
                             <Button Content="{Binding CopyCodeLabel}" Command="{Binding CopyCodeCommand}" IsVisible="{Binding IsHosting}" />
                         </StackPanel>
+                        <fragments:OnlineRoomsFragment />
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>

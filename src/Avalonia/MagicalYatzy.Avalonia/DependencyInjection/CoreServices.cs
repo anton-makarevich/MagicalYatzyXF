@@ -44,6 +44,7 @@ public static class CoreServices
             new HttpClient(),
             serviceProvider.GetRequiredService<IRelayHubConfigurationProvider>(),
             NullLogger<RelayRoomClient>.Instance));
+        services.AddSingleton<IRelayRoomLister, RelayRoomLister>();
         services.AddSingleton<IApiClient, AzureApiClient>();
         services.AddSingleton<IGameService, GameService>();
         services.AddSingleton<IWebService, WebService>();

@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy.Core"
+             xmlns:fragments="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.Fragments"
              xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.OnlineLobby.OnlineLobbyViewWide"
              x:DataType="viewModels:OnlineLobbyViewModel">
@@ -12,7 +13,7 @@
             TitleAlignment="Center" />
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <Grid ColumnDefinitions="*,*" ColumnSpacing="24" Margin="10">
-                <Grid Grid.Column="0" RowDefinitions="Auto,Auto,*" VerticalAlignment="Top">
+                <Grid Grid.Column="0" RowDefinitions="Auto,Auto,Auto" VerticalAlignment="Top">
                     <StackPanel Spacing="8">
                         <templatedControls:EditableMenuItem
                             Caption="{Binding CurrentPlayerName, Mode=TwoWay}"
@@ -33,6 +34,7 @@
                         <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap" />
                         <Button Content="{Binding CopyCodeLabel}" Command="{Binding CopyCodeCommand}" IsVisible="{Binding IsHosting}" />
                     </StackPanel>
+                    <fragments:OnlineRoomsFragment Grid.Row="2" Margin="0,12" />
                 </Grid>
                 <Grid Grid.Column="1" RowDefinitions="Auto,*" VerticalAlignment="Top">
                     <Label Content="{Binding RulesTitle}" Classes="caption" HorizontalAlignment="Left" />
