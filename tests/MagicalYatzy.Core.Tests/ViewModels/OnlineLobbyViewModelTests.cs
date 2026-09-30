@@ -11,6 +11,7 @@ using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Services.Relay;
 using Sanet.MagicalYatzy.ViewModels;
+using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 using Shouldly;
 using Xunit;
 
@@ -52,25 +53,25 @@ public sealed class OnlineLobbyViewModelTests
         _sut.SelectedRule!.Rule.ShouldBe(Rules.krSimple);
     }
 
-    [Theory]
-    [InlineData("")]
-    [InlineData("abc12")]
-    [InlineData("abc1234")]
-    [InlineData("abc-12")]
-    public void JoinCode_InvalidValues_CannotJoin(string code)
+    [Fact]
+    public void JoinMode_StartsWithNoRoomSelectedAndCannotJoin()
     {
-        _sut.JoinCode = code;
+        _sut.SelectJoinCommand.Execute(null);
 
+        _sut.State.ShouldBe(OnlineLobbyState.JoinSetup);
+        _sut.SelectedRoom.ShouldBeNull();
         _sut.CanJoin.ShouldBeFalse();
     }
 
     [Fact]
-    public void JoinCode_TrimmedSixCharacterValue_CanJoinWithoutChangingCase()
+    public void HostSetup_CannotJoinEvenWithARoomSelected()
     {
-        _sut.JoinCode = " Abc123 ";
+        _sut.SelectJoinCommand.Execute(null);
+        _sut.SelectedRoom = new RoomViewModel(new RelayRoomInfo("ABC123", 1, Rules.krSimple), _localization);
 
-        _sut.CanJoin.ShouldBeTrue();
-        _sut.JoinCode.ShouldBe(" Abc123 ");
+        _sut.SelectHostCommand.Execute(null);
+
+        _sut.CanJoin.ShouldBeFalse();
     }
 
     [Fact]
@@ -138,7 +139,10 @@ public sealed class OnlineLobbyViewModelTests
         sut.AttachHandlers();
         sut.DetachHandlers();
         sut.AttachHandlers();
-        sut.JoinCode = "ABC123";
+
+        sut.SelectJoinCommand.Execute(null);
+        WaitForRooms(sut, 0).GetAwaiter().GetResult();
+        sut.SelectedRoom = new RoomViewModel(new RelayRoomInfo("ABC123", 1, Rules.krSimple), _localization);
 
         await ((IAsyncCommand) sut.JoinCommand).ExecuteAsync();
 
@@ -257,29 +261,24 @@ public sealed class OnlineLobbyViewModelTests
     }
 
     [Fact]
-    public async Task SelectingARoomJoinsItWithTheRoomsCode()
+    public async Task SelectingARoomOnlyMakesTheCodeAvailableForJoining()
     {
         _roomLister.ListRoomsAsync(Arg.Any<CancellationToken>()).Returns(RelayRoomListResult.Succeeded(
             [new RelayRoomInfo("JOIN12", 1, Rules.krSimple)]));
         var clientSession = Substitute.For<IOnlineClientSession>();
-        clientSession
-            .JoinAsync("JOIN12", Arg.Any<CancellationToken>())
-            .Returns(OnlineClientResult.Succeeded("JOIN12"));
-        var sut = new OnlineLobbyViewModel(
-            Substitute.For<IDicePanel>(),
-            _localization,
-            _rules,
-            _players,
-            _roomLister,
-            Substitute.For<Func<IOnlineHostSession>>(),
-            () => clientSession,
-            _clipboard);
+        var sut = CreateViewModel(
+            () => Substitute.For<IOnlineHostSession>(),
+            () => clientSession);
         sut.AttachHandlers();
         await WaitForRooms(sut, 1);
+        sut.SelectJoinCommand.Execute(null);
 
-        sut.Rooms.Single().JoinCommand.Execute(null);
+        sut.SelectedRoom = sut.Rooms.Single();
 
-        await clientSession.Received(1).JoinAsync("JOIN12", Arg.Any<CancellationToken>());
+        sut.SelectedRoom.RoomCode.ShouldBe("JOIN12");
+        sut.CanJoin.ShouldBeTrue();
+        sut.State.ShouldBe(OnlineLobbyState.JoinSetup);
+        await clientSession.DidNotReceive().JoinAsync(Arg.Any<string>(), Arg.Any<CancellationToken>());
     }
 
     private static async Task WaitForRooms(OnlineLobbyViewModel sut, int expected)

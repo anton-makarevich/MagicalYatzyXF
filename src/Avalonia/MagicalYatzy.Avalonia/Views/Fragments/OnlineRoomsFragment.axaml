@@ -8,23 +8,6 @@
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="300"
              x:DataType="viewModels:OnlineLobbyViewModel"
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.Fragments.OnlineRoomsFragment">
-    <UserControl.Styles>
-        <!-- Rooms are a list of row buttons, so the default blue button chrome is flattened
-             and only the pointer-over state is kept as a hover hint. -->
-        <Style Selector="Button.room">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="8,6"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-        </Style>
-        <Style Selector="Button.room:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="{StaticResource MenuSelectionColor}"/>
-        </Style>
-        <Style Selector="Button.room:disabled /template/ ContentPresenter">
-            <Setter Property="Opacity" Value="0.5"/>
-        </Style>
-    </UserControl.Styles>
     <StackPanel Spacing="6" IsVisible="{Binding IsRoomsVisible}">
         <Grid ColumnDefinitions="*,Auto">
             <Label Content="{Binding RoomsTitle}" Classes="caption" HorizontalAlignment="Left" />
@@ -37,25 +20,18 @@
                      IsVisible="{Binding IsRoomsLoading}" />
         <TextBlock Text="{Binding RoomsErrorMessage}" Classes="description" TextWrapping="Wrap" IsVisible="{Binding HasRoomsError}" />
         <TextBlock Text="{Binding NoRoomsMessage}" Classes="description" TextWrapping="Wrap" IsVisible="{Binding HasNoRoomsMessage}" />
-        <ItemsControl ItemsSource="{Binding Rooms}" Background="Transparent">
-            <ItemsControl.ItemTemplate>
+        <ListBox ItemsSource="{Binding Rooms}"
+                 SelectedItem="{Binding SelectedRoom}"
+                 Background="Transparent">
+            <ListBox.ItemTemplate>
                 <DataTemplate x:DataType="wrappers:RoomViewModel">
-                    <Button Classes="room"
-                            Command="{Binding JoinCommand}"
-                            IsEnabled="{Binding CanJoin}">
-                        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto">
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding RoomCode}" FontWeight="Bold" />
-                            <TextBlock Grid.Row="0" Grid.Column="1" Classes="description" Text="{Binding PlayersText}" />
-                            <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" Classes="description" Text="{Binding RulesText}" TextWrapping="Wrap" />
-                        </Grid>
-                    </Button>
+                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto" Margin="8,6">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding RoomCode}" FontWeight="Bold" />
+                        <TextBlock Grid.Row="0" Grid.Column="1" Classes="description" Text="{Binding PlayersText}" />
+                        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" Classes="description" Text="{Binding RulesText}" TextWrapping="Wrap" />
+                    </Grid>
                 </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Spacing="2" Orientation="Vertical"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </StackPanel>
 </UserControl>

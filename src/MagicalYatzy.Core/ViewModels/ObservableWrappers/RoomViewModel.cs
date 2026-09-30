@@ -1,7 +1,4 @@
-using System;
-using System.Windows.Input;
 using Sanet.Localization;
-using Sanet.MagicalYatzy.Models;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Online;
 using Sanet.MagicalYatzy.Services.Relay;
@@ -11,8 +8,8 @@ namespace Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 
 /// <summary>
 /// A listed relay room offered for joining: its code, how full it is and the rule its host
-/// reported. <see cref="JoinCommand"/> raises <see cref="RoomSelected"/>; the owning view model
-/// decides whether to actually join.
+/// reported. Selecting it in the room list just makes its code available; the lobby's
+/// Join button decides when to actually join.
 /// </summary>
 public class RoomViewModel : BindableBase
 {
@@ -25,8 +22,6 @@ public class RoomViewModel : BindableBase
         MemberCount = room.MemberCount;
         Rule = room.Rule;
     }
-
-    public event EventHandler? RoomSelected;
 
     /// <summary>Code used to join the room.</summary>
     public string RoomCode { get; }
@@ -46,12 +41,6 @@ public class RoomViewModel : BindableBase
         ? _localizationService.GetString(rule.ToString())
         : _localizationService.GetString("UnknownRulesLabel");
 
-    /// <summary>A full room cannot be joined, so its item is not clickable.</summary>
+    /// <summary>A full room cannot be joined.</summary>
     public bool CanJoin => MemberCount < OnlineGameInfo.MaxPlayers;
-
-    public ICommand JoinCommand => new SimpleCommand(() =>
-    {
-        if (CanJoin)
-            RoomSelected?.Invoke(this, EventArgs.Empty);
-    });
 }

@@ -27,10 +27,6 @@
                     <StackPanel Grid.Row="1" Spacing="8" Margin="0,12">
                         <TextBlock Text="{Binding RoomCodeLabel}" FontWeight="Bold" />
                         <TextBlock Text="{Binding RoomCode}" FontSize="28" HorizontalAlignment="Center" />
-                        <TextBox IsVisible="{Binding IsJoinSetup}"
-                                 Text="{Binding JoinCode}"
-                                 PlaceholderText="{Binding EnterRoomCodePlaceholder}" />
-                        <TextBlock Text="{Binding InvalidRoomCodeMessage}" IsVisible="{Binding IsJoinCodeInvalid}" />
                         <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap" />
                         <Button Content="{Binding CopyCodeLabel}" Command="{Binding CopyCodeCommand}" IsVisible="{Binding IsHosting}" />
                     </StackPanel>

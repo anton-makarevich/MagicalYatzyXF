@@ -133,8 +133,6 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
     public string CreateRoomLabel => _localizationService.GetString("CreateRoomLabel");
     public string RoomCodeLabel => _localizationService.GetString("RoomCodeLabel");
     public string CopyCodeLabel => _localizationService.GetString("CopyCodeLabel");
-    public string EnterRoomCodePlaceholder => _localizationService.GetString("EnterRoomCodePlaceholder");
-    public string InvalidRoomCodeMessage => _localizationService.GetString("InvalidRoomCodeMessage");
     public string RoomsTitle => _localizationService.GetString("RoomsLabel");
     public string RefreshRoomsLabel => _localizationService.GetString("RefreshRoomsLabel");
     public string NoRoomsMessage => _localizationService.GetString("NoRoomsMessage");
@@ -156,16 +154,16 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
 
     public string? RoomCode { get; private set; }
 
-    public string JoinCode
+    /// <summary>The room currently picked in the room list, or <c>null</c> when nothing is picked.</summary>
+    public RoomViewModel? SelectedRoom
     {
         get;
         set
         {
-            SetProperty(ref field, value ?? string.Empty);
+            SetProperty(ref field, value);
             NotifyPropertyChanged(nameof(CanJoin));
-            NotifyPropertyChanged(nameof(IsJoinCodeInvalid));
         }
-    } = string.Empty;
+    }
 
     public RuleViewModel SelectedRule
     {
@@ -178,9 +176,7 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
         }
     }
 
-    public bool CanJoin => RoomCodePattern.IsMatch(JoinCode.Trim());
-
-    public bool IsJoinCodeInvalid => !string.IsNullOrWhiteSpace(JoinCode) && !CanJoin;
+    public bool CanJoin => State == OnlineLobbyState.JoinSetup && SelectedRoom?.CanJoin == true;
 
     /// <summary>
     /// The room list is offered whenever no session is running yet, so it is already populated
@@ -286,15 +282,8 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
         _lifetimeCancellation.Cancel();
         _lifetimeCancellation.Dispose();
         UnsubscribeFromGame();
-        UnsubscribeFromRooms();
         _ = DisposeSessionAsync();
         base.DetachHandlers();
-    }
-
-    private void UnsubscribeFromRooms()
-    {
-        foreach (var room in Rooms)
-            room.RoomSelected -= OnRoomSelected;
     }
 
     private void ChangeState(OnlineLobbyState state)
@@ -385,26 +374,9 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
 
     private void RebuildRooms(IReadOnlyList<RelayRoomInfo> rooms)
     {
-        foreach (var room in Rooms)
-            room.RoomSelected -= OnRoomSelected;
-
         Rooms.Clear();
         foreach (var room in rooms)
-        {
-            var roomViewModel = new RoomViewModel(room, _localizationService);
-            roomViewModel.RoomSelected += OnRoomSelected;
-            Rooms.Add(roomViewModel);
-        }
-    }
-
-    private void OnRoomSelected(object? sender, EventArgs e)
-    {
-        if (sender is not RoomViewModel room)
-            return;
-
-        JoinCode = room.RoomCode;
-        NotifyStateChanged();
-        JoinCommand.Execute(null);
+            Rooms.Add(new RoomViewModel(room, _localizationService));
     }
 
     private void LoadRules()
@@ -457,8 +429,8 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
 
     private async Task JoinAsync()
     {
-        var roomCode = JoinCode.Trim();
-        if (!RoomCodePattern.IsMatch(roomCode))
+        var roomCode = SelectedRoom?.RoomCode;
+        if (string.IsNullOrEmpty(roomCode) || !RoomCodePattern.IsMatch(roomCode))
         {
             NotifyStateChanged();
             return;
@@ -636,6 +608,7 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
         NotifyPropertyChanged(nameof(HasNoRoomsMessage));
         NotifyPropertyChanged(nameof(StatusMessage));
         NotifyPropertyChanged(nameof(CanCreate));
+        NotifyPropertyChanged(nameof(CanJoin));
         NotifyPropertyChanged(nameof(CanCopyCode));
         NotifyPropertyChanged(nameof(CanStartGame));
         NotifyPropertyChanged(nameof(CanReady));
