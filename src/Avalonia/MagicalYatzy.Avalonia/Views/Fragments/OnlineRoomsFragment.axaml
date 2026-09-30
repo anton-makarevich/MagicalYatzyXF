@@ -33,5 +33,17 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <Grid ColumnDefinitions="*,*" Margin="8,6" ColumnSpacing="8">
+            <templatedControls:ActionButton Grid.Column="0"
+                Content="{Binding CreateRoomLabel}"
+                Command="{Binding CreateRoomCommand}"
+                IsEnabled="{Binding CanCreate}"
+                ImageSource="{Binding StartImage}" />
+            <templatedControls:ActionButton Grid.Column="1"
+                Content="{Binding JoinGameLabel}"
+                Command="{Binding JoinCommand}"
+                IsEnabled="{Binding CanJoin}"
+                ImageSource="{Binding StartImage}" />
+        </Grid>
     </StackPanel>
 </UserControl>

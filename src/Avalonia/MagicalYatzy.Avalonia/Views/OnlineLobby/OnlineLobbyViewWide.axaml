@@ -19,16 +19,9 @@
                             Caption="{Binding CurrentPlayerName, Mode=TwoWay}"
                             Description="{Binding CurrentPlayerTypeName}"
                             ImageSource="{Binding CurrentPlayerImage}" />
-                        <ToggleSwitch IsVisible="{Binding IsModeSelectionVisible}"
-                                      IsChecked="{Binding IsCreateMode, Mode=TwoWay}"
-                                      OnContent="{Binding HostGameLabel}"
-                                      OffContent="{Binding JoinGameLabel}" />
                     </StackPanel>
                     <StackPanel Grid.Row="1" Spacing="8" Margin="0,12">
-                        <TextBlock Text="{Binding RoomCodeLabel}" FontWeight="Bold" />
-                        <TextBlock Text="{Binding RoomCode}" FontSize="28" HorizontalAlignment="Center" />
-                        <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap" />
-                        <Button Content="{Binding CopyCodeLabel}" Command="{Binding CopyCodeCommand}" IsVisible="{Binding IsHosting}" />
+                        <fragments:OnlineRoomInfoFragment />
                     </StackPanel>
                     <fragments:OnlineRoomsFragment Grid.Row="2" Margin="0,12" />
                 </Grid>
@@ -51,9 +44,6 @@
             </Grid>
         </ScrollViewer>
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8">
-            <templatedControls:ActionButton Content="{Binding CreateRoomLabel}" Command="{Binding CreateRoomCommand}" IsVisible="{Binding IsHostSetup}" ImageSource="{Binding StartImage}" />
-            <templatedControls:ActionButton Content="{Binding JoinGameLabel}" Command="{Binding JoinCommand}" IsVisible="{Binding IsJoinSetup}" IsEnabled="{Binding CanJoin}" ImageSource="{Binding StartImage}" />
-            <templatedControls:ActionButton Content="{Binding ReadyLabel}" Command="{Binding ReadyCommand}" IsVisible="{Binding CanReady}" ImageSource="{Binding StartImage}" />
             <templatedControls:ActionButton Content="{Binding StartLabel}" Command="{Binding StartGameCommand}" IsVisible="{Binding CanStartGame}" ImageSource="{Binding StartImage}" />
         </StackPanel>
     </Grid>

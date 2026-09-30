@@ -44,48 +44,19 @@ public sealed class OnlineLobbyViewModelTests
     }
 
     [Fact]
-    public void HostMode_LoadsRulesAndSelectsSimpleByDefault()
+    public void Browse_LoadsRulesAndSelectsSimpleByDefault()
     {
-        _sut.SelectHostCommand.Execute(null);
-
-        _sut.State.ShouldBe(OnlineLobbyState.HostSetup);
+        _sut.State.ShouldBe(OnlineLobbyState.Browse);
         _sut.Rules.Count.ShouldBe(2);
         _sut.SelectedRule!.Rule.ShouldBe(Rules.krSimple);
     }
 
     [Fact]
-    public void JoinMode_StartsWithNoRoomSelectedAndCannotJoin()
+    public void Browse_StartsWithNoRoomSelectedAndCannotJoin()
     {
-        _sut.SelectJoinCommand.Execute(null);
-
-        _sut.State.ShouldBe(OnlineLobbyState.JoinSetup);
+        _sut.State.ShouldBe(OnlineLobbyState.Browse);
         _sut.SelectedRoom.ShouldBeNull();
         _sut.CanJoin.ShouldBeFalse();
-    }
-
-    [Fact]
-    public void HostSetup_CannotJoinEvenWithARoomSelected()
-    {
-        _sut.SelectJoinCommand.Execute(null);
-        _sut.SelectedRoom = new RoomViewModel(new RelayRoomInfo("ABC123", 1, Rules.krSimple), _localization);
-
-        _sut.SelectHostCommand.Execute(null);
-
-        _sut.CanJoin.ShouldBeFalse();
-    }
-
-    [Fact]
-    public void JoinMode_LoadsRulesButKeepsThemReadOnly()
-    {
-        _sut.SelectJoinCommand.Execute(null);
-
-        _sut.State.ShouldBe(OnlineLobbyState.JoinSetup);
-        _sut.Rules.Count.ShouldBe(2);
-        _sut.IsRulesEditable.ShouldBeFalse();
-
-        _sut.SelectHostCommand.Execute(null);
-
-        _sut.IsRulesEditable.ShouldBeTrue();
     }
 
     [Fact]
@@ -98,9 +69,6 @@ public sealed class OnlineLobbyViewModelTests
         _sut.CurrentPlayerName = "Renamed";
 
         player.Name.ShouldBe("Renamed");
-
-        _sut.SelectHostCommand.Execute(null);
-        _sut.SelectJoinCommand.Execute(null);
 
         _sut.CurrentPlayerName.ShouldBe("Renamed");
         player.Name.ShouldBe("Renamed");
@@ -140,7 +108,6 @@ public sealed class OnlineLobbyViewModelTests
         sut.DetachHandlers();
         sut.AttachHandlers();
 
-        sut.SelectJoinCommand.Execute(null);
         WaitForRooms(sut, 0).GetAwaiter().GetResult();
         sut.SelectedRoom = new RoomViewModel(new RelayRoomInfo("ABC123", 1, Rules.krSimple), _localization);
 
@@ -185,24 +152,6 @@ public sealed class OnlineLobbyViewModelTests
         sut.Rooms.Single().RoomCode.ShouldBe("ABC123");
         sut.Rooms.Single().PlayersText.ShouldBe("1/4 players");
         sut.Rooms.Single().RulesText.ShouldBe("Magic");
-    }
-
-    [Fact]
-    public async Task TogglingIntoJoinModeRefreshesTheRoomList()
-    {
-        var sut = CreateViewModel(
-            () => Substitute.For<IOnlineHostSession>(),
-            () => Substitute.For<IOnlineClientSession>());
-        sut.AttachHandlers();
-        await WaitForRooms(sut, 0);
-
-        _roomLister.ListRoomsAsync(Arg.Any<CancellationToken>()).Returns(RelayRoomListResult.Succeeded(
-            [new RelayRoomInfo("XYZ789", 2, Rules.krSimple)]));
-
-        sut.SelectJoinCommand.Execute(null);
-
-        await WaitForRooms(sut, 1);
-        sut.Rooms.Single().RoomCode.ShouldBe("XYZ789");
     }
 
     [Fact]
@@ -271,13 +220,12 @@ public sealed class OnlineLobbyViewModelTests
             () => clientSession);
         sut.AttachHandlers();
         await WaitForRooms(sut, 1);
-        sut.SelectJoinCommand.Execute(null);
 
         sut.SelectedRoom = sut.Rooms.Single();
 
         sut.SelectedRoom.RoomCode.ShouldBe("JOIN12");
         sut.CanJoin.ShouldBeTrue();
-        sut.State.ShouldBe(OnlineLobbyState.JoinSetup);
+        sut.State.ShouldBe(OnlineLobbyState.Browse);
         await clientSession.DidNotReceive().JoinAsync(Arg.Any<string>(), Arg.Any<CancellationToken>());
     }
 
