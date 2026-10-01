@@ -158,7 +158,8 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
         }
     }
 
-    public bool CanJoin => State == OnlineLobbyState.Browse && SelectedRoom?.CanJoin == true;
+    public bool CanJoin => State is OnlineLobbyState.Browse or OnlineLobbyState.Failed
+                           && SelectedRoom?.CanJoin == true;
 
     /// <summary>
     /// The room list is offered whenever no session is running yet, so it is already
@@ -197,7 +198,8 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
 
     public bool HasNoRoomsMessage => IsRoomsVisible && !IsRoomsLoading && !HasRoomsError && Rooms.Count == 0;
 
-    public bool CanCreate => State == OnlineLobbyState.Browse && SelectedRule != null;
+    public bool CanCreate => State is OnlineLobbyState.Browse or OnlineLobbyState.Failed
+                             && SelectedRule != null;
 
     public bool CanAddBot => false;
 
@@ -211,7 +213,7 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
 
     public string AddPlayerImage => string.Empty;
 
-    public bool IsRulesEditable => State == OnlineLobbyState.Browse;
+    public bool IsRulesEditable => State is OnlineLobbyState.Browse or OnlineLobbyState.Failed;
 
     public bool CanCopyCode => (State == OnlineLobbyState.Hosting || State == OnlineLobbyState.Joined)
                                && !string.IsNullOrEmpty(RoomCode);
@@ -284,11 +286,23 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
         NotifyStateChanged();
     }
 
+    private bool _isRefreshPending;
+
     /// <summary>
     /// Fire-and-forget room-list refresh; safe to call before the view model is attached, where
     /// <see cref="_lifetimeCancellation"/> is still the field initializer's token.
+    /// A request made while a listing is still in flight (e.g. one just cancelled with the
+    /// lobby) is deferred until <see cref="ApplyRooms"/> releases the guard.
     /// </summary>
-    private void RefreshRooms() => _ = RefreshRoomsAsync(_lifetimeCancellation.Token);
+    private void RefreshRooms()
+    {
+        if (IsRoomsLoading)
+        {
+            _isRefreshPending = true;
+            return;
+        }
+        _ = RefreshRoomsAsync(_lifetimeCancellation.Token);
+    }
 
     private async Task RefreshRoomsAsync(CancellationToken cancellationToken)
     {
@@ -332,6 +346,7 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
         if (result == null)
         {
             IsRoomsLoading = false;
+            StartPendingRefresh();
             return;
         }
 
@@ -346,6 +361,15 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
         IsRoomsLoading = false;
         NotifyPropertyChanged(nameof(HasRooms));
         NotifyPropertyChanged(nameof(HasNoRoomsMessage));
+        StartPendingRefresh();
+    }
+
+    private void StartPendingRefresh()
+    {
+        if (!_isRefreshPending)
+            return;
+        _isRefreshPending = false;
+        RefreshRooms();
     }
 
     private void RebuildRooms(IReadOnlyList<RelayRoomInfo> rooms)

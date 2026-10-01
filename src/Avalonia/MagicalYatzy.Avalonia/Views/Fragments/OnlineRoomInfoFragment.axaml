@@ -7,16 +7,19 @@
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="240"
              x:DataType="viewModels:OnlineLobbyViewModel"
              x:Class="Sanet.MagicalYatzy.Avalonia.Views.Fragments.OnlineRoomInfoFragment">
-    <StackPanel Spacing="8" IsVisible="{Binding IsRoomInfoVisible}">
-        <TextBlock Text="{Binding RoomCodeLabel}" FontWeight="Bold" />
-        <TextBlock Text="{Binding RoomCode}" FontSize="28" HorizontalAlignment="Center" />
-        <templatedControls:ActionButton Content="{Binding CopyCodeLabel}"
-                                        Command="{Binding CopyCodeCommand}"
-                                        IsVisible="{Binding CanCopyCode}" />
-        <TextBlock Text="{Binding StatusMessage}" Classes="description" TextWrapping="Wrap" />
-        <templatedControls:ActionButton Content="{Binding ReadyLabel}"
-                                        Command="{Binding ReadyCommand}"
-                                        IsVisible="{Binding CanReady}"
-                                        ImageSource="{Binding StartImage}" />
+    <StackPanel Spacing="8">
+        <TextBlock Text="{Binding StatusMessage}" Classes="description" TextWrapping="Wrap"
+                   IsVisible="{Binding IsFailed}" />
+        <StackPanel Spacing="8" IsVisible="{Binding IsRoomInfoVisible}">
+            <TextBlock Text="{Binding RoomCodeLabel}" FontWeight="Bold" />
+            <TextBlock Text="{Binding RoomCode}" FontSize="28" HorizontalAlignment="Center" />
+            <templatedControls:ActionButton Content="{Binding CopyCodeLabel}"
+                                            Command="{Binding CopyCodeCommand}"
+                                            IsVisible="{Binding CanCopyCode}" />
+            <templatedControls:ActionButton Content="{Binding ReadyLabel}"
+                                            Command="{Binding ReadyCommand}"
+                                            IsVisible="{Binding CanReady}"
+                                            ImageSource="{Binding StartImage}" />
+        </StackPanel>
     </StackPanel>
 </UserControl>
