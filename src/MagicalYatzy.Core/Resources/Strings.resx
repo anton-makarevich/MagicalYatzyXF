@@ -837,4 +837,25 @@
   <data name="language_name" xml:space="preserve">
     <value>English</value>
   </data>
+  <data name="RoomsLabel" xml:space="preserve">
+    <value>Open rooms</value>
+  </data>
+  <data name="RefreshRoomsLabel" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="NoRoomsMessage" xml:space="preserve">
+    <value>No open rooms right now. Host a game or refresh later.</value>
+  </data>
+  <data name="RoomsUnavailableMessage" xml:space="preserve">
+    <value>Could not load the list of rooms.</value>
+  </data>
+  <data name="RoomFullMessage" xml:space="preserve">
+    <value>Room is full</value>
+  </data>
+  <data name="RoomPlayersFormat" xml:space="preserve">
+    <value>{0}/{1} players</value>
+  </data>
+  <data name="UnknownRulesLabel" xml:space="preserve">
+    <value>Unknown rules</value>
+  </data>
 </root>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -14,6 +15,7 @@ using Sanet.MagicalYatzy.Online.Commands.Client;
 using Sanet.MagicalYatzy.Online.Commands.Server;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Game;
+using Sanet.MagicalYatzy.Services.Relay;
 using Sanet.MagicalYatzy.ViewModels.Base;
 using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 
@@ -21,11 +23,9 @@ namespace Sanet.MagicalYatzy.ViewModels;
 
 public enum OnlineLobbyState
 {
-    ChooseMode,
-    HostSetup,
+    Browse,
     Creating,
     Hosting,
-    JoinSetup,
     Joining,
     Joined,
     Started,
@@ -39,6 +39,7 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
     private readonly ILocalizationService _localizationService;
     private readonly IRulesService _rulesService;
     private readonly IPlayerService _playerService;
+    private readonly IRelayRoomLister _roomLister;
     private readonly Func<IOnlineHostSession> _hostSessionFactory;
     private readonly Func<IOnlineClientSession> _clientSessionFactory;
     private readonly IClipboardService _clipboardService;
@@ -47,16 +48,14 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
     private IOnlineHostSession? _hostSession;
     private IOnlineClientSession? _clientSession;
     private SynchronizationContext? _synchronizationContext;
-    private OnlineLobbyState _state = OnlineLobbyState.ChooseMode;
-    private string _joinCode = string.Empty;
     private string? _failureMessage;
-    private bool _isCreateMode = true;
 
     public OnlineLobbyViewModel(
         IDicePanel dicePanel,
         ILocalizationService localizationService,
         IRulesService rulesService,
         IPlayerService playerService,
+        IRelayRoomLister roomLister,
         Func<IOnlineHostSession> hostSessionFactory,
         Func<IOnlineClientSession> clientSessionFactory,
         IClipboardService clipboardService) : base(dicePanel)
@@ -64,29 +63,32 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
         _localizationService = localizationService;
         _rulesService = rulesService;
         _playerService = playerService;
+        _roomLister = roomLister;
         _hostSessionFactory = hostSessionFactory;
         _clientSessionFactory = clientSessionFactory;
         _clipboardService = clipboardService;
 
-        SelectHostCommand = new SimpleCommand(() => SetMode(true));
-        SelectJoinCommand = new SimpleCommand(() => SetMode(false));
         CreateRoomCommand = new AsyncCommand(CreateRoomAsync);
         CopyCodeCommand = new AsyncCommand(() => _clipboardService.SetTextAsync(RoomCode ?? string.Empty));
+        RefreshRoomsCommand = new AsyncCommand(() => RefreshRoomsAsync(_lifetimeCancellation.Token));
         JoinCommand = new AsyncCommand(JoinAsync);
         ReadyCommand = new SimpleCommand(Ready);
         StartGameCommand = new SimpleCommand(StartGame);
         AddBotCommand = new SimpleCommand(() => { });
         AddHumanCommand = new SimpleCommand(() => { });
+        LoadRules();
     }
 
     public ObservableCollection<RuleViewModel> Rules { get; } = new();
 
     public ObservableCollection<PlayerViewModel> Players { get; } = new();
 
-    public ICommand SelectHostCommand { get; }
-    public ICommand SelectJoinCommand { get; }
+    /// <summary>Open rooms reported by the relay hub, offered for joining.</summary>
+    public ObservableCollection<RoomViewModel> Rooms { get; } = new();
+
     public ICommand CreateRoomCommand { get; }
     public ICommand CopyCodeCommand { get; }
+    public ICommand RefreshRoomsCommand { get; }
     public ICommand JoinCommand { get; }
     public ICommand ReadyCommand { get; }
     public ICommand StartGameCommand { get; }
@@ -95,9 +97,9 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
 
     public OnlineLobbyState State
     {
-        get => _state;
-        private set => SetProperty(ref _state, value);
-    }
+        get;
+        private set => SetProperty(ref field, value);
+    } = OnlineLobbyState.Browse;
 
     public string Title => _localizationService.GetString("NewOnlineGameAction");
     public string PlayersTitle => _localizationService.GetString("PlayersLabel");
@@ -119,40 +121,29 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
     public string CurrentPlayerImage => string.IsNullOrEmpty(_playerService.CurrentPlayer?.ProfileImage)
         ? "SanetDice.png"
         : _playerService.CurrentPlayer.ProfileImage;
-    public string HostGameLabel => _localizationService.GetString("HostGameLabel");
     public string JoinGameLabel => _localizationService.GetString("JoinGameLabel");
     public string RulesTitle => _localizationService.GetString("RulesLabel").ToUpper();
     public string CreateRoomLabel => _localizationService.GetString("CreateRoomLabel");
     public string RoomCodeLabel => _localizationService.GetString("RoomCodeLabel");
     public string CopyCodeLabel => _localizationService.GetString("CopyCodeLabel");
-    public string EnterRoomCodePlaceholder => _localizationService.GetString("EnterRoomCodePlaceholder");
-    public string InvalidRoomCodeMessage => _localizationService.GetString("InvalidRoomCodeMessage");
+    public string RoomsTitle => _localizationService.GetString("RoomsLabel");
+    public string RefreshRoomsLabel => _localizationService.GetString("RefreshRoomsLabel");
+    public string NoRoomsMessage => _localizationService.GetString("NoRoomsMessage");
     public string ReadyLabel => _localizationService.GetString("ReadyLabel");
     public string StartLabel => _localizationService.GetString("StartGameButton");
     public string StartImage => "Start.png";
     public string BackImage => "Back.png";
 
-    public bool IsCreateMode
-    {
-        get => _isCreateMode;
-        set => SetMode(value);
-    }
-
-    public bool IsModeSelectionVisible => State is OnlineLobbyState.ChooseMode
-        or OnlineLobbyState.HostSetup
-        or OnlineLobbyState.JoinSetup
-        or OnlineLobbyState.Failed;
-
     public string? RoomCode { get; private set; }
 
-    public string JoinCode
+    /// <summary>The room currently picked in the room list, or <c>null</c> when nothing is picked.</summary>
+    public RoomViewModel? SelectedRoom
     {
-        get => _joinCode;
+        get;
         set
         {
-            SetProperty(ref _joinCode, value ?? string.Empty);
+            SetProperty(ref field, value);
             NotifyPropertyChanged(nameof(CanJoin));
-            NotifyPropertyChanged(nameof(IsJoinCodeInvalid));
         }
     }
 
@@ -167,11 +158,48 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
         }
     }
 
-    public bool CanJoin => RoomCodePattern.IsMatch(JoinCode.Trim());
+    public bool CanJoin => State is OnlineLobbyState.Browse or OnlineLobbyState.Failed
+                           && SelectedRoom?.CanJoin == true;
 
-    public bool IsJoinCodeInvalid => !string.IsNullOrWhiteSpace(JoinCode) && !CanJoin;
+    /// <summary>
+    /// The room list is offered whenever no session is running yet, so it is already
+    /// populated on page load and stays available while picking a room or setting up a new one.
+    /// </summary>
+    public bool IsRoomsVisible => State is OnlineLobbyState.Browse or OnlineLobbyState.Failed;
 
-    public bool CanCreate => State == OnlineLobbyState.HostSetup;
+    public bool IsRoomsLoading
+    {
+        get;
+        private set
+        {
+            SetProperty(ref field, value);
+            NotifyPropertyChanged(nameof(HasNoRoomsMessage));
+        }
+    }
+
+    /// <summary>
+    /// Reason the room list could not be loaded, or <c>null</c> when the last load succeeded.
+    /// Shown in place of the list; a stale list is cleared so a failure never shows rooms as
+    /// if they were current.
+    /// </summary>
+    public string? RoomsErrorMessage
+    {
+        get;
+        private set
+        {
+            SetProperty(ref field, value);
+            NotifyPropertyChanged(nameof(HasRoomsError));
+        }
+    }
+
+    public bool HasRoomsError => !string.IsNullOrEmpty(RoomsErrorMessage);
+
+    public bool HasRooms => Rooms.Count > 0;
+
+    public bool HasNoRoomsMessage => IsRoomsVisible && !IsRoomsLoading && !HasRoomsError && Rooms.Count == 0;
+
+    public bool CanCreate => State is OnlineLobbyState.Browse or OnlineLobbyState.Failed
+                             && SelectedRule != null;
 
     public bool CanAddBot => false;
 
@@ -185,9 +213,10 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
 
     public string AddPlayerImage => string.Empty;
 
-    public bool IsRulesEditable => State == OnlineLobbyState.HostSetup;
+    public bool IsRulesEditable => State is OnlineLobbyState.Browse or OnlineLobbyState.Failed;
 
-    public bool CanCopyCode => State == OnlineLobbyState.Hosting && !string.IsNullOrEmpty(RoomCode);
+    public bool CanCopyCode => (State == OnlineLobbyState.Hosting || State == OnlineLobbyState.Joined)
+                               && !string.IsNullOrEmpty(RoomCode);
 
     public bool CanStartGame => State == OnlineLobbyState.Hosting
                                 && _hostSession?.Game is { Players.Count: >= 2 } game
@@ -197,15 +226,30 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
     public bool CanReady => State == OnlineLobbyState.Joined
                             && _clientSession?.LocalPlayer is { IsReady: false };
 
-    public bool IsChooseMode => State == OnlineLobbyState.ChooseMode;
-    public bool IsHostSetup => State == OnlineLobbyState.HostSetup;
+    public bool IsBrowse => State == OnlineLobbyState.Browse;
     public bool IsCreating => State == OnlineLobbyState.Creating;
     public bool IsHosting => State == OnlineLobbyState.Hosting;
-    public bool IsJoinSetup => State == OnlineLobbyState.JoinSetup;
     public bool IsJoining => State == OnlineLobbyState.Joining;
     public bool IsJoined => State == OnlineLobbyState.Joined;
     public bool IsStarted => State == OnlineLobbyState.Started;
     public bool IsFailed => State == OnlineLobbyState.Failed;
+
+    /// <summary>
+    /// The joined-room info (code, copy, ready) replaces the room list once a session
+    /// is created or joined, regardless of whether this player hosts or joined.
+    /// </summary>
+    public bool IsRoomInfoVisible => State is OnlineLobbyState.Creating
+        or OnlineLobbyState.Hosting
+        or OnlineLobbyState.Joining
+        or OnlineLobbyState.Joined
+        or OnlineLobbyState.Started;
+
+    /// <summary>
+    /// The status line belongs to the view, not to either fragment: it is shown for the whole
+    /// session lifecycle - the waiting/started messages next to the room info and the session
+    /// error next to the room list.
+    /// </summary>
+    public bool IsStatusVisible => IsFailed || IsRoomInfoVisible;
 
     public string StatusMessage => _failureMessage
                                    ?? State switch
@@ -226,7 +270,8 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
         base.AttachHandlers();
         _synchronizationContext = SynchronizationContext.Current;
         _lifetimeCancellation = new CancellationTokenSource();
-        SetMode(true);
+        ChangeState(OnlineLobbyState.Browse);
+        RefreshRooms();
     }
 
     public override void DetachHandlers()
@@ -243,20 +288,102 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
         State = state;
         if (state != OnlineLobbyState.Failed)
             _failureMessage = null;
-        if (state is OnlineLobbyState.HostSetup or OnlineLobbyState.JoinSetup)
+        if (state is OnlineLobbyState.Browse or OnlineLobbyState.Failed)
             LoadRules();
         NotifyStateChanged();
     }
 
-    private void SetMode(bool createMode)
+    private bool _isRefreshPending;
+
+    /// <summary>
+    /// Fire-and-forget room-list refresh; safe to call before the view model is attached, where
+    /// <see cref="_lifetimeCancellation"/> is still the field initializer's token.
+    /// A request made while a listing is still in flight (e.g. one just cancelled with the
+    /// lobby) is deferred until <see cref="ApplyRooms"/> releases the guard.
+    /// </summary>
+    private void RefreshRooms()
     {
-        if (_isCreateMode != createMode)
+        if (IsRoomsLoading)
         {
-            _isCreateMode = createMode;
-            NotifyPropertyChanged(nameof(IsCreateMode));
+            _isRefreshPending = true;
+            return;
+        }
+        _ = RefreshRoomsAsync(_lifetimeCancellation.Token);
+    }
+
+    private async Task RefreshRoomsAsync(CancellationToken cancellationToken)
+    {
+        // Concurrent loads are never started: guard any trigger (attach, join mode, refresh button)
+        // so a slower earlier listing can never replace a newer one or hide the loading state.
+        if (IsRoomsLoading)
+            return;
+
+        IsRoomsLoading = true;
+
+        RelayRoomListResult? result = null;
+        try
+        {
+            result = await _roomLister.ListRoomsAsync(cancellationToken);
+        }
+        catch (OperationCanceledException)
+        {
+            // The lobby is going away; the current list is left alone.
+        }
+        catch (Exception exception)
+        {
+            var message = string.IsNullOrWhiteSpace(exception.Message)
+                ? _localizationService.GetString("RoomsUnavailableMessage")
+                : exception.Message;
+            result = RelayRoomListResult.Failed(message);
         }
 
-        ChangeState(createMode ? OnlineLobbyState.HostSetup : OnlineLobbyState.JoinSetup);
+        var outcome = result;
+        PostToContext(() => ApplyRooms(outcome));
+    }
+
+    /// <summary>
+    /// Swaps the visible list for the latest listing. Marshalled to the attaching thread because
+    /// <see cref="Rooms"/> is bound; a failed listing empties the list so stale rooms are never
+    /// offered as if they were current.
+    /// </summary>
+    private void ApplyRooms(RelayRoomListResult? result)
+    {
+        // A null result means the listing was cancelled because the lobby went away; the last
+        // known list is deliberately left in place rather than being wiped.
+        if (result == null)
+        {
+            IsRoomsLoading = false;
+            StartPendingRefresh();
+            return;
+        }
+
+        RoomsErrorMessage = result.Success
+            ? null
+            : string.IsNullOrWhiteSpace(result.Error)
+                ? _localizationService.GetString("RoomsUnavailableMessage")
+                : result.Error;
+
+        RebuildRooms(result.Rooms);
+
+        IsRoomsLoading = false;
+        NotifyPropertyChanged(nameof(HasRooms));
+        NotifyPropertyChanged(nameof(HasNoRoomsMessage));
+        StartPendingRefresh();
+    }
+
+    private void StartPendingRefresh()
+    {
+        if (!_isRefreshPending)
+            return;
+        _isRefreshPending = false;
+        RefreshRooms();
+    }
+
+    private void RebuildRooms(IReadOnlyList<RelayRoomInfo> rooms)
+    {
+        Rooms.Clear();
+        foreach (var room in rooms)
+            Rooms.Add(new RoomViewModel(room, _localizationService));
     }
 
     private void LoadRules()
@@ -309,8 +436,8 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
 
     private async Task JoinAsync()
     {
-        var roomCode = JoinCode.Trim();
-        if (!RoomCodePattern.IsMatch(roomCode))
+        var roomCode = SelectedRoom?.RoomCode;
+        if (string.IsNullOrEmpty(roomCode) || !RoomCodePattern.IsMatch(roomCode))
         {
             NotifyStateChanged();
             return;
@@ -475,22 +602,24 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
 
     private void NotifyStateChanged()
     {
-        NotifyPropertyChanged(nameof(IsChooseMode));
-        NotifyPropertyChanged(nameof(IsHostSetup));
+        NotifyPropertyChanged(nameof(IsBrowse));
         NotifyPropertyChanged(nameof(IsCreating));
         NotifyPropertyChanged(nameof(IsHosting));
-        NotifyPropertyChanged(nameof(IsJoinSetup));
         NotifyPropertyChanged(nameof(IsJoining));
         NotifyPropertyChanged(nameof(IsJoined));
         NotifyPropertyChanged(nameof(IsStarted));
         NotifyPropertyChanged(nameof(IsFailed));
+        NotifyPropertyChanged(nameof(IsRoomInfoVisible));
+        NotifyPropertyChanged(nameof(IsRoomsVisible));
+        NotifyPropertyChanged(nameof(IsStatusVisible));
         NotifyPropertyChanged(nameof(StatusMessage));
         NotifyPropertyChanged(nameof(CanCreate));
+        NotifyPropertyChanged(nameof(CanJoin));
         NotifyPropertyChanged(nameof(CanCopyCode));
         NotifyPropertyChanged(nameof(CanStartGame));
         NotifyPropertyChanged(nameof(CanReady));
         NotifyPropertyChanged(nameof(IsRulesEditable));
-        NotifyPropertyChanged(nameof(IsModeSelectionVisible));
+        NotifyPropertyChanged(nameof(HasNoRoomsMessage));
         NotifyPropertyChanged(nameof(CurrentPlayerName));
         NotifyPropertyChanged(nameof(CurrentPlayerTypeName));
         NotifyPropertyChanged(nameof(CurrentPlayerImage));

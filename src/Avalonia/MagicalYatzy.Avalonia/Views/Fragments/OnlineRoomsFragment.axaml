@@ -1,0 +1,50 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy.Core"
+             xmlns:wrappers="clr-namespace:Sanet.MagicalYatzy.ViewModels.ObservableWrappers;assembly=MagicalYatzy.Core"
+             xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="300"
+             x:DataType="viewModels:OnlineLobbyViewModel"
+             x:Class="Sanet.MagicalYatzy.Avalonia.Views.Fragments.OnlineRoomsFragment">
+    <StackPanel Spacing="6">
+        <Grid ColumnDefinitions="*,Auto">
+            <Label Content="{Binding RoomsTitle}" Classes="caption" HorizontalAlignment="Left" />
+            <templatedControls:ActionButton Grid.Column="1"
+                Content="{Binding RefreshRoomsLabel}"
+                Command="{Binding RefreshRoomsCommand}"
+                IsEnabled="{Binding !IsRoomsLoading}" />
+        </Grid>
+        <ProgressBar IsIndeterminate="True"
+                     Classes="description"
+                     IsVisible="{Binding IsRoomsLoading}" />
+        <TextBlock Text="{Binding RoomsErrorMessage}" Classes="description" TextWrapping="Wrap" IsVisible="{Binding HasRoomsError}" />
+        <TextBlock Text="{Binding NoRoomsMessage}" Classes="description" TextWrapping="Wrap" IsVisible="{Binding HasNoRoomsMessage}" />
+        <ListBox ItemsSource="{Binding Rooms}"
+                 SelectedItem="{Binding SelectedRoom}"
+                 Background="Transparent">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="wrappers:RoomViewModel">
+                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto" Margin="8,6">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding RoomCode}" FontWeight="Bold" />
+                        <TextBlock Grid.Row="0" Grid.Column="1" Classes="description" Text="{Binding PlayersText}" />
+                        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" Classes="description" Text="{Binding RulesText}" TextWrapping="Wrap" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Grid ColumnDefinitions="*,*" Margin="8,6" ColumnSpacing="8">
+            <templatedControls:ActionButton Grid.Column="0"
+                Content="{Binding CreateRoomLabel}"
+                Command="{Binding CreateRoomCommand}"
+                IsEnabled="{Binding CanCreate}"
+                ImageSource="{Binding StartImage}" />
+            <templatedControls:ActionButton Grid.Column="1"
+                Content="{Binding JoinGameLabel}"
+                Command="{Binding JoinCommand}"
+                IsEnabled="{Binding CanJoin}"
+                ImageSource="{Binding StartImage}" />
+        </Grid>
+    </StackPanel>
+</UserControl>

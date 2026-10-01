@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AsyncAwaitBestPractices.MVVM;
@@ -8,7 +10,9 @@ using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Online;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.Services.Game;
+using Sanet.MagicalYatzy.Services.Relay;
 using Sanet.MagicalYatzy.ViewModels;
+using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
 using Shouldly;
 using Xunit;
 
@@ -20,64 +24,40 @@ public sealed class OnlineLobbyViewModelTests
     private readonly IRulesService _rules = Substitute.For<IRulesService>();
     private readonly IPlayerService _players = Substitute.For<IPlayerService>();
     private readonly IClipboardService _clipboard = Substitute.For<IClipboardService>();
+    private readonly IRelayRoomLister _roomLister = Substitute.For<IRelayRoomLister>();
     private readonly OnlineLobbyViewModel _sut;
 
     public OnlineLobbyViewModelTests()
     {
         _rules.GetAllRules().Returns(new[] { Rules.krSimple, Rules.krStandard });
+        _localization.GetString("RoomPlayersFormat").Returns("{0}/{1} players");
+        _localization.GetString("krMagic").Returns("Magic");
+        _roomLister.ListRoomsAsync(Arg.Any<CancellationToken>()).Returns(RelayRoomListResult.Succeeded([]));
         _sut = new OnlineLobbyViewModel(
             Substitute.For<IDicePanel>(),
             _localization,
             _rules,
             _players,
+            _roomLister,
             Substitute.For<Func<IOnlineHostSession>>(),
             Substitute.For<Func<IOnlineClientSession>>(),
             _clipboard);
     }
 
     [Fact]
-    public void HostMode_LoadsRulesAndSelectsSimpleByDefault()
+    public void Browse_LoadsRulesAndSelectsSimpleByDefault()
     {
-        _sut.SelectHostCommand.Execute(null);
-
-        _sut.State.ShouldBe(OnlineLobbyState.HostSetup);
+        _sut.State.ShouldBe(OnlineLobbyState.Browse);
         _sut.Rules.Count.ShouldBe(2);
         _sut.SelectedRule!.Rule.ShouldBe(Rules.krSimple);
     }
 
-    [Theory]
-    [InlineData("")]
-    [InlineData("abc12")]
-    [InlineData("abc1234")]
-    [InlineData("abc-12")]
-    public void JoinCode_InvalidValues_CannotJoin(string code)
+    [Fact]
+    public void Browse_StartsWithNoRoomSelectedAndCannotJoin()
     {
-        _sut.JoinCode = code;
-
+        _sut.State.ShouldBe(OnlineLobbyState.Browse);
+        _sut.SelectedRoom.ShouldBeNull();
         _sut.CanJoin.ShouldBeFalse();
-    }
-
-    [Fact]
-    public void JoinCode_TrimmedSixCharacterValue_CanJoinWithoutChangingCase()
-    {
-        _sut.JoinCode = " Abc123 ";
-
-        _sut.CanJoin.ShouldBeTrue();
-        _sut.JoinCode.ShouldBe(" Abc123 ");
-    }
-
-    [Fact]
-    public void JoinMode_LoadsRulesButKeepsThemReadOnly()
-    {
-        _sut.SelectJoinCommand.Execute(null);
-
-        _sut.State.ShouldBe(OnlineLobbyState.JoinSetup);
-        _sut.Rules.Count.ShouldBe(2);
-        _sut.IsRulesEditable.ShouldBeFalse();
-
-        _sut.SelectHostCommand.Execute(null);
-
-        _sut.IsRulesEditable.ShouldBeTrue();
     }
 
     [Fact]
@@ -91,11 +71,33 @@ public sealed class OnlineLobbyViewModelTests
 
         player.Name.ShouldBe("Renamed");
 
-        _sut.SelectHostCommand.Execute(null);
-        _sut.SelectJoinCommand.Execute(null);
-
         _sut.CurrentPlayerName.ShouldBe("Renamed");
         player.Name.ShouldBe("Renamed");
+    }
+
+    [Fact]
+    public void Browse_HasNoStatusToShow()
+    {
+        _sut.IsStatusVisible.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task Hosting_ShowsTheWaitingStatus()
+    {
+        var hostSession = Substitute.For<IOnlineHostSession>();
+        hostSession.Game.Returns(new YatzyServerGame());
+        hostSession
+            .HostAsync(Arg.Any<Rules>(), Arg.Any<CancellationToken>())
+            .Returns(OnlineHostResult.Succeeded("ABC123"));
+        var sut = CreateViewModel(() => hostSession, () => Substitute.For<IOnlineClientSession>());
+        sut.AttachHandlers();
+
+        await ((IAsyncCommand) sut.CreateRoomCommand).ExecuteAsync();
+
+        sut.State.ShouldBe(OnlineLobbyState.Hosting);
+        sut.IsStatusVisible.ShouldBeTrue();
+        sut.IsRoomInfoVisible.ShouldBeTrue();
+        sut.IsRoomsVisible.ShouldBeFalse();
     }
 
     [Fact]
@@ -131,7 +133,9 @@ public sealed class OnlineLobbyViewModelTests
         sut.AttachHandlers();
         sut.DetachHandlers();
         sut.AttachHandlers();
-        sut.JoinCode = "ABC123";
+
+        WaitForRooms(sut, 0).GetAwaiter().GetResult();
+        sut.SelectedRoom = new RoomViewModel(new RelayRoomInfo("ABC123", 1, Rules.krSimple), _localization);
 
         await ((IAsyncCommand) sut.JoinCommand).ExecuteAsync();
 
@@ -158,6 +162,235 @@ public sealed class OnlineLobbyViewModelTests
         hostToken.Value.IsCancellationRequested.ShouldBeTrue();
     }
 
+    [Fact]
+    public async Task AttachingLoadsRoomsEvenBeforeJoinModeIsPicked()
+    {
+        _roomLister.ListRoomsAsync(Arg.Any<CancellationToken>()).Returns(RelayRoomListResult.Succeeded(
+            [new RelayRoomInfo("ABC123", 1, Rules.krMagic)]));
+
+        var sut = CreateViewModel(
+            () => Substitute.For<IOnlineHostSession>(),
+            () => Substitute.For<IOnlineClientSession>());
+        sut.AttachHandlers();
+
+        await WaitForRooms(sut, 1);
+
+        sut.Rooms.Single().RoomCode.ShouldBe("ABC123");
+        sut.Rooms.Single().PlayersText.ShouldBe("1/4 players");
+        sut.Rooms.Single().RulesText.ShouldBe("Magic");
+    }
+
+    [Fact]
+    public async Task RefreshingReplacesThePreviousListing()
+    {
+        _roomLister.ListRoomsAsync(Arg.Any<CancellationToken>()).Returns(RelayRoomListResult.Succeeded(
+            [new RelayRoomInfo("AAA111", 1, Rules.krSimple),
+             new RelayRoomInfo("BBB222", 2, Rules.krStandard)]));
+        var sut = CreateViewModel(
+            () => Substitute.For<IOnlineHostSession>(),
+            () => Substitute.For<IOnlineClientSession>());
+        sut.AttachHandlers();
+        await WaitForRooms(sut, 2);
+
+        _roomLister.ListRoomsAsync(Arg.Any<CancellationToken>()).Returns(RelayRoomListResult.Succeeded(
+            [new RelayRoomInfo("CCC333", 3, Rules.krExtended)]));
+        await ((IAsyncCommand) sut.RefreshRoomsCommand).ExecuteAsync();
+
+        await WaitForRooms(sut, 1);
+        sut.Rooms.Single().RoomCode.ShouldBe("CCC333");
+    }
+
+    [Fact]
+    public async Task FullRoomsAreNotJoinable()
+    {
+        _roomLister.ListRoomsAsync(Arg.Any<CancellationToken>()).Returns(RelayRoomListResult.Succeeded(
+            [new RelayRoomInfo("FULL01", 4, Rules.krSimple)]));
+        var sut = CreateViewModel(
+            () => Substitute.For<IOnlineHostSession>(),
+            () => Substitute.For<IOnlineClientSession>());
+        sut.AttachHandlers();
+
+        await WaitForRooms(sut, 1);
+
+        sut.Rooms.Single().CanJoin.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task FailedListingShowsTheErrorAndClearsStaleRooms()
+    {
+        _roomLister.ListRoomsAsync(Arg.Any<CancellationToken>()).Returns(RelayRoomListResult.Succeeded(
+            [new RelayRoomInfo("AAA111", 1, Rules.krSimple)]));
+        var sut = CreateViewModel(
+            () => Substitute.For<IOnlineHostSession>(),
+            () => Substitute.For<IOnlineClientSession>());
+        sut.AttachHandlers();
+        await WaitForRooms(sut, 1);
+
+        _roomLister.ListRoomsAsync(Arg.Any<CancellationToken>()).Returns(RelayRoomListResult.Failed("hub down"));
+        await ((IAsyncCommand) sut.RefreshRoomsCommand).ExecuteAsync();
+
+        await WaitForRooms(sut, 0);
+        sut.RoomsErrorMessage.ShouldBe("hub down");
+        sut.HasRoomsError.ShouldBeTrue();
+        sut.IsRoomsLoading.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task SelectingARoomOnlyMakesTheCodeAvailableForJoining()
+    {
+        _roomLister.ListRoomsAsync(Arg.Any<CancellationToken>()).Returns(RelayRoomListResult.Succeeded(
+            [new RelayRoomInfo("JOIN12", 1, Rules.krSimple)]));
+        var clientSession = Substitute.For<IOnlineClientSession>();
+        var sut = CreateViewModel(
+            () => Substitute.For<IOnlineHostSession>(),
+            () => clientSession);
+        sut.AttachHandlers();
+        await WaitForRooms(sut, 1);
+
+        sut.SelectedRoom = sut.Rooms.Single();
+
+        sut.SelectedRoom.RoomCode.ShouldBe("JOIN12");
+        sut.CanJoin.ShouldBeTrue();
+        sut.State.ShouldBe(OnlineLobbyState.Browse);
+        await clientSession.DidNotReceive().JoinAsync(Arg.Any<string>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task RefreshWhileAnotherRefreshIsRunning_IsIgnored()
+    {
+        var tcs = new TaskCompletionSource<RelayRoomListResult>();
+        _roomLister.ListRoomsAsync(Arg.Any<CancellationToken>())
+            .Returns(tcs.Task);
+        var sut = CreateViewModel(
+            () => Substitute.For<IOnlineHostSession>(),
+            () => Substitute.For<IOnlineClientSession>());
+        sut.AttachHandlers();
+        await Task.Yield();
+        sut.IsRoomsLoading.ShouldBeTrue();
+
+        await ((IAsyncCommand) sut.RefreshRoomsCommand).ExecuteAsync();
+
+        _roomLister.ReceivedCalls().Count().ShouldBe(1);
+        tcs.SetResult(RelayRoomListResult.Succeeded([new RelayRoomInfo("AAA111", 1, Rules.krSimple)]));
+        await WaitForRooms(sut, 1);
+        sut.IsRoomsLoading.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task FailedSession_KeepsBrowseActionsAvailableForRetry()
+    {
+        var hostSession = Substitute.For<IOnlineHostSession>();
+        hostSession
+            .HostAsync(Arg.Any<Rules>(), Arg.Any<CancellationToken>())
+            .Returns(OnlineHostResult.Failed(null, "host down"));
+        var sut = CreateViewModel(() => hostSession, () => Substitute.For<IOnlineClientSession>());
+        sut.AttachHandlers();
+
+        await ((IAsyncCommand) sut.CreateRoomCommand).ExecuteAsync();
+
+        sut.State.ShouldBe(OnlineLobbyState.Failed);
+        sut.IsFailed.ShouldBeTrue();
+        sut.IsStatusVisible.ShouldBeTrue();
+        sut.IsRoomInfoVisible.ShouldBeFalse();
+        sut.IsRoomsVisible.ShouldBeTrue();
+        sut.CanCreate.ShouldBeTrue();
+        sut.IsRulesEditable.ShouldBeTrue();
+        sut.CanJoin.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task FailedSession_CanJoinSelectedRoomWithoutReopeningTheLobby()
+    {
+        var hostSession = Substitute.For<IOnlineHostSession>();
+        hostSession
+            .HostAsync(Arg.Any<Rules>(), Arg.Any<CancellationToken>())
+            .Returns(OnlineHostResult.Failed(null, "host down"));
+        var sut = CreateViewModel(() => hostSession, () => Substitute.For<IOnlineClientSession>());
+        sut.AttachHandlers();
+        await ((IAsyncCommand) sut.CreateRoomCommand).ExecuteAsync();
+        sut.State.ShouldBe(OnlineLobbyState.Failed);
+
+        sut.SelectedRoom = new RoomViewModel(new RelayRoomInfo("ABC123", 1, Rules.krSimple), _localization);
+
+        sut.CanJoin.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task RefreshWhileCancelledListingIsInFlight_IsDeferredUntilItApplies()
+    {
+        var firstListingTcs = new TaskCompletionSource<RelayRoomListResult>(
+            TaskCreationOptions.RunContinuationsAsynchronously);
+        var callCount = 0;
+        var tokens = new List<CancellationToken>();
+        _roomLister.ListRoomsAsync(Arg.Do<CancellationToken>(token => tokens.Add(token)))
+            .Returns(_ => ++callCount == 1
+                ? firstListingTcs.Task
+                : Task.FromResult(RelayRoomListResult.Succeeded(
+                    [new RelayRoomInfo("CCC333", 1, Rules.krSimple)])));
+        var sut = CreateViewModel(
+            () => Substitute.For<IOnlineHostSession>(),
+            () => Substitute.For<IOnlineClientSession>());
+
+        sut.AttachHandlers();
+        await Task.Yield();
+        sut.IsRoomsLoading.ShouldBeTrue();
+
+        sut.DetachHandlers();
+        sut.AttachHandlers();
+
+        // The reattachment refresh is deferred: the cancelled listing still holds the guard.
+        callCount.ShouldBe(1);
+        tokens.Count.ShouldBe(1);
+
+        // Completing the stale listing releases the guard and runs the deferred refresh.
+        firstListingTcs.SetResult(RelayRoomListResult.Succeeded(
+            [new RelayRoomInfo("AAA111", 1, Rules.krSimple)]));
+        await WaitForRooms(sut, 1);
+
+        callCount.ShouldBe(2);
+        tokens.Count.ShouldBe(2);
+        tokens[1].IsCancellationRequested.ShouldBeFalse();
+        sut.Rooms.Single().RoomCode.ShouldBe("CCC333");
+        sut.IsRoomsLoading.ShouldBeFalse();
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task FailedListingWithMissingError_ShowsLocalizedUnavailableMessage(string? error)
+    {
+        _localization.GetString("RoomsUnavailableMessage").Returns("unavailable");
+        _roomLister.ListRoomsAsync(Arg.Any<CancellationToken>())
+            .Returns(RelayRoomListResult.Failed(error));
+        var sut = CreateViewModel(
+            () => Substitute.For<IOnlineHostSession>(),
+            () => Substitute.For<IOnlineClientSession>());
+        sut.AttachHandlers();
+
+        await WaitForError(sut);
+
+        sut.RoomsErrorMessage.ShouldBe("unavailable");
+    }
+
+    private static async Task WaitForError(OnlineLobbyViewModel sut)
+    {
+        var limit = DateTime.UtcNow + TimeSpan.FromSeconds(5);
+        while (sut.RoomsErrorMessage == null && DateTime.UtcNow < limit)
+            await Task.Delay(10);
+
+        sut.RoomsErrorMessage.ShouldNotBeNull();
+    }
+
+    private static async Task WaitForRooms(OnlineLobbyViewModel sut, int expected)
+    {
+        var limit = DateTime.UtcNow + TimeSpan.FromSeconds(5);
+        while (sut.Rooms.Count != expected && DateTime.UtcNow < limit)
+            await Task.Delay(10);
+
+        sut.Rooms.Count.ShouldBe(expected);
+    }
+
     private OnlineLobbyViewModel CreateViewModel(
         Func<IOnlineHostSession> hostSessionFactory,
         Func<IOnlineClientSession> clientSessionFactory) =>
@@ -166,6 +399,7 @@ public sealed class OnlineLobbyViewModelTests
             _localization,
             _rules,
             _players,
+            _roomLister,
             hostSessionFactory,
             clientSessionFactory,
             _clipboard);

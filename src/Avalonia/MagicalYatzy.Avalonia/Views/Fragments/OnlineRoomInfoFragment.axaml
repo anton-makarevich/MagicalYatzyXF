@@ -1,0 +1,21 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy.Core"
+             xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="240"
+             x:DataType="viewModels:OnlineLobbyViewModel"
+             x:Class="Sanet.MagicalYatzy.Avalonia.Views.Fragments.OnlineRoomInfoFragment">
+    <StackPanel Spacing="8">
+        <TextBlock Text="{Binding RoomCodeLabel}" FontWeight="Bold" />
+        <TextBlock Text="{Binding RoomCode}" FontSize="28" HorizontalAlignment="Center" />
+        <templatedControls:ActionButton Content="{Binding CopyCodeLabel}"
+                                        Command="{Binding CopyCodeCommand}"
+                                        IsVisible="{Binding CanCopyCode}" />
+        <templatedControls:ActionButton Content="{Binding ReadyLabel}"
+                                        Command="{Binding ReadyCommand}"
+                                        IsVisible="{Binding CanReady}"
+                                        ImageSource="{Binding StartImage}" />
+    </StackPanel>
+</UserControl>

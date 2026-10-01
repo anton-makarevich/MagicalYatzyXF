@@ -13,6 +13,7 @@ using Sanet.MagicalYatzy.Online.Commands.Server;
 using Sanet.MagicalYatzy.Services.Game;
 using Sanet.MagicalYatzy.Services.Relay;
 using Sanet.Transport;
+using Sanet.Transport.Relay.Contracts;
 using Sanet.Transport.SignalR.Client.Relay;
 using Shouldly;
 
@@ -424,12 +425,12 @@ public sealed class OnlineGameHarness : IAsyncDisposable
 
     private void SetupRelayCalls()
     {
-        _relayRoomClient.Create(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+        _relayRoomClient.Create(Arg.Any<RoomGameInfo>(), Arg.Any<CancellationToken>(), Arg.Any<RelayClientOptions>())
             .Returns(_ => Task.FromResult(RoomSessionResult.Succeeded(
-                RoomCode, "host-session-token", "Host", Guid.NewGuid(), Guid.NewGuid())));
-        _relayRoomClient.Join(RoomCode, Arg.Any<string?>(), Arg.Any<CancellationToken>())
+                RoomCode, "host-session-token", "Host", Guid.NewGuid(), TestGameInfo.Create())));
+        _relayRoomClient.Join(RoomCode, Arg.Any<string?>(), Arg.Any<CancellationToken>(), Arg.Any<RelayClientOptions>())
             .Returns(_ => Task.FromResult(RoomSessionResult.Succeeded(
-                RoomCode, "guest-session-token", "Guest", Guid.NewGuid(), Guid.NewGuid())));
+                RoomCode, "guest-session-token", "Guest", Guid.NewGuid(), TestGameInfo.Create())));
         _relayRoomClient.GetRelayTicket(RoomCode, Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(_ => Task.FromResult(RelayTicketResult.Succeeded(
                 "relay-ticket", DateTimeOffset.UtcNow.AddMinutes(10))));

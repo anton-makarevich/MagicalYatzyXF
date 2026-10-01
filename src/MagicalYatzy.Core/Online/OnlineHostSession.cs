@@ -25,7 +25,7 @@ namespace Sanet.MagicalYatzy.Online;
 /// </summary>
 public sealed class OnlineHostSession : IOnlineHostSession
 {
-    private const int MaxPlayers = 4;
+    private const int MaxPlayers = OnlineGameInfo.MaxPlayers;
 
     private readonly IRelayRoomClient _relayRoomClient;
     private readonly IRelayPublisherProvider _publisherProvider;
@@ -93,7 +93,9 @@ public sealed class OnlineHostSession : IOnlineHostSession
 
         try
         {
-            var createResult = await _relayRoomClient.Create(Guid.Parse(game.GameId), cancellationToken);
+            var createResult = await _relayRoomClient.Create(
+                OnlineGameInfo.Create(Guid.Parse(game.GameId), rule),
+                cancellationToken);
             if (!createResult.Success
                 || string.IsNullOrEmpty(createResult.RoomCode)
                 || createResult.SessionToken == null)
