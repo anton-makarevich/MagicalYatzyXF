@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -247,6 +248,81 @@ public sealed class OnlineLobbyViewModelTests
         _roomLister.ReceivedCalls().Count().ShouldBe(1);
         tcs.SetResult(RelayRoomListResult.Succeeded([new RelayRoomInfo("AAA111", 1, Rules.krSimple)]));
         await WaitForRooms(sut, 1);
+        sut.IsRoomsLoading.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task FailedSession_KeepsBrowseActionsAvailableForRetry()
+    {
+        var hostSession = Substitute.For<IOnlineHostSession>();
+        hostSession
+            .HostAsync(Arg.Any<Rules>(), Arg.Any<CancellationToken>())
+            .Returns(OnlineHostResult.Failed(null, "host down"));
+        var sut = CreateViewModel(() => hostSession, () => Substitute.For<IOnlineClientSession>());
+        sut.AttachHandlers();
+
+        await ((IAsyncCommand) sut.CreateRoomCommand).ExecuteAsync();
+
+        sut.State.ShouldBe(OnlineLobbyState.Failed);
+        sut.IsFailed.ShouldBeTrue();
+        sut.CanCreate.ShouldBeTrue();
+        sut.IsRulesEditable.ShouldBeTrue();
+        sut.CanJoin.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task FailedSession_CanJoinSelectedRoomWithoutReopeningTheLobby()
+    {
+        var hostSession = Substitute.For<IOnlineHostSession>();
+        hostSession
+            .HostAsync(Arg.Any<Rules>(), Arg.Any<CancellationToken>())
+            .Returns(OnlineHostResult.Failed(null, "host down"));
+        var sut = CreateViewModel(() => hostSession, () => Substitute.For<IOnlineClientSession>());
+        sut.AttachHandlers();
+        await ((IAsyncCommand) sut.CreateRoomCommand).ExecuteAsync();
+        sut.State.ShouldBe(OnlineLobbyState.Failed);
+
+        sut.SelectedRoom = new RoomViewModel(new RelayRoomInfo("ABC123", 1, Rules.krSimple), _localization);
+
+        sut.CanJoin.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task RefreshWhileCancelledListingIsInFlight_IsDeferredUntilItApplies()
+    {
+        var firstListingTcs = new TaskCompletionSource<RelayRoomListResult>(
+            TaskCreationOptions.RunContinuationsAsynchronously);
+        var callCount = 0;
+        var tokens = new List<CancellationToken>();
+        _roomLister.ListRoomsAsync(Arg.Do<CancellationToken>(token => tokens.Add(token)))
+            .Returns(_ => ++callCount == 1
+                ? firstListingTcs.Task
+                : Task.FromResult(RelayRoomListResult.Succeeded(
+                    [new RelayRoomInfo("CCC333", 1, Rules.krSimple)])));
+        var sut = CreateViewModel(
+            () => Substitute.For<IOnlineHostSession>(),
+            () => Substitute.For<IOnlineClientSession>());
+
+        sut.AttachHandlers();
+        await Task.Yield();
+        sut.IsRoomsLoading.ShouldBeTrue();
+
+        sut.DetachHandlers();
+        sut.AttachHandlers();
+
+        // The reattachment refresh is deferred: the cancelled listing still holds the guard.
+        callCount.ShouldBe(1);
+        tokens.Count.ShouldBe(1);
+
+        // Completing the stale listing releases the guard and runs the deferred refresh.
+        firstListingTcs.SetResult(RelayRoomListResult.Succeeded(
+            [new RelayRoomInfo("AAA111", 1, Rules.krSimple)]));
+        await WaitForRooms(sut, 1);
+
+        callCount.ShouldBe(2);
+        tokens.Count.ShouldBe(2);
+        tokens[1].IsCancellationRequested.ShouldBeFalse();
+        sut.Rooms.Single().RoomCode.ShouldBe("CCC333");
         sut.IsRoomsLoading.ShouldBeFalse();
     }
 
