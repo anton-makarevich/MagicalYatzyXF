@@ -76,6 +76,31 @@ public sealed class OnlineLobbyViewModelTests
     }
 
     [Fact]
+    public void Browse_HasNoStatusToShow()
+    {
+        _sut.IsStatusVisible.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task Hosting_ShowsTheWaitingStatus()
+    {
+        var hostSession = Substitute.For<IOnlineHostSession>();
+        hostSession.Game.Returns(new YatzyServerGame());
+        hostSession
+            .HostAsync(Arg.Any<Rules>(), Arg.Any<CancellationToken>())
+            .Returns(OnlineHostResult.Succeeded("ABC123"));
+        var sut = CreateViewModel(() => hostSession, () => Substitute.For<IOnlineClientSession>());
+        sut.AttachHandlers();
+
+        await ((IAsyncCommand) sut.CreateRoomCommand).ExecuteAsync();
+
+        sut.State.ShouldBe(OnlineLobbyState.Hosting);
+        sut.IsStatusVisible.ShouldBeTrue();
+        sut.IsRoomInfoVisible.ShouldBeTrue();
+        sut.IsRoomsVisible.ShouldBeFalse();
+    }
+
+    [Fact]
     public async Task ReattachedViewModel_HostsWithANonCancelledToken()
     {
         var hostSession = Substitute.For<IOnlineHostSession>();
@@ -265,6 +290,9 @@ public sealed class OnlineLobbyViewModelTests
 
         sut.State.ShouldBe(OnlineLobbyState.Failed);
         sut.IsFailed.ShouldBeTrue();
+        sut.IsStatusVisible.ShouldBeTrue();
+        sut.IsRoomInfoVisible.ShouldBeFalse();
+        sut.IsRoomsVisible.ShouldBeTrue();
         sut.CanCreate.ShouldBeTrue();
         sut.IsRulesEditable.ShouldBeTrue();
         sut.CanJoin.ShouldBeFalse();

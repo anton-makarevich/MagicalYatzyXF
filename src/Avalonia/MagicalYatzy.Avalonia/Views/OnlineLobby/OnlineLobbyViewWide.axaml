@@ -13,18 +13,16 @@
             TitleAlignment="Center" />
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <Grid ColumnDefinitions="*,*" ColumnSpacing="24" Margin="10">
-                <Grid Grid.Column="0" RowDefinitions="Auto,Auto,Auto" VerticalAlignment="Top">
-                    <StackPanel Spacing="8">
-                        <templatedControls:EditableMenuItem
-                            Caption="{Binding CurrentPlayerName, Mode=TwoWay}"
-                            Description="{Binding CurrentPlayerTypeName}"
-                            ImageSource="{Binding CurrentPlayerImage}" />
-                    </StackPanel>
-                    <StackPanel Grid.Row="1" Spacing="8" Margin="0,12">
-                        <fragments:OnlineRoomInfoFragment />
-                    </StackPanel>
-                    <fragments:OnlineRoomsFragment Grid.Row="2" Margin="0,12" />
-                </Grid>
+                <StackPanel Grid.Column="0" Spacing="12" VerticalAlignment="Top">
+                    <templatedControls:EditableMenuItem
+                        Caption="{Binding CurrentPlayerName, Mode=TwoWay}"
+                        Description="{Binding CurrentPlayerTypeName}"
+                        ImageSource="{Binding CurrentPlayerImage}" />
+                    <TextBlock Text="{Binding StatusMessage}" Classes="description" TextWrapping="Wrap"
+                               IsVisible="{Binding IsStatusVisible}" />
+                    <fragments:OnlineRoomInfoFragment IsVisible="{Binding IsRoomInfoVisible}" />
+                    <fragments:OnlineRoomsFragment IsVisible="{Binding IsRoomsVisible}" />
+                </StackPanel>
                 <Grid Grid.Column="1" RowDefinitions="Auto,*" VerticalAlignment="Top">
                     <Label Content="{Binding RulesTitle}" Classes="caption" HorizontalAlignment="Left" />
                     <ListBox Grid.Row="1"

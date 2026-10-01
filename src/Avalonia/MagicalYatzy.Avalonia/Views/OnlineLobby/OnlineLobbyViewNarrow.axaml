@@ -14,13 +14,15 @@
         <TabControl Grid.Row="1" TabStripPlacement="Bottom">
             <TabItem Header="{Binding PlayersTitle}">
                 <ScrollViewer>
-                        <StackPanel Spacing="12">
+                    <StackPanel Spacing="12">
                         <templatedControls:EditableMenuItem
                             Caption="{Binding CurrentPlayerName, Mode=TwoWay}"
                             Description="{Binding CurrentPlayerTypeName}"
                             ImageSource="{Binding CurrentPlayerImage}" />
-                         <fragments:OnlineRoomInfoFragment />
-                         <fragments:OnlineRoomsFragment />
+                        <TextBlock Text="{Binding StatusMessage}" Classes="description" TextWrapping="Wrap"
+                                   IsVisible="{Binding IsStatusVisible}" />
+                        <fragments:OnlineRoomInfoFragment IsVisible="{Binding IsRoomInfoVisible}" />
+                        <fragments:OnlineRoomsFragment IsVisible="{Binding IsRoomsVisible}" />
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>

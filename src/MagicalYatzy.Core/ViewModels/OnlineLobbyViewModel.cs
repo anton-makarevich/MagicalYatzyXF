@@ -244,6 +244,13 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
         or OnlineLobbyState.Joined
         or OnlineLobbyState.Started;
 
+    /// <summary>
+    /// The status line belongs to the view, not to either fragment: it is shown for the whole
+    /// session lifecycle - the waiting/started messages next to the room info and the session
+    /// error next to the room list.
+    /// </summary>
+    public bool IsStatusVisible => IsFailed || IsRoomInfoVisible;
+
     public string StatusMessage => _failureMessage
                                    ?? State switch
                                    {
@@ -604,6 +611,7 @@ public sealed class OnlineLobbyViewModel : DicePanelViewModel
         NotifyPropertyChanged(nameof(IsFailed));
         NotifyPropertyChanged(nameof(IsRoomInfoVisible));
         NotifyPropertyChanged(nameof(IsRoomsVisible));
+        NotifyPropertyChanged(nameof(IsStatusVisible));
         NotifyPropertyChanged(nameof(StatusMessage));
         NotifyPropertyChanged(nameof(CanCreate));
         NotifyPropertyChanged(nameof(CanJoin));
