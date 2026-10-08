@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Sanet.MagicalYatzy.Avalonia.DependencyInjection;
 using Sanet.MagicalYatzy.Online;
 using Sanet.MagicalYatzy.Services.Relay;
+using Sanet.MagicalYatzy.Services.StorageService;
 using Sanet.Transport.SignalR.Client.Relay;
 using Shouldly;
 using Xunit;
@@ -22,6 +23,10 @@ public class CoreServicesTests
             .Lifetime.ShouldBe(ServiceLifetime.Singleton);
         services.Single(descriptor => descriptor.ServiceType == typeof(IRelayHubConfigurationProvider))
             .Lifetime.ShouldBe(ServiceLifetime.Singleton);
+        services.Single(descriptor => descriptor.ServiceType == typeof(ISettingsStorageService))
+            .Lifetime.ShouldBe(ServiceLifetime.Singleton);
+        services.Single(descriptor => descriptor.ServiceType == typeof(ISettingsStorageService))
+            .ImplementationType.ShouldBe(typeof(FileSettingsStorageService));
         services.Single(descriptor => descriptor.ServiceType == typeof(IRelayRoomClient))
             .Lifetime.ShouldBe(ServiceLifetime.Singleton);
         services.Single(descriptor => descriptor.ServiceType == typeof(IRelayPublisherProvider))
@@ -42,11 +47,29 @@ public class CoreServicesTests
         secondHostSession.ShouldBeOfType<OnlineHostSession>();
         secondHostSession.ShouldNotBeSameAs(hostSession);
 
-        var settings = serviceProvider.GetRequiredService<IRelaySettings>();
-        settings.BaseUrl = "https://updated.example.test";
-        var configurationProvider = serviceProvider.GetRequiredService<IRelayHubConfigurationProvider>();
-        var options = await configurationProvider.GetActiveOptions();
+        services.Single(descriptor => descriptor.ServiceType == typeof(IRelayHubConfigurationProvider))
+            .ImplementationType.ShouldBe(typeof(RelayHubConfigurationProvider));
 
-        options.BaseUrl.ShouldBe("https://updated.example.test");
+        var settings = serviceProvider.GetRequiredService<IRelaySettings>();
+        settings.BaseUrl.ShouldNotBeNullOrWhiteSpace();
+    }
+
+    [Fact]
+    public void RegisterServicesKeepsPreRegisteredSettingsStorage()
+    {
+        var services = new ServiceCollection();
+        services.AddSingleton<ISettingsStorageService, InMemorySettingsStorage>();
+
+        services.RegisterServices();
+
+        services.Single(descriptor => descriptor.ServiceType == typeof(ISettingsStorageService))
+            .ImplementationType.ShouldBe(typeof(InMemorySettingsStorage));
+    }
+
+    private sealed class InMemorySettingsStorage : ISettingsStorageService
+    {
+        public Task<string?> LoadValueAsync(string key) => Task.FromResult<string?>(null);
+
+        public Task SaveValueAsync(string key, string value) => Task.CompletedTask;
     }
 }

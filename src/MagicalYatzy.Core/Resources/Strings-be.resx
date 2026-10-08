@@ -831,4 +831,64 @@
   <data name="UnknownRulesLabel" xml:space="preserve">
     <value>Невядомыя правілы</value>
   </data>
+  <data name="HubSectionTitleText" xml:space="preserve">
+    <value>Рэлей-хаб</value>
+  </data>
+  <data name="AddHubCaptionText" xml:space="preserve">
+    <value>Дадаць хаб</value>
+  </data>
+  <data name="AddHubLabel" xml:space="preserve">
+    <value>Дадаць хаб</value>
+  </data>
+  <data name="SelectHubLabel" xml:space="preserve">
+    <value>Актыўны хаб</value>
+  </data>
+  <data name="HubNameLabel" xml:space="preserve">
+    <value>Назва</value>
+  </data>
+  <data name="HubUrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="HubApiKeyLabel" xml:space="preserve">
+    <value>API-ключ</value>
+  </data>
+  <data name="EditHubLabel" xml:space="preserve">
+    <value>Змяніць</value>
+  </data>
+  <data name="SaveHubLabel" xml:space="preserve">
+    <value>Захаваць</value>
+  </data>
+  <data name="CancelHubLabel" xml:space="preserve">
+    <value>Скасаваць</value>
+  </data>
+  <data name="RemoveHubLabel" xml:space="preserve">
+    <value>Выдаліць</value>
+  </data>
+  <data name="ConfirmHubLabel" xml:space="preserve">
+    <value>Пацвердзіць</value>
+  </data>
+  <data name="RefreshHubLabel" xml:space="preserve">
+    <value>Абнавіць</value>
+  </data>
+  <data name="HubStatusOnlineText" xml:space="preserve">
+    <value>У сетцы</value>
+  </data>
+  <data name="HubStatusOfflineText" xml:space="preserve">
+    <value>Па-за сеткай</value>
+  </data>
+  <data name="HubStatusCheckingText" xml:space="preserve">
+    <value>Праверка</value>
+  </data>
+  <data name="HubStatusUnknownText" xml:space="preserve">
+    <value>Невядома</value>
+  </data>
+  <data name="HubUrlRequiredMessage" xml:space="preserve">
+    <value>Увядзіце URL хаба.</value>
+  </data>
+  <data name="HubUrlInvalidMessage" xml:space="preserve">
+    <value>Увядзіце карэктны URL (http або https).</value>
+  </data>
+  <data name="BuiltInHubLabel" xml:space="preserve">
+    <value>Убудаваны</value>
+  </data>
 </root>

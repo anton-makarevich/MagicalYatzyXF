@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging.Abstractions;
 using Sanet.Localization;
 using Sanet.Localization.Providers;
@@ -30,7 +31,8 @@ public static class CoreServices
         services.AddSingleton<IExternalNavigationService, ExternalNavigationStub>();
         services.AddSingleton<IGameSettingsService, GameSettingsService>();
         services.AddSingleton<IRelaySettings, RelaySettings>();
-        services.AddSingleton<IRelayHubConfigurationProvider, RelaySettingsHubConfigurationProvider>();
+        services.TryAddSingleton<ISettingsStorageService, FileSettingsStorageService>();
+        services.AddSingleton<IRelayHubConfigurationProvider, RelayHubConfigurationProvider>();
         services.AddSingleton<IRelayPublisherProvider, RelayPublisherProvider>();
         services.AddSingleton<Online.CommandRegistry>();
         services.AddTransient<Online.IOnlineHostSession, Online.OnlineHostSession>();

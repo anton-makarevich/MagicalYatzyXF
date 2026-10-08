@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy.Core"
+             xmlns:fragments="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.Fragments"
+             xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:DataType="viewModels:SettingsViewModel"
+             x:Class="Sanet.MagicalYatzy.Avalonia.Views.Settings.SettingsViewNarrow">
+    <Grid Margin="10,0,0,5" RowDefinitions="Auto,*">
+        <templatedControls:ToolBar
+            Grid.Row="0"
+            LeftCommand="{Binding BackCommand}"
+            LeftIcon="{Binding BackImage}"
+            Title="{Binding Title}"
+            TitleAlignment="Center" />
+        <TabControl Grid.Row="1" TabStripPlacement="Bottom">
+            <TabItem Header="{Binding Title}">
+                <ScrollViewer>
+                    <fragments:GameSettingsFragment />
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="{Binding HubSectionTitle}">
+                <ScrollViewer>
+                    <fragments:HubConfigurationFragment />
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

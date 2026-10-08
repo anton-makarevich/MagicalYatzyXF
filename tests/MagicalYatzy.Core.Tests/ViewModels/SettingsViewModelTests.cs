@@ -1,9 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using AsyncAwaitBestPractices.MVVM;
 using NSubstitute;
 using Sanet.Localization;
 using Sanet.MagicalYatzy.Models.Game;
 using Sanet.MagicalYatzy.Services;
 using Sanet.MagicalYatzy.ViewModels;
+using Sanet.MagicalYatzy.ViewModels.ObservableWrappers;
+using Sanet.MVVM.Core.Services;
+using Sanet.Transport.SignalR.Client.Relay;
 using Shouldly;
 using Xunit;
 
@@ -14,7 +22,9 @@ public class SettingsViewModelTests
     private readonly SettingsViewModel _sut;
     private readonly IGameSettingsService _gameSettingsService;
     private readonly ILocalizationService _localizationService;
-    
+    private readonly IRelayHubConfigurationProvider _hubConfigurationProvider = Substitute.For<IRelayHubConfigurationProvider>();
+    private readonly IRelayRoomClient _relayRoomClient = Substitute.For<IRelayRoomClient>();
+
     private readonly Language _defLanguage = new Language("en", true, "english");
 
     public SettingsViewModelTests()
@@ -25,7 +35,35 @@ public class SettingsViewModelTests
 
         _localizationService.Languages.Returns(new List<Language> {_defLanguage});
 
-        _sut = new SettingsViewModel(dicePanel, _gameSettingsService, _localizationService);
+        _sut = new SettingsViewModel(
+            dicePanel,
+            _gameSettingsService,
+            _localizationService,
+            _hubConfigurationProvider,
+            _relayRoomClient);
+    }
+
+    private static HubConfigData DemoHub => new("default", "Relay Hub", "http://demo.local", string.Empty, true);
+
+    private static HubConfigData CustomHub => new("custom-1", "My Hub", "http://my-hub.example", "secret", false);
+
+    private static bool HasNewGuidId(HubConfigData hub) => Guid.TryParseExact(hub.Id, "N", out _);
+
+    private void SetupProviderHubs(IReadOnlyList<HubConfigData> hubs, string activeHubId)
+    {
+        _hubConfigurationProvider.GetHubs().Returns(Task.FromResult(hubs));
+        _hubConfigurationProvider.GetActiveHubId().Returns(Task.FromResult(activeHubId));
+    }
+
+    private static async Task WaitFor(Func<bool> condition, int timeoutMs = 2000, int intervalMs = 10)
+    {
+        var start = DateTime.UtcNow;
+        while (!condition())
+        {
+            if ((DateTime.UtcNow - start).TotalMilliseconds > timeoutMs)
+                throw new TimeoutException("Condition not met within timeout");
+            await Task.Delay(intervalMs);
+        }
     }
 
     [Fact]
@@ -718,4 +756,250 @@ public class SettingsViewModelTests
     {
         _sut.AvailableLanguages.ShouldBe(new List<Language>() { _defLanguage });
     }
+
+    #region hub management
+
+    [Fact]
+    public void HubSectionTitle_ShouldReturnCorrectLocalizedString()
+    {
+        _localizationService.GetString("HubSectionTitleText").Returns("Relay Hub");
+
+        _sut.HubSectionTitle.ShouldBe("Relay Hub");
+    }
+
+    [Fact]
+    public void HubSelectLabel_ShouldReturnCorrectLocalizedString()
+    {
+        _localizationService.GetString("SelectHubLabel").Returns("Active hub");
+
+        _sut.HubSelectLabel.ShouldBe("Active hub");
+    }
+
+    [Fact]
+    public void HubAddHubLabel_ShouldReturnCorrectLocalizedString()
+    {
+        _localizationService.GetString("AddHubLabel").Returns("Add Hub");
+
+        _sut.HubAddHubLabel.ShouldBe("Add Hub");
+    }
+
+    [Fact]
+    public async Task AttachHandlers_ShouldLoadHubs_BookmarkRowsAndRestoreActiveSelection_WithoutCallingSelectHub()
+    {
+        SetupProviderHubs([DemoHub, CustomHub], "default");
+
+        _sut.AttachHandlers();
+        await WaitFor(() => _sut.Hubs.Count == 2);
+
+        _sut.Hubs.Count.ShouldBe(2);
+        _sut.Hubs[0].Id.ShouldBe("default");
+        _sut.Hubs[0].IsBuiltIn.ShouldBeTrue();
+        _sut.Hubs[0].CanEdit.ShouldBeFalse();
+        _sut.Hubs[0].CanRemove.ShouldBeFalse();
+        _sut.Hubs[1].Id.ShouldBe("custom-1");
+        _sut.Hubs[1].CanEdit.ShouldBeTrue();
+        _sut.Hubs[1].CanRemove.ShouldBeTrue();
+
+        _sut.SelectedHub.ShouldNotBeNull();
+        _sut.SelectedHub!.Id.ShouldBe("default");
+        await _hubConfigurationProvider.DidNotReceive().SelectHub(Arg.Any<string>());
+    }
+
+    [Fact]
+    public async Task SelectedHub_WhenChanged_ShouldCallSelectHub()
+    {
+        SetupProviderHubs([DemoHub, CustomHub], "default");
+        _sut.AttachHandlers();
+        await WaitFor(() => _sut.Hubs.Count == 2);
+
+        _sut.SelectedHub = _sut.Hubs.First(h => h.Id == "custom-1");
+        await WaitFor(() => _hubConfigurationProvider.ReceivedCalls()
+            .Any(c => c.GetMethodInfo().Name == nameof(IRelayHubConfigurationProvider.SelectHub)));
+
+        _hubConfigurationProvider.Received(1).SelectHub("custom-1");
+    }
+
+    [Fact]
+    public async Task SelectedHub_WhenEarlierSelectionFails_LaterSelectionStillRuns()
+    {
+        SetupProviderHubs([DemoHub, CustomHub], "default");
+        _sut.AttachHandlers();
+        await WaitFor(() => _sut.Hubs.Count == 2);
+
+        _hubConfigurationProvider.SelectHub("custom-1")
+            .Returns(Task.FromException(new Exception("selection failed")));
+        _hubConfigurationProvider.SelectHub("default").Returns(Task.CompletedTask);
+
+        _sut.SelectedHub = _sut.Hubs.First(h => h.Id == "custom-1");
+        _sut.SelectedHub = _sut.Hubs.First(h => h.Id == "default");
+
+        await WaitFor(() => _hubConfigurationProvider.ReceivedCalls().Any(c =>
+            c.GetMethodInfo().Name == nameof(IRelayHubConfigurationProvider.SelectHub)
+            && c.GetArguments()[0] as string == "default"));
+
+        _hubConfigurationProvider.Received(1).SelectHub("default");
+    }
+
+    [Fact]
+    public async Task AddHubCommand_WhenExecuted_ShouldShowAddHubDialog()
+    {
+        var navigationService = Substitute.For<INavigationService>();
+        _sut.SetNavigationService(navigationService);
+
+        await ((IAsyncCommand)_sut.AddHubCommand).ExecuteAsync();
+
+        navigationService.Received(1).ShowViewModelForResultAsync<AddHubViewModel, AddHubResult?>(Arg.Any<AddHubViewModel>());
+    }
+
+    [Fact]
+    public async Task AddHub_WhenCancelled_ShouldNotAddHub()
+    {
+        var navigationService = Substitute.For<INavigationService>();
+        SetupProviderHubs([DemoHub], "default");
+        _sut.SetNavigationService(navigationService);
+        navigationService.ShowViewModelForResultAsync<AddHubViewModel, AddHubResult?>(Arg.Any<AddHubViewModel>())
+            .Returns(Task.FromResult<AddHubResult?>(null));
+
+        await ((IAsyncCommand)_sut.AddHubCommand).ExecuteAsync();
+
+        await _hubConfigurationProvider.DidNotReceive().AddHub(Arg.Any<HubConfigData>());
+    }
+
+    [Fact]
+    public async Task AddHub_WhenConfirmed_ShouldAddUserHub_ThenReload()
+    {
+        var navigationService = Substitute.For<INavigationService>();
+        var reloadTask = new TaskCompletionSource();
+        SetupProviderHubs([DemoHub], "default");
+        _sut.SetNavigationService(navigationService);
+        navigationService.ShowViewModelForResultAsync<AddHubViewModel, AddHubResult?>(Arg.Any<AddHubViewModel>())
+            .Returns(Task.FromResult<AddHubResult?>(
+                new AddHubResult { Name = "My Hub", BaseUrl = "http://my-hub.example", ApiKey = "secret" }));
+        _hubConfigurationProvider
+            .When(provider => provider.AddHub(Arg.Any<HubConfigData>()))
+            .Do(callInfo =>
+            {
+                _hubConfigurationProvider.GetHubs().Returns(Task.FromResult<IReadOnlyList<HubConfigData>>(
+                    new[] { DemoHub, callInfo.Arg<HubConfigData>() }));
+                reloadTask.TrySetResult();
+            });
+
+        await ((IAsyncCommand)_sut.AddHubCommand).ExecuteAsync();
+        await reloadTask.Task;
+
+        await _hubConfigurationProvider.Received(1).AddHub(Arg.Is<HubConfigData>(h =>
+            HasNewGuidId(h)
+            && h.Name == "My Hub"
+            && h.BaseUrl == "http://my-hub.example"
+            && h.ApiKey == "secret"
+            && !h.IsBuiltIn));
+        await WaitFor(() => _sut.Hubs.Count == 2);
+        var addedRow = _sut.Hubs.First(h => h.Id != "default");
+        addedRow.Name.ShouldBe("My Hub");
+        addedRow.CanEdit.ShouldBeTrue();
+        addedRow.CanRemove.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task RemoveHubCommand_WhenExecuted_ShouldRemoveHub()
+    {
+        SetupProviderHubs([DemoHub, CustomHub], "default");
+        _sut.AttachHandlers();
+        await WaitFor(() => _sut.Hubs.Count == 2);
+        var entry = _sut.Hubs.First(h => h.Id == "custom-1");
+
+        await ((IAsyncCommand<HubEntryViewModel>)_sut.RemoveHubCommand).ExecuteAsync(entry);
+
+        _hubConfigurationProvider.Received(1).RemoveHub("custom-1");
+    }
+
+    [Fact]
+    public async Task RemoveHubCommand_WhenExecutedWithNull_ShouldNotRemove()
+    {
+        await ((IAsyncCommand<HubEntryViewModel>)_sut.RemoveHubCommand).ExecuteAsync(null!);
+
+        _hubConfigurationProvider.DidNotReceive().RemoveHub(Arg.Any<string>());
+    }
+
+    [Fact]
+    public async Task RemoveHubCommand_WhenBuiltIn_ShouldNotRemove()
+    {
+        SetupProviderHubs([DemoHub], "default");
+        _sut.AttachHandlers();
+        await WaitFor(() => _sut.Hubs.Count == 1);
+        var entry = _sut.Hubs.Single();
+
+        await ((IAsyncCommand<HubEntryViewModel>)_sut.RemoveHubCommand).ExecuteAsync(entry);
+
+        _hubConfigurationProvider.DidNotReceive().RemoveHub(Arg.Any<string>());
+    }
+
+    [Fact]
+    public async Task AttachHandlers_ShouldProbeStatusForEachHub_WithRowOptions()
+    {
+        SetupProviderHubs([DemoHub, CustomHub], "default");
+        _relayRoomClient.Health(Arg.Any<CancellationToken>(), Arg.Any<RelayClientOptions>())
+            .Returns((RelayClientError?)null);
+
+        _sut.AttachHandlers();
+        await WaitFor(() => _sut.Hubs.Count == 2);
+
+        await _relayRoomClient.Received(2).Health(Arg.Any<CancellationToken>(), Arg.Any<RelayClientOptions>());
+        _relayRoomClient.Received(1).Health(
+            Arg.Any<CancellationToken>(),
+            Arg.Is<RelayClientOptions>(o => o.BaseUrl == CustomHub.BaseUrl && o.ApiKey == CustomHub.ApiKey));
+        await WaitFor(() => _sut.Hubs.All(h => h.Status == HubStatus.Online));
+    }
+
+    [Fact]
+    public async Task Health_WhenErrorReturned_ShouldMapToOffline()
+    {
+        SetupProviderHubs([CustomHub], "custom-1");
+        _relayRoomClient.Health(Arg.Any<CancellationToken>(), Arg.Any<RelayClientOptions>())
+            .Returns(Task.FromResult<RelayClientError?>(
+                new RelayClientError(RelayClientErrorCode.NetworkError, "unreachable")));
+
+        _sut.AttachHandlers();
+        await WaitFor(() => _sut.Hubs.Count == 1);
+
+        await WaitFor(() => _sut.Hubs.Single().Status == HubStatus.Offline);
+    }
+
+    [Fact]
+    public async Task Health_WhenProbeThrows_ShouldMapToOffline()
+    {
+        SetupProviderHubs([CustomHub], "custom-1");
+        _relayRoomClient.Health(Arg.Any<CancellationToken>(), Arg.Any<RelayClientOptions>())
+            .Returns(Task.FromException<RelayClientError?>(new Exception("probe failed")));
+
+        _sut.AttachHandlers();
+        await WaitFor(() => _sut.Hubs.Count == 1);
+
+        await WaitFor(() => _sut.Hubs.Single().Status == HubStatus.Offline);
+    }
+
+    [Fact]
+    public async Task DetachHandlers_ShouldCancelHealthProbes()
+    {
+        var healthGate = new TaskCompletionSource<RelayClientError?>();
+        _relayRoomClient.Health(Arg.Any<CancellationToken>(), Arg.Any<RelayClientOptions>())
+            .Returns(callInfo =>
+            {
+                var cancellationToken = callInfo.Arg<CancellationToken>();
+                cancellationToken.Register(() => healthGate.TrySetCanceled(cancellationToken));
+                return healthGate.Task;
+            });
+        SetupProviderHubs([CustomHub], "custom-1");
+
+        _sut.AttachHandlers();
+        await WaitFor(() => _sut.Hubs.Count == 1);
+        _sut.Hubs.Single().Status.ShouldBe(HubStatus.Checking);
+
+        _sut.DetachHandlers();
+
+        await WaitFor(() => _sut.Hubs.Single().Status == HubStatus.Unknown);
+        _sut.Hubs.Single().IsCheckingStatus.ShouldBeFalse();
+    }
+
+    #endregion
 }
