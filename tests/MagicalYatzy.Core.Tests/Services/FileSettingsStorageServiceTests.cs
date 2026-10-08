@@ -98,5 +98,40 @@ public class FileSettingsStorageServiceTests : IDisposable
         }
     }
 
+    [Fact]
+    public async Task SaveLeavesNoTemporaryFilesBehind()
+    {
+        var sut = CreateSut();
+
+        await sut.SaveValueAsync("key", "value");
+
+        Directory.GetFiles(_baseFolder)
+            .ShouldBe(new[] { Path.Combine(_baseFolder, "key.settings") });
+    }
+
+    [Fact]
+    public async Task SaveWhenTargetCannotBeReplaced_KeepsTargetAndCleansUpTemporaryFile()
+    {
+        var sut = CreateSut();
+        Directory.CreateDirectory(_baseFolder);
+        var targetPath = Path.Combine(_baseFolder, "key.settings");
+        Directory.CreateDirectory(targetPath);
+
+        var threw = false;
+        try
+        {
+            await sut.SaveValueAsync("key", "new");
+        }
+        catch (Exception)
+        {
+            threw = true;
+        }
+
+        threw.ShouldBeTrue();
+        Directory.Exists(targetPath).ShouldBeTrue();
+        Directory.GetFileSystemEntries(_baseFolder)
+            .ShouldBe(new[] { targetPath });
+    }
+
     private FileSettingsStorageService CreateSut() => new(_baseFolder);
 }

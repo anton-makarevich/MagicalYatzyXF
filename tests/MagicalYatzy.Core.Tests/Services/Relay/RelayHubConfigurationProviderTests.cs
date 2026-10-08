@@ -55,6 +55,19 @@ public class RelayHubConfigurationProviderTests
     }
 
     [Fact]
+    public async Task GetActiveOptionsUsesCurrentSettingsValuesForBuiltInHub()
+    {
+        var sut = CreateSut();
+        _settings.BaseUrl.Returns("https://updated.example");
+        _settings.ApiKey.Returns("updated-key");
+
+        var options = await sut.GetActiveOptions();
+
+        options.BaseUrl.ShouldBe("https://updated.example");
+        options.ApiKey.ShouldBe("updated-key");
+    }
+
+    [Fact]
     public async Task LoadsPersistedHubsAndSelection()
     {
         SeedStorage(StateJson(

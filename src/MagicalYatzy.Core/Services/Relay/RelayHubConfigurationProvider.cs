@@ -21,8 +21,9 @@ public sealed class RelayHubConfigurationProvider : IRelayHubConfigurationProvid
     private const string BuiltInHubName = "Relay Hub";
 
     private readonly ISettingsStorageService _storage;
+    private readonly IRelaySettings _relaySettings;
     private readonly Dictionary<string, HubConfigData> _hubs = new(StringComparer.Ordinal);
-    private readonly object _gate = new();
+    private readonly Lock _gate = new();
     private readonly SemaphoreSlim _operationGate = new(1, 1);
     private readonly Task _loadTask;
     private string _activeHubId = BuiltInHubId;
@@ -30,6 +31,7 @@ public sealed class RelayHubConfigurationProvider : IRelayHubConfigurationProvid
     public RelayHubConfigurationProvider(IRelaySettings relaySettings, ISettingsStorageService storage)
     {
         _storage = storage;
+        _relaySettings = relaySettings;
         _hubs[BuiltInHubId] = new HubConfigData(
             BuiltInHubId,
             BuiltInHubName,
@@ -47,8 +49,8 @@ public sealed class RelayHubConfigurationProvider : IRelayHubConfigurationProvid
             var active = _hubs[_activeHubId];
             return new RelayClientOptions
             {
-                BaseUrl = active.BaseUrl,
-                ApiKey = active.ApiKey
+                BaseUrl = active.IsBuiltIn ? _relaySettings.BaseUrl : active.BaseUrl,
+                ApiKey = active.IsBuiltIn ? _relaySettings.ApiKey : active.ApiKey
             };
         }
     }

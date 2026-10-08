@@ -36,7 +36,20 @@ public sealed class FileSettingsStorageService : ISettingsStorageService
     public async Task SaveValueAsync(string key, string value)
     {
         Directory.CreateDirectory(_baseFolder);
-        await File.WriteAllTextAsync(GetPath(key), value);
+        var targetPath = GetPath(key);
+        var tempPath = $"{targetPath}.{Guid.NewGuid():N}.tmp";
+        try
+        {
+            await File.WriteAllTextAsync(tempPath, value);
+            File.Move(tempPath, targetPath, true);
+        }
+        finally
+        {
+            if (File.Exists(tempPath))
+            {
+                File.Delete(tempPath);
+            }
+        }
     }
 
     private string GetPath(string key)

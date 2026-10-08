@@ -1001,5 +1001,29 @@ public class SettingsViewModelTests
         _sut.Hubs.Single().IsCheckingStatus.ShouldBeFalse();
     }
 
+    [Fact]
+    public async Task HubSave_WhenDetachedWhileReloadInFlight_DoesNotThrowAndKeepsHubs()
+    {
+        SetupProviderHubs([DemoHub, CustomHub], "default");
+        _sut.AttachHandlers();
+        await WaitFor(() => _sut.Hubs.Count == 2);
+
+        var reloadGate = new TaskCompletionSource<IReadOnlyList<HubConfigData>>();
+        _hubConfigurationProvider.GetHubs().Returns(reloadGate.Task);
+
+        var entry = _sut.Hubs.First(h => h.Id == "custom-1");
+        await entry.StartEditing();
+        var saveTask = ((IAsyncCommand)entry.SaveCommand).ExecuteAsync();
+
+        await WaitFor(() => _hubConfigurationProvider.ReceivedCalls()
+            .Any(c => c.GetMethodInfo().Name == nameof(IRelayHubConfigurationProvider.UpdateHub)));
+
+        _sut.DetachHandlers();
+        reloadGate.SetResult([DemoHub, CustomHub]);
+        await saveTask;
+
+        _sut.Hubs.Count.ShouldBe(2);
+    }
+
     #endregion
 }

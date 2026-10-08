@@ -23,6 +23,7 @@ public class SettingsViewModel : DicePanelViewModel
     private HubEntryViewModel? _selectedHub;
     private Task? _selectHubTask;
     private CancellationTokenSource _lifetimeCancellation = new();
+    private CancellationToken _lifetimeToken = CancellationToken.None;
 
     public SettingsViewModel(
         IDicePanel dicePanel,
@@ -322,7 +323,8 @@ public class SettingsViewModel : DicePanelViewModel
     {
         base.AttachHandlers();
         _lifetimeCancellation = new CancellationTokenSource();
-        _ = LoadHubsAsync();
+        _lifetimeToken = _lifetimeCancellation.Token;
+        _ = LoadHubsAsync(_lifetimeToken);
     }
 
     public override void DetachHandlers()
@@ -334,6 +336,7 @@ public class SettingsViewModel : DicePanelViewModel
 
     private async Task AddHubAsync()
     {
+        var cancellationToken = _lifetimeToken;
         var dialog = new AddHubViewModel(_localizationService);
         dialog.SetNavigationService(NavigationService);
         var result = await NavigationService.ShowViewModelForResultAsync<AddHubViewModel, AddHubResult?>(dialog);
@@ -348,37 +351,40 @@ public class SettingsViewModel : DicePanelViewModel
             false);
         await _hubConfigurationProvider.AddHub(hub);
 
-        await LoadHubsAsync();
+        await LoadHubsAsync(cancellationToken);
     }
 
     private async Task RemoveHubAsync(HubEntryViewModel? entry)
     {
         if (entry is null || entry.IsBuiltIn) return;
 
+        var cancellationToken = _lifetimeToken;
         await _hubConfigurationProvider.RemoveHub(entry.Id);
 
-        await LoadHubsAsync();
+        await LoadHubsAsync(cancellationToken);
     }
 
-    private async Task OnHubSaved(HubEntryViewModel entry)
+    private async Task OnHubSaved(HubEntryViewModel entry, CancellationToken cancellationToken)
     {
         var pending = entry.PendingHub;
         await _hubConfigurationProvider.UpdateHub(entry.Id, pending.Name, pending.BaseUrl, pending.ApiKey);
 
-        await LoadHubsAsync();
+        await LoadHubsAsync(cancellationToken);
     }
 
-    private async Task LoadHubsAsync()
+    private async Task LoadHubsAsync(CancellationToken cancellationToken)
     {
         var hubs = await _hubConfigurationProvider.GetHubs();
         var activeHubId = await _hubConfigurationProvider.GetActiveHubId();
+
+        if (cancellationToken.IsCancellationRequested) return;
 
         Hubs.Clear();
         foreach (var hub in hubs)
         {
             Hubs.Add(new HubEntryViewModel(
                 hub,
-                onSaved: OnHubSaved,
+                onSaved: entry => OnHubSaved(entry, cancellationToken),
                 checkStatus: CheckHubStatusAsync,
                 localizationService: _localizationService));
         }
@@ -388,7 +394,7 @@ public class SettingsViewModel : DicePanelViewModel
 
         foreach (var hub in Hubs)
         {
-            _ = hub.RefreshStatusAsync(_lifetimeCancellation.Token);
+            _ = hub.RefreshStatusAsync(cancellationToken);
         }
     }
 
