@@ -9,6 +9,7 @@
         <PublishTrimmed>false</PublishTrimmed>
         <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
         <AssemblyName>MagicalYatzy.Avalonia.Browser</AssemblyName>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>

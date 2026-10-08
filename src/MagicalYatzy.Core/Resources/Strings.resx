@@ -858,4 +858,64 @@
   <data name="UnknownRulesLabel" xml:space="preserve">
     <value>Unknown rules</value>
   </data>
+  <data name="HubSectionTitleText" xml:space="preserve">
+    <value>Relay Hub</value>
+  </data>
+  <data name="AddHubCaptionText" xml:space="preserve">
+    <value>Add Hub</value>
+  </data>
+  <data name="AddHubLabel" xml:space="preserve">
+    <value>Add Hub</value>
+  </data>
+  <data name="SelectHubLabel" xml:space="preserve">
+    <value>Active hub</value>
+  </data>
+  <data name="HubNameLabel" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="HubUrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="HubApiKeyLabel" xml:space="preserve">
+    <value>API key</value>
+  </data>
+  <data name="EditHubLabel" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="SaveHubLabel" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="CancelHubLabel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="RemoveHubLabel" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="ConfirmHubLabel" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="RefreshHubLabel" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="HubStatusOnlineText" xml:space="preserve">
+    <value>Online</value>
+  </data>
+  <data name="HubStatusOfflineText" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="HubStatusCheckingText" xml:space="preserve">
+    <value>Checking</value>
+  </data>
+  <data name="HubStatusUnknownText" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="HubUrlRequiredMessage" xml:space="preserve">
+    <value>Please enter the hub URL.</value>
+  </data>
+  <data name="HubUrlInvalidMessage" xml:space="preserve">
+    <value>Please enter a valid http or https URL.</value>
+  </data>
+  <data name="BuiltInHubLabel" xml:space="preserve">
+    <value>Built-in</value>
+  </data>
 </root>

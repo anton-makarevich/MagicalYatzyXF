@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy.Core"
+             xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
+             mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="400"
+             x:DataType="viewModels:AddHubViewModel"
+             x:Class="Sanet.MagicalYatzy.Avalonia.Views.Settings.AddHubView">
+    <Border
+        Margin="20"
+        Padding="20"
+        CornerRadius="10"
+        Background="#CC101010"
+        BorderBrush="{StaticResource SanetBlueColor}"
+        BorderThickness="1"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center">
+        <StackPanel Spacing="10" Width="380">
+            <Label Content="{Binding Title}" Classes="caption"/>
+            <Label Content="{Binding NameLabel}" Classes="caption"/>
+            <TextBox Text="{Binding Name, Mode=TwoWay}"/>
+            <Label Content="{Binding UrlLabel}" Classes="caption"/>
+            <TextBox Text="{Binding BaseUrl, Mode=TwoWay}" PlaceholderText="https://"/>
+            <Label Content="{Binding ApiKeyLabel}" Classes="caption"/>
+            <TextBox Text="{Binding ApiKey, Mode=TwoWay}" PasswordChar="&#x25cf;"/>
+            <TextBlock
+                Text="{Binding ValidationMessage}"
+                IsVisible="{Binding HasValidationMessage}"
+                Foreground="Crimson"
+                Classes="description"
+                TextWrapping="Wrap"/>
+            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8" Margin="0,6,0,0">
+                <templatedControls:ActionButton
+                    Grid.Column="1"
+                    Content="{Binding ConfirmLabel}"
+                    Command="{Binding ConfirmCommand}" />
+                <templatedControls:ActionButton
+                    Grid.Column="2"
+                    Content="{Binding CancelLabel}"
+                    Command="{Binding CancelCommand}" />
+            </Grid>
+        </StackPanel>
+    </Border>
+</UserControl>

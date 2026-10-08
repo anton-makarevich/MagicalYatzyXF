@@ -1,11 +1,11 @@
-﻿using Avalonia.Controls;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
 namespace Sanet.MagicalYatzy.Avalonia.Views.Fragments;
 
-public partial class RulesFragment : UserControl
+public partial class GameSettingsFragment : UserControl
 {
-    public RulesFragment()
+    public GameSettingsFragment()
     {
         InitializeComponent();
     }

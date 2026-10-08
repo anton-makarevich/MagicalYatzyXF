@@ -9,6 +9,7 @@ using Sanet.MagicalYatzy.Avalonia.Views;
 using Sanet.MagicalYatzy.Avalonia.Views.Game;
 using Sanet.MagicalYatzy.Avalonia.Views.Lobby;
 using Sanet.MagicalYatzy.Avalonia.Views.OnlineLobby;
+using Sanet.MagicalYatzy.Avalonia.Views.Settings;
 using Sanet.MagicalYatzy.ViewModels;
 using Sanet.MVVM.Core.Services;
 using Sanet.MVVM.Navigation.Avalonia.Services;
@@ -99,15 +100,17 @@ public partial class App : Application
     {
         navigationService.RegisterViews(typeof(MainMenuView), typeof(MainMenuViewModel));
         navigationService.RegisterViews(typeof(GameResultsView), typeof(GameResultsViewModel));
-        navigationService.RegisterViews(typeof(SettingsView), typeof(SettingsViewModel));
+        navigationService.RegisterViews(typeof(AddHubView), typeof(AddHubViewModel));
         if (IsMobile())
         {
+            navigationService.RegisterViews(typeof(SettingsViewNarrow), typeof(SettingsViewModel));
             navigationService.RegisterViews(typeof(LobbyViewNarrow), typeof(LobbyViewModel));
             navigationService.RegisterViews(typeof(OnlineLobbyViewNarrow), typeof(OnlineLobbyViewModel));
             navigationService.RegisterViews(typeof(GameViewNarrow), typeof(GameViewModel));
         }
         else
         {
+            navigationService.RegisterViews(typeof(SettingsViewWide), typeof(SettingsViewModel));
             navigationService.RegisterViews(typeof(LobbyViewWide), typeof(LobbyViewModel));
             navigationService.RegisterViews(typeof(OnlineLobbyViewWide), typeof(OnlineLobbyViewModel));
             navigationService.RegisterViews(typeof(GameViewWide), typeof(GameViewModel));

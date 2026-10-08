@@ -3,7 +3,6 @@ using Avalonia;
 using Sanet.MagicalYatzy.Avalonia.Desktop.DependencyInjection;
 using Sanet.MVVM.DI.Avalonia.Extensions;
 #if DEBUG
-using AvaloniaUI.DiagnosticsSupport;
 #endif
 
 namespace Sanet.MagicalYatzy.Avalonia.Desktop;

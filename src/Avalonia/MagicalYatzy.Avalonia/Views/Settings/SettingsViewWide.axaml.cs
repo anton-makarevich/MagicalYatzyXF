@@ -1,11 +1,10 @@
-﻿using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Sanet.MagicalYatzy.Avalonia.Views.Fragments;
+namespace Sanet.MagicalYatzy.Avalonia.Views.Settings;
 
-public partial class RulesFragment : UserControl
+public partial class SettingsViewWide : SettingsView
 {
-    public RulesFragment()
+    public SettingsViewWide()
     {
         InitializeComponent();
     }

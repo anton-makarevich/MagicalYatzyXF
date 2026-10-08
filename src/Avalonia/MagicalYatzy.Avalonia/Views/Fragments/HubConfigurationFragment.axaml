@@ -1,0 +1,69 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy.Core"
+             xmlns:wrappers="clr-namespace:Sanet.MagicalYatzy.ViewModels.ObservableWrappers;assembly=MagicalYatzy.Core"
+             xmlns:templatedControls="clr-namespace:Sanet.MagicalYatzy.Avalonia.Views.TemplatedControls"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="500"
+             x:DataType="viewModels:SettingsViewModel"
+             x:Class="Sanet.MagicalYatzy.Avalonia.Views.Fragments.HubConfigurationFragment">
+    <StackPanel Spacing="6">
+        <Label Content="{Binding HubSelectLabel}" Classes="caption"/>
+        <ComboBox
+            ItemsSource="{Binding Hubs}"
+            SelectedItem="{Binding SelectedHub, Mode=TwoWay}"
+            DisplayMemberBinding="{Binding Name}"/>
+        <templatedControls:ActionButton
+            Content="{Binding HubAddHubLabel}"
+            Command="{Binding AddHubCommand}"
+            HorizontalAlignment="Left" />
+        <ItemsControl ItemsSource="{Binding Hubs}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="wrappers:HubEntryViewModel">
+                    <StackPanel Spacing="4" Margin="0,4">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <Border CornerRadius="4" Padding="4,1" IsVisible="{Binding IsBuiltIn}">
+                                <TextBlock Text="{Binding BuiltInText}" Classes="description"/>
+                            </Border>
+                        </StackPanel>
+                        <TextBlock Text="{Binding BaseUrl}" Classes="description" TextWrapping="Wrap"/>
+                        <StackPanel Orientation="Horizontal" Spacing="4" IsVisible="{Binding !IsEditing}">
+                            <TextBlock Text="{Binding StatusText}" Classes="description" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                            <templatedControls:ActionButton
+                                Content="{Binding RefreshLabel}"
+                                Command="{Binding RefreshStatusCommand}"
+                                IsEnabled="{Binding !IsCheckingStatus}" />
+                            <templatedControls:ActionButton
+                                Content="{Binding EditLabel}"
+                                Command="{Binding StartEditingCommand}"
+                                IsEnabled="{Binding CanEdit}" />
+                            <templatedControls:ActionButton
+                                Content="{Binding RemoveLabel}"
+                                Command="{Binding $parent[ItemsControl].((viewModels:SettingsViewModel)DataContext).RemoveHubCommand}"
+                                CommandParameter="{Binding}"
+                                IsEnabled="{Binding CanRemove}" />
+                        </StackPanel>
+                        <StackPanel Spacing="4" IsVisible="{Binding IsEditing}">
+                            <Label Classes="caption" Content="{Binding NameLabel}"/>
+                            <TextBox Text="{Binding EditableName, Mode=TwoWay}"/>
+                            <Label Classes="caption" Content="{Binding UrlLabel}"/>
+                            <TextBox Text="{Binding EditableBaseUrl, Mode=TwoWay}" PlaceholderText="https://"/>
+                            <Label Classes="caption" Content="{Binding ApiKeyLabel}"/>
+                            <TextBox Text="{Binding EditableApiKey, Mode=TwoWay}" PasswordChar="&#x25cf;"/>
+                            <StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Right">
+                                <templatedControls:ActionButton
+                                    Content="{Binding SaveLabel}"
+                                    Command="{Binding SaveCommand}" />
+                                <templatedControls:ActionButton
+                                    Content="{Binding CancelLabel}"
+                                    Command="{Binding CancelCommand}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>
+</UserControl>

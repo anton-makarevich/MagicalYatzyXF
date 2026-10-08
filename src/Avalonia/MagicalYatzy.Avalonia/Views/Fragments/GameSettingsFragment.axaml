@@ -1,0 +1,124 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:Sanet.MagicalYatzy.ViewModels;assembly=MagicalYatzy.Core"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="700"
+             x:DataType="viewModels:SettingsViewModel"
+             x:Class="Sanet.MagicalYatzy.Avalonia.Views.Fragments.GameSettingsFragment">
+    <UserControl.Styles>
+        <Style Selector="StackPanel.middle-panel">
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
+    </UserControl.Styles>
+    <StackPanel>
+        <StackPanel Classes="panel">
+            <Label
+                Classes="caption"
+                Content="{Binding LanguageLabel, Converter={StaticResource StringUppercasedConverter}}"
+                VerticalAlignment="Center"/>
+            <ComboBox
+                ItemsSource="{Binding AvailableLanguages}"
+                SelectedItem="{Binding SelectedLanguage}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <Label Content="{Binding Name}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Label
+                Classes="caption"
+                Content="{Binding SettingsStyleCaption, Converter={StaticResource StringUppercasedConverter}}"
+                VerticalAlignment="Center"/>
+
+            <StackPanel
+                Orientation="Horizontal">
+                <ToggleButton
+                    Height="70"
+                    Width="70"
+                    IsChecked="{Binding IsStyleWhite,Mode=TwoWay}">
+                    <Image Source="avares://MagicalYatzy.Avalonia/Assets/Styles/White.png" />
+                </ToggleButton>
+                <ToggleButton
+                    Height="70"
+                    Width="70"
+                    IsChecked="{Binding IsStyleBlue,Mode=TwoWay}">
+                    <Image Source="avares://MagicalYatzy.Avalonia/Assets/Styles/Blue.png" />
+                </ToggleButton>
+                <ToggleButton
+                    Height="70"
+                    Width="70"
+                    IsChecked="{Binding IsStyleRed,Mode=TwoWay}">
+                    <Image Source="avares://MagicalYatzy.Avalonia/Assets/Styles/Red.png" />
+                </ToggleButton>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Classes="panel">
+            <Label
+                Classes="caption"
+                Content="{Binding SettingsSpeedCaption, Converter={StaticResource StringUppercasedConverter}}"
+                VerticalAlignment="Center"/>
+            <StackPanel
+                Orientation="Horizontal">
+                <ToggleButton
+                    IsChecked="{Binding IsSpeedVerySlow,Mode=TwoWay}">
+                    <TextBlock
+                        Text="{Binding SpeedVerySlow}" />
+                </ToggleButton>
+                <ToggleButton
+                    IsChecked="{Binding IsSpeedSlow,Mode=TwoWay}">
+                    <TextBlock
+                        Text="{Binding SpeedSlow}" />
+                </ToggleButton>
+                <ToggleButton
+                    IsChecked="{Binding IsSpeedFast,Mode=TwoWay}">
+                    <TextBlock
+                        Text="{Binding SpeedFast}" />
+                </ToggleButton>
+                <ToggleButton
+                    IsChecked="{Binding IsSpeedVeryFast,Mode=TwoWay}">
+                    <TextBlock
+                        Text="{Binding SpeedVeryFast}" />
+                </ToggleButton>
+
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Classes="panel">
+            <Label
+                Classes="caption"
+                Content="{Binding SettingsAngleCaption, Converter={StaticResource StringUppercasedConverter}}"
+                VerticalAlignment="Center"/>
+            <StackPanel
+                Classes="middle-panel"
+                Orientation="Horizontal">
+                <ToggleButton
+                    IsChecked="{Binding IsAngleLow,Mode=TwoWay}">
+                    <TextBlock
+                        Text="{Binding AngleLowText}" />
+                </ToggleButton>
+                <ToggleButton
+                    IsChecked="{Binding IsAngleHigh,Mode=TwoWay}">
+                    <TextBlock
+                        Text="{Binding AngleHighText}" />
+                </ToggleButton>
+                <ToggleButton
+                    IsChecked="{Binding IsAngleVeryHigh,Mode=TwoWay}">
+                    <TextBlock
+                        Text="{Binding AngleVeryHighText}" />
+                </ToggleButton>
+
+            </StackPanel>
+
+            <Label
+                Classes="caption"
+                Content="{Binding SoundLabel, Converter={StaticResource StringUppercasedConverter}}"/>
+            <ToggleSwitch
+                IsChecked="{Binding IsSoundEnabled,Mode=TwoWay}"
+                OnContent="{Binding OnContent}"
+                OffContent="{Binding OffContent}"/>
+
+        </StackPanel>
+    </StackPanel>
+</UserControl>
