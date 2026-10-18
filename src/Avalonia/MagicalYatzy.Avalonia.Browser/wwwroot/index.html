@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>atest.Browser</title>
+    <title>MagicalYatzy</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./app.css" />
@@ -28,6 +28,12 @@
                 </svg>
             </a>
         </h2>
+        <div id="splash-status" aria-live="polite">Loading…</div>
+        <div class="splash-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Loading MagicalYatzy">
+            <div id="splash-progress-fill" class="splash-progress-fill"></div>
+        </div>
+        <div id="splash-percent">0%</div>
+        <div id="splash-error" class="splash-error hidden" role="alert"></div>
     </div>
 </div>
 <script type='module' src="./main.js"></script>
