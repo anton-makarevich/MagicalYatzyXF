@@ -99,17 +99,17 @@
     color: #d32f2f;
 }
 
-.avalonia-splash.splash-error .splash-progress,
-.avalonia-splash.splash-error #splash-percent,
-.avalonia-splash.splash-error #splash-status {
+.avalonia-splash.splash-failed .splash-progress,
+.avalonia-splash.splash-failed #splash-percent,
+.avalonia-splash.splash-failed #splash-status {
     display: none;
 }
 
-.avalonia-splash.splash-error .splash-error {
+.avalonia-splash.splash-failed .splash-error {
     display: block;
 }
 
-.avalonia-splash.splash-error a {
+.avalonia-splash.splash-failed a {
     pointer-events: auto;
     color: #0D6EFD;
     text-decoration: underline;
@@ -120,7 +120,7 @@
         color: #ff8888;
     }
 
-    .avalonia-splash.splash-error a {
+    .avalonia-splash.splash-failed a {
         color: #ffb3b3;
     }
 }
