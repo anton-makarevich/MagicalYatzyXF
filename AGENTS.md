@@ -75,6 +75,10 @@ Start at `docs/INDEX.md` and load only the documents you need rather than bulk-l
 
 - Install/update all skills: `mise run install-skills`
 
+## GitHub CLI
+
+Always use the `gh` CLI for any GitHub interaction — reading/creating issues, PRs, comments, reviews, labels, milestones, releases, etc. Do not use the GitHub web UI or raw REST API calls.
+
 ## MCP Tools
 
-Serena MCP provides symbolic C# navigation/editing: `mise run install-serena` (project config in `.serena/project.yml`). Prefer using serena tools when working with the code base.
+Serena MCP provides symbolic C# navigation/editing: `mise run install-serena` (project config in `.serena/project.yml`). Prefer using serena tools when working with the codebase.
