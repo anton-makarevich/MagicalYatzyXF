@@ -51,13 +51,16 @@
                                 CommandParameter="{Binding}"
                                 IsEnabled="{Binding CanRemove}" />
                         </StackPanel>
-                        <StackPanel Spacing="4" IsVisible="{Binding IsEditing}">
-                            <Label Classes="caption" Content="{Binding NameLabel}"/>
-                            <TextBox Text="{Binding EditableName, Mode=TwoWay}"/>
-                            <Label Classes="caption" Content="{Binding UrlLabel}"/>
-                            <TextBox Text="{Binding EditableBaseUrl, Mode=TwoWay}" PlaceholderText="https://"/>
-                            <Label Classes="caption" Content="{Binding ApiKeyLabel}"/>
-                            <TextBox Text="{Binding EditableApiKey, Mode=TwoWay}" PasswordChar="&#x25cf;"/>
+                         <StackPanel Spacing="4" IsVisible="{Binding IsEditing}">
+                             <Label Classes="caption" Content="{Binding NameLabel}"/>
+                             <TextBox PointerReleased="OnEditorPointerReleased"
+                                      Text="{Binding EditableName, Mode=TwoWay}"/>
+                             <Label Classes="caption" Content="{Binding UrlLabel}"/>
+                             <TextBox PointerReleased="OnEditorPointerReleased"
+                                      Text="{Binding EditableBaseUrl, Mode=TwoWay}" PlaceholderText="https://"/>
+                             <Label Classes="caption" Content="{Binding ApiKeyLabel}"/>
+                             <TextBox PointerReleased="OnEditorPointerReleased"
+                                      Text="{Binding EditableApiKey, Mode=TwoWay}" PasswordChar="&#x25cf;"/>
                             <StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Right">
                                 <templatedControls:ActionButton
                                     Content="{Binding SaveLabel}"
