@@ -870,6 +870,9 @@
   <data name="SelectHubLabel" xml:space="preserve">
     <value>Active hub</value>
   </data>
+  <data name="ActiveHubConfirmationFormat" xml:space="preserve">
+    <value>Active hub is "{0}"</value>
+  </data>
   <data name="HubNameLabel" xml:space="preserve">
     <value>Name</value>
   </data>
