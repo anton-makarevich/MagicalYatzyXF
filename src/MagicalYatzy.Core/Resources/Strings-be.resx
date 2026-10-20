@@ -843,6 +843,9 @@
   <data name="SelectHubLabel" xml:space="preserve">
     <value>Актыўны хаб</value>
   </data>
+  <data name="ActiveHubConfirmationFormat" xml:space="preserve">
+    <value>Актыўны хаб: «{0}»</value>
+  </data>
   <data name="HubNameLabel" xml:space="preserve">
     <value>Назва</value>
   </data>

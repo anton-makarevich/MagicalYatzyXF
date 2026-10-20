@@ -84,4 +84,41 @@ public class LocalizationIntegrationTests
 
         sut.Languages.Select(l => l.Code).ShouldBeUnique();
     }
+
+    [Fact]
+    public void ActiveHubConfirmationFormat_ShouldResolveInEnglish()
+    {
+        var sut = CreateSut();
+
+        var result = sut.GetString("ActiveHubConfirmationFormat");
+
+        result.ShouldBe("Active hub is \"{0}\"");
+    }
+
+    [Fact]
+    public void ActiveHubConfirmationFormat_ShouldResolveInBelarusian()
+    {
+        var sut = CreateSut();
+
+        sut.SetActiveLanguage("be");
+
+        var result = sut.GetString("ActiveHubConfirmationFormat");
+
+        result.ShouldNotBe("Active hub is \"{0}\"");
+        result.ShouldContain("{0}");
+    }
+
+    [Fact]
+    public void ActiveHubConfirmationFormat_ShouldFormatWithHubName()
+    {
+        var sut = CreateSut();
+
+        var enResult = string.Format(sut.GetString("ActiveHubConfirmationFormat"), "My Hub");
+        enResult.ShouldBe("Active hub is \"My Hub\"");
+
+        sut.SetActiveLanguage("be");
+
+        var beResult = string.Format(sut.GetString("ActiveHubConfirmationFormat"), "My Hub");
+        beResult.ShouldContain("My Hub");
+    }
 }

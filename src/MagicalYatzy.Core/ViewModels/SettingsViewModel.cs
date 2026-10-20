@@ -56,6 +56,10 @@ public class SettingsViewModel : DicePanelViewModel
 
     public string HubAddHubLabel => _localizationService.GetString("AddHubLabel");
 
+    public string ActiveHubConfirmationText => SelectedHub is null
+        ? string.Empty
+        : string.Format(_localizationService.GetString("ActiveHubConfirmationFormat"), SelectedHub.Name);
+
     public ObservableCollection<HubEntryViewModel> Hubs { get; } = [];
 
     public HubEntryViewModel? SelectedHub
@@ -66,6 +70,7 @@ public class SettingsViewModel : DicePanelViewModel
             if (_selectedHub == value) return;
             _selectedHub = value;
             NotifyPropertyChanged();
+            NotifyPropertyChanged(nameof(ActiveHubConfirmationText));
             if (value is null) return;
             EnqueueSelect(value.Id);
         }
@@ -391,6 +396,7 @@ public class SettingsViewModel : DicePanelViewModel
 
         _selectedHub = Hubs.FirstOrDefault(h => h.Id == activeHubId);
         NotifyPropertyChanged(nameof(SelectedHub));
+        NotifyPropertyChanged(nameof(ActiveHubConfirmationText));
 
         foreach (var hub in Hubs)
         {

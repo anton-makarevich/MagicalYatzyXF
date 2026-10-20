@@ -1025,5 +1025,177 @@ public class SettingsViewModelTests
         _sut.Hubs.Count.ShouldBe(2);
     }
 
+    [Fact]
+    public async Task ActiveHubConfirmationText_ShouldContainHubName_AfterAttachHandlers()
+    {
+        _localizationService.GetString("ActiveHubConfirmationFormat").Returns("Active hub is \"{0}\"");
+        SetupProviderHubs([DemoHub, CustomHub], "default");
+
+        _sut.AttachHandlers();
+        await WaitFor(() => _sut.Hubs.Count == 2);
+
+        _sut.ActiveHubConfirmationText.ShouldBe("Active hub is \"Relay Hub\"");
+        await _hubConfigurationProvider.DidNotReceive().SelectHub(Arg.Any<string>());
+    }
+
+    [Fact]
+    public async Task ActiveHubConfirmationText_ShouldRaiseNotification_WhenSelectedHubChanges()
+    {
+        _localizationService.GetString("ActiveHubConfirmationFormat").Returns("Active hub is \"{0}\"");
+        SetupProviderHubs([DemoHub, CustomHub], "default");
+        _sut.AttachHandlers();
+        await WaitFor(() => _sut.Hubs.Count == 2);
+
+        var propertyChangedNames = new List<string>();
+        _sut.PropertyChanged += (s, e) => propertyChangedNames.Add(e.PropertyName);
+
+        _sut.SelectedHub = _sut.Hubs.First(h => h.Id == "custom-1");
+
+        propertyChangedNames.ShouldContain(nameof(SettingsViewModel.ActiveHubConfirmationText));
+        _sut.ActiveHubConfirmationText.ShouldBe("Active hub is \"My Hub\"");
+    }
+
+    [Fact]
+    public async Task ActiveHubConfirmationText_ShouldBeEmpty_WhenActiveIdDoesNotMatch()
+    {
+        _localizationService.GetString("ActiveHubConfirmationFormat").Returns("Active hub is \"{0}\"");
+        SetupProviderHubs([DemoHub, CustomHub], "nonexistent-id");
+
+        _sut.AttachHandlers();
+        await WaitFor(() => _sut.Hubs.Count == 2);
+
+        _sut.ActiveHubConfirmationText.ShouldBe(string.Empty);
+    }
+
+    [Fact]
+    public async Task ActiveHubConfirmationText_ShouldShowNewName_AfterHubRename()
+    {
+        _localizationService.GetString("ActiveHubConfirmationFormat").Returns("Active hub is \"{0}\"");
+        SetupProviderHubs([DemoHub], "default");
+        _sut.AttachHandlers();
+        await WaitFor(() => _sut.Hubs.Count == 1);
+
+        var renamedHub = new HubConfigData("default", "Renamed Hub", "http://demo.local", string.Empty, true);
+        _hubConfigurationProvider
+            .When(p => p.UpdateHub("default", "Renamed Hub", Arg.Any<string>(), Arg.Any<string>()))
+            .Do(_ =>
+            {
+                _hubConfigurationProvider.GetHubs().Returns(Task.FromResult<IReadOnlyList<HubConfigData>>(
+                    new[] { renamedHub }));
+            });
+
+        var entry = _sut.Hubs.Single();
+        await entry.StartEditing();
+        entry.EditableName = "Renamed Hub";
+        await ((IAsyncCommand)entry.SaveCommand).ExecuteAsync();
+
+        await WaitFor(() => _sut.ActiveHubConfirmationText == "Active hub is \"Renamed Hub\"");
+        _sut.ActiveHubConfirmationText.ShouldBe("Active hub is \"Renamed Hub\"");
+        await _hubConfigurationProvider.DidNotReceive().SelectHub(Arg.Any<string>());
+    }
+
+    [Fact]
+    public async Task ActiveHubConfirmationText_ShouldShowBuiltInName_AfterActiveCustomHubRemoved()
+    {
+        _localizationService.GetString("ActiveHubConfirmationFormat").Returns("Active hub is \"{0}\"");
+        SetupProviderHubs([DemoHub, CustomHub], "custom-1");
+        _sut.AttachHandlers();
+        await WaitFor(() => _sut.Hubs.Count == 2);
+
+        _sut.ActiveHubConfirmationText.ShouldBe("Active hub is \"My Hub\"");
+
+        _hubConfigurationProvider
+            .When(p => p.RemoveHub("custom-1"))
+            .Do(_ =>
+            {
+                _hubConfigurationProvider.GetHubs().Returns(Task.FromResult<IReadOnlyList<HubConfigData>>(
+                    new[] { DemoHub }));
+                _hubConfigurationProvider.GetActiveHubId().Returns(Task.FromResult("default"));
+            });
+
+        var entry = _sut.Hubs.First(h => h.Id == "custom-1");
+        await ((IAsyncCommand<HubEntryViewModel>)_sut.RemoveHubCommand).ExecuteAsync(entry);
+
+        await WaitFor(() => _sut.ActiveHubConfirmationText == "Active hub is \"Relay Hub\"");
+        _sut.ActiveHubConfirmationText.ShouldBe("Active hub is \"Relay Hub\"");
+    }
+
+    [Fact]
+    public async Task ActiveHubConfirmationText_ShouldNotChange_AfterAdd()
+    {
+        _localizationService.GetString("ActiveHubConfirmationFormat").Returns("Active hub is \"{0}\"");
+        var navigationService = Substitute.For<INavigationService>();
+        SetupProviderHubs([DemoHub], "default");
+        _sut.SetNavigationService(navigationService);
+        _sut.AttachHandlers();
+        await WaitFor(() => _sut.Hubs.Count == 1);
+
+        _sut.ActiveHubConfirmationText.ShouldBe("Active hub is \"Relay Hub\"");
+
+        var newHub = new HubConfigData(Guid.NewGuid().ToString("N"), "New Hub", "http://new.example", "key", false);
+        navigationService.ShowViewModelForResultAsync<AddHubViewModel, AddHubResult?>(Arg.Any<AddHubViewModel>())
+            .Returns(Task.FromResult<AddHubResult?>(
+                new AddHubResult { Name = "New Hub", BaseUrl = "http://new.example", ApiKey = "key" }));
+        _hubConfigurationProvider
+            .When(p => p.AddHub(Arg.Any<HubConfigData>()))
+            .Do(callInfo =>
+            {
+                _hubConfigurationProvider.GetHubs().Returns(Task.FromResult<IReadOnlyList<HubConfigData>>(
+                    new[] { DemoHub, callInfo.Arg<HubConfigData>() }));
+            });
+
+        await ((IAsyncCommand)_sut.AddHubCommand).ExecuteAsync();
+        await WaitFor(() => _sut.Hubs.Count == 2);
+
+        _sut.ActiveHubConfirmationText.ShouldBe("Active hub is \"Relay Hub\"");
+        _sut.SelectedHub!.Id.ShouldBe("default");
+    }
+
+    [Fact]
+    public async Task ActiveHubConfirmationText_ShouldNotChange_AfterInactiveHubRemoved()
+    {
+        _localizationService.GetString("ActiveHubConfirmationFormat").Returns("Active hub is \"{0}\"");
+        SetupProviderHubs([DemoHub, CustomHub], "default");
+        _sut.AttachHandlers();
+        await WaitFor(() => _sut.Hubs.Count == 2);
+
+        _sut.ActiveHubConfirmationText.ShouldBe("Active hub is \"Relay Hub\"");
+
+        _hubConfigurationProvider
+            .When(p => p.RemoveHub("custom-1"))
+            .Do(_ =>
+            {
+                _hubConfigurationProvider.GetHubs().Returns(Task.FromResult<IReadOnlyList<HubConfigData>>(
+                    new[] { DemoHub }));
+            });
+
+        var entry = _sut.Hubs.First(h => h.Id == "custom-1");
+        await ((IAsyncCommand<HubEntryViewModel>)_sut.RemoveHubCommand).ExecuteAsync(entry);
+
+        await WaitFor(() => _sut.Hubs.Count == 1);
+
+        _sut.ActiveHubConfirmationText.ShouldBe("Active hub is \"Relay Hub\"");
+        _sut.SelectedHub!.Id.ShouldBe("default");
+    }
+
+    [Fact]
+    public async Task ActiveHubConfirmationText_ShouldRaiseNotification_OnLanguageChange()
+    {
+        _localizationService.GetString("ActiveHubConfirmationFormat").Returns("Active hub is \"{0}\"");
+        SetupProviderHubs([DemoHub], "default");
+        _sut.AttachHandlers();
+        await WaitFor(() => _sut.Hubs.Count == 1);
+
+        var propertyChangedCount = 0;
+        _sut.PropertyChanged += (s, e) =>
+        {
+            if (e.PropertyName == string.Empty) propertyChangedCount++;
+        };
+
+        _sut.SelectedLanguage = _defLanguage;
+
+        propertyChangedCount.ShouldBeGreaterThan(0);
+    }
+
     #endregion
 }
