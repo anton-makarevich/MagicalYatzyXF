@@ -29,13 +29,14 @@ jobs:
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
       - name: Compare versions
+        env:
+          CURRENT: ${{ steps.current-version.outputs.version }}
+          MAIN: ${{ steps.main-version.outputs.version }}
         run: |
-          current="${{ steps.current-version.outputs.version }}"
-          main="${{ steps.main-version.outputs.version }}"
-          echo "Current: $current"
-          echo "Main:    $main"
-          if [ "$current" = "$main" ]; then
-            echo "::error::VersionPrefix ($current) must be bumped before merging into main."
+          echo "Current: $CURRENT"
+          echo "Main:    $MAIN"
+          if [ "$CURRENT" = "$MAIN" ]; then
+            echo "::error::VersionPrefix ($CURRENT) must be bumped before merging into main."
             exit 1
           fi
           echo "Version differs — check passed."

@@ -34,13 +34,27 @@ jobs:
         with:
           global-json-file: global.json
 
+      - name: Resolve target framework from project
+        shell: bash
+        run: |
+          TFM=$(sed -n 's:.*<TargetFramework>\([^<]*\)</TargetFramework>.*:\1:p' src/Avalonia/MagicalYatzy.Avalonia.Browser/MagicalYatzy.Avalonia.Browser.csproj)
+          if [ -z "$TFM" ]; then
+            echo "::error::Could not resolve TargetFramework from the browser project"
+            exit 1
+          fi
+          echo "BROWSER_TFM=$TFM" >> $GITHUB_ENV
+          echo "Target framework: $TFM"
+
       - name: Extract and validate version from Directory.Build.props
         id: extract_version
         shell: bash
+        env:
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
         run: |
           VERSION=$(sed -n 's:.*<VersionPrefix>\([^<]*\)</VersionPrefix>.*:\1:p' Directory.Build.props)
-          if [ "${{ github.ref_type }}" = "tag" ] && [ "${{ github.ref_name }}" != "v$VERSION" ]; then
-            echo "::error::Git tag ${{ github.ref_name }} does not match VersionPrefix v$VERSION"
+          if [ "$REF_TYPE" = "tag" ] && [ "$REF_NAME" != "v$VERSION" ]; then
+            echo "::error::Git tag $REF_NAME does not match VersionPrefix v$VERSION"
             exit 1
           fi
           echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
@@ -64,7 +78,7 @@ jobs:
         uses: softprops/action-gh-release@v3
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: src/Avalonia/MagicalYatzy.Avalonia.Browser/bin/${{ env.CONFIGURATION }}/net10.0-browser/publish/wwwroot/*
+          files: src/Avalonia/MagicalYatzy.Avalonia.Browser/bin/${{ env.CONFIGURATION }}/${{ env.BROWSER_TFM }}/publish/wwwroot/*
           draft: false
           prerelease: false
           generate_release_notes: false
@@ -73,5 +87,5 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: MagicalYatzy-WASM-${{ env.APP_VERSION }}
-          path: src/Avalonia/MagicalYatzy.Avalonia.Browser/bin/${{ env.CONFIGURATION }}/net10.0-browser/publish/wwwroot
+          path: src/Avalonia/MagicalYatzy.Avalonia.Browser/bin/${{ env.CONFIGURATION }}/${{ env.BROWSER_TFM }}/publish/wwwroot
           retention-days: 90

@@ -23,5 +23,7 @@ jobs:
         run: dotnet test tests/MagicalYatzy.Core.Tests/MagicalYatzy.Core.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute=GeneratedCodeAttribute /p:Include=[MagicalYatzy]*
 
       - name: Upload Core tests results
-        run: bash <(curl -s https://codecov.io/bash) -f "tests/MagicalYatzy.Core.Tests/coverage.opencover.xml" -t ${{ secrets.CODECOV_TOKEN }}
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: bash <(curl -s https://codecov.io/bash) -f "tests/MagicalYatzy.Core.Tests/coverage.opencover.xml" -t "$CODECOV_TOKEN"
 
