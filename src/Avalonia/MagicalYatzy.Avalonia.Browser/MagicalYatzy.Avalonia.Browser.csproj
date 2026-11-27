@@ -24,7 +24,8 @@
 
     <ItemGroup>
         <PackageReference Include="Avalonia.Browser" Version="$(AvaloniaVersion)" />
-        <PackageReference Include="Sanet.MVVM.DI.Avalonia" Version="1.7.1214" />
+        <PackageReference Include="Sanet.MVVM.DI.Avalonia" Version="1.7.12200" />
+        <PackageReference Include="Sanet.MVVM.Navigation.Avalonia" Version="1.7.12200" />
     </ItemGroup>
 
     <ItemGroup>

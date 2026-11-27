@@ -16,11 +16,11 @@
         <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
         <PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.14" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.14" />
-        <PackageReference Include="Sanet.MVVM.DI.Avalonia" Version="1.7.1214" />
-        <PackageReference Include="Sanet.MVVM.Navigation.Avalonia" Version="1.7.1214" />
-        <PackageReference Include="Sanet.MVVM.Views.Avalonia" Version="1.7.1214" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="11.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="11.0.0" />
+        <PackageReference Include="Sanet.MVVM.DI.Avalonia" Version="1.7.12200" />
+        <PackageReference Include="Sanet.MVVM.Navigation.Avalonia" Version="1.7.12200" />
+        <PackageReference Include="Sanet.MVVM.Views.Avalonia" Version="1.7.12200" />
     </ItemGroup>
 
     <ItemGroup>
