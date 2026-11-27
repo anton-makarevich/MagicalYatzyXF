@@ -48,10 +48,13 @@ jobs:
       - name: Extract and validate version from Directory.Build.props
         id: extract_version
         shell: bash
+        env:
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
         run: |
           VERSION=$(sed -n 's:.*<VersionPrefix>\([^<]*\)</VersionPrefix>.*:\1:p' Directory.Build.props)
-          if [ "${{ github.ref_type }}" = "tag" ] && [ "${{ github.ref_name }}" != "v$VERSION" ]; then
-            echo "::error::Git tag ${{ github.ref_name }} does not match VersionPrefix v$VERSION"
+          if [ "$REF_TYPE" = "tag" ] && [ "$REF_NAME" != "v$VERSION" ]; then
+            echo "::error::Git tag $REF_NAME does not match VersionPrefix v$VERSION"
             exit 1
           fi
           echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
