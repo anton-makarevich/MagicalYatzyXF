@@ -24,6 +24,17 @@ jobs:
         with:
           global-json-file: global.json
 
+      - name: Resolve target framework from project
+        shell: bash
+        run: |
+          TFM=$(sed -n 's:.*<TargetFramework>\([^<]*\)</TargetFramework>.*:\1:p' src/Avalonia/MagicalYatzy.Avalonia.Android/MagicalYatzy.Avalonia.Android.csproj)
+          if [ -z "$TFM" ]; then
+            echo "::error::Could not resolve TargetFramework from the Android project"
+            exit 1
+          fi
+          echo "ANDROID_TFM=$TFM" >> $GITHUB_ENV
+          echo "Target framework: $TFM"
+
       - name: Extract and validate version from Directory.Build.props
         id: extract_version
         shell: bash
@@ -49,7 +60,7 @@ jobs:
         run: |
           cd src/Avalonia/MagicalYatzy.Avalonia.Android
           dotnet workload restore
-          dotnet build -t:InstallAndroidDependencies -f:net10.0-android -p:AcceptAndroidSDKLicenses=True -p:AndroidSdkPath="/usr/local/lib/android/sdk/"
+          dotnet build -t:InstallAndroidDependencies -f:"$ANDROID_TFM" -p:AcceptAndroidSDKLicenses=True -p:AndroidSdkPath="/usr/local/lib/android/sdk/"
           dotnet publish -c Release -o bin/Release/android/publish
 
       - name: Create Release

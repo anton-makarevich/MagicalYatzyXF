@@ -4,7 +4,7 @@ Guidance for AI coding agents working in this repository.
 
 ## Overview
 
-MagicalYatzy is a cross-platform Yatzy dice game: .NET 10, AvaloniaUI (Desktop, Android, iOS, Browser/WASM), MVVM via the Sanet.MVVM NuGet framework. It is a remake of an older WP7/UWP app. Default branch: `main`.
+MagicalYatzy is a cross-platform Yatzy dice game: .NET 11, AvaloniaUI (Desktop, Android, iOS, Browser/WASM), MVVM via the Sanet.MVVM NuGet framework. It is a remake of an older WP7/UWP app. Default branch: `main`.
 
 ## Build & Test Commands
 

@@ -18,7 +18,7 @@
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
       <MtouchLink>Full</MtouchLink>
       <CodesignKey>Apple Distribution: Anton Makarevich (Z8GJWJ4Q4E)</CodesignKey>
-      <OutputPath>bin\Release/net10.0-ios/ios/</OutputPath>
+      <OutputPath>bin\Release/$(TargetFramework)/ios/</OutputPath>
       <CodesignProvision>MagicalYatzy_AdHoc</CodesignProvision>
     </PropertyGroup>
 
